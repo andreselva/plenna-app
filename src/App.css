@@ -1,0 +1,23 @@
+.App {
+    background-color: rgba(200, 243, 255, 0.39);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.MainContent {
+    display: flex;
+    flex: 1;
+    flex-direction: row;
+    height: 100%;
+}
+
+.Content {
+    display: flex;
+    flex: 1;
+    background-color: #f4f4f4;
+    padding: 20px;
+    box-sizing: border-box;
+    height: 100%;
+    overflow-y: auto;
+}
