@@ -5,22 +5,21 @@ import Header from "./Components/Header/Header";
 import Sidebar from "./Components/Sidebar/Sidebar";
 import Dashboard from "./Pages/Dashboard/Dashboard";
 
-function App() {
-    return (
-        <Router>
-            <div className="App">
-                <Header/>
-                <div className="MainContent">
-                    <Sidebar/>
-                    <div className="Content">
-                        <Routes>
-                            <Route path="/dashboard" element={<Dashboard/>}/>
-                        </Routes>
-                    </div>
+const App = () => {
+    return (<Router>
+        <div className="App">
+            <Header/>
+            <div className="MainContent">
+                <Sidebar/>
+                <div className="Content">
+                    <Routes>
+                        <Route path="/dashboard" element={<Dashboard/>}/>
+                    </Routes>
                 </div>
             </div>
-        </Router>
-    );
+        </div>
+    </Router>);
 }
+
 
 export default App;

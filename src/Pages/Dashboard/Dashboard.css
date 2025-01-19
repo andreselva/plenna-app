@@ -1,16 +1,71 @@
 .Dashboard {
+    padding: 20px;
+    background-color: #f4f4f4;
     display: flex;
-    flex: 1;
-    flex-direction: column;
-    height: 100%;
+    align-items: center;
+    justify-content: center;
 }
 
 .Dashboard-content {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Duas colunas */
+    grid-template-rows: repeat(2, 1fr); /* Duas linhas */
+    gap: 1vh; /* Espaçamento entre os gráficos */
+    margin: auto; /* Centraliza o conteúdo */
+}
+
+.card {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 30px;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    flex: 1;
-    background-color: #f4f4f4;
-    padding: 20px;
-    box-sizing: border-box;
+    text-align: center;
+    height: 34vh;
+    width: 78vh;
+}
+
+.card h2 {
+    margin-bottom: 15px;
+    font-size: 20px;
+    color: #333;
+}
+
+.card ul {
+    list-style-type: none;
+    padding: 0;
+    text-align: left;
+}
+
+.card ul li {
+    margin-bottom: 10px;
+}
+
+.card table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.card th {
+    text-align: right;
+    padding: 8px;
+    border-bottom: 1px solid #ddd;
+}
+
+.card td {
+    padding: 8px;
+    text-align: center;
+}
+
+.card tr {
+    border-bottom: 1px solid #ddd;
+}
+
+.card tr:last-child {
+    border-bottom: none;
 }
