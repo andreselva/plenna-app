@@ -1,0 +1,81 @@
+.Categories {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    height: 100%;
+    width: 100%;
+}
+
+.Categories-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.show-categories-btn {
+    margin-bottom: 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    align-self: flex-start;
+}
+
+.show-categories-btn:hover {
+    background-color: #45a049;
+}
+
+.card-categories {
+    border: 1px solid #ccc;
+    padding: 20px;
+    border-radius: 5px;
+    width: 150vh;
+    height: 70vh;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+    overflow-y: auto; /* Para permitir rolagem caso o conteúdo seja muito grande */
+}
+
+.card-categories h3 {
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.card-categories table {
+    width: 100%;
+    border-collapse: collapse; /* Remover espaçamento entre as células */
+}
+
+.card-categories th,
+.card-categories td {
+    padding: 10px;
+    text-align: center;
+    border-bottom: 1px solid #ddd; /* Linha divisória entre as categorias */
+}
+
+.card-categories th {
+    background-color: #f4f4f4; /* Cor de fundo para o cabeçalho */
+    font-weight: bold;
+}
+
+.card-categories .actions {
+    display: flex;
+    justify-content: center;
+    gap: 10px
+}
+
+.card-categories .actions button {
+    padding: 5px 10px;
+    background-color: #f4f4f4;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.card-categories .actions button:hover {
+    background-color: #e0e0e0;
+}

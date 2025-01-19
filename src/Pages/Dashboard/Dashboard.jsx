@@ -83,7 +83,7 @@ const Dashboard = () => {
                                 },
                             },
                         }}
-                        style={{ width: '300px', height: '300px' }} // Ajustando o tamanho do gráfico
+                        style={{ width: '300px', height: '300px' }}
                     />
                 </div>
 
