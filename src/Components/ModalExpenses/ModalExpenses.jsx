@@ -2,7 +2,7 @@ import './ModalExpenses.css';
 
 const ModalExpenses = ({
                            setIsModalOpen,
-                           handleSaveExpense,
+                           handleAddExpense,
                            newExpense,
                            setNewExpense,
                            expenseDescription,
@@ -13,7 +13,8 @@ const ModalExpenses = ({
                            setExpensePay,
                            categories,
                            selectedCategory,
-                           setSelectedCategory
+                           setSelectedCategory,
+                           setEditingExpense
                        }) => {
     const handleCancel = () => {
         setNewExpense('');
@@ -21,6 +22,7 @@ const ModalExpenses = ({
         setExpenseValue('0');
         setExpensePay('');
         setSelectedCategory('');
+        setEditingExpense(null);  // Limpar o estado de edição
         setIsModalOpen(false);
     };
 
@@ -70,21 +72,22 @@ const ModalExpenses = ({
                     <label>Categoria</label>
                     <select
                         value={selectedCategory}
-                        onChange={(e) => setSelectedCategory(e.target.value)}
+                        onChange={(e) => setSelectedCategory(e.target.value)} // Aqui você está recebendo o id da categoria
                     >
                         <option value="">Selecione</option>
                         {categories
-                            .filter(category => category.type === 'despesa')
+                            .filter(category => category.type === 'despesa') // Filtra apenas as categorias de despesa
                             .map((category) => (
-                                <option key={category.id} value={category.id}>
+                                <option key={category.id} value={category.id}> {/* Aqui está o id, não o nome */}
                                     {category.name}
                                 </option>
                             ))}
                     </select>
+
                 </div>
 
                 <div className="modal-buttons">
-                    <button onClick={handleSaveExpense}>Salvar</button>
+                    <button onClick={handleAddExpense}>Salvar</button>
                     <button onClick={handleCancel}>Cancelar</button>
                 </div>
             </div>

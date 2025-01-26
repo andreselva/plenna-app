@@ -7,8 +7,10 @@ import {useCategoryManager} from "../../Hooks/CategoryManager/useCategoryManager
 
 const Expenses = () => {
     const {expenses, addExpense, deleteExpense, updateExpense} = useExpenseManager();
+
+    console.log(expenses);
     const {categories} = useCategoryManager();
-    const [selectedCategory, setSelectedCategory] = useState('');
+    const [selectedCategory, setSelectedCategory] = useState();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingExpense, setEditingExpense] = useState(null);
     const [newExpense, setNewExpense] = useState('');
@@ -27,15 +29,18 @@ const Expenses = () => {
             name: newExpense,
             description: expenseDescription,
             value: expenseValue,
-            pay: expensePay
+            pay: expensePay,
+            categoryId: selectedCategory,
         });
 
         setNewExpense('');
         setExpenseDescription('');
         setExpenseValue('0');
         setExpensePay('');
+        setSelectedCategory('');
         setIsModalOpen(false);
-    }
+    };
+
 
     const handleEditExpense = (expense) => {
         setEditingExpense(expense);
@@ -43,6 +48,7 @@ const Expenses = () => {
         setExpenseDescription(expense.description);
         setExpenseValue(expense.value);
         setExpensePay(expense.pay);
+        setSelectedCategory(expense.categoryId);
         setIsModalOpen(true);
     };
 
@@ -57,17 +63,19 @@ const Expenses = () => {
                 name: newExpense,
                 description: expenseDescription,
                 value: expenseValue,
-                pay: expensePay
+                pay: expensePay,
+                categoryId: selectedCategory,
             });
         } else {
             handleAddExpense();
         }
 
-        setEditingExpense(null);
+        setEditingExpense(null);  // Garantir que o estado de edição seja limpo
         setNewExpense('');
         setExpenseDescription('');
         setExpenseValue('0');
         setExpensePay('');
+        setSelectedCategory('');
         setIsModalOpen(false);
     };
 
@@ -107,6 +115,7 @@ const Expenses = () => {
                     categories={categories}
                     selectedCategory={selectedCategory}
                     setSelectedCategory={setSelectedCategory}
+                    setEditingExpense={setEditingExpense}
                 />
             )}
         </div>
