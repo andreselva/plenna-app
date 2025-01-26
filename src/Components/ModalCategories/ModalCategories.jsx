@@ -1,10 +1,30 @@
 import './ModalCategories.css';
 
-const Modal = ({ setIsModalOpen, handleAddCategory, newCategory, setNewCategory, categoryType, setCategoryType, categoryDescription, setCategoryDescription, categoryColor, setCategoryColor }) => {
+const Modal = ({
+                   setIsModalOpen,
+                   handleAddCategory,
+                   newCategory,
+                   setNewCategory,
+                   categoryType,
+                   setCategoryType,
+                   categoryDescription,
+                   setCategoryDescription,
+                   categoryColor,
+                   setCategoryColor
+               }) => {
+    const handleCancel = () => {
+        setNewCategory('');
+        setCategoryType('receita');
+        setCategoryDescription('');
+        setCategoryColor('#000000');
+
+        setIsModalOpen(false);
+    };
+
     return (
         <div className="modal-overlay">
             <div className="modal-content">
-                <h2>Cadastrar Nova Categoria</h2>
+                <h2>Cadastrar categoria</h2>
 
                 <input
                     type="text"
@@ -46,7 +66,7 @@ const Modal = ({ setIsModalOpen, handleAddCategory, newCategory, setNewCategory,
 
                 <div className="modal-buttons">
                     <button onClick={handleAddCategory}>Adicionar</button>
-                    <button onClick={() => setIsModalOpen(false)}>Cancelar</button>
+                    <button onClick={handleCancel}>Cancelar</button>
                 </div>
             </div>
         </div>
