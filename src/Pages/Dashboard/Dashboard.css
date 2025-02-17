@@ -7,11 +7,15 @@
 }
 
 .Dashboard-content {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr); /* Duas colunas */
-    grid-template-rows: repeat(2, 1fr); /* Duas linhas */
-    gap: 1vh; /* Espaçamento entre os gráficos */
-    margin: auto; /* Centraliza o conteúdo */
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 1vh;
+    margin: auto;
+}
+
+.Dashboard-content > * {
+    width: calc(50% - 0.5vh); /* Cada item ocupa 50% da largura com ajuste para o gap */
 }
 
 .card {
@@ -22,9 +26,8 @@
     padding: 30px;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
-    text-align: center;
     height: 34vh;
     width: 78vh;
 }

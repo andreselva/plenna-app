@@ -68,23 +68,23 @@ const Dashboard = () => {
                     </table>
                 </div>
 
-
                 {/* Card 2: Gráfico de pizza */}
                 <div className="card">
                     <h2>Porcentagem de Gastos</h2>
-                    <Pie
-                        data={data}
-                        options={{
-                            responsive: true,
-                            maintainAspectRatio: false,
-                            plugins: {
-                                legend: {
-                                    position: 'top',
+                    <div style={{width: "80%", height: "80%", position: "relative"}}>
+                        <Pie
+                            data={data}
+                            options={{
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                plugins: {
+                                    legend: {
+                                        position: 'top',
+                                    },
                                 },
-                            },
-                        }}
-                        style={{ width: '300px', height: '300px' }}
-                    />
+                            }}
+                        />
+                    </div>
                 </div>
 
                 {/* Card 3: Receita x Despesa */}
