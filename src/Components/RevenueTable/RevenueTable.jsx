@@ -1,4 +1,4 @@
-const ExpenseTable = ({expenses = [], categories = [], onEdit, onDelete}) => (
+const RevenueTable = ({revenues = [], categories = [], onEdit, onDelete}) => (
     <table>
         <thead>
         <tr>
@@ -10,19 +10,19 @@ const ExpenseTable = ({expenses = [], categories = [], onEdit, onDelete}) => (
         </tr>
         </thead>
         <tbody>
-        {expenses.length > 0 ? (
-            expenses.map((expense) => {
-                const category = categories.find(category => category.id == expense.categoryId);
+        {revenues.length > 0 ? (
+            revenues.map((revenue) => {
+                const category = categories.find(category => category.id == revenue.categoryId);
                 return (
-                    <tr key={expense.id}>
-                        <td>{expense.name}</td>
-                        <td>{expense.value}</td>
-                        <td>{expense.pay}</td>
+                    <tr key={revenue.id}>
+                        <td>{revenue.name}</td>
+                        <td>{revenue.value}</td>
+                        <td>{revenue.pay}</td>
                         <td>{category ? category.name : 'Categoria não encontrada'}</td>
 
                         <td className="actions">
-                            <button onClick={() => onEdit(expense)}>Editar</button>
-                            <button onClick={() => onDelete(expense.id)}>Excluir</button>
+                            <button onClick={() => onEdit(revenue)}>Editar</button>
+                            <button onClick={() => onDelete(revenue.id)}>Excluir</button>
                         </td>
                     </tr>
                 );
@@ -36,4 +36,4 @@ const ExpenseTable = ({expenses = [], categories = [], onEdit, onDelete}) => (
     </table>
 );
 
-export default ExpenseTable;
+export default RevenueTable;

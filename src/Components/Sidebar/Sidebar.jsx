@@ -7,6 +7,7 @@ const Sidebar = () => (
             <Link to="/dashboard">Dashboard</Link>
             <Link to="/categories">Categories</Link>
             <Link to="/expenses">Expenses</Link>
+            <Link to="/revenues">Revenues</Link>
         </div>
     </div>
 );

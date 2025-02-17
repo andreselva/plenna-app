@@ -2,13 +2,11 @@ import './Expenses.css';
 import {useState} from "react";
 import ExpenseTable from "../../Components/ExpenseTable/ExpenseTable";
 import ModalExpenses from "../../Components/ModalExpenses/ModalExpenses";
-import {useExpenseManager} from "../../Hooks/ExpenseManager/useExpenseManager";
+import {ExpenseManager} from "../../Hooks/ExpenseManager/ExpenseManager";
 import {useCategoryManager} from "../../Hooks/CategoryManager/useCategoryManager";
 
 const Expenses = () => {
-    const {expenses, addExpense, deleteExpense, updateExpense} = useExpenseManager();
-
-    console.log(expenses);
+    const {expenses, addExpense, deleteExpense, updateExpense} = ExpenseManager();
     const {categories} = useCategoryManager();
     const [selectedCategory, setSelectedCategory] = useState();
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -37,10 +35,9 @@ const Expenses = () => {
         setExpenseDescription('');
         setExpenseValue('0');
         setExpensePay('');
-        setSelectedCategory('');
+        setSelectedCategory(null);
         setIsModalOpen(false);
     };
-
 
     const handleEditExpense = (expense) => {
         setEditingExpense(expense);
@@ -70,7 +67,7 @@ const Expenses = () => {
             handleAddExpense();
         }
 
-        setEditingExpense(null);  // Garantir que o estado de edição seja limpo
+        setEditingExpense(null);
         setNewExpense('');
         setExpenseDescription('');
         setExpenseValue('0');
@@ -83,43 +80,39 @@ const Expenses = () => {
         deleteExpense(id);
     };
 
-    return (
-        <div className="Expenses">
-            <div className="Expenses-content">
-                <button className="show-expenses-btn" onClick={() => setIsModalOpen(true)}>
-                    Cadastrar despesa
-                </button>
-                <div className="card-expenses">
-                    <h3>Despesas</h3>
-                    <ExpenseTable
-                        expenses={expenses}
-                        categories={categories}
-                        onEdit={handleEditExpense}
-                        onDelete={handleDeleteExpense}
-                    />
-                </div>
-            </div>
-
-            {isModalOpen && (
-                <ModalExpenses
-                    setIsModalOpen={setIsModalOpen}
-                    handleAddExpense={handleSaveExpense}
-                    newExpense={newExpense}
-                    setNewExpense={setNewExpense}
-                    expenseDescription={expenseDescription}
-                    setExpenseDescription={setExpenseDescription}
-                    expenseValue={expenseValue}
-                    setExpenseValue={setExpenseValue}
-                    expensePay={expensePay}
-                    setExpensePay={setExpensePay}
+    return (<div className="Expenses">
+        <div className="Expenses-content">
+            <button className="show-expenses-btn" onClick={() => setIsModalOpen(true)}>
+                Cadastrar despesa
+            </button>
+            <div className="card-expenses">
+                <h3>Despesas</h3>
+                <ExpenseTable
+                    expenses={expenses}
                     categories={categories}
-                    selectedCategory={selectedCategory}
-                    setSelectedCategory={setSelectedCategory}
-                    setEditingExpense={setEditingExpense}
+                    onEdit={handleEditExpense}
+                    onDelete={handleDeleteExpense}
                 />
-            )}
+            </div>
         </div>
-    );
+
+        {isModalOpen && (<ModalExpenses
+            setIsModalOpen={setIsModalOpen}
+            handleAddExpense={handleSaveExpense}
+            newExpense={newExpense}
+            setNewExpense={setNewExpense}
+            expenseDescription={expenseDescription}
+            setExpenseDescription={setExpenseDescription}
+            expenseValue={expenseValue}
+            setExpenseValue={setExpenseValue}
+            expensePay={expensePay}
+            setExpensePay={setExpensePay}
+            categories={categories}
+            selectedCategory={selectedCategory}
+            setSelectedCategory={setSelectedCategory}
+            setEditingExpense={setEditingExpense}
+        />)}
+    </div>);
 }
 
 export default Expenses;

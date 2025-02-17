@@ -1,6 +1,6 @@
 import {useState} from "react";
 
-export const useExpenseManager = () => {
+export const ExpenseManager = () => {
     const [expenses, setExpenses] = useState([
         {id: 1, name: 'Despesa 1', description: 'Descrição 1', value: '200,00', pay: '03/2025', categoryId: 2},
         {id: 2, name: 'Despesa 2', description: 'Descrição 2', value: '200,00', pay: '03/2025', categoryId: 2},
@@ -9,16 +9,18 @@ export const useExpenseManager = () => {
     ]);
 
     const addExpense = (expense) => {
-        const newExpense = {...expense, id: Date.now()};  // Garantir ID único
-        setExpenses(prev => [...prev, newExpense]);
+        const newExpense = {...expense, id: Date.now()};
+        setExpenses(oldExpenses => [...oldExpenses, newExpense]);
     };
 
     const deleteExpense = (id) => {
-        setExpenses(prev => prev.filter(expense => expense.id !== id));
+        setExpenses(oldExpenses => oldExpenses.filter(
+            expense => expense.id !== id
+        ));
     };
 
     const updateExpense = (id, updatedExpense) => {
-        setExpenses(prev => prev.map(expense =>
+        setExpenses(oldExpenses => oldExpenses.map(expense =>
             expense.id === id ? {...expense, ...updatedExpense} : expense
         ));
     };

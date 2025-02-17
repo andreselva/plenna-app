@@ -1,28 +1,26 @@
-import './ModalExpenses.css';
-
-const ModalExpenses = ({
+const ModalRevenues = ({
                            setIsModalOpen,
-                           handleAddExpense,
-                           newExpense,
-                           setNewExpense,
-                           expenseDescription,
-                           setExpenseDescription,
-                           expenseValue,
-                           setExpenseValue,
-                           expensePay,
-                           setExpensePay,
+                           handleAddRevenue,
+                           newRevenue,
+                           setNewRevenue,
+                           revenueDescription,
+                           setRevenueDescription,
+                           revenueValue,
+                           setRevenueValue,
+                           revenuePay,
+                           setRevenuePay,
                            categories,
                            selectedCategory,
                            setSelectedCategory,
-                           setEditingExpense
+                           setEditingRevenue
                        }) => {
     const handleCancel = () => {
-        setNewExpense('');
-        setExpenseDescription('');
-        setExpenseValue('0');
-        setExpensePay('');
+        setNewRevenue('');
+        setRevenueDescription('');
+        setRevenueValue('0');
+        setRevenuePay('');
         setSelectedCategory('');
-        setEditingExpense(null);
+        setEditingRevenue(null);
         setIsModalOpen(false);
     };
 
@@ -33,8 +31,8 @@ const ModalExpenses = ({
 
                 <input
                     type="text"
-                    value={newExpense}
-                    onChange={(e) => setNewExpense(e.target.value)}
+                    value={newRevenue}
+                    onChange={(e) => setNewRevenue(e.target.value)}
                     placeholder="Nome"
                 />
 
@@ -42,8 +40,8 @@ const ModalExpenses = ({
                     <label>Descrição</label>
                     <input
                         type="text"
-                        value={expenseDescription}
-                        onChange={(e) => setExpenseDescription(e.target.value)}
+                        value={revenueDescription}
+                        onChange={(e) => setRevenueDescription(e.target.value)}
                         placeholder="Descrição"
                     />
                 </div>
@@ -52,8 +50,8 @@ const ModalExpenses = ({
                     <label>Valor</label>
                     <input
                         type="text"
-                        value={expenseValue}
-                        onChange={(e) => setExpenseValue(e.target.value)}
+                        value={revenueValue}
+                        onChange={(e) => setRevenueValue(e.target.value)}
                         placeholder="Valor"
                     />
                 </div>
@@ -62,8 +60,8 @@ const ModalExpenses = ({
                     <label>Vencimento</label>
                     <input
                         type="text"
-                        value={expensePay}
-                        onChange={(e) => setExpensePay(e.target.value)}
+                        value={revenuePay}
+                        onChange={(e) => setRevenuePay(e.target.value)}
                         placeholder="Vencimento"
                     />
                 </div>
@@ -76,7 +74,7 @@ const ModalExpenses = ({
                     >
                         <option value="">Selecione</option>
                         {categories
-                            .filter(category => category.type === 'despesa')
+                            .filter(category => category.type == 'receita')
                             .map((category) => (
                                 <option key={category.id} value={category.id}>
                                     {category.name}
@@ -87,7 +85,7 @@ const ModalExpenses = ({
                 </div>
 
                 <div className="modal-buttons">
-                    <button onClick={handleAddExpense}>Salvar</button>
+                    <button onClick={handleAddRevenue}>Salvar</button>
                     <button onClick={handleCancel}>Cancelar</button>
                 </div>
             </div>
@@ -95,4 +93,4 @@ const ModalExpenses = ({
     );
 };
 
-export default ModalExpenses;
+export default ModalRevenues;

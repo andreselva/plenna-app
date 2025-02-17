@@ -6,6 +6,7 @@ import Sidebar from "./Components/Sidebar/Sidebar";
 import Categories from "./Pages/Categories/Categories";
 import Dashboard from "./Pages/Dashboard/Dashboard";
 import Expenses from "./Pages/Expenses/Expenses";
+import Revenues from "./Pages/Revenues/Revenues";
 
 const App = () => {
     return (<Router>
@@ -18,6 +19,7 @@ const App = () => {
                         <Route path="/dashboard" element={<Dashboard/>}/>
                         <Route path="/categories" element={<Categories/>}/>
                         <Route path="/expenses" element={<Expenses/>}/>
+                        <Route path="/revenues" element={<Revenues/>}/>
                     </Routes>
                 </div>
             </div>
