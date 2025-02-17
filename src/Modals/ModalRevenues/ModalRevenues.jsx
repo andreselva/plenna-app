@@ -1,3 +1,5 @@
+import './ModalRevenues.css';
+
 const ModalRevenues = ({
                            setIsModalOpen,
                            handleAddRevenue,

@@ -2,8 +2,8 @@ import './Revenues.css';
 import {useState} from "react";
 import {useCategoryManager} from "../../Hooks/CategoryManager/useCategoryManager";
 import {RevenuesManager} from "../../Hooks/RevenuesManager/RevenuesManager";
-import RevenueTable from "../../Components/RevenueTable/RevenueTable";
-import ModalRevenues from "../../Components/ModalRevenues/ModalRevenues";
+import RevenueTable from "../../Tables/RevenueTable/RevenueTable";
+import ModalRevenues from "../../Modals/ModalRevenues/ModalRevenues";
 
 const Revenues = () => {
     const {revenues, addRevenue, deleteRevenue, updateRevenue} = RevenuesManager();

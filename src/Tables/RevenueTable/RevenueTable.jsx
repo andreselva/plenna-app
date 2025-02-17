@@ -18,7 +18,20 @@ const RevenueTable = ({revenues = [], categories = [], onEdit, onDelete}) => (
                         <td>{revenue.name}</td>
                         <td>{revenue.value}</td>
                         <td>{revenue.pay}</td>
-                        <td>{category ? category.name : 'Categoria não encontrada'}</td>
+                        <td>
+                            <span
+                                style={{
+                                    backgroundColor: category.color + "33",
+                                    color: "#000",
+                                    fontSize: '15px',
+                                    padding: "4px 8px",
+                                    borderRadius: "10px",
+                                    display: "inline-block",
+                                }}
+                            >
+                                {category ? category.name : 'Categoria não encontrada'}
+                            </span>
+                        </td>
 
                         <td className="actions">
                             <button onClick={() => onEdit(revenue)}>Editar</button>

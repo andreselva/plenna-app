@@ -1,8 +1,8 @@
 import {useState} from 'react';
 import './Categories.css';
-import Modal from "../../Components/ModalCategories/ModalCategories";
+import Modal from "../../Modals/ModalCategories/ModalCategories";
 import {useCategoryManager} from "../../Hooks/CategoryManager/useCategoryManager";
-import CategoryTable from "../../Components/CategoryTable/CategoryTable";
+import CategoryTable from "../../Tables/CategoryTable/CategoryTable";
 
 const Categories = () => {
     const {categories, addCategory, deleteCategory, updateCategory} = useCategoryManager();

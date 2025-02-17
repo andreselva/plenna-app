@@ -1,7 +1,7 @@
 import './Expenses.css';
 import {useState} from "react";
-import ExpenseTable from "../../Components/ExpenseTable/ExpenseTable";
-import ModalExpenses from "../../Components/ModalExpenses/ModalExpenses";
+import ExpenseTable from "../../Tables/ExpenseTable/ExpenseTable";
+import ModalExpenses from "../../Modals/ModalExpenses/ModalExpenses";
 import {ExpenseManager} from "../../Hooks/ExpenseManager/ExpenseManager";
 import {useCategoryManager} from "../../Hooks/CategoryManager/useCategoryManager";
 

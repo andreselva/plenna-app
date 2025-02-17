@@ -14,7 +14,7 @@ const Modal = ({
                }) => {
     const handleCancel = () => {
         setNewCategory('');
-        setCategoryType('receita');
+        setCategoryType('Receita');
         setCategoryDescription('');
         setCategoryColor('#000000');
 
@@ -39,9 +39,8 @@ const Modal = ({
                         value={categoryType}
                         onChange={(e) => setCategoryType(e.target.value)}
                     >
-                        <option value="receita">Receita</option>
-                        <option value="despesa">Despesa</option>
-                        <option value="ambos">Ambos</option>
+                        <option value="Receita">Receita</option>
+                        <option value="Despesa">Despesa</option>
                     </select>
                 </div>
 
@@ -56,7 +55,6 @@ const Modal = ({
                 </div>
 
                 <div className="form-group">
-                    <label>Cor</label>
                     <input
                         type="color"
                         value={categoryColor}
