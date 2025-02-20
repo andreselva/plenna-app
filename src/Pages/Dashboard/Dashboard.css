@@ -15,7 +15,7 @@
 }
 
 .Dashboard-content > * {
-    width: calc(50% - 0.5vh); /* Cada item ocupa 50% da largura com ajuste para o gap */
+    width: calc(50% - 0.5vh);
 }
 
 .card {

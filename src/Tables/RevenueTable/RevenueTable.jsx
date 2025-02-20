@@ -12,7 +12,7 @@ const RevenueTable = ({revenues = [], categories = [], onEdit, onDelete}) => (
         <tbody>
         {revenues.length > 0 ? (
             revenues.map((revenue) => {
-                const category = categories.find(category => category.id == revenue.categoryId);
+                const category = categories.find(cat => cat.id === revenue.categoryId) || {};
                 return (
                     <tr key={revenue.id}>
                         <td>{revenue.name}</td>
@@ -21,8 +21,8 @@ const RevenueTable = ({revenues = [], categories = [], onEdit, onDelete}) => (
                         <td>
                             <span
                                 style={{
-                                    backgroundColor: category.color + "33",
-                                    color: "#000",
+                                    backgroundColor: category.color + "33" || "#000",
+                                    color: "#000" || "#000",
                                     fontSize: '15px',
                                     padding: "4px 8px",
                                     borderRadius: "10px",

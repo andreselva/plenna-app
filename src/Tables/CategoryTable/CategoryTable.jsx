@@ -14,7 +14,7 @@ const CategoryTable = ({categories, onEdit, onDelete}) => (
                     <td>
                             <span
                                 style={{
-                                    backgroundColor: category.color + "33",
+                                    backgroundColor: category.color + "33" ,
                                     color: "#000",
                                     fontSize: '15px',
                                     padding: "4px 8px",
@@ -28,7 +28,7 @@ const CategoryTable = ({categories, onEdit, onDelete}) => (
                     <td>
                         <span
                             style={{
-                                backgroundColor: category.type == 'Receita' ? "rgba(0, 255, 0, 0.2)" : "rgba(255, 0, 0, 0.2)",
+                                backgroundColor: category.type === 'Receita' ? "rgba(0, 255, 0, 0.2)" : "rgba(255, 0, 0, 0.2)",
                                 color: "#000",
                                 fontSize: '15px',
                                 padding: "4px 8px",

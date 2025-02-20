@@ -12,7 +12,7 @@ const ExpenseTable = ({expenses = [], categories = [], onEdit, onDelete}) => (
         <tbody>
         {expenses.length > 0 ? (
             expenses.map((expense) => {
-                const category = categories.find(category => category.id == expense.categoryId);
+                const category = categories.find(category => category.id == expense.categoryId) || {};
 
                 return (
                     <tr key={expense.id}>
@@ -23,7 +23,7 @@ const ExpenseTable = ({expenses = [], categories = [], onEdit, onDelete}) => (
                         <td>
                             <span
                                 style={{
-                                    backgroundColor: category.color + "33",
+                                    backgroundColor: category.color + "33" || '#000',
                                     color: "#000",
                                     fontSize: '15px',
                                     padding: "4px 8px",

@@ -37,33 +37,33 @@ const Dashboard = () => {
                     <h2>Contas</h2>
                     <table>
                         <thead>
-                        <tr>
-                            <th style={{textAlign: 'center'}}>Conta</th>
-                            <th style={{textAlign: 'center'}}>Categoria</th>
-                            <th style={{textAlign: 'center'}}>Valor</th>
-                        </tr>
+                            <tr>
+                                <th style={{textAlign: 'center'}}>Conta</th>
+                                <th style={{textAlign: 'center'}}>Categoria</th>
+                                <th style={{textAlign: 'center'}}>Valor</th>
+                            </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                            <td>Aluguel</td>
-                            <td>Moradia</td>
-                            <td>R$ 1.200,00</td>
-                        </tr>
-                        <tr>
-                            <td>Supermercado</td>
-                            <td>Alimentação</td>
-                            <td>R$ 600,00</td>
-                        </tr>
-                        <tr>
-                            <td>Academia</td>
-                            <td>Saúde</td>
-                            <td>R$ 150,00</td>
-                        </tr>
-                        <tr>
-                            <td>Netflix</td>
-                            <td>Lazer</td>
-                            <td>R$ 50,00</td>
-                        </tr>
+                            <tr>
+                                <td>Aluguel</td>
+                                <td>Moradia</td>
+                                <td>R$ 1.200,00</td>
+                            </tr>
+                            <tr>
+                                <td>Supermercado</td>
+                                <td>Alimentação</td>
+                                <td>R$ 600,00</td>
+                            </tr>
+                            <tr>
+                                <td>Academia</td>
+                                <td>Saúde</td>
+                                <td>R$ 150,00</td>
+                            </tr>
+                            <tr>
+                                <td>Netflix</td>
+                                <td>Lazer</td>
+                                <td>R$ 50,00</td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>

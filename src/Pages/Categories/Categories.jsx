@@ -10,7 +10,7 @@ const Categories = () => {
     const [editingCategory, setEditingCategory] = useState(null);
 
     const [newCategory, setNewCategory] = useState('');
-    const [categoryType, setCategoryType] = useState('receita');
+    const [categoryType, setCategoryType] = useState('Receita');
     const [categoryDescription, setCategoryDescription] = useState('');
     const [categoryColor, setCategoryColor] = useState('#000000');
 
@@ -62,7 +62,7 @@ const Categories = () => {
 
         setEditingCategory(null);
         setNewCategory('');
-        setCategoryType('receita');
+        setCategoryType('Receita');
         setCategoryDescription('');
         setCategoryColor('#000000');
         setIsModalOpen(false);
