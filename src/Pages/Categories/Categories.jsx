@@ -102,6 +102,7 @@ const Categories = () => {
                     setCategoryDescription={setCategoryDescription}
                     categoryColor={categoryColor}
                     setCategoryColor={setCategoryColor}
+                    setEditingCategory={setEditingCategory}
                 />
             )}
         </div>

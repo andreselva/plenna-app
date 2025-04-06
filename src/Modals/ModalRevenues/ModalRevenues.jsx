@@ -76,7 +76,7 @@ const ModalRevenues = ({
                     >
                         <option value="">Selecione</option>
                         {categories
-                            .filter(category => category.type == 'Receita')
+                            .filter(category => category.type.toUpperCase() === 'RECEITA')
                             .map((category) => (
                                 <option key={category.id} value={category.id}>
                                     {category.name}

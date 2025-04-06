@@ -76,7 +76,7 @@ const ModalExpenses = ({
                     >
                         <option value="">Selecione</option>
                         {categories
-                            .filter(category => category.type == 'Despesa')
+                            .filter(category => category.type.toUpperCase() === 'DESPESA')
                             .map((category) => (
                                 <option key={category.id} value={category.id}>
                                     {category.name}

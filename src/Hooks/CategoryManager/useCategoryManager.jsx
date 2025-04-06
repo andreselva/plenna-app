@@ -32,7 +32,7 @@ export const useCategoryManager = () => {
 
     const addCategory = async (category) => {
         try {
-            const response = await fetch("http://localhost:8000/categories", {
+            const response = await fetch(`${apiUrl}`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -49,12 +49,26 @@ export const useCategoryManager = () => {
             setCategories((prev) => [...prev, newCategory]);
         } catch (err) {
             setError(err.message);
+        } finally {
+            setLoading(false);
         }
     };
 
-    const deleteCategory = (id) => {
-        setCategories(prev => prev.filter(category => category.id !== id));
-    };
+    const deleteCategory = async (id) => {
+        try {
+            const response = await fetch(`${apiUrl}/${id}`, {
+                method: "DELETE",
+            });
+
+            if (!response.ok) {
+                throw new Error("Erro ao deletar categoria");
+            }
+            setCategories((prev) => prev.filter((category) => category.id !== id));
+            alert("Categoria deletada com sucesso!");
+        } catch (err) {
+            setError(err.message);
+        }
+    }
 
     const updateCategory = (id, updatedCategory) => {
         setCategories(prev =>

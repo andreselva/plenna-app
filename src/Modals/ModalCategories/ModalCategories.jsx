@@ -10,15 +10,24 @@ const Modal = ({
                    categoryDescription,
                    setCategoryDescription,
                    categoryColor,
-                   setCategoryColor
+                   setCategoryColor,
+                   setEditingCategory,
                }) => {
     const handleCancel = () => {
         setNewCategory('');
         setCategoryType('Receita');
         setCategoryDescription('');
         setCategoryColor('#000000');
-
         setIsModalOpen(false);
+        setEditingCategory(null);
+
+        // setNewExpense('');
+        // setExpenseDescription('');
+        // setExpenseValue('0');
+        // setExpensePay('');
+        // setSelectedCategory('');
+        // setEditingExpense(null);
+        // setIsModalOpen(false);
     };
 
     return (
