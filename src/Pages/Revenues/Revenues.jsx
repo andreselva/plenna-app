@@ -1,13 +1,13 @@
 import './Revenues.css';
 import {useState} from "react";
-import {useCategoryManager} from "../../Hooks/CategoryManager/useCategoryManager";
+import {CategoryManager} from "../../Hooks/CategoryManager/CategoryManager";
 import {RevenuesManager} from "../../Hooks/RevenuesManager/RevenuesManager";
 import RevenueTable from "../../Tables/RevenueTable/RevenueTable";
 import ModalRevenues from "../../Modals/ModalRevenues/ModalRevenues";
 
 const Revenues = () => {
     const {revenues, addRevenue, deleteRevenue, updateRevenue} = RevenuesManager();
-    const {categories} = useCategoryManager();
+    const {categories} = CategoryManager();
     const [selectedCategory, setSelectedCategory] = useState();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingRevenue, setEditingRevenue] = useState(null);

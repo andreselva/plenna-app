@@ -1,11 +1,11 @@
 import {useState} from 'react';
 import './Categories.css';
 import Modal from "../../Modals/ModalCategories/ModalCategories";
-import {useCategoryManager} from "../../Hooks/CategoryManager/useCategoryManager";
+import {CategoryManager} from "../../Hooks/CategoryManager/CategoryManager";
 import CategoryTable from "../../Tables/CategoryTable/CategoryTable";
 
 const Categories = () => {
-    const {categories, addCategory, deleteCategory, updateCategory} = useCategoryManager();
+    const {categories, addCategory, deleteCategory, updateCategory} = CategoryManager();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingCategory, setEditingCategory] = useState(null);
 
@@ -103,6 +103,7 @@ const Categories = () => {
                     categoryColor={categoryColor}
                     setCategoryColor={setCategoryColor}
                     setEditingCategory={setEditingCategory}
+                    editingCategory={editingCategory}
                 />
             )}
         </div>

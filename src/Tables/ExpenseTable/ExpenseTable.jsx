@@ -12,7 +12,7 @@ const ExpenseTable = ({expenses = [], categories = [], onEdit, onDelete}) => (
         <tbody>
         {expenses.length > 0 ? (
             expenses.map((expense) => {
-                const category = categories.find(category => category.id == expense.categoryId) || {};
+                const category = categories.find(category => category.id === expense.categoryId) || {};
 
                 return (
                     <tr key={expense.id}>

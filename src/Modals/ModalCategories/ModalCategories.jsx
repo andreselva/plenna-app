@@ -1,18 +1,19 @@
 import './ModalCategories.css';
 
 const Modal = ({
-                   setIsModalOpen,
-                   handleAddCategory,
-                   newCategory,
-                   setNewCategory,
-                   categoryType,
-                   setCategoryType,
-                   categoryDescription,
-                   setCategoryDescription,
-                   categoryColor,
-                   setCategoryColor,
-                   setEditingCategory,
-               }) => {
+    setIsModalOpen,
+    handleAddCategory,
+    newCategory,
+    setNewCategory,
+    categoryType,
+    setCategoryType,
+    categoryDescription,
+    setCategoryDescription,
+    categoryColor,
+    setCategoryColor,
+    setEditingCategory,
+    editingCategory
+}) => {
     const handleCancel = () => {
         setNewCategory('');
         setCategoryType('Receita');
@@ -20,14 +21,6 @@ const Modal = ({
         setCategoryColor('#000000');
         setIsModalOpen(false);
         setEditingCategory(null);
-
-        // setNewExpense('');
-        // setExpenseDescription('');
-        // setExpenseValue('0');
-        // setExpensePay('');
-        // setSelectedCategory('');
-        // setEditingExpense(null);
-        // setIsModalOpen(false);
     };
 
     return (
@@ -72,7 +65,9 @@ const Modal = ({
                 </div>
 
                 <div className="modal-buttons">
-                    <button onClick={handleAddCategory}>Adicionar</button>
+                    <button onClick={handleAddCategory}>
+                        {editingCategory ? 'Salvar' : 'Adicionar'}
+                    </button>
                     <button onClick={handleCancel}>Cancelar</button>
                 </div>
             </div>

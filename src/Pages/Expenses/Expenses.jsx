@@ -3,11 +3,11 @@ import {useState} from "react";
 import ExpenseTable from "../../Tables/ExpenseTable/ExpenseTable";
 import ModalExpenses from "../../Modals/ModalExpenses/ModalExpenses";
 import {ExpenseManager} from "../../Hooks/ExpenseManager/ExpenseManager";
-import {useCategoryManager} from "../../Hooks/CategoryManager/useCategoryManager";
+import {CategoryManager} from "../../Hooks/CategoryManager/CategoryManager";
 
 const Expenses = () => {
     const {expenses, addExpense, deleteExpense, updateExpense} = ExpenseManager();
-    const {categories} = useCategoryManager();
+    const {categories} = CategoryManager();
     const [selectedCategory, setSelectedCategory] = useState();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingExpense, setEditingExpense] = useState(null);
