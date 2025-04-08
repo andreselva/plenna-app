@@ -1,16 +1,55 @@
-import {useState} from 'react';
+import { useState, useEffect, useRef } from "react";
+const apiUrl = "http://localhost:8000/revenues";
 
 export const RevenuesManager = () => {
-    const [revenues, setRevenues] = useState([
-        {id: 1, name: 'Receita 1', description: 'Descrição 1', value: 200, pay: '03/2025', categoryId: 2},
-        {id: 2, name: 'Receita 2', description: 'Descrição 2', value: 200, pay: '03/2025', categoryId: 2},
-        {id: 3, name: 'Receita 3', description: 'Descrição 3', value: 200, pay: '03/2025', categoryId: 4},
-        {id: 4, name: 'Receita 4', description: 'Descrição 4', value: 200, pay: '03/2025', categoryId: 4},
-    ]);
+    const [revenues, setRevenues] = useState([])
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const hasFetched = useRef(false);
 
-    const addRevenue = (revenue) => {
-        const newRevenue = {...revenue, id: Date.now()};
-        setRevenues((oldRevenues) => [...oldRevenues, newRevenue]);
+    useEffect(() => {
+        const fetchRevenues = async () => {
+            if (hasFetched.current) return;
+            hasFetched.current = true;
+
+            try {
+                const response = await fetch(apiUrl);
+
+                if (!response.ok) {
+                    throw new Error("Erro ao buscar as receitas!");
+                }
+
+                const data = await response.json();
+                setRevenues(data);
+            } catch (err) {
+                setError(err);
+            } finally {
+                setLoading(false);
+            }
+        }
+
+        fetchRevenues();
+    }, []);
+
+    const addRevenue = async (revenue) => {
+        try {
+            const response = await fetch(`${apiUrl}`, {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(revenue)
+            });
+
+            if (!response.ok) {
+                throw new Error("Erro ao adicionar nova receita!");
+            }
+
+            const newRevenue = await response.json();
+            setRevenues((oldRevenues) => [...oldRevenues, newRevenue]);
+        } catch (err) {
+            setError(err);
+        }
     };
 
     const deleteRevenue = (id) => {
@@ -19,9 +58,9 @@ export const RevenuesManager = () => {
 
     const updateRevenue = (id, updatedRevenue) => {
         setRevenues((oldRevenues) =>
-            oldRevenues.map((revenue) => (revenue.id === id ? {...revenue, ...updatedRevenue} : revenue))
+            oldRevenues.map((revenue) => (revenue.id === id ? { ...revenue, ...updatedRevenue } : revenue))
         );
     };
 
-    return {revenues, addRevenue, deleteRevenue, updateRevenue};
+    return { revenues, addRevenue, deleteRevenue, updateRevenue, loading, error };
 };

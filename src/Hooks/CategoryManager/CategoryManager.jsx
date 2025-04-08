@@ -43,7 +43,7 @@ export const CategoryManager = () => {
             if (!response.ok) {
                 throw new Error("Erro ao adicionar categoria");
             }
-            
+
             const newCategory = await response.json();
 
             setCategories((prev) => [...prev, newCategory]);
@@ -55,18 +55,14 @@ export const CategoryManager = () => {
     };
 
     const deleteCategory = async (id) => {
-        try {
-            const response = await fetch(`${apiUrl}/${id}`, {
-                method: "DELETE",
-            });
+        const response = await fetch(`${apiUrl}/${id}`, {
+            method: "DELETE",
+        });
 
-            if (!response.ok) {
-                throw new Error("Erro ao deletar categoria");
-            }
-            setCategories((prev) => prev.filter((category) => category.id !== id));
-        } catch (err) {
-            setError(err.message);
+        if (!response.ok) {
+            throw new Error("Erro ao deletar categoria");
         }
+        setCategories((prev) => prev.filter((category) => category.id !== id));
     }
 
     const updateCategory = async (id, updatedCategory) => {

@@ -1,26 +1,26 @@
 import './ModalRevenues.css';
 
 const ModalRevenues = ({
-                           setIsModalOpen,
-                           handleAddRevenue,
-                           newRevenue,
-                           setNewRevenue,
-                           revenueDescription,
-                           setRevenueDescription,
-                           revenueValue,
-                           setRevenueValue,
-                           revenuePay,
-                           setRevenuePay,
-                           categories,
-                           selectedCategory,
-                           setSelectedCategory,
-                           setEditingRevenue
-                       }) => {
+    setIsModalOpen,
+    handleAddRevenue,
+    newRevenue,
+    setNewRevenue,
+    revenueDescription,
+    setRevenueDescription,
+    revenueValue,
+    setRevenueValue,
+    revenueInvoiceDueDate,
+    setRevenueInvoiceDueDate,
+    categories,
+    idCategory,
+    setSelectedCategory,
+    setEditingRevenue
+}) => {
     const handleCancel = () => {
         setNewRevenue('');
         setRevenueDescription('');
         setRevenueValue('0');
-        setRevenuePay('');
+        setRevenueInvoiceDueDate('');
         setSelectedCategory('');
         setEditingRevenue(null);
         setIsModalOpen(false);
@@ -62,8 +62,8 @@ const ModalRevenues = ({
                     <label>Vencimento</label>
                     <input
                         type="text"
-                        value={revenuePay}
-                        onChange={(e) => setRevenuePay(e.target.value)}
+                        value={revenueInvoiceDueDate}
+                        onChange={(e) => setRevenueInvoiceDueDate(e.target.value)}
                         placeholder="Vencimento"
                     />
                 </div>
@@ -71,7 +71,7 @@ const ModalRevenues = ({
                 <div className="form-group">
                     <label>Categoria</label>
                     <select
-                        value={selectedCategory}
+                        value={idCategory}
                         onChange={(e) => setSelectedCategory(e.target.value)}
                     >
                         <option value="">Selecione</option>

@@ -68,8 +68,8 @@ const Categories = () => {
         setIsModalOpen(false);
     };
 
-    const handleDeleteCategory = (id) => {
-        deleteCategory(id);
+    const handleDeleteCategory = async (id) => {
+        await deleteCategory(id);
     };
 
     return (

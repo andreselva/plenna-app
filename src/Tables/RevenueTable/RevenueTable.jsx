@@ -12,12 +12,12 @@ const RevenueTable = ({revenues = [], categories = [], onEdit, onDelete}) => (
         <tbody>
         {revenues.length > 0 ? (
             revenues.map((revenue) => {
-                const category = categories.find(cat => cat.id === revenue.categoryId) || {};
+                const category = categories.find(cat => cat.id === revenue.idCategory) || {};
                 return (
                     <tr key={revenue.id}>
                         <td>{revenue.name}</td>
                         <td>{revenue.value}</td>
-                        <td>{revenue.pay}</td>
+                        <td>{revenue.invoiceDueDate}</td>
                         <td>
                             <span
                                 style={{

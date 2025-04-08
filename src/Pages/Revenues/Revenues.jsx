@@ -14,27 +14,27 @@ const Revenues = () => {
     const [newRevenue, setNewRevenue] = useState('');
     const [revenueDescription, setRevenueDescription] = useState('');
     const [revenueValue, setRevenueValue] = useState('0');
-    const [revenuePay, setRevenuePay] = useState('');
+    const [revenueInvoiceDueDate, setRevenueInvoiceDueDate] = useState('');
 
 
-    const handleAddRevenue = () => {
+    const handleAddRevenue = async () => {
         if (!newRevenue.trim()) {
             alert('O nome da receita não pode ser vazio.');
             return;
         }
 
-        addRevenue({
+        await addRevenue({
             name: newRevenue,
             description: revenueDescription,
             value: revenueValue,
-            pay: revenuePay,
-            categoryId: selectedCategory,
+            invoiceDueDate: revenueInvoiceDueDate,
+            idCategory: selectedCategory,
         });
 
         setNewRevenue('');
         setRevenueDescription('');
         setRevenueValue('0');
-        setRevenuePay('');
+        setRevenueInvoiceDueDate('');
         setSelectedCategory(null);
         setIsModalOpen(false);
     };
@@ -44,12 +44,12 @@ const Revenues = () => {
         setNewRevenue(revenue.name);
         setRevenueDescription(revenue.description);
         setRevenueValue(revenue.value);
-        setRevenuePay(revenue.pay);
-        setSelectedCategory(revenue.categoryId);
+        setRevenueInvoiceDueDate(revenue.invoiceDueDate);
+        setSelectedCategory(revenue.idCategory);
         setIsModalOpen(true);
     };
 
-    const handleSaveRevenue = () => {
+    const handleSaveRevenue = async () => {
         if (!newRevenue.trim()) {
             alert('O nome da receita não pode ser vazio.');
             return;
@@ -60,8 +60,8 @@ const Revenues = () => {
                 name: newRevenue,
                 description: revenueDescription,
                 value: revenueValue,
-                pay: revenuePay,
-                categoryId: selectedCategory,
+                invoiceDueDate: revenueInvoiceDueDate,
+                idCategory: selectedCategory,
             });
         } else {
             handleAddRevenue();
@@ -71,7 +71,7 @@ const Revenues = () => {
         setNewRevenue('');
         setRevenueDescription('');
         setRevenueValue('0');
-        setRevenuePay('');
+        setRevenueInvoiceDueDate('');
         setSelectedCategory('');
         setIsModalOpen(false);
     };
@@ -105,8 +105,8 @@ const Revenues = () => {
                 setRevenueDescription={setRevenueDescription}
                 revenueValue={revenueValue}
                 setRevenueValue={setRevenueValue}
-                revenuePay={revenuePay}
-                setRevenuePay={setRevenuePay}
+                revenueInvoiceDueDate={revenueInvoiceDueDate}
+                setRevenueInvoiceDueDate={setRevenueInvoiceDueDate}
                 categories={categories}
                 selectedCategory={selectedCategory}
                 setSelectedCategory={setSelectedCategory}
