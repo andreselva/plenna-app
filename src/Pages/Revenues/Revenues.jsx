@@ -1,13 +1,13 @@
-import './Revenues.css';
-import {useState} from "react";
-import {CategoryManager} from "../../Hooks/CategoryManager/CategoryManager";
-import {RevenuesManager} from "../../Hooks/RevenuesManager/RevenuesManager";
+import { useState } from "react";
+import styles from './Revenues.module.css'; // Importando o módulo CSS
 import RevenueTable from "../../Tables/RevenueTable/RevenueTable";
 import ModalRevenues from "../../Modals/ModalRevenues/ModalRevenues";
+import { CategoryManager } from "../../Hooks/CategoryManager/CategoryManager";
+import { RevenuesManager } from "../../Hooks/RevenuesManager/RevenuesManager";
 
 const Revenues = () => {
-    const {revenues, addRevenue, deleteRevenue, updateRevenue} = RevenuesManager();
-    const {categories} = CategoryManager();
+    const { revenues, addRevenue, deleteRevenue, updateRevenue } = RevenuesManager();
+    const { categories } = CategoryManager();
     const [selectedCategory, setSelectedCategory] = useState();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingRevenue, setEditingRevenue] = useState(null);
@@ -16,14 +16,13 @@ const Revenues = () => {
     const [revenueValue, setRevenueValue] = useState('0');
     const [revenueInvoiceDueDate, setRevenueInvoiceDueDate] = useState('');
 
-
-    const handleAddRevenue = async () => {
+    const handleAddRevenue = () => {
         if (!newRevenue.trim()) {
             alert('O nome da receita não pode ser vazio.');
             return;
         }
 
-        await addRevenue({
+        addRevenue({
             name: newRevenue,
             description: revenueDescription,
             value: revenueValue,
@@ -49,7 +48,7 @@ const Revenues = () => {
         setIsModalOpen(true);
     };
 
-    const handleSaveRevenue = async () => {
+    const handleSaveRevenue = () => {
         if (!newRevenue.trim()) {
             alert('O nome da receita não pode ser vazio.');
             return;
@@ -80,39 +79,43 @@ const Revenues = () => {
         deleteRevenue(id);
     };
 
-    return (<div className="Revenues">
-        <div className="Revenues-content">
-            <button className="show-revenues-btn" onClick={() => setIsModalOpen(true)}>
-                Cadastrar receita
-            </button>
-            <div className="card-revenues">
-                <h3>Receitas</h3>
-                <RevenueTable
-                    revenues={revenues}
-                    categories={categories}
-                    onEdit={handleEditRevenue}
-                    onDelete={handleDeleteRevenue}
-                />
+    return (
+        <div className={styles.Revenues}>
+            <div className={styles['Revenues-content']}>
+                <button className={styles['show-revenues-btn']} onClick={() => setIsModalOpen(true)}>
+                    Cadastrar receita
+                </button>
+                <div className={styles['card-revenues']}>
+                    <h3>Receitas</h3>
+                    <RevenueTable
+                        revenues={revenues}
+                        categories={categories}
+                        onEdit={handleEditRevenue}
+                        onDelete={handleDeleteRevenue}
+                    />
+                </div>
             </div>
-        </div>
 
-        {isModalOpen && (<ModalRevenues
-                setIsModalOpen={setIsModalOpen}
-                handleAddRevenue={handleSaveRevenue}
-                newRevenue={newRevenue}
-                setNewRevenue={setNewRevenue}
-                revenueDescription={revenueDescription}
-                setRevenueDescription={setRevenueDescription}
-                revenueValue={revenueValue}
-                setRevenueValue={setRevenueValue}
-                revenueInvoiceDueDate={revenueInvoiceDueDate}
-                setRevenueInvoiceDueDate={setRevenueInvoiceDueDate}
-                categories={categories}
-                selectedCategory={selectedCategory}
-                setSelectedCategory={setSelectedCategory}
-                setEditingRevenue={setEditingRevenue}/>
-        )}
-    </div>);
-}
+            {isModalOpen && (
+                <ModalRevenues
+                    setIsModalOpen={setIsModalOpen}
+                    handleAddRevenue={handleSaveRevenue}
+                    newRevenue={newRevenue}
+                    setNewRevenue={setNewRevenue}
+                    revenueDescription={revenueDescription}
+                    setRevenueDescription={setRevenueDescription}
+                    revenueValue={revenueValue}
+                    setRevenueValue={setRevenueValue}
+                    revenueInvoiceDueDate={revenueInvoiceDueDate}
+                    setRevenueInvoiceDueDate={setRevenueInvoiceDueDate}
+                    categories={categories}
+                    selectedCategory={selectedCategory}
+                    setSelectedCategory={setSelectedCategory}
+                    setEditingRevenue={setEditingRevenue}
+                />
+            )}
+        </div>
+    );
+};
 
 export default Revenues;

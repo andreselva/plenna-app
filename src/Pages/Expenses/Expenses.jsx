@@ -1,13 +1,13 @@
-import './Expenses.css';
-import {useState} from "react";
+import styles from './Expenses.module.css'; // Importando o módulo CSS
+import { useState } from "react";
 import ExpenseTable from "../../Tables/ExpenseTable/ExpenseTable";
 import ModalExpenses from "../../Modals/ModalExpenses/ModalExpenses";
-import {ExpenseManager} from "../../Hooks/ExpenseManager/ExpenseManager";
-import {CategoryManager} from "../../Hooks/CategoryManager/CategoryManager";
+import { ExpenseManager } from "../../Hooks/ExpenseManager/ExpenseManager";
+import { CategoryManager } from "../../Hooks/CategoryManager/CategoryManager";
 
 const Expenses = () => {
-    const {expenses, addExpense, deleteExpense, updateExpense} = ExpenseManager();
-    const {categories} = CategoryManager();
+    const { expenses, addExpense, deleteExpense, updateExpense } = ExpenseManager();
+    const { categories } = CategoryManager();
     const [selectedCategory, setSelectedCategory] = useState();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingExpense, setEditingExpense] = useState(null);
@@ -15,7 +15,6 @@ const Expenses = () => {
     const [expenseDescription, setExpenseDescription] = useState('');
     const [expenseValue, setExpenseValue] = useState('0');
     const [expenseInvoiceDueDate, setExpenseInvoiceDueDate] = useState('');
-
 
     const handleAddExpense = () => {
         if (!newExpense.trim()) {
@@ -80,39 +79,43 @@ const Expenses = () => {
         deleteExpense(id);
     };
 
-    return (<div className="Expenses">
-        <div className="Expenses-content">
-            <button className="show-expenses-btn" onClick={() => setIsModalOpen(true)}>
-                Cadastrar despesa
-            </button>
-            <div className="card-expenses">
-                <h3>Despesas</h3>
-                <ExpenseTable
-                    expenses={expenses}
-                    categories={categories}
-                    onEdit={handleEditExpense}
-                    onDelete={handleDeleteExpense}
-                />
+    return (
+        <div className={styles.Expenses}>
+            <div className={styles['Expenses-content']}>
+                <button className={styles['show-expenses-btn']} onClick={() => setIsModalOpen(true)}>
+                    Cadastrar despesa
+                </button>
+                <div className={styles['card-expenses']}>
+                    <h3>Despesas</h3>
+                    <ExpenseTable
+                        expenses={expenses}
+                        categories={categories}
+                        onEdit={handleEditExpense}
+                        onDelete={handleDeleteExpense}
+                    />
+                </div>
             </div>
-        </div>
 
-        {isModalOpen && (<ModalExpenses
-            setIsModalOpen={setIsModalOpen}
-            handleAddExpense={handleSaveExpense}
-            newExpense={newExpense}
-            setNewExpense={setNewExpense}
-            expenseDescription={expenseDescription}
-            setExpenseDescription={setExpenseDescription}
-            expenseValue={expenseValue}
-            setExpenseValue={setExpenseValue}
-            expenseInvoiceDueDate={expenseInvoiceDueDate}
-            setExpenseInvoiceDueDate={setExpenseInvoiceDueDate}
-            categories={categories}
-            selectedCategory={selectedCategory}
-            setSelectedCategory={setSelectedCategory}
-            setEditingExpense={setEditingExpense}
-        />)}
-    </div>);
-}
+            {isModalOpen && (
+                <ModalExpenses
+                    setIsModalOpen={setIsModalOpen}
+                    handleAddExpense={handleSaveExpense}
+                    newExpense={newExpense}
+                    setNewExpense={setNewExpense}
+                    expenseDescription={expenseDescription}
+                    setExpenseDescription={setExpenseDescription}
+                    expenseValue={expenseValue}
+                    setExpenseValue={setExpenseValue}
+                    expenseInvoiceDueDate={expenseInvoiceDueDate}
+                    setExpenseInvoiceDueDate={setExpenseInvoiceDueDate}
+                    categories={categories}
+                    selectedCategory={selectedCategory}
+                    setSelectedCategory={setSelectedCategory}
+                    setEditingExpense={setEditingExpense}
+                />
+            )}
+        </div>
+    );
+};
 
 export default Expenses;

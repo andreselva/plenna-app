@@ -1,0 +1,23 @@
+.Revenues {
+    composes: container from '../../Styles/GlobalStyles.module.css';
+}
+
+.Revenues-content {
+    composes: container-content from '../../Styles/GlobalStyles.module.css';
+}
+
+.card-revenues {
+    composes: card from '../../Styles/GlobalStyles.module.css';
+}
+
+.actions {
+    composes: actions from '../../Styles/GlobalStyles.module.css';
+}
+
+.action-button {
+    composes: action-button from '../../Styles/GlobalStyles.module.css';
+}
+
+.show-revenues-btn {
+    composes: show-btn from '../../Styles/GlobalStyles.module.css';
+}

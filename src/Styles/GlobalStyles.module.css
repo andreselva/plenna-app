@@ -1,4 +1,5 @@
-.Expenses {
+/* Estilos globais para containers */
+.container {
     display: flex;
     justify-content: center;
     align-items: center; /* Alinhar verticalmente ao centro */
@@ -6,14 +7,15 @@
     width: 100%;
 }
 
-.Expenses-content {
+.container-content {
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
 }
 
-.card-expenses {
+/* Estilos globais para cards */
+.card {
     border: 1px solid #ccc;
     padding: 20px;
     border-radius: 5px;
@@ -24,35 +26,35 @@
     overflow-y: auto; /* Para permitir rolagem caso o conteúdo seja muito grande */
 }
 
-.card-expenses h3 {
+.card h3 {
     text-align: center;
     margin-bottom: 15px;
 }
 
-.card-expenses table {
+.card table {
     width: 100%;
     border-collapse: collapse; /* Remover espaçamento entre as células */
 }
 
-.card-expenses th,
-.card-expenses td {
+.card th,
+.card td {
     padding: 10px;
     text-align: center;
     border-bottom: 1px solid #ddd; /* Linha divisória entre as categorias */
 }
 
-.card-expenses th {
+.card th {
     background-color: #f4f4f4; /* Cor de fundo para o cabeçalho */
     font-weight: bold;
 }
 
-.card-expenses .actions {
+.card .actions {
     display: flex;
     justify-content: center;
-    gap: 10px
+    gap: 10px;
 }
 
-.card-expenses .actions button {
+.card .actions button {
     padding: 5px 10px;
     background-color: #f4f4f4;
     border: 1px solid #ccc;
@@ -60,11 +62,12 @@
     cursor: pointer;
 }
 
-.card-expenses .actions button:hover {
+.card .actions button:hover {
     background-color: #e0e0e0;
 }
 
-.show-expenses-btn {
+/* Estilos globais para botões */
+.show-btn {
     margin-bottom: 10px;
     padding: 10px 20px;
     font-size: 16px;
@@ -76,6 +79,6 @@
     align-self: flex-start;
 }
 
-.show-expenses-btn:hover {
+.show-btn:hover {
     background-color: #45a049;
 }

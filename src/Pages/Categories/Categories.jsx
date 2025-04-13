@@ -1,11 +1,11 @@
-import {useState} from 'react';
-import './Categories.css';
+import { useState } from 'react';
+import styles from './Categories.module.css'; // Importando o CSS como módulo
 import Modal from "../../Modals/ModalCategories/ModalCategories";
-import {CategoryManager} from "../../Hooks/CategoryManager/CategoryManager";
+import { CategoryManager } from "../../Hooks/CategoryManager/CategoryManager";
 import CategoryTable from "../../Tables/CategoryTable/CategoryTable";
 
 const Categories = () => {
-    const {categories, addCategory, deleteCategory, updateCategory} = CategoryManager();
+    const { categories, addCategory, deleteCategory, updateCategory } = CategoryManager();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingCategory, setEditingCategory] = useState(null);
 
@@ -73,13 +73,13 @@ const Categories = () => {
     };
 
     return (
-        <div className="Categories">
-            <div className="Categories-content">
-                <button className="show-categories-btn" onClick={() => setIsModalOpen(true)}>
+        <div className={styles.Categories}>
+            <div className={styles['Categories-content']}>
+                <button className={styles['show-categories-btn']} onClick={() => setIsModalOpen(true)}>
                     Cadastrar categoria
                 </button>
 
-                <div className="card-categories">
+                <div className={styles['card-categories']}>
                     <h3>Categorias</h3>
 
                     <CategoryTable

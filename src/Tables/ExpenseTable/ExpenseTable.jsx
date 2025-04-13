@@ -1,4 +1,5 @@
 import DeleteConfirmation from "../../Hooks/DeleteConfirmation/DeleteConfirmation";
+import globalStyles from '../../Styles/GlobalStyles.module.css';
 
 const ExpenseTable = ({ expenses = [], categories = [], onEdit, onDelete }) => {
     const handleDelete = DeleteConfirmation(onDelete, {
@@ -45,9 +46,9 @@ const ExpenseTable = ({ expenses = [], categories = [], onEdit, onDelete }) => {
                                         {category.name || 'Categoria não encontrada'}
                                     </span>
                                 </td>
-                                <td className="actions">
-                                    <button onClick={() => onEdit(expense)}>Editar</button>
-                                    <button onClick={() => handleDelete(expense.id)}>Excluir</button>
+                                <td className={globalStyles.actions}>
+                                    <button className={globalStyles['action-button']} onClick={() => onEdit(expense)}>Editar</button>
+                                    <button className={globalStyles['action-button']} onClick={() => handleDelete(expense.id)}>Excluir</button>
                                 </td>
                             </tr>
                         );

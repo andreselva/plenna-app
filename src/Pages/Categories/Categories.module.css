@@ -1,0 +1,15 @@
+.Categories {
+    composes: container from '../../Styles/GlobalStyles.module.css';
+}
+
+.Categories-content {
+    composes: container-content from '../../Styles/GlobalStyles.module.css';
+}
+
+.card-categories {
+    composes: card from '../../Styles/GlobalStyles.module.css';
+}
+
+.show-categories-btn {
+    composes: show-btn from '../../Styles/GlobalStyles.module.css';
+}
