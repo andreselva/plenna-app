@@ -52,14 +52,39 @@ export const RevenuesManager = () => {
         }
     };
 
-    const deleteRevenue = (id) => {
+    const deleteRevenue = async (id) => {
+        const response = await fetch(`${apiUrl}/${id}`, {
+            method: "DELETE",
+        });
+
+        if (!response.ok) {
+            throw new Error("Erro ao deletar categoria");
+        }
+
         setRevenues((oldRevenues) => oldRevenues.filter((revenue) => revenue.id !== id));
     };
 
-    const updateRevenue = (id, updatedRevenue) => {
-        setRevenues((oldRevenues) =>
-            oldRevenues.map((revenue) => (revenue.id === id ? { ...revenue, ...updatedRevenue } : revenue))
-        );
+    const updateRevenue = async (id, updatedRevenue) => {
+        try {
+            const response = await fetch(`${apiUrl}/${id}`, {
+                method: 'PUT',
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(updatedRevenue),
+            });
+
+            if (!response.ok) {
+                throw new Error("Erro ao atualizar categoria!");
+            }
+
+            const updatedData = await response.json();
+            setRevenues(prev =>
+                prev.map(revenue => revenue.id === id ? { ...revenue, ...updatedData } : revenue)
+            );
+        } catch (err) {
+            setError(err);
+        }
     };
 
     return { revenues, addRevenue, deleteRevenue, updateRevenue, loading, error };

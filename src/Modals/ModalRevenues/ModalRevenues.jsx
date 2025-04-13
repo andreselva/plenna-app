@@ -29,7 +29,7 @@ const ModalRevenues = ({
     return (
         <div className="modal-overlay">
             <div className="modal-content">
-                <h2>Cadastrar despesa</h2>
+                <h2>Cadastrar receita</h2>
 
                 <input
                     type="text"
