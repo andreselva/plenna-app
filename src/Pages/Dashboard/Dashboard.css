@@ -1,72 +1,59 @@
 .Dashboard {
-    padding: 20px;
     background-color: #f4f4f4;
+    min-width: 100%;
     display: flex;
-    align-items: center;
     justify-content: center;
-    min-height: 100vh; /* Garante que o container ocupe toda a altura da tela */
+    margin: auto;
+    padding: 10px 0 10px 0;
 }
 
 .Dashboard-content {
+    width: 100%;
     display: flex;
     flex-direction: column;
-    flex-wrap: wrap;
-    margin: auto;
+    gap: 2rem;
+    max-width: 1500px;
 }
 
-.Dashboard-content > * {
-    width: calc(50% - 0.5vh);
+.row {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+    width: 100%;
 }
 
 .card {
     background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    height: auto; /* Permite que a altura seja ajustada automaticamente */
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.chart {
+    width: 28.7%;
+}
+
+.full-width {
     width: 100%;
 }
 
-.card h2 {
-    margin-bottom: 15px;
-    font-size: 20px;
-    color: #333;
-}
-
-.card ul {
-    list-style-type: none;
-    padding: 0;
-    text-align: left;
-}
-
-.card ul li {
-    margin-bottom: 10px;
-}
-
-.card table {
+.contas-table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 20px;
+    margin-top: 10px;
 }
 
-.card th {
-    text-align: right;
-    padding: 8px;
-    border-bottom: 1px solid #ddd;
+.contas-table th,
+.contas-table td {
+    border-bottom: 1px solid #ddd; /* Linha abaixo de cada linha */
+    padding: 12px; /* Espaço maior entre colunas */
+    text-align: center; /* Centraliza o texto */
 }
 
-.card td {
-    padding: 8px;
-    text-align: center;
+.contas-table th {
+    font-weight: bold;
 }
 
-.card tr {
-    border-bottom: 1px solid #ddd;
-}
-
-.card tr:last-child {
-    border-bottom: none;
+.contas-table tbody tr:hover {
+    background-color: #f9f9f9; /* Destaque apenas para as linhas do corpo da tabela */
 }
