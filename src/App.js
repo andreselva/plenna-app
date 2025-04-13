@@ -11,7 +11,6 @@ import Revenues from "./Pages/Revenues/Revenues";
 const App = () => {
     return (<Router>
         <div className="App">
-            <Header/>
             <div className="MainContent">
                 <Sidebar/>
                 <div className="Content">

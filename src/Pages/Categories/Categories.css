@@ -1,8 +1,8 @@
 .Categories {
     display: flex;
     justify-content: center;
-    align-items: flex-start;
-    height: 100%;
+    align-items: center; /* Alinhar verticalmente ao centro */
+    height: 100vh; /* Garantir que ocupe toda a altura da tela */
     width: 100%;
 }
 

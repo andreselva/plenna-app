@@ -1,29 +1,91 @@
-import {useState} from "react";
+import { useEffect, useRef, useState } from "react";
+const apiUrl = "http://localhost:8000/expenses";
 
 export const ExpenseManager = () => {
-    const [expenses, setExpenses] = useState([
-        {id: 1, name: 'Despesa 1', description: 'Descrição 1', value: '200,00', pay: '03/2025', categoryId: 2},
-        {id: 2, name: 'Despesa 2', description: 'Descrição 2', value: '200,00', pay: '03/2025', categoryId: 2},
-        {id: 3, name: 'Despesa 3', description: 'Descrição 3', value: '200,00', pay: '03/2025', categoryId: 4},
-        {id: 4, name: 'Despesa 4', description: 'Descrição 4', value: '200,00', pay: '03/2025', categoryId: 4},
-    ]);
+    const [expenses, setExpenses] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const hasFetched = useRef(false);
 
-    const addExpense = (expense) => {
-        const newExpense = {...expense, id: Date.now()};
-        setExpenses(oldExpenses => [...oldExpenses, newExpense]);
+    useEffect(() => {
+        const fetchExpenses = async () => {
+            if (hasFetched.current) return;
+
+            hasFetched.current = true;
+            try {
+                const response = await fetch(apiUrl);
+                if (!response.ok) {
+                    throw new Error("Erro ao buscar receitas");
+                }
+
+                const data = await response.json();
+                setExpenses(data);
+            } catch (err) {
+                setError(err.message);
+            } finally {
+                setLoading(false);
+            }
+        }
+
+        fetchExpenses();
+    }, [])
+
+    const addExpense = async (expense) => {
+        try {
+            const response = await fetch(`${apiUrl}`, {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(expense),
+            });
+
+            if (!response.ok) {
+                throw new Error("Erro ao adicionar nova despesa!");
+            }
+
+            const newExpense = await response.json();
+            setExpenses(oldExpenses => [...oldExpenses, newExpense]);
+        } catch (err) {
+            setError(err.message);
+        }
     };
 
-    const deleteExpense = (id) => {
+    const deleteExpense = async (id) => {
+        const response = await fetch(`${apiUrl}/${id}`, {
+            method: "DELETE",
+        });
+
+        if (!response.ok) {
+            throw new Error("Erro ao deletar categoria");
+        }
         setExpenses(oldExpenses => oldExpenses.filter(
             expense => expense.id !== id
         ));
     };
 
-    const updateExpense = (id, updatedExpense) => {
-        setExpenses(oldExpenses => oldExpenses.map(expense =>
-            expense.id === id ? {...expense, ...updatedExpense} : expense
-        ));
-    };
+    const updateExpense = async (id, updatedExpense) => {
+        try {
+            const response = await fetch(`${apiUrl}/${id}`, {
+                method: 'PUT',
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(updatedExpense),
+            });
 
-    return {expenses, addExpense, deleteExpense, updateExpense};
-};
+            if (!response.ok) {
+                throw new Error("Erro ao atualizar categoria!");
+            }
+
+            const updatedData = await response.json();
+            setExpenses(prev =>
+                prev.map(expense => expense.id === id ? { ...expense, ...updatedData } : expense)
+            );
+        } catch (err) {
+            setError(err);
+        }
+    }
+
+    return { expenses, addExpense, deleteExpense, updateExpense, loading, error };
+}

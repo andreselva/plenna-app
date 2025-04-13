@@ -14,7 +14,7 @@ const Expenses = () => {
     const [newExpense, setNewExpense] = useState('');
     const [expenseDescription, setExpenseDescription] = useState('');
     const [expenseValue, setExpenseValue] = useState('0');
-    const [expensePay, setExpensePay] = useState('');
+    const [expenseInvoiceDueDate, setExpenseInvoiceDueDate] = useState('');
 
 
     const handleAddExpense = () => {
@@ -27,14 +27,14 @@ const Expenses = () => {
             name: newExpense,
             description: expenseDescription,
             value: expenseValue,
-            pay: expensePay,
-            categoryId: selectedCategory,
+            invoiceDueDate: expenseInvoiceDueDate,
+            idCategory: selectedCategory,
         });
 
         setNewExpense('');
         setExpenseDescription('');
         setExpenseValue('0');
-        setExpensePay('');
+        setExpenseInvoiceDueDate('');
         setSelectedCategory(null);
         setIsModalOpen(false);
     };
@@ -44,8 +44,8 @@ const Expenses = () => {
         setNewExpense(expense.name);
         setExpenseDescription(expense.description);
         setExpenseValue(expense.value);
-        setExpensePay(expense.pay);
-        setSelectedCategory(expense.categoryId);
+        setExpenseInvoiceDueDate(expense.invoiceDueDate);
+        setSelectedCategory(expense.idCategory);
         setIsModalOpen(true);
     };
 
@@ -60,8 +60,8 @@ const Expenses = () => {
                 name: newExpense,
                 description: expenseDescription,
                 value: expenseValue,
-                pay: expensePay,
-                categoryId: selectedCategory,
+                invoiceDueDate: expenseInvoiceDueDate,
+                idCategory: selectedCategory,
             });
         } else {
             handleAddExpense();
@@ -71,7 +71,7 @@ const Expenses = () => {
         setNewExpense('');
         setExpenseDescription('');
         setExpenseValue('0');
-        setExpensePay('');
+        setExpenseInvoiceDueDate('');
         setSelectedCategory('');
         setIsModalOpen(false);
     };
@@ -105,8 +105,8 @@ const Expenses = () => {
             setExpenseDescription={setExpenseDescription}
             expenseValue={expenseValue}
             setExpenseValue={setExpenseValue}
-            expensePay={expensePay}
-            setExpensePay={setExpensePay}
+            expenseInvoiceDueDate={expenseInvoiceDueDate}
+            setExpenseInvoiceDueDate={setExpenseInvoiceDueDate}
             categories={categories}
             selectedCategory={selectedCategory}
             setSelectedCategory={setSelectedCategory}

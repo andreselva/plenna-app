@@ -9,8 +9,8 @@ const ModalExpenses = ({
                            setExpenseDescription,
                            expenseValue,
                            setExpenseValue,
-                           expensePay,
-                           setExpensePay,
+                           expenseInvoiceDueDate,
+                           setExpenseInvoiceDueDate,
                            categories,
                            selectedCategory,
                            setSelectedCategory,
@@ -20,7 +20,7 @@ const ModalExpenses = ({
         setNewExpense('');
         setExpenseDescription('');
         setExpenseValue('0');
-        setExpensePay('');
+        setExpenseInvoiceDueDate('');
         setSelectedCategory('');
         setEditingExpense(null);
         setIsModalOpen(false);
@@ -62,8 +62,8 @@ const ModalExpenses = ({
                     <label>Vencimento</label>
                     <input
                         type="text"
-                        value={expensePay}
-                        onChange={(e) => setExpensePay(e.target.value)}
+                        value={expenseInvoiceDueDate}
+                        onChange={(e) => setExpenseInvoiceDueDate(e.target.value)}
                         placeholder="Vencimento"
                     />
                 </div>
