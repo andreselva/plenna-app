@@ -12,7 +12,7 @@ const ModalRevenues = ({
     revenueInvoiceDueDate,
     setRevenueInvoiceDueDate,
     categories,
-    idCategory,
+    selectedCategory,
     setSelectedCategory,
     setEditingRevenue
 }) => {
@@ -71,7 +71,7 @@ const ModalRevenues = ({
                 <div className="form-group">
                     <label>Categoria</label>
                     <select
-                        value={idCategory}
+                        value={selectedCategory}
                         onChange={(e) => setSelectedCategory(e.target.value)}
                     >
                         <option value="">Selecione</option>
