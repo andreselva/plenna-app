@@ -20,3 +20,21 @@
     text-decoration: none;
     margin-bottom: 10px;
 }
+
+.Sidebar-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 25px;
+    text-align: center;
+    color: white;
+    position: relative;
+}
+
+.Sidebar-title::after {
+    content: '';
+    display: block;
+    width: 100%; /* Linha não ocupa a largura total */
+    height: 1px;
+    background-color: #555; /* Cor sutil */
+    margin: 10px auto 0; /* Centraliza a linha */
+}

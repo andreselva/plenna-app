@@ -1,8 +1,9 @@
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import './Sidebar.css';
 
 const Sidebar = () => (
     <div className="Sidebar">
+        <div className="Sidebar-title">Financial System</div>
         <div className="Sidebar-components">
             <Link to="/dashboard">Dashboard</Link>
             <Link to="/categories">Categories</Link>
