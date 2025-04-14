@@ -11,15 +11,16 @@
     width: 100%;
     display: flex;
     flex-direction: column;
-    gap: 2rem;
-    max-width: 1500px;
+    gap: 1rem;
+    flex-wrap: wrap;
+    max-width: 1550px;
 }
 
 .row {
     display: flex;
-    gap: 2rem;
     flex-wrap: wrap;
     width: 100%;
+    justify-content: space-between;
 }
 
 .card {
@@ -29,31 +30,86 @@
     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }
 
+.row-1 {
+    height: 350px;
+}
+
 .chart {
     width: 28.7%;
+}
+
+.small-doughnut {
+    max-width: 250px; /* Ajuste o tamanho conforme necessário */
+    margin: 0 auto; /* Centraliza o gráfico */
 }
 
 .full-width {
     width: 100%;
 }
 
+.card.chart.table h2 {
+    padding: 1.5rem;
+    margin: 0;
+    background-color: #fff;
+    border-bottom: 1px solid #ddd;
+}
+
+.table-wrapper {
+    max-height: 260px;
+    overflow-y: auto;
+}
+
 .contas-table {
     width: 100%;
-    border-collapse: collapse;
-    margin-top: 10px;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.contas-table thead {
+    position: sticky;
+    top: 0;
+    background-color: white;
+    z-index: 1;
 }
 
 .contas-table th,
 .contas-table td {
     border-bottom: 1px solid #ddd; /* Linha abaixo de cada linha */
-    padding: 12px; /* Espaço maior entre colunas */
     text-align: center; /* Centraliza o texto */
 }
 
 .contas-table th {
+    padding: 12px;
+    text-align: center;
     font-weight: bold;
+    background-color: white;
+}
+
+.contas-table td {
+    padding: 12px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
 }
 
 .contas-table tbody tr:hover {
     background-color: #f9f9f9; /* Destaque apenas para as linhas do corpo da tabela */
+}
+
+/* Estilização da barra de rolagem */
+.table-wrapper::-webkit-scrollbar {
+    width: 3px;
+}
+
+.table-wrapper::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.table-wrapper::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+}
+
+.table-wrapper::-webkit-scrollbar-thumb:hover {
+    background: #8d8c8c;
 }
