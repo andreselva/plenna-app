@@ -12,6 +12,7 @@ import {
     LineElement,
     BarElement,
 } from "chart.js";
+import { useDashboardData } from "../../Hooks/DashboardManager/DashboardManager";
 
 // Registro dos elementos necessários
 ChartJS.register(
@@ -26,20 +27,12 @@ ChartJS.register(
 );
 
 const Dashboard = () => {
-    // Gráfico 1: Saldo atual (Entradas x Saídas)
-    const saldoData = {
-        labels: ["Receitas", "Despesas"],
-        datasets: [
-            {
-                data: [4000, 1500],
-                backgroundColor: ["rgba(76, 175, 80, 0.8)", "rgba(244, 67, 54, 0.8)"],
-                hoverBackgroundColor: ["rgba(76, 175, 80, 1)", "rgba(244, 67, 54, 1)"],
-                borderWidth: 0,
-                hoverOffset: 4,
-            },
-        ],
-    };
+    const { data, loading, error } = useDashboardData();
 
+    if (loading) return <div>Carregando...</div>;
+    if (error) return <div>Erro ao carregar dados: {error}</div>;
+
+    const { saldoData, gastosPorCategoriaData, contasVencimentoProximo } = data;
     const saldoOptions = {
         plugins: {
             legend: {
@@ -56,32 +49,6 @@ const Dashboard = () => {
         cutout: '70%',
     };
 
-    // Gráfico 2: Gastos por Categoria
-    const gastosPorCategoriaData = {
-        labels: ["Alimentação", "Transporte", "Moradia", "Lazer", "Saúde"],
-        datasets: [
-            {
-                label: "Gastos por Categoria",
-                data: [800, 300, 100, 150, 150],
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.7)',
-                    'rgba(54, 162, 235, 0.7)',
-                    'rgba(255, 205, 86, 0.7)',
-                    'rgba(75, 192, 192, 0.7)',
-                    'rgba(153, 102, 255, 0.7)',
-                ],
-                borderColor: [
-                    'rgb(255, 99, 132)',
-                    'rgb(54, 162, 235)',
-                    'rgb(255, 205, 86)',
-                    'rgb(75, 192, 192)',
-                    'rgb(153, 102, 255)',
-                ],
-                borderWidth: 1,
-                borderRadius: 5,
-            },
-        ],
-    };
 
     const gastosPorCategoriaOptions = {
         plugins: {
@@ -104,19 +71,6 @@ const Dashboard = () => {
             }
         }
     };
-
-    const contasVencimentoProximo = [
-        { nome: "Conta de Luz", vencimento: "15/04/2025", valor: "R$ 120,00" },
-        { nome: "Internet", vencimento: "16/04/2025", valor: "R$ 80,00" },
-        { nome: "Aluguel", vencimento: "20/04/2025", valor: "R$ 1.200,00" },
-        { nome: "Cartão de Crédito", vencimento: "22/04/2025", valor: "R$ 500,00" },
-        { nome: "Seguro do Carro", vencimento: "25/04/2025", valor: "R$ 300,00" },
-        { nome: "Seguro do Carro", vencimento: "25/04/2025", valor: "R$ 300,00" },
-        { nome: "Seguro do Carro", vencimento: "25/04/2025", valor: "R$ 300,00" },
-        { nome: "Seguro do Carro", vencimento: "25/04/2025", valor: "R$ 300,00" },
-        { nome: "Seguro do Carro", vencimento: "25/04/2025", valor: "R$ 300,00" },
-        { nome: "Seguro do Carro", vencimento: "25/04/2025", valor: "R$ 300,00" },
-    ];
 
     // Gráfico 3: Evolução Mensal
     const meses = [
