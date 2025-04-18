@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 const apiUrl = "http://localhost:8000/dashboard";
 
@@ -7,12 +7,17 @@ export const useDashboardData = () => {
         saldoData: null,
         gastosPorCategoriaData: null,
         contasVencimentoProximo: [],
+        evolucaoMensal: null
     });
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const hasFetched = useRef(false);
 
     useEffect(() => {
         const fetchData = async () => {
+            if (hasFetched.current) return;
+
+            hasFetched.current = true;  
             try {
                 const response = await fetch(apiUrl);
                 if (!response.ok) {
@@ -23,12 +28,14 @@ export const useDashboardData = () => {
                     saldoAtual,
                     despesasPorCategoria,
                     contasVencendo,
+                    evolucaoMensal,
                 } = await response.json();
 
                 setData({
                     saldoData: saldoAtual,
                     gastosPorCategoriaData: despesasPorCategoria,
                     contasVencimentoProximo: contasVencendo,
+                    evolucaoMensal: evolucaoMensal
                 });
             } catch (err) {
                 setError(err.message);

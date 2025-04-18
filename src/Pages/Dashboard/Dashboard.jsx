@@ -27,12 +27,28 @@ ChartJS.register(
 );
 
 const Dashboard = () => {
-    const { data, loading, error } = useDashboardData();
+    const { data, loading } = useDashboardData();
 
-    if (loading) return <div>Carregando...</div>;
-    if (error) return <div>Erro ao carregar dados: {error}</div>;
+    const saldoData = data?.saldoData || {
+        labels: ["Carregando..."],
+        datasets: [{
+            data: [1],
+            backgroundColor: ["#ccc"],
+            borderWidth: 0,
+        }]
+    };
 
-    const { saldoData, gastosPorCategoriaData, contasVencimentoProximo } = data;
+    const gastosPorCategoriaData = data?.gastosPorCategoriaData || {
+        labels: [],
+        datasets: [{
+            label: "Gastos",
+            data: [],
+            backgroundColor: [],
+        }]
+    };
+
+    const contasVencimentoProximo = data?.contasVencimentoProximo || [];
+
     const saldoOptions = {
         plugins: {
             legend: {
@@ -48,7 +64,6 @@ const Dashboard = () => {
         },
         cutout: '70%',
     };
-
 
     const gastosPorCategoriaOptions = {
         plugins: {
@@ -72,28 +87,14 @@ const Dashboard = () => {
         }
     };
 
-    // Gráfico 3: Evolução Mensal
-    const meses = [
-        "Abr",
-        "Mai",
-        "Jun",
-        "Jul",
-        "Ago",
-        "Set",
-        "Out",
-        "Nov",
-        "Dez",
-        "Jan",
-        "Fev",
-        "Mar",
-    ];
+    const meses = ["-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-"];
 
-    const evolucaoMensalData = {
+    const evolucaoMensalData = data?.evolucaoMensal || {
         labels: meses,
         datasets: [
             {
                 label: "Receitas",
-                data: [2500, 2700, 2600, 3000, 2800, 3100, 3300, 3400, 3200, 3500, 3600, 4000],
+                data: [200, 200, 200, 200, 200],
                 fill: true,
                 backgroundColor: 'rgba(76, 175, 80, 0.1)',
                 borderColor: 'rgba(76, 175, 80, 0.8)',
@@ -103,7 +104,7 @@ const Dashboard = () => {
             },
             {
                 label: "Despesas",
-                data: [2000, 2200, 2100, 2500, 2400, 2300, 2500, 2600, 2700, 2900, 3100, 3300],
+                data: [],
                 fill: true,
                 backgroundColor: 'rgba(244, 67, 54, 0.1)',
                 borderColor: 'rgba(244, 67, 54, 0.8)',
@@ -147,6 +148,7 @@ const Dashboard = () => {
     return (
         <div className="Dashboard">
             <div className="Dashboard-content">
+                {loading && <div className="info-msg">Carregando dados...</div>}
                 <div className="row">
                     <div className="card chart row-1">
                         <h2>Saldo Atual</h2>
@@ -168,24 +170,28 @@ const Dashboard = () => {
                     <div className="card chart table">
                         <h2>Contas a Vencer</h2>
                         <div className="table-wrapper">
-                            <table className="contas-table">
-                                <thead>
-                                    <tr>
-                                        <th>Nome</th>
-                                        <th>Vencimento</th>
-                                        <th>Valor</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {contasVencimentoProximo.map((conta, index) => (
-                                        <tr key={index}>
-                                            <td>{conta.nome}</td>
-                                            <td>{conta.vencimento}</td>
-                                            <td>{conta.valor}</td>
+                            {contasVencimentoProximo.length === 0 ? (
+                                <div className="info-msg">Nenhuma conta a vencer.</div>
+                            ) : (
+                                <table className="contas-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Nome</th>
+                                            <th>Vencimento</th>
+                                            <th>Valor</th>
                                         </tr>
-                                    ))}
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody>
+                                        {contasVencimentoProximo.map((conta, index) => (
+                                            <tr key={index}>
+                                                <td>{conta.nome}</td>
+                                                <td>{conta.vencimento}</td>
+                                                <td>{conta.valor}</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            )}
                         </div>
                     </div>
                 </div>
@@ -203,5 +209,4 @@ const Dashboard = () => {
         </div>
     );
 };
-
 export default Dashboard;
