@@ -14,7 +14,25 @@ import {
 } from "chart.js";
 import { useDashboardData } from "../../Hooks/DashboardManager/DashboardManager";
 
-// Registro dos elementos necessários
+const centerTextPlugin = {
+    id: 'centerText',
+    beforeDraw: (chart) => {
+        const { width, height, ctx } = chart;
+        const text = chart.config.options.plugins.centerText?.text || '';
+
+        ctx.save();
+        ctx.font = "bold 1.4em sans-serif";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillStyle = "#333";
+
+        const offsetY = -17;
+
+        ctx.fillText(text, width / 2, height / 2 + offsetY);
+        ctx.restore();
+    }
+};
+
 ChartJS.register(
     ArcElement,
     Tooltip,
@@ -23,11 +41,13 @@ ChartJS.register(
     LinearScale,
     PointElement,
     LineElement,
-    BarElement
+    BarElement,
+    centerTextPlugin
 );
 
 const Dashboard = () => {
     const { data, loading } = useDashboardData();
+    const remainingBalance = data?.saldoRestante ?? 0;
 
     const saldoData = data?.saldoData || {
         labels: ["Carregando..."],
@@ -60,6 +80,9 @@ const Dashboard = () => {
                         size: 12
                     }
                 }
+            },
+            centerText: {
+                text: `R$ ${remainingBalance.toFixed(2)}`
             }
         },
         cutout: '70%',
@@ -94,7 +117,7 @@ const Dashboard = () => {
         datasets: [
             {
                 label: "Receitas",
-                data: [200, 200, 200, 200, 200],
+                data: Array(12).fill(0),
                 fill: true,
                 backgroundColor: 'rgba(76, 175, 80, 0.1)',
                 borderColor: 'rgba(76, 175, 80, 0.8)',
@@ -104,7 +127,7 @@ const Dashboard = () => {
             },
             {
                 label: "Despesas",
-                data: [],
+                data: Array(12).fill(0),
                 fill: true,
                 backgroundColor: 'rgba(244, 67, 54, 0.1)',
                 borderColor: 'rgba(244, 67, 54, 0.8)',
@@ -167,32 +190,40 @@ const Dashboard = () => {
                         />
                     </div>
 
-                    <div className="card chart table">
-                        <h2>Contas a Vencer</h2>
-                        <div className="table-wrapper">
-                            {contasVencimentoProximo.length === 0 ? (
-                                <div className="info-msg">Nenhuma conta a vencer.</div>
-                            ) : (
-                                <table className="contas-table">
-                                    <thead>
-                                        <tr>
-                                            <th>Nome</th>
-                                            <th>Vencimento</th>
-                                            <th>Valor</th>
+                    <div className="card chart row-1">
+                        <h2>Faturas</h2>
+                        <Bar
+                            data={gastosPorCategoriaData}
+                            options={gastosPorCategoriaOptions}
+                        />
+                    </div>
+                </div>
+
+                <div className="card table">
+                    <h2>Contas do mês</h2>
+                    <div className="table-wrapper">
+                        {contasVencimentoProximo.length === 0 ? (
+                            <div className="info-msg">Nenhuma conta a vencer.</div>
+                        ) : (
+                            <table className="contas-table">
+                                <thead>
+                                    <tr>
+                                        <th>Nome</th>
+                                        <th>Vencimento</th>
+                                        <th>Valor</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {contasVencimentoProximo.map((conta, index) => (
+                                        <tr key={index}>
+                                            <td>{conta.nome}</td>
+                                            <td>{conta.vencimento}</td>
+                                            <td>{conta.valor}</td>
                                         </tr>
-                                    </thead>
-                                    <tbody>
-                                        {contasVencimentoProximo.map((conta, index) => (
-                                            <tr key={index}>
-                                                <td>{conta.nome}</td>
-                                                <td>{conta.vencimento}</td>
-                                                <td>{conta.valor}</td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                            )}
-                        </div>
+                                    ))}
+                                </tbody>
+                            </table>
+                        )}
                     </div>
                 </div>
 
@@ -209,4 +240,5 @@ const Dashboard = () => {
         </div>
     );
 };
+
 export default Dashboard;

@@ -6,9 +6,9 @@ const Sidebar = () => (
         <div className="Sidebar-title">Financial System</div>
         <div className="Sidebar-components">
             <Link to="/dashboard">Dashboard</Link>
-            <Link to="/categories">Categories</Link>
-            <Link to="/expenses">Expenses</Link>
-            <Link to="/revenues">Revenues</Link>
+            <Link to="/categories">Categorias</Link>
+            <Link to="/expenses">Despesas</Link>
+            <Link to="/revenues">Receitas</Link>
         </div>
     </div>
 );

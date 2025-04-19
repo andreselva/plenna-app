@@ -4,10 +4,11 @@ const apiUrl = "http://localhost:8000/dashboard";
 
 export const useDashboardData = () => {
     const [data, setData] = useState({
-        saldoData: null,
-        gastosPorCategoriaData: null,
-        contasVencimentoProximo: [],
-        evolucaoMensal: null
+        currentBalance: null,
+        expensesByCategory: null,
+        billsDue: [],
+        monthlyProgress: null,
+        remainingBalance: 0
     });
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -25,17 +26,19 @@ export const useDashboardData = () => {
                 }
 
                 const {
-                    saldoAtual,
-                    despesasPorCategoria,
-                    contasVencendo,
-                    evolucaoMensal,
+                    currentBalance,
+                    expensesByCategory,
+                    billsDue,
+                    monthlyProgress,
+                    remainingBalance
                 } = await response.json();
 
                 setData({
-                    saldoData: saldoAtual,
-                    gastosPorCategoriaData: despesasPorCategoria,
-                    contasVencimentoProximo: contasVencendo,
-                    evolucaoMensal: evolucaoMensal
+                    saldoData: currentBalance,
+                    gastosPorCategoriaData: expensesByCategory,
+                    contasVencimentoProximo: billsDue,
+                    evolucaoMensal: monthlyProgress,
+                    saldoRestante: remainingBalance
                 });
             } catch (err) {
                 setError(err.message);
