@@ -21,3 +21,7 @@
 .show-expenses-btn {
     composes: show-btn from '../../Styles/GlobalStyles.module.css';
 }
+
+.btn-card {
+    composes: container-btn-card from '../../Styles/GlobalStyles.module.css';
+}

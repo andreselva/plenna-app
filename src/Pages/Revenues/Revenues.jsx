@@ -1,90 +1,42 @@
-import { useState } from "react";
-import styles from './Revenues.module.css'; // Importando o módulo CSS
+import styles from './Revenues.module.css';
 import RevenueTable from "../../Tables/RevenueTable/RevenueTable";
 import ModalRevenues from "../../Modals/ModalRevenues/ModalRevenues";
 import { CategoryManager } from "../../Hooks/CategoryManager/CategoryManager";
-import { RevenuesManager } from "../../Hooks/RevenuesManager/RevenuesManager";
+import { useRevenueHandler } from '../../Hooks/Handlers/useRevenuesHandler';
 
 const Revenues = () => {
-    const { revenues, addRevenue, deleteRevenue, updateRevenue } = RevenuesManager();
+    const {
+        revenues,
+        selectedCategory,
+        setSelectedCategory,
+        isModalOpen,
+        setIsModalOpen,
+        setEditingRevenue,
+        newRevenue,
+        setNewRevenue,
+        revenueDescription,
+        setRevenueDescription,
+        revenueValue,
+        setRevenueValue,
+        revenueInvoiceDueDate,
+        setRevenueInvoiceDueDate,
+        handleEditRevenue,
+        handleSaveRevenue,
+        handleDeleteRevenue
+    } = useRevenueHandler();
+
     const { categories } = CategoryManager();
-    const [selectedCategory, setSelectedCategory] = useState();
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [editingRevenue, setEditingRevenue] = useState(null);
-    const [newRevenue, setNewRevenue] = useState('');
-    const [revenueDescription, setRevenueDescription] = useState('');
-    const [revenueValue, setRevenueValue] = useState('');
-    const [revenueInvoiceDueDate, setRevenueInvoiceDueDate] = useState('');
-
-    const handleAddRevenue = () => {
-        if (!newRevenue.trim()) {
-            alert('O nome da receita não pode ser vazio.');
-            return;
-        }
-
-        addRevenue({
-            name: newRevenue,
-            description: revenueDescription,
-            value: revenueValue,
-            invoiceDueDate: revenueInvoiceDueDate,
-            idCategory: selectedCategory,
-        });
-
-        setNewRevenue('');
-        setRevenueDescription('');
-        setRevenueValue('0');
-        setRevenueInvoiceDueDate('');
-        setSelectedCategory(null);
-        setIsModalOpen(false);
-    };
-
-    const handleEditRevenue = (revenue) => {
-        setEditingRevenue(revenue);
-        setNewRevenue(revenue.name);
-        setRevenueDescription(revenue.description);
-        setRevenueValue(revenue.value);
-        setRevenueInvoiceDueDate(revenue.invoiceDueDate);
-        setSelectedCategory(revenue.idCategory);
-        setIsModalOpen(true);
-    };
-
-    const handleSaveRevenue = () => {
-        if (!newRevenue.trim()) {
-            alert('O nome da receita não pode ser vazio.');
-            return;
-        }
-
-        if (editingRevenue) {
-            updateRevenue(editingRevenue.id, {
-                name: newRevenue,
-                description: revenueDescription,
-                value: revenueValue,
-                invoiceDueDate: revenueInvoiceDueDate,
-                idCategory: selectedCategory,
-            });
-        } else {
-            handleAddRevenue();
-        }
-
-        setEditingRevenue(null);
-        setNewRevenue('');
-        setRevenueDescription('');
-        setRevenueValue('0');
-        setRevenueInvoiceDueDate('');
-        setSelectedCategory('');
-        setIsModalOpen(false);
-    };
-
-    const handleDeleteRevenue = (id) => {
-        deleteRevenue(id);
-    };
 
     return (
         <div className={styles.Revenues}>
             <div className={styles['Revenues-content']}>
-                <button className={styles['show-revenues-btn']} onClick={() => setIsModalOpen(true)}>
+                <button
+                    className={styles['show-revenues-btn']}
+                    onClick={() => setIsModalOpen(true)}
+                >
                     Cadastrar receita
                 </button>
+
                 <div className={styles['card-revenues']}>
                     <h3>Receitas</h3>
                     <RevenueTable

@@ -1,90 +1,27 @@
-import styles from './Expenses.module.css'; // Importando o módulo CSS
-import { useState } from "react";
+// Expenses.js
+import styles from './Expenses.module.css';
 import ExpenseTable from "../../Tables/ExpenseTable/ExpenseTable";
 import ModalExpenses from "../../Modals/ModalExpenses/ModalExpenses";
-import { ExpenseManager } from "../../Hooks/ExpenseManager/ExpenseManager";
-import { CategoryManager } from "../../Hooks/CategoryManager/CategoryManager";
+import { useExpenseHandler } from '../../Hooks/Handlers/useExpenseHandler';
 
 const Expenses = () => {
-    const { expenses, addExpense, deleteExpense, updateExpense } = ExpenseManager();
-    const { categories } = CategoryManager();
-    const [selectedCategory, setSelectedCategory] = useState();
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [editingExpense, setEditingExpense] = useState(null);
-    const [newExpense, setNewExpense] = useState('');
-    const [expenseDescription, setExpenseDescription] = useState('');
-    const [expenseValue, setExpenseValue] = useState('');
-    const [expenseInvoiceDueDate, setExpenseInvoiceDueDate] = useState('');
-
-    const handleAddExpense = () => {
-        if (!newExpense.trim()) {
-            alert('O nome da despesa não pode ser vazio.');
-            return;
-        }
-
-        addExpense({
-            name: newExpense,
-            description: expenseDescription,
-            value: expenseValue,
-            invoiceDueDate: expenseInvoiceDueDate,
-            idCategory: selectedCategory,
-        });
-
-        setNewExpense('');
-        setExpenseDescription('');
-        setExpenseValue('0');
-        setExpenseInvoiceDueDate('');
-        setSelectedCategory(null);
-        setIsModalOpen(false);
-    };
-
-    const handleEditExpense = (expense) => {
-        setEditingExpense(expense);
-        setNewExpense(expense.name);
-        setExpenseDescription(expense.description);
-        setExpenseValue(expense.value);
-        setExpenseInvoiceDueDate(expense.invoiceDueDate);
-        setSelectedCategory(expense.idCategory);
-        setIsModalOpen(true);
-    };
-
-    const handleSaveExpense = () => {
-        if (!newExpense.trim()) {
-            alert('O nome da despesa não pode ser vazio.');
-            return;
-        }
-
-        if (editingExpense) {
-            updateExpense(editingExpense.id, {
-                name: newExpense,
-                description: expenseDescription,
-                value: expenseValue,
-                invoiceDueDate: expenseInvoiceDueDate,
-                idCategory: selectedCategory,
-            });
-        } else {
-            handleAddExpense();
-        }
-
-        setEditingExpense(null);
-        setNewExpense('');
-        setExpenseDescription('');
-        setExpenseValue('0');
-        setExpenseInvoiceDueDate('');
-        setSelectedCategory('');
-        setIsModalOpen(false);
-    };
-
-    const handleDeleteExpense = (id) => {
-        deleteExpense(id);
-    };
+    const {
+        expenses, categories, newExpense, setNewExpense, expenseDescription, setExpenseDescription,
+        expenseValue, setExpenseValue, expenseInvoiceDueDate, setExpenseInvoiceDueDate, selectedCategory,
+        setSelectedCategory, isModalOpen, setIsModalOpen, setEditingExpense, handleEditExpense, handleSaveExpense, handleDeleteExpense
+    } = useExpenseHandler();
 
     return (
         <div className={styles.Expenses}>
             <div className={styles['Expenses-content']}>
-                <button className={styles['show-expenses-btn']} onClick={() => setIsModalOpen(true)}>
-                    Cadastrar despesa
-                </button>
+                <div className={styles['btn-card']}>
+                    <button className={styles['show-expenses-btn']} onClick={() => setIsModalOpen(true)}>
+                        Cadastrar despesa
+                    </button>
+                    <button className={styles['show-expenses-btn']}>
+
+                    </button>
+                </div>
                 <div className={styles['card-expenses']}>
                     <h3>Despesas</h3>
                     <ExpenseTable
