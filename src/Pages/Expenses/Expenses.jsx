@@ -13,7 +13,7 @@ const Expenses = () => {
     const [editingExpense, setEditingExpense] = useState(null);
     const [newExpense, setNewExpense] = useState('');
     const [expenseDescription, setExpenseDescription] = useState('');
-    const [expenseValue, setExpenseValue] = useState('0');
+    const [expenseValue, setExpenseValue] = useState('');
     const [expenseInvoiceDueDate, setExpenseInvoiceDueDate] = useState('');
 
     const handleAddExpense = () => {

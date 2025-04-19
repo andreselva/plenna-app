@@ -19,7 +19,7 @@ const ModalRevenues = ({
     const handleCancel = () => {
         setNewRevenue('');
         setRevenueDescription('');
-        setRevenueValue('0');
+        setRevenueValue('');
         setRevenueInvoiceDueDate('');
         setSelectedCategory('');
         setEditingRevenue(null);
@@ -29,67 +29,83 @@ const ModalRevenues = ({
     return (
         <div className="modal-overlay">
             <div className="modal-content">
-                <h2>Cadastrar receita</h2>
+                <h2>Cadastrar Receita</h2>
 
-                <input
-                    type="text"
-                    value={newRevenue}
-                    onChange={(e) => setNewRevenue(e.target.value)}
-                    placeholder="Nome"
-                />
+                <form onSubmit={(e) => {
+                    e.preventDefault();
+                    handleAddRevenue();
+                }}>
+                    <div className="form-group">
+                        <label htmlFor="revenueName">Nome</label>
+                        <input
+                            id="revenueName"
+                            type="text"
+                            value={newRevenue}
+                            onChange={(e) => setNewRevenue(e.target.value)}
+                            placeholder="Ex: Salário, Freelancer..."
+                            required
+                        />
+                    </div>
 
-                <div className="form-group">
-                    <label>Descrição</label>
-                    <input
-                        type="text"
-                        value={revenueDescription}
-                        onChange={(e) => setRevenueDescription(e.target.value)}
-                        placeholder="Descrição"
-                    />
-                </div>
+                    <div className="form-group">
+                        <label htmlFor="revenueDescription">Descrição</label>
+                        <input
+                            id="revenueDescription"
+                            type="text"
+                            value={revenueDescription}
+                            onChange={(e) => setRevenueDescription(e.target.value)}
+                            placeholder="Descreva a receita (opcional)"
+                        />
+                    </div>
 
-                <div className="form-group">
-                    <label>Valor</label>
-                    <input
-                        type="text"
-                        value={revenueValue}
-                        onChange={(e) => setRevenueValue(e.target.value)}
-                        placeholder="Valor"
-                    />
-                </div>
+                    <div className="form-group">
+                        <label htmlFor="revenueValue">Valor (R$)</label>
+                        <input
+                            id="revenueValue"
+                            type="number"
+                            step="0.01"
+                            value={revenueValue}
+                            onChange={(e) => setRevenueValue(e.target.value)}
+                            placeholder="0,00"
+                            required
+                        />
+                    </div>
 
-                <div className="form-group">
-                    <label>Vencimento</label>
-                    <input
-                        type="text"
-                        value={revenueInvoiceDueDate}
-                        onChange={(e) => setRevenueInvoiceDueDate(e.target.value)}
-                        placeholder="Vencimento"
-                    />
-                </div>
+                    <div className="form-group">
+                        <label htmlFor="invoiceDueDate">Vencimento</label>
+                        <input
+                            id="invoiceDueDate"
+                            type="date"
+                            value={revenueInvoiceDueDate}
+                            onChange={(e) => setRevenueInvoiceDueDate(e.target.value)}
+                            required
+                        />
+                    </div>
 
-                <div className="form-group">
-                    <label>Categoria</label>
-                    <select
-                        value={selectedCategory}
-                        onChange={(e) => setSelectedCategory(e.target.value)}
-                    >
-                        <option value="">Selecione</option>
-                        {categories
-                            .filter(category => category.type.toUpperCase() === 'RECEITA')
-                            .map((category) => (
-                                <option key={category.id} value={category.id}>
-                                    {category.name}
-                                </option>
-                            ))}
-                    </select>
+                    <div className="form-group">
+                        <label htmlFor="category">Categoria</label>
+                        <select
+                            id="category"
+                            value={selectedCategory}
+                            onChange={(e) => setSelectedCategory(e.target.value)}
+                            required
+                        >
+                            <option value="">Selecione uma categoria</option>
+                            {categories
+                                .filter(category => category.type.toUpperCase() === 'RECEITA')
+                                .map((category) => (
+                                    <option key={category.id} value={category.id}>
+                                        {category.name}
+                                    </option>
+                                ))}
+                        </select>
+                    </div>
 
-                </div>
-
-                <div className="modal-buttons">
-                    <button onClick={handleAddRevenue}>Salvar</button>
-                    <button onClick={handleCancel}>Cancelar</button>
-                </div>
+                    <div className="modal-buttons">
+                        <button type="submit" className="btn-primary">Salvar</button>
+                        <button type="button" onClick={handleCancel} className="btn-secondary">Cancelar</button>
+                    </div>
+                </form>
             </div>
         </div>
     );

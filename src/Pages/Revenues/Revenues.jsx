@@ -13,7 +13,7 @@ const Revenues = () => {
     const [editingRevenue, setEditingRevenue] = useState(null);
     const [newRevenue, setNewRevenue] = useState('');
     const [revenueDescription, setRevenueDescription] = useState('');
-    const [revenueValue, setRevenueValue] = useState('0');
+    const [revenueValue, setRevenueValue] = useState('');
     const [revenueInvoiceDueDate, setRevenueInvoiceDueDate] = useState('');
 
     const handleAddRevenue = () => {

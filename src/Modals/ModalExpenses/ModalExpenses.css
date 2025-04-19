@@ -102,6 +102,29 @@ textarea:focus {
     transform: translateY(-2px);
 }
 
+/* Estilização suave e alinhada para o campo de data */
+input[type="date"] {
+    appearance: none;
+    -webkit-appearance: none;
+    background-color: #fff;
+    color: #333;
+    font-family: inherit;
+    padding-right: 40px;
+    position: relative;
+}
+
+/* Ícone de calendário discreto no Chrome/WebKit */
+input[type="date"]::-webkit-calendar-picker-indicator {
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: url('data:image/svg+xml;utf8,<svg fill="gray" height="20" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 18H5V8h14v13zM7 10h5v5H7z"/></svg>') no-repeat center;
+    background-size: 20px;
+    cursor: pointer;
+    opacity: 0.6;
+}
+
 /* Animações */
 @keyframes fadeIn {
     from {
