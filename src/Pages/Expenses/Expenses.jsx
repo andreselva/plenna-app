@@ -3,6 +3,8 @@ import styles from './Expenses.module.css';
 import ExpenseTable from "../../Tables/ExpenseTable/ExpenseTable";
 import ModalExpenses from "../../Modals/ModalExpenses/ModalExpenses";
 import { useExpenseHandler } from '../../Hooks/Handlers/useExpenseHandler';
+import { ReactComponent as CardIcon } from '../../assets/icons/card-outline.svg';
+import { BotaoGlobal } from '../../Components/Buttons/ButtonGlobal.tsx';
 
 const Expenses = () => {
     const {
@@ -15,12 +17,11 @@ const Expenses = () => {
         <div className={styles.Expenses}>
             <div className={styles['Expenses-content']}>
                 <div className={styles['btn-card']}>
-                    <button className={styles['show-expenses-btn']} onClick={() => setIsModalOpen(true)}>
+                    <BotaoGlobal cor="primaria" className={styles['show-expenses-btn']} onClick={() => setIsModalOpen(true)}>
                         Cadastrar despesa
-                    </button>
-                    <button className={styles['show-expenses-btn']}>
+                    </BotaoGlobal>
+                    <BotaoGlobal cor="secundaria" icone={<CardIcon className={styles['icon']} />} />
 
-                    </button>
                 </div>
                 <div className={styles['card-expenses']}>
                     <h3>Despesas</h3>

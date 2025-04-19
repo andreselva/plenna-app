@@ -3,6 +3,7 @@ import RevenueTable from "../../Tables/RevenueTable/RevenueTable";
 import ModalRevenues from "../../Modals/ModalRevenues/ModalRevenues";
 import { CategoryManager } from "../../Hooks/CategoryManager/CategoryManager";
 import { useRevenueHandler } from '../../Hooks/Handlers/useRevenuesHandler';
+import { BotaoGlobal } from '../../Components/Buttons/ButtonGlobal.tsx';
 
 const Revenues = () => {
     const {
@@ -30,12 +31,9 @@ const Revenues = () => {
     return (
         <div className={styles.Revenues}>
             <div className={styles['Revenues-content']}>
-                <button
-                    className={styles['show-revenues-btn']}
-                    onClick={() => setIsModalOpen(true)}
-                >
+                <BotaoGlobal className={styles['show-revenues-btn']} onClick={() => setIsModalOpen(true)}>
                     Cadastrar receita
-                </button>
+                </BotaoGlobal>
 
                 <div className={styles['card-revenues']}>
                     <h3>Receitas</h3>

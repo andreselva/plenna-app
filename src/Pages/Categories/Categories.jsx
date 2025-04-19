@@ -2,6 +2,7 @@ import styles from './Categories.module.css';
 import Modal from "../../Modals/ModalCategories/ModalCategories";
 import CategoryTable from "../../Tables/CategoryTable/CategoryTable";
 import { useCategoryHandler } from '../../Hooks/Handlers/useCategoryHandler';
+import { BotaoGlobal } from '../../Components/Buttons/ButtonGlobal.tsx';
 
 const Categories = () => {
     const {
@@ -26,9 +27,9 @@ const Categories = () => {
     return (
         <div className={styles.Categories}>
             <div className={styles['Categories-content']}>
-                <button className={styles['show-categories-btn']} onClick={() => setIsModalOpen(true)}>
+                <BotaoGlobal className={styles['show-categories-btn']} onClick={() => setIsModalOpen(true)}>
                     Cadastrar categoria
-                </button>
+                </BotaoGlobal>
 
                 <div className={styles['card-categories']}>
                     <h3>Categorias</h3>

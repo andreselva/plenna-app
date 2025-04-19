@@ -64,21 +64,6 @@
     background-color: #e0e0e0;
 }
 
-/* Estilos globais para botões */
-.show-btn {
-    margin-bottom: 10px;
-    padding: 10px 20px;
-    font-size: 16px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    cursor: pointer;
-    border-radius: 5px;
-    align-self: flex-start;
-    min-height: 38px;
-    min-width: 50px;
-}
-
 .show-btn:hover {
     background-color: #45a049;
 }
@@ -87,3 +72,43 @@
     display: flex;
     justify-content: space-between;
 }
+
+.card-icon {
+    width: 18px;
+    height: 15px;
+    fill: currentColor; /* usa a cor do texto */
+}
+
+/* BotaoGlobal.module.css */
+.botao {
+    margin-bottom: 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    align-self: flex-start;
+    min-height: 38px;
+    min-width: 50px;
+  }
+  
+  .primaria {
+    background-color: #4CAF50;
+    color: white;
+  }
+  
+  .secundaria {
+    background-color: #0d82e7;
+    color: white;
+  }
+  
+  .vermelho {
+    background-color: #dc3545;
+    color: white;
+  }
+  
+  .icone {
+    display: inline-flex;
+  }
+  
