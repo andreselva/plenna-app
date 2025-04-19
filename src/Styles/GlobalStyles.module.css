@@ -71,6 +71,8 @@
 .container-btn-card {
     display: flex;
     justify-content: space-between;
+    position: relative; /* Importante para o dropdown se posicionar em relação a este elemento */
+
 }
 
 .card-icon {
@@ -111,4 +113,3 @@
   .icone {
     display: inline-flex;
   }
-  

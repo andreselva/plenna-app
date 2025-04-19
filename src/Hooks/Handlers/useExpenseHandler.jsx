@@ -5,7 +5,8 @@ import { CategoryManager } from '../../Hooks/CategoryManager/CategoryManager';
 export const useExpenseHandler = () => {
     const { expenses, addExpense, deleteExpense, updateExpense } = ExpenseManager();
     const { categories } = CategoryManager();
-
+    const [cards, setCards] = useState([{ 'name': 'Sicredi' }, { 'name': 'Nubank' }]);
+    
     const [selectedCategory, setSelectedCategory] = useState();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingExpense, setEditingExpense] = useState(null);
@@ -13,6 +14,7 @@ export const useExpenseHandler = () => {
     const [expenseDescription, setExpenseDescription] = useState('');
     const [expenseValue, setExpenseValue] = useState('');
     const [expenseInvoiceDueDate, setExpenseInvoiceDueDate] = useState('');
+    const [isModalCardOpen, setIsModalCardOpen] = useState(false);
 
     const handleAddExpense = () => {
         if (!newExpense.trim()) {
@@ -77,6 +79,10 @@ export const useExpenseHandler = () => {
         deleteExpense(id);
     };
 
+    const handleAddCard = () => {
+        setIsModalCardOpen(true);
+    }
+
     return {
         expenses,
         categories,
@@ -92,11 +98,15 @@ export const useExpenseHandler = () => {
         setSelectedCategory,
         isModalOpen,
         setIsModalOpen,
+        isModalCardOpen,
+        setIsModalCardOpen,
         editingExpense,
         setEditingExpense,
         handleAddExpense,
         handleEditExpense,
         handleSaveExpense,
         handleDeleteExpense,
+        handleAddCard,
+        cards,
     };
 };

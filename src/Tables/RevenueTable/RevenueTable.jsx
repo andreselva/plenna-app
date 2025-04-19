@@ -12,7 +12,7 @@ const RevenueTable = ({ revenues = [], categories = [], onEdit, onDelete }) => {
     });
 
     return (
-        <table className={globalStyles.table}>
+        <table>
             <thead>
                 <tr>
                     <th>Descrição</th>

@@ -2,6 +2,7 @@
 import styles from './Expenses.module.css';
 import ExpenseTable from "../../Tables/ExpenseTable/ExpenseTable";
 import ModalExpenses from "../../Modals/ModalExpenses/ModalExpenses";
+import { ModalCards } from '../../Modals/ModalCards/ModalCards';
 import { useExpenseHandler } from '../../Hooks/Handlers/useExpenseHandler';
 import { ReactComponent as CardIcon } from '../../assets/icons/card-outline.svg';
 import { BotaoGlobal } from '../../Components/Buttons/ButtonGlobal.tsx';
@@ -10,7 +11,7 @@ const Expenses = () => {
     const {
         expenses, categories, newExpense, setNewExpense, expenseDescription, setExpenseDescription,
         expenseValue, setExpenseValue, expenseInvoiceDueDate, setExpenseInvoiceDueDate, selectedCategory,
-        setSelectedCategory, isModalOpen, setIsModalOpen, setEditingExpense, handleEditExpense, handleSaveExpense, handleDeleteExpense
+        setSelectedCategory, isModalOpen, setIsModalOpen, isModalCardOpen, setIsModalCardOpen, setEditingExpense, handleEditExpense, handleSaveExpense, handleDeleteExpense, cards
     } = useExpenseHandler();
 
     return (
@@ -20,7 +21,7 @@ const Expenses = () => {
                     <BotaoGlobal cor="primaria" className={styles['show-expenses-btn']} onClick={() => setIsModalOpen(true)}>
                         Cadastrar despesa
                     </BotaoGlobal>
-                    <BotaoGlobal cor="secundaria" icone={<CardIcon className={styles['icon']} />} />
+                    <BotaoGlobal cor="secundaria" icone={<CardIcon className={styles['icon']} />} onClick={() => setIsModalCardOpen(true)}/>
 
                 </div>
                 <div className={styles['card-expenses']}>
@@ -52,6 +53,13 @@ const Expenses = () => {
                     setEditingExpense={setEditingExpense}
                 />
             )}
+
+            {isModalCardOpen && (
+                <ModalCards
+                    setIsModalCardOpen={setIsModalCardOpen}
+                    cards={cards}
+                />
+            )} 
         </div>
     );
 };
