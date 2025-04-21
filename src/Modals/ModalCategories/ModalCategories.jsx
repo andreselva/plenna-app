@@ -1,6 +1,6 @@
-import './ModalCategories.css';
+import GenericModal from "../../Components/GenericModal/GenericModal";
 
-const Modal = ({
+const ModalCategories = ({
     setIsModalOpen,
     handleAddCategory,
     newCategory,
@@ -12,7 +12,7 @@ const Modal = ({
     categoryColor,
     setCategoryColor,
     setEditingCategory,
-    editingCategory
+    editingCategory,
 }) => {
     const handleCancel = () => {
         setNewCategory('');
@@ -23,56 +23,55 @@ const Modal = ({
         setEditingCategory(null);
     };
 
+    const formFields = [
+        {
+            id: 'categoryName',
+            label: 'Nome da Categoria',
+            type: 'text',
+            value: newCategory,
+            onChange: setNewCategory,
+            placeholder: 'Nome da categoria',
+            required: true,
+        },
+        {
+            id: 'categoryType',
+            label: 'Tipo de Categoria',
+            type: 'select',
+            value: categoryType,
+            onChange: setCategoryType,
+            placeholder: 'Selecione o tipo',
+            required: true,
+            options: [
+                { value: 'Receita', label: 'Receita' },
+                { value: 'Despesa', label: 'Despesa' },
+            ],
+        },
+        {
+            id: 'categoryDescription',
+            label: 'Descrição',
+            type: 'text',
+            value: categoryDescription,
+            onChange: setCategoryDescription,
+            placeholder: 'Descrição da categoria',
+        },
+        {
+            id: 'categoryColor',
+            type: 'color',
+            value: categoryColor,
+            onChange: setCategoryColor,
+        },
+    ];
+
     return (
-        <div className="modal-overlay">
-            <div className="modal-content">
-                <h2>Cadastrar categoria</h2>
-
-                <input
-                    type="text"
-                    value={newCategory}
-                    onChange={(e) => setNewCategory(e.target.value)}
-                    placeholder="Nome da categoria"
-                />
-
-                <div className="form-group">
-                    <label>Tipo de Categoria</label>
-                    <select
-                        value={categoryType}
-                        onChange={(e) => setCategoryType(e.target.value)}
-                    >
-                        <option value="Receita">Receita</option>
-                        <option value="Despesa">Despesa</option>
-                    </select>
-                </div>
-
-                <div className="form-group">
-                    <label>Descrição</label>
-                    <input
-                        type="text"
-                        value={categoryDescription}
-                        onChange={(e) => setCategoryDescription(e.target.value)}
-                        placeholder="Descrição da categoria"
-                    />
-                </div>
-
-                <div className="form-group">
-                    <input
-                        type="color"
-                        value={categoryColor}
-                        onChange={(e) => setCategoryColor(e.target.value)}
-                    />
-                </div>
-
-                <div className="modal-buttons">
-                    <button onClick={handleAddCategory}>
-                        {editingCategory ? 'Salvar' : 'Adicionar'}
-                    </button>
-                    <button onClick={handleCancel}>Cancelar</button>
-                </div>
-            </div>
-        </div>
+        <GenericModal
+            isOpen={true}
+            title={editingCategory ? 'Editar Categoria' : 'Cadastrar Categoria'}
+            formFields={formFields}
+            onSubmit={handleAddCategory}
+            onCancel={handleCancel}
+            submitButtonText={editingCategory ? 'Salvar' : 'Adicionar'}
+        />
     );
 };
 
-export default Modal;
+export default ModalCategories;
