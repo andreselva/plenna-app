@@ -10,9 +10,9 @@ const ModalRevenues = ({
     revenueInvoiceDueDate,
     setRevenueInvoiceDueDate,
     categories,
-    selectedCategory,   
+    selectedCategory,
     setSelectedCategory,
-    setEditingRevenue
+    setEditingRevenue,
 }) => {
     const handleCancel = () => {
         setNewRevenue('');
@@ -25,43 +25,59 @@ const ModalRevenues = ({
 
     const formFields = [
         {
-            id: 'revenueName',
-            label: 'Nome',
-            type: 'text',
-            value: newRevenue,
-            onChange: setNewRevenue,
-            placeholder: 'Ex: Salário, Freelancer...',
-            required: true,
+            fields: [
+                {
+                    id: 'revenueName',
+                    label: 'Nome',
+                    type: 'text',
+                    value: newRevenue,
+                    onChange: setNewRevenue,
+                    placeholder: 'Ex: Salário, Freelancer...',
+                    required: true,
+                    size: 'full-width', // Define o tamanho do input
+                },
+            ],
         },
         {
-            id: 'revenueValue',
-            label: 'Valor (R$)',
-            type: 'number',
-            value: revenueValue,
-            onChange: setRevenueValue,
-            placeholder: '0,00',
-            step: '0.01',
-            required: true,
+            fields: [
+                {
+                    id: 'revenueValue',
+                    label: 'Valor (R$)',
+                    type: 'number',
+                    value: revenueValue,
+                    onChange: setRevenueValue,
+                    placeholder: '0,00',
+                    step: '0.01',
+                    required: true,
+                    size: 'half-width', // Define o tamanho do input
+                },
+                {
+                    id: 'invoiceDueDate',
+                    label: 'Vencimento',
+                    type: 'date',
+                    value: revenueInvoiceDueDate,
+                    onChange: setRevenueInvoiceDueDate,
+                    required: true,
+                    size: 'half-width', // Define o tamanho do input
+                },
+            ],
         },
         {
-            id: 'invoiceDueDate',
-            label: 'Vencimento',
-            type: 'date',
-            value: revenueInvoiceDueDate,
-            onChange: setRevenueInvoiceDueDate,
-            required: true,
-        },
-        {
-            id: 'category',
-            label: 'Categoria',
-            type: 'select',
-            value: selectedCategory,
-            onChange: setSelectedCategory,
-            placeholder: 'Selecione uma categoria',
-            required: true,
-            options: categories
-                .filter(category => category.type.toUpperCase() === 'RECEITA')
-                .map(category => ({ value: category.id, label: category.name })),
+            fields: [
+                {
+                    id: 'category',
+                    label: 'Categoria',
+                    type: 'select',
+                    value: selectedCategory,
+                    onChange: setSelectedCategory,
+                    placeholder: 'Selecione uma categoria',
+                    required: true,
+                    options: categories
+                        .filter((category) => category.type.toUpperCase() === 'RECEITA')
+                        .map((category) => ({ value: category.id, label: category.name })),
+                    size: 'full-width', // Define o tamanho do input
+                },
+            ],
         },
     ];
 
@@ -72,6 +88,7 @@ const ModalRevenues = ({
             formFields={formFields}
             onSubmit={handleAddRevenue}
             onCancel={handleCancel}
+            submitButtonText="Adicionar"
         />
     );
 };

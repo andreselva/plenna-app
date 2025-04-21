@@ -12,7 +12,7 @@ const ModalExpenses = ({
     categories,
     selectedCategory,
     setSelectedCategory,
-    setEditingExpense
+    setEditingExpense,
 }) => {
     const handleCancel = () => {
         setNewExpense('');
@@ -25,42 +25,58 @@ const ModalExpenses = ({
 
     const formFields = [
         {
-            id: 'expenseName',
-            label: 'Nome',
-            type: 'text',
-            value: newExpense,
-            onChange: setNewExpense,
-            placeholder: 'Ex: Luz, Internet...',
-            required: true,
+            fields: [
+                {
+                    id: 'expenseName',
+                    label: 'Nome',
+                    type: 'text',
+                    value: newExpense,
+                    onChange: setNewExpense,
+                    placeholder: 'Ex: Luz, Internet...',
+                    required: true,
+                    size: 'full-width', // Define o tamanho do input
+                },
+            ],
         },
         {
-            id: 'expenseValue',
-            label: 'Valor R$',
-            type: 'number',
-            value: expenseValue,
-            onChange: setExpenseValue,
-            placeholder: '0,00',
-            required: true,
+            fields: [
+                {
+                    id: 'expenseValue',
+                    label: 'Valor R$',
+                    type: 'number',
+                    value: expenseValue,
+                    onChange: setExpenseValue,
+                    placeholder: '0,00',
+                    required: true,
+                    size: 'half-width', // Define o tamanho do input
+                },
+                {
+                    id: 'invoiceDueDate',
+                    label: 'Vencimento',
+                    type: 'date',
+                    value: expenseInvoiceDueDate,
+                    onChange: setExpenseInvoiceDueDate,
+                    required: true,
+                    size: 'half-width', // Define o tamanho do input
+                },
+            ],
         },
         {
-            id: 'invoiceDueDate',
-            label: 'Vencimento',
-            type: 'date',
-            value: expenseInvoiceDueDate,
-            onChange: setExpenseInvoiceDueDate,
-            required: true,
-        },
-        {
-            id: 'category',
-            label: 'Categoria',
-            type: 'select',
-            value: selectedCategory,
-            onChange: setSelectedCategory,
-            placeholder: 'Selecione uma categoria',
-            required: true,
-            options: categories
-                .filter(category => category.type.toUpperCase() === 'DESPESA')
-                .map(category => ({ value: category.id, label: category.name })),
+            fields: [
+                {
+                    id: 'category',
+                    label: 'Categoria',
+                    type: 'select',
+                    value: selectedCategory,
+                    onChange: setSelectedCategory,
+                    placeholder: 'Selecione uma categoria',
+                    required: true,
+                    options: categories
+                        .filter((category) => category.type.toUpperCase() === 'DESPESA')
+                        .map((category) => ({ value: category.id, label: category.name })),
+                    size: 'full-width', // Define o tamanho do input
+                },
+            ],
         },
     ];
 
@@ -71,6 +87,7 @@ const ModalExpenses = ({
             formFields={formFields}
             onSubmit={handleAddExpense}
             onCancel={handleCancel}
+            submitButtonText="Adicionar"
         />
     );
 };

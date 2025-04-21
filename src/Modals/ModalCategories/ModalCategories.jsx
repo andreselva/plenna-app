@@ -7,7 +7,6 @@ const ModalCategories = ({
     setNewCategory,
     categoryType,
     setCategoryType,
-    setCategoryDescription,
     categoryColor,
     setCategoryColor,
     setEditingCategory,
@@ -16,7 +15,6 @@ const ModalCategories = ({
     const handleCancel = () => {
         setNewCategory('');
         setCategoryType('Receita');
-        setCategoryDescription('');
         setCategoryColor('#000000');
         setIsModalOpen(false);
         setEditingCategory(null);
@@ -24,32 +22,44 @@ const ModalCategories = ({
 
     const formFields = [
         {
-            id: 'categoryName',
-            label: 'Nome da Categoria',
-            type: 'text',
-            value: newCategory,
-            onChange: setNewCategory,
-            placeholder: 'Nome da categoria',
-            required: true,
-        },
-        {
-            id: 'categoryType',
-            label: 'Tipo de Categoria',
-            type: 'select',
-            value: categoryType,
-            onChange: setCategoryType,
-            placeholder: 'Selecione o tipo',
-            required: true,
-            options: [
-                { value: 'Receita', label: 'Receita' },
-                { value: 'Despesa', label: 'Despesa' },
+            fields: [
+                {
+                    id: 'categoryName',
+                    label: 'Nome da Categoria',
+                    type: 'text',
+                    value: newCategory,
+                    onChange: setNewCategory,
+                    placeholder: 'Nome da categoria',
+                    required: true,
+                    size: 'full-width', // Define o tamanho do input
+                },
             ],
         },
         {
-            id: 'categoryColor',
-            type: 'color',
-            value: categoryColor,
-            onChange: setCategoryColor,
+            fields: [
+                {
+                    id: 'categoryType',
+                    label: 'Tipo de Categoria',
+                    type: 'select',
+                    value: categoryType,
+                    onChange: setCategoryType,
+                    placeholder: 'Selecione o tipo',
+                    required: true,
+                    options: [
+                        { value: 'Receita', label: 'Receita' },
+                        { value: 'Despesa', label: 'Despesa' },
+                    ],
+                    size: 'half-width', // Define o tamanho do input
+                },
+                {
+                    id: 'categoryColor',
+                    label: 'Cor da Categoria',
+                    type: 'color',
+                    value: categoryColor,
+                    onChange: setCategoryColor,
+                    size: 'half-width', // Define o tamanho do input
+                },
+            ],
         },
     ];
 

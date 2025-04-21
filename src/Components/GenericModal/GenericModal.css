@@ -102,6 +102,25 @@ textarea:focus {
     transform: translateY(-2px);
 }
 
+.form-group-row {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.full-width {
+    flex: 1;
+}
+
+.half-width {
+    flex: 0.5;
+}
+
 /* Animações */
 @keyframes fadeIn {
     from {

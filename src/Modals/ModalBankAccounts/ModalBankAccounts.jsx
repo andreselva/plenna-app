@@ -6,7 +6,7 @@ export const ModalBankAccounts = ({
     setNewAccount,
     newAccount,
     setEditingAccount,
-    editingAccount
+    editingAccount,
 }) => {
     const handleCancel = () => {
         setNewAccount('');
@@ -16,13 +16,18 @@ export const ModalBankAccounts = ({
 
     const formFields = [
         {
-            id: 'nameAccount',
-            label: 'Nome',
-            type: 'text',
-            value: newAccount,
-            onChange: setNewAccount,
-            placeholder: 'Ex: Sicredi, Bradesco...',
-            required: true,
+            fields: [
+                {
+                    id: 'nameAccount',
+                    label: 'Nome',
+                    type: 'text',
+                    value: newAccount,
+                    onChange: (value) => setNewAccount(value),
+                    placeholder: 'Ex: Sicredi, Bradesco...',
+                    required: true,
+                    size: 'full-width', // Define o tamanho do input
+                },
+            ],
         },
     ];
 
