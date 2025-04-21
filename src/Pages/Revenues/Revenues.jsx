@@ -1,14 +1,11 @@
 import styles from './Revenues.module.css';
 import RevenueTable from "../../Tables/RevenueTable/RevenueTable";
 import ModalRevenues from "../../Modals/ModalRevenues/ModalRevenues";
-import { CategoryManager } from "../../Hooks/CategoryManager/CategoryManager";
 import { useRevenueHandler } from '../../Hooks/Handlers/useRevenuesHandler';
 import { BotaoGlobal } from '../../Components/Buttons/ButtonGlobal.tsx';
 
 const Revenues = () => {
-    const { revenues, selectedCategory, setSelectedCategory, isModalOpen, setIsModalOpen, setEditingRevenue, newRevenue, setNewRevenue, revenueValue, setRevenueValue, revenueInvoiceDueDate, setRevenueInvoiceDueDate, handleEditRevenue, handleSaveRevenue, handleDeleteRevenue } = useRevenueHandler();
-
-    const { categories } = CategoryManager();
+    const { revenues, categories, selectedCategory, setSelectedCategory, isModalOpen, setIsModalOpen, setEditingRevenue, newRevenue, setNewRevenue, revenueValue, setRevenueValue, revenueInvoiceDueDate, setRevenueInvoiceDueDate, handleEditRevenue, handleSaveRevenue, handleDeleteRevenue } = useRevenueHandler();
 
     return (
         <div className={styles.Revenues}>

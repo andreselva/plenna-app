@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { RevenuesManager } from '../RevenuesManager/RevenuesManager';
+import { CategoryManager } from '../CategoryManager/CategoryManager';
 
 export const useRevenueHandler = () => {
     const { revenues, addRevenue, deleteRevenue, updateRevenue } = RevenuesManager();
@@ -11,6 +12,8 @@ export const useRevenueHandler = () => {
     const [revenueDescription, setRevenueDescription] = useState('');
     const [revenueValue, setRevenueValue] = useState('');
     const [revenueInvoiceDueDate, setRevenueInvoiceDueDate] = useState('');
+    const { categories } = CategoryManager();
+
 
     const handleAddRevenue = () => {
         if (!newRevenue.trim()) {
@@ -77,6 +80,7 @@ export const useRevenueHandler = () => {
 
     return {
         revenues,
+        categories,
         selectedCategory,
         setSelectedCategory,
         isModalOpen,
