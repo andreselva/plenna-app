@@ -8,12 +8,17 @@ const GenericModal = ({
     onCancel,
     submitButtonText = 'Salvar',
     cancelButtonText = 'Cancelar',
+    width = '500px', // Largura padrão
+    height = 'auto', // Altura padrão
 }) => {
     if (!isOpen) return null;
 
     return (
         <div className="modal-overlay">
-            <div className="modal-content">
+            <div
+                className="modal-content"
+                style={{ width: width, height: height }} // Estilo dinâmico
+            >
                 <h2>{title}</h2>
 
                 <form

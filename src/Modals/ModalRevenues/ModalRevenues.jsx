@@ -70,12 +70,12 @@ const ModalRevenues = ({
                     type: 'select',
                     value: selectedCategory,
                     onChange: setSelectedCategory,
-                    placeholder: 'Selecione uma categoria',
+                    placeholder: 'Selecione',
                     required: true,
                     options: categories
                         .filter((category) => category.type.toUpperCase() === 'RECEITA')
                         .map((category) => ({ value: category.id, label: category.name })),
-                    size: 'full-width', // Define o tamanho do input
+                    size: 'half-width-medium', // Define o tamanho do input
                 },
             ],
         },
@@ -89,6 +89,8 @@ const ModalRevenues = ({
             onSubmit={handleAddRevenue}
             onCancel={handleCancel}
             submitButtonText="Adicionar"
+            width="600px"
+            height="500px"
         />
     );
 };

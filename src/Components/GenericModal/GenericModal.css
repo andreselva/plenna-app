@@ -9,6 +9,7 @@
     justify-content: center;
     align-items: center;
     animation: fadeIn 0.3s ease;
+    z-index: 1000; /* Garante que o modal fique acima de outros elementos */
 }
 
 .modal-content {
@@ -16,9 +17,12 @@
     padding: 30px;
     border-radius: 12px;
     width: 100%;
-    max-width: 450px;
+    max-width: 1300px; /* Valor padrão, pode ser sobrescrito dinamicamente */
+    max-height: 90%; /* Evita que o modal ultrapasse a altura da tela */
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     animation: slideUp 0.3s ease;
+    overflow-y: auto; /* Adiciona rolagem se o conteúdo exceder a altura */
+    box-sizing: border-box;
 }
 
 h2 {
@@ -28,7 +32,7 @@ h2 {
     text-align: center;
 }
 
-input, select {
+input, select, textarea {
     width: 100%;
     padding: 12px;
     margin-bottom: 20px;
@@ -39,38 +43,28 @@ input, select {
     box-sizing: border-box;
 }
 
-input:focus, select:focus {
+input:focus, select:focus, textarea:focus {
     border-color: #4CAF50;
     outline: none;
 }
 
 input[type="color"] {
-    width: 40px; /* Ajuste o tamanho conforme necessário */
-    height: 40px; /* Ajuste o tamanho conforme necessário */
+    width: 40px;
+    height: 40px;
     border: none;
     padding: 0;
+    cursor: pointer;
 }
-
 
 textarea {
-    width: 100%;
-    padding: 12px;
-    margin-bottom: 20px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    font-size: 16px;
     height: 100px;
-    transition: border-color 0.3s;
-}
-
-textarea:focus {
-    border-color: #4CAF50;
-    outline: none;
+    resize: vertical; /* Permite redimensionar verticalmente */
 }
 
 .modal-buttons {
     display: flex;
     justify-content: space-between;
+    gap: 10px; /* Adiciona espaçamento entre os botões */
 }
 
 .modal-buttons button {
@@ -106,11 +100,14 @@ textarea:focus {
     display: flex;
     gap: 16px;
     margin-bottom: 16px;
+    flex-wrap: wrap; /* Permite que os inputs quebrem linha em telas menores */
+    justify-content: space-between;
 }
 
 .form-group {
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
 }
 
 .full-width {
@@ -119,6 +116,21 @@ textarea:focus {
 
 .half-width {
     flex: 0.5;
+    min-width: 150px; /* Garante um tamanho mínimo para inputs menores */
+}
+
+.half-width-medium {
+    flex: 0.33;
+    min-width: 150px; /* Garante um tamanho mínimo para inputs menores */
+}
+.half-width-large {
+    flex: 0.75;
+    min-width: 150px; /* Garante um tamanho mínimo para inputs menores */
+}
+
+.half-width-small {
+    flex: 0.25;
+    min-width: 100px; /* Garante um tamanho mínimo para inputs menores */
 }
 
 /* Animações */
