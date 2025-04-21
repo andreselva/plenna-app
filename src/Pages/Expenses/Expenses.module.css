@@ -16,8 +16,12 @@
 
 .action-button {
     composes: action-button from '../../Styles/GlobalStyles.module.css';
+}       
+
+.btn-card {
+    composes: container-btn-card from '../../Styles/GlobalStyles.module.css';
 }
 
-.show-expenses-btn {
-    composes: show-btn from '../../Styles/GlobalStyles.module.css';
+.icon {
+    composes: card-icon from '../../Styles/GlobalStyles.module.css';
 }
