@@ -5,7 +5,6 @@ import { CategoryManager } from '../../Hooks/CategoryManager/CategoryManager';
 export const useExpenseHandler = () => {
     const { expenses, addExpense, deleteExpense, updateExpense } = ExpenseManager();
     const { categories } = CategoryManager();
-    const [cards, setCards] = useState([{ 'name': 'Sicredi' }, { 'name': 'Nubank' }]);
     
     const [selectedCategory, setSelectedCategory] = useState();
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -107,6 +106,5 @@ export const useExpenseHandler = () => {
         handleSaveExpense,
         handleDeleteExpense,
         handleAddCard,
-        cards,
     };
 };
