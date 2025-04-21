@@ -15,8 +15,6 @@ const Revenues = () => {
         setEditingRevenue,
         newRevenue,
         setNewRevenue,
-        revenueDescription,
-        setRevenueDescription,
         revenueValue,
         setRevenueValue,
         revenueInvoiceDueDate,
@@ -52,8 +50,6 @@ const Revenues = () => {
                     handleAddRevenue={handleSaveRevenue}
                     newRevenue={newRevenue}
                     setNewRevenue={setNewRevenue}
-                    revenueDescription={revenueDescription}
-                    setRevenueDescription={setRevenueDescription}
                     revenueValue={revenueValue}
                     setRevenueValue={setRevenueValue}
                     revenueInvoiceDueDate={revenueInvoiceDueDate}

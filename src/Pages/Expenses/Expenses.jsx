@@ -6,7 +6,7 @@ import { BotaoGlobal } from '../../Components/Buttons/ButtonGlobal.tsx';
 
 const Expenses = () => {
     const {
-        expenses, categories, newExpense, setNewExpense, expenseDescription, setExpenseDescription,
+        expenses, categories, newExpense, setNewExpense,
         expenseValue, setExpenseValue, expenseInvoiceDueDate, setExpenseInvoiceDueDate, selectedCategory,
         setSelectedCategory, isModalOpen, setIsModalOpen, setEditingExpense, handleEditExpense, handleSaveExpense, handleDeleteExpense
     } = useExpenseHandler();
@@ -37,8 +37,6 @@ const Expenses = () => {
                     handleAddExpense={handleSaveExpense}
                     newExpense={newExpense}
                     setNewExpense={setNewExpense}
-                    expenseDescription={expenseDescription}
-                    setExpenseDescription={setExpenseDescription}
                     expenseValue={expenseValue}
                     setExpenseValue={setExpenseValue}
                     expenseInvoiceDueDate={expenseInvoiceDueDate}

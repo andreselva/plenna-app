@@ -5,8 +5,6 @@ const ModalExpenses = ({
     handleAddExpense,
     newExpense,
     setNewExpense,
-    expenseDescription,
-    setExpenseDescription,
     expenseValue,
     setExpenseValue,
     expenseInvoiceDueDate,
@@ -18,7 +16,6 @@ const ModalExpenses = ({
 }) => {
     const handleCancel = () => {
         setNewExpense('');
-        setExpenseDescription('');
         setExpenseValue('');
         setExpenseInvoiceDueDate('');
         setSelectedCategory('');
@@ -35,14 +32,6 @@ const ModalExpenses = ({
             onChange: setNewExpense,
             placeholder: 'Ex: Luz, Internet...',
             required: true,
-        },
-        {
-            id: 'expenseDescription',
-            label: 'Descrição',
-            type: 'text',
-            value: expenseDescription,
-            onChange: setExpenseDescription,
-            placeholder: 'Descreva a despesa (opcional)',
         },
         {
             id: 'expenseValue',

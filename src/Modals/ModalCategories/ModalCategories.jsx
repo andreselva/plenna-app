@@ -7,7 +7,6 @@ const ModalCategories = ({
     setNewCategory,
     categoryType,
     setCategoryType,
-    categoryDescription,
     setCategoryDescription,
     categoryColor,
     setCategoryColor,
@@ -45,14 +44,6 @@ const ModalCategories = ({
                 { value: 'Receita', label: 'Receita' },
                 { value: 'Despesa', label: 'Despesa' },
             ],
-        },
-        {
-            id: 'categoryDescription',
-            label: 'Descrição',
-            type: 'text',
-            value: categoryDescription,
-            onChange: setCategoryDescription,
-            placeholder: 'Descrição da categoria',
         },
         {
             id: 'categoryColor',

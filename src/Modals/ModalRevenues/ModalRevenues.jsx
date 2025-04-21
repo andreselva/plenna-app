@@ -5,8 +5,6 @@ const ModalRevenues = ({
     handleAddRevenue,
     newRevenue,
     setNewRevenue,
-    revenueDescription,
-    setRevenueDescription,
     revenueValue,
     setRevenueValue,
     revenueInvoiceDueDate,
@@ -18,7 +16,6 @@ const ModalRevenues = ({
 }) => {
     const handleCancel = () => {
         setNewRevenue('');
-        setRevenueDescription('');
         setRevenueValue('');
         setRevenueInvoiceDueDate('');
         setSelectedCategory('');
@@ -35,14 +32,6 @@ const ModalRevenues = ({
             onChange: setNewRevenue,
             placeholder: 'Ex: Salário, Freelancer...',
             required: true,
-        },
-        {
-            id: 'revenueDescription',
-            label: 'Descrição',
-            type: 'text',
-            value: revenueDescription,
-            onChange: setRevenueDescription,
-            placeholder: 'Descreva a receita (opcional)',
         },
         {
             id: 'revenueValue',
