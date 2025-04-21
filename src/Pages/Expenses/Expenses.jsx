@@ -1,4 +1,3 @@
-// Expenses.js
 import styles from './Expenses.module.css';
 import ExpenseTable from "../../Tables/ExpenseTable/ExpenseTable";
 import ModalExpenses from "../../Modals/ModalExpenses/ModalExpenses";

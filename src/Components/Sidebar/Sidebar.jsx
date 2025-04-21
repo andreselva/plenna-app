@@ -9,6 +9,7 @@ const Sidebar = () => (
             <Link to="/categories">Categorias</Link>
             <Link to="/expenses">Despesas</Link>
             <Link to="/revenues">Receitas</Link>
+            <Link to="/bank-accounts">Contas Bancárias</Link>
         </div>
     </div>
 );
