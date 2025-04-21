@@ -1,4 +1,6 @@
-export const BankAccountsTable = ({ accounts }) => {
+import globalStyles from '../../Styles/GlobalStyles.module.css';
+
+export const BankAccountsTable = ({ accounts, onEdit, handleDelete }) => {
     return (
         <table>
             <thead>
@@ -11,10 +13,10 @@ export const BankAccountsTable = ({ accounts }) => {
                 {accounts.length > 0 ? (
                     accounts.map((account) => (
                         <tr>
-                            <td>{account.nome}</td>
-                            <td className="actions">
-                                <button className="action-button">Editar</button>
-                                <button className="action-button">Excluir</button>
+                            <td>{account.name}</td>
+                            <td className={globalStyles.actions}>
+                                <button className={globalStyles['action-button']} onClick={() => onEdit(account)}>Editar</button>
+                                <button className={globalStyles['action-button']} onClick={() => handleDelete(account.id)}>Excluir</button>
                             </td>
                         </tr>
                     ))

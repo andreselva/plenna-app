@@ -6,6 +6,7 @@ export const ModalBankAccounts = ({
     setNewAccount,
     newAccount,
     setEditingAccount,
+    editingAccount
 }) => {
     const handleCancel = () => {
         setNewAccount('');
@@ -28,10 +29,11 @@ export const ModalBankAccounts = ({
     return (
         <GenericModal
             isOpen={true}
-            title="Cadastrar Conta Bancária"
+            title={editingAccount ? 'Editar conta' : 'Cadastrar conta'}
             formFields={formFields}
             onSubmit={handleAddAccount}
             onCancel={handleCancel}
+            submitButtonText={editingAccount ? 'Salvar' : 'Adicionar'}
         />
     );
 };
