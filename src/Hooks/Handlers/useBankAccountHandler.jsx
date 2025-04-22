@@ -1,8 +1,8 @@
 import { useState } from 'react';
+import { useBankAccounts } from '../BankAccountsManager/useBankAccounts';
 
 export const useBankAccountHandler = () => {
-    const accounts = [{ 'name': 'Sicredi' }, { 'name': 'Bradesco' }, { 'name': 'Itaú' }, { 'name': 'Santander' }, { 'name': 'Caixa Econômica Federal' }, { 'name': 'Banco do Brasil' }, { 'name': 'Banrisul' }, { 'name': 'Sicoob' }, { 'name': 'Banco Inter' }, { 'name': 'Nubank' }];
-
+    const { accounts, addBankAccount, updateBankAccount, deleteBankAccount } = useBankAccounts();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingAccount, setEditingAccount] = useState(null);
     const [newAccount, setNewAccount] = useState('');
@@ -13,9 +13,9 @@ export const useBankAccountHandler = () => {
             return;
         }
 
-        // addAccount({
-        //     name: newAccount,
-        // });
+        addBankAccount({
+            name: newAccount,
+        });
 
         setNewAccount('');
         setIsModalOpen(false);
@@ -34,9 +34,9 @@ export const useBankAccountHandler = () => {
         }
 
         if (editingAccount) {
-            // updateAccount(editingAccount.id, {
-            //     name: newAccount,
-            // });
+            updateBankAccount(editingAccount.id, {
+                name: newAccount,
+            });
         } else {
             handleAddAccount();
         }
@@ -47,7 +47,7 @@ export const useBankAccountHandler = () => {
     };
 
     const handleDeleteAccount = (id) => {
-        // deleteAccount(id);
+        deleteBankAccount(id);
     };
 
     return {

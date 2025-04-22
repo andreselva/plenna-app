@@ -12,7 +12,7 @@ export const BankAccountsTable = ({ accounts, onEdit, handleDelete }) => {
             <tbody>
                 {accounts.length > 0 ? (
                     accounts.map((account) => (
-                        <tr>
+                        <tr key={account.id}>
                             <td>{account.name}</td>
                             <td className={globalStyles.actions}>
                                 <button className={globalStyles['action-button']} onClick={() => onEdit(account)}>Editar</button>
@@ -21,7 +21,7 @@ export const BankAccountsTable = ({ accounts, onEdit, handleDelete }) => {
                         </tr>
                     ))
                 ) : (
-                    <tr>
+                    <tr key="no-accounts">
                         <td colSpan="2">Nenhuma conta bancária cadastrada</td>
                     </tr>
                 )}
