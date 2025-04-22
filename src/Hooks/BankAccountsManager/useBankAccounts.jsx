@@ -8,7 +8,6 @@ export const useBankAccounts = () => {
     const [error, setError] = useState(null);
     const hasFetched = useRef(false);
 
-
     useEffect(() => {
         const fetchBankAccounts = async () => {
             if (hasFetched.current) return;

@@ -1,6 +1,15 @@
+import DeleteConfirmation from '../../Hooks/DeleteConfirmation/DeleteConfirmation';
 import globalStyles from '../../Styles/GlobalStyles.module.css';
 
-export const BankAccountsTable = ({ accounts, onEdit, handleDelete }) => {
+export const BankAccountsTable = ({ accounts, onEdit, onDelete }) => {
+    const handleDelete = DeleteConfirmation(onDelete, {
+        confirmTitle: 'Deseja realmente excluir?',
+        confirmText: 'A exclusão é definitiva!',
+        confirmButtonText: 'Excluir',
+        cancelButtonText: 'Manter',
+        successMessage: 'Conta excluída!',
+        errorMessage: 'Falha ao remover conta!'
+    });
     return (
         <table>
             <thead>
