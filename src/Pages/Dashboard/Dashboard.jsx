@@ -1,5 +1,7 @@
 import "./Dashboard.css";
 import { Doughnut, Line, Bar } from "react-chartjs-2";
+import ChartDataLabels from 'chartjs-plugin-datalabels';
+
 import {
     Chart as ChartJS,
     ArcElement,
@@ -28,7 +30,8 @@ ChartJS.register(
     PointElement,
     LineElement,
     BarElement,
-    centerTextPlugin
+    centerTextPlugin,
+    ChartDataLabels,
 );
 
 const Dashboard = () => {
