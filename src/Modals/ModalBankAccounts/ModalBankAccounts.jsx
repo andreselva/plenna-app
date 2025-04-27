@@ -25,7 +25,7 @@ export const ModalBankAccounts = ({
                     onChange: (value) => setNewAccount(value),
                     placeholder: 'Ex: Sicredi, Bradesco...',
                     required: true,
-                    size: 'full-width', // Define o tamanho do input
+                    size: 'full-width',
                 },
             ],
         },
