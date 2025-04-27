@@ -30,7 +30,7 @@ const RevenueTable = ({ revenues = [], categories = [], onEdit, onDelete }) => {
                             <tr key={revenue.id}>
                                 <td>{revenue.name}</td>
                                 <td>{revenue.value}</td>
-                                <td>{revenue.invoiceDueDate}</td>
+                                <td>{revenue.invoiceDueDate.split('-').reverse().join('/')}</td>
                                 <td>
                                     <span
                                         style={{
