@@ -11,6 +11,15 @@ export const gastosPorCategoriaOptions = {
     plugins: {
         legend: {
             display: false
+        },
+        datalabels: {
+            anchor: 'center',
+            align: 'center',
+            color: '#fff',
+            font: {
+                weight: 'bold',
+                size: 12
+            },
         }
     },
     scales: {

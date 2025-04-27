@@ -21,7 +21,11 @@ export const createSaldoOptions = (remainingBalance) => ({
         },
         centerText: {
             text: `R$ ${remainingBalance.toFixed(2)}`
+        },
+        datalabels: {
+            display: false
         }
     },
     cutout: '70%',
 });
+

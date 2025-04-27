@@ -38,6 +38,9 @@ export const evolucaoMensalOptions = {
                     size: 12
                 }
             }
+        },
+        datalabels: {
+            display: false
         }
     },
     scales: {
@@ -55,3 +58,4 @@ export const evolucaoMensalOptions = {
         }
     }
 };
+
