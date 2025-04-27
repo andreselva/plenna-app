@@ -1,0 +1,15 @@
+.BankAccounts {
+    composes: container from '../../Styles/GlobalStyles.module.css';
+}
+
+.BankAccounts-content {
+    composes: container-content from '../../Styles/GlobalStyles.module.css';
+}
+
+.card-bank-accounts {
+    composes: card from '../../Styles/GlobalStyles.module.css';
+}
+
+.show-btn {
+    composes: show-btn from '../../Styles/GlobalStyles.module.css';
+}

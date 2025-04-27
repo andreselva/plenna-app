@@ -1,12 +1,10 @@
-import './ModalExpenses.css';
+import GenericModal from '../../Components/GenericModal/GenericModal';
 
 const ModalExpenses = ({
     setIsModalOpen,
     handleAddExpense,
     newExpense,
     setNewExpense,
-    expenseDescription,
-    setExpenseDescription,
     expenseValue,
     setExpenseValue,
     expenseInvoiceDueDate,
@@ -14,11 +12,10 @@ const ModalExpenses = ({
     categories,
     selectedCategory,
     setSelectedCategory,
-    setEditingExpense
+    setEditingExpense,
 }) => {
     const handleCancel = () => {
         setNewExpense('');
-        setExpenseDescription('');
         setExpenseValue('');
         setExpenseInvoiceDueDate('');
         setSelectedCategory('');
@@ -26,87 +23,72 @@ const ModalExpenses = ({
         setIsModalOpen(false);
     };
 
+    const formFields = [
+        {
+            fields: [
+                {
+                    id: 'expenseName',
+                    label: 'Nome',
+                    type: 'text',
+                    value: newExpense,
+                    onChange: setNewExpense,
+                    placeholder: 'Ex: Luz, Internet...',
+                    required: true,
+                    size: 'full-width', // Define o tamanho do input
+                },
+            ],
+        },
+        {
+            fields: [
+                {
+                    id: 'expenseValue',
+                    label: 'Valor R$',
+                    type: 'number',
+                    value: expenseValue,
+                    onChange: setExpenseValue,
+                    placeholder: '0,00',
+                    required: true,
+                    size: 'half-width', // Define o tamanho do input
+                },
+                {
+                    id: 'invoiceDueDate',
+                    label: 'Vencimento',
+                    type: 'date',
+                    value: expenseInvoiceDueDate,
+                    onChange: setExpenseInvoiceDueDate,
+                    required: true,
+                    size: 'half-width', // Define o tamanho do input
+                },
+            ],
+        },
+        {
+            fields: [
+                {
+                    id: 'category',
+                    label: 'Categoria',
+                    type: 'select',
+                    value: selectedCategory,
+                    onChange: setSelectedCategory,
+                    placeholder: 'Selecione uma categoria',
+                    required: true,
+                    options: categories
+                        .filter((category) => category.type.toUpperCase() === 'DESPESA')
+                        .map((category) => ({ value: category.id, label: category.name })),
+                    size: 'full-width', // Define o tamanho do input
+                },
+            ],
+        },
+    ];
+
     return (
-        <div className="modal-overlay">
-            <div className="modal-content">
-                <h2>Cadastrar Despesa</h2>
-
-                <form onSubmit={(e) => {
-                    e.preventDefault();
-                    handleAddExpense();
-                }}>
-                    <div className="form-group">
-                        <label htmlFor="expenseName">Nome</label>
-                        <input
-                            id="expenseName"
-                            type="text"
-                            value={newExpense}
-                            onChange={(e) => setNewExpense(e.target.value)}
-                            placeholder="Ex: Luz, Internet..."
-                            required
-                        />
-                    </div>
-
-                    <div className="form-group">
-                        <label htmlFor="expenseDescription">Descrição</label>
-                        <input
-                            id="expenseDescription"
-                            type="text"
-                            value={expenseDescription}
-                            onChange={(e) => setExpenseDescription(e.target.value)}
-                            placeholder="Descreva a despesa (opcional)"
-                        />
-                    </div>
-
-                    <div className="form-group">
-                        <label htmlFor="expenseValue">Valor R$</label>
-                        <input
-                            id="expenseValue"
-                            type="number"
-                            value={expenseValue}
-                            onChange={(e) => setExpenseValue(e.target.value)}
-                            placeholder="0,00"
-                            required
-                        />
-                    </div>
-
-                    <div className="form-group">
-                        <label htmlFor="invoiceDueDate">Vencimento</label>
-                        <input
-                            id="invoiceDueDate"
-                            type="date"
-                            value={expenseInvoiceDueDate}
-                            onChange={(e) => setExpenseInvoiceDueDate(e.target.value)}
-                            required
-                        />
-                    </div>
-
-                    <div className="form-group">
-                        <label htmlFor="category">Categoria</label>
-                        <select
-                            id="category"
-                            value={selectedCategory}
-                            onChange={(e) => setSelectedCategory(e.target.value)}
-                            required
-                        >
-                            <option value="">Selecione uma categoria</option>
-                            {categories
-                                .filter(category => category.type.toUpperCase() === 'DESPESA')
-                                .map((category) => (
-                                    <option key={category.id} value={category.id}>
-                                        {category.name}
-                                    </option>
-                                ))}
-                        </select>
-                    </div>
-
-                    <div className="modal-buttons">
-                        <button type="submit" className="btn-primary">Salvar</button>
-                        <button type="button" onClick={handleCancel} className="btn-secondary">Cancelar</button>
-                    </div>
-                </form>
-            </div>
-        </div>
+        <GenericModal
+            isOpen={true}
+            title="Cadastrar Despesa"
+            formFields={formFields}
+            onSubmit={handleAddExpense}
+            onCancel={handleCancel}
+            submitButtonText="Adicionar"
+        />
     );
 };
 
