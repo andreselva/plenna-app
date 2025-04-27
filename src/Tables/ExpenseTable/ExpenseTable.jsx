@@ -1,7 +1,7 @@
 import DeleteConfirmation from "../../Hooks/DeleteConfirmation/DeleteConfirmation";
 import globalStyles from '../../Styles/GlobalStyles.module.css';
 
-const ExpenseTable = ({ expenses = [], categories = [], onEdit, onDelete }) => {
+const ExpenseTable = ({ expenses = [], categories = [], creditCards = [], onEdit, onDelete }) => {
     const handleDelete = DeleteConfirmation(onDelete, {
         confirmTitle: 'Deseja realmente excluir?',
         confirmText: 'A exclusão é definitiva!',
@@ -19,6 +19,7 @@ const ExpenseTable = ({ expenses = [], categories = [], onEdit, onDelete }) => {
                     <th>Valor</th>
                     <th>Vencimento</th>
                     <th>Categoria</th>
+                    <th>Cartão de crédito</th>
                     <th>Ações</th>
                 </tr>
             </thead>
@@ -26,12 +27,13 @@ const ExpenseTable = ({ expenses = [], categories = [], onEdit, onDelete }) => {
                 {expenses.length > 0 ? (
                     expenses.map((expense) => {
                         const category = categories.find(category => category.id === expense.idCategory) || {};
+                        const creditCard = creditCards.find(creditCard => creditCard.id === expense.idCreditCard) || {}
 
                         return (
                             <tr key={expense.id}>
                                 <td>{expense.name}</td>
                                 <td>{expense.value}</td>
-                                <td>{expense.invoiceDueDate}</td>
+                                <td>{expense.invoiceDueDate.split('-').reverse().join('/')}</td>
                                 <td>
                                     <span
                                         style={{
@@ -46,6 +48,7 @@ const ExpenseTable = ({ expenses = [], categories = [], onEdit, onDelete }) => {
                                         {category.name || 'Categoria não encontrada'}
                                     </span>
                                 </td>
+                                <td>{creditCard.name || '-'}</td>
                                 <td className={globalStyles.actions}>
                                     <button className={globalStyles['action-button']} onClick={() => onEdit(expense)}>Editar</button>
                                     <button className={globalStyles['action-button']} onClick={() => handleDelete(expense.id)}>Excluir</button>

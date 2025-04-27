@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import { ExpenseManager } from '../../Hooks/ExpenseManager/ExpenseManager';
 import { CategoryManager } from '../../Hooks/CategoryManager/CategoryManager';
+import { useBankAccounts } from '../BankAccountsManager/useBankAccounts';
 
 export const useExpenseHandler = () => {
     const { expenses, addExpense, deleteExpense, updateExpense } = ExpenseManager();
     const { categories } = CategoryManager();
-    
+    const { accounts } = useBankAccounts();
+
     const [selectedCategory, setSelectedCategory] = useState();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingExpense, setEditingExpense] = useState(null);
@@ -14,6 +16,8 @@ export const useExpenseHandler = () => {
     const [expenseValue, setExpenseValue] = useState('');
     const [expenseInvoiceDueDate, setExpenseInvoiceDueDate] = useState('');
     const [isModalCardOpen, setIsModalCardOpen] = useState(false);
+    const [selectedCard, setSelectedCard] = useState(null);
+
 
     const handleAddExpense = () => {
         if (!newExpense.trim()) {
@@ -27,6 +31,7 @@ export const useExpenseHandler = () => {
             value: expenseValue,
             invoiceDueDate: expenseInvoiceDueDate,
             idCategory: selectedCategory,
+            idCreditCard: selectedCard
         });
 
         setNewExpense('');
@@ -44,6 +49,7 @@ export const useExpenseHandler = () => {
         setExpenseValue(expense.value);
         setExpenseInvoiceDueDate(expense.invoiceDueDate);
         setSelectedCategory(expense.idCategory);
+        setSelectedCard(expense.idCreditCard);
         setIsModalOpen(true);
     };
 
@@ -60,6 +66,7 @@ export const useExpenseHandler = () => {
                 value: expenseValue,
                 invoiceDueDate: expenseInvoiceDueDate,
                 idCategory: selectedCategory,
+                idCreditCard: selectedCard,
             });
         } else {
             handleAddExpense();
@@ -106,5 +113,8 @@ export const useExpenseHandler = () => {
         handleSaveExpense,
         handleDeleteExpense,
         handleAddCard,
+        accounts,
+        selectedCard,
+        setSelectedCard,
     };
 };
