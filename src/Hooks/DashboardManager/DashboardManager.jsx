@@ -8,7 +8,8 @@ export const useDashboardData = () => {
         expensesByCategory: null,
         billsDue: [],
         monthlyProgress: null,
-        remainingBalance: 0
+        remainingBalance: 0,
+        creditCardStatements: null
     });
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -30,7 +31,8 @@ export const useDashboardData = () => {
                     expensesByCategory,
                     billsDue,
                     monthlyProgress,
-                    remainingBalance
+                    remainingBalance,
+                    creditCardStatements
                 } = await response.json();
 
                 setData({
@@ -38,7 +40,8 @@ export const useDashboardData = () => {
                     gastosPorCategoriaData: expensesByCategory,
                     contasVencimentoProximo: billsDue,
                     evolucaoMensal: monthlyProgress,
-                    saldoRestante: remainingBalance
+                    saldoRestante: remainingBalance,
+                    faturasPorCartao: creditCardStatements
                 });
             } catch (err) {
                 setError(err.message);
