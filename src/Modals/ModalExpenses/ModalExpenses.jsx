@@ -13,12 +13,16 @@ const ModalExpenses = ({
     selectedCategory,
     setSelectedCategory,
     setEditingExpense,
+    creditCards,
+    selectedCard,
+    setSelectedCard,
 }) => {
     const handleCancel = () => {
         setNewExpense('');
         setExpenseValue('');
         setExpenseInvoiceDueDate('');
         setSelectedCategory('');
+        setSelectedCard('');
         setEditingExpense(null);
         setIsModalOpen(false);
     };
@@ -74,6 +78,21 @@ const ModalExpenses = ({
                     options: categories
                         .filter((category) => category.type.toUpperCase() === 'DESPESA')
                         .map((category) => ({ value: category.id, label: category.name })),
+                    size: 'full-width', // Define o tamanho do input
+                },
+            ],
+        },
+        {
+            fields: [
+                {
+                    id: 'creditCard',
+                    label: 'Cartão de crédito',
+                    type: 'select',
+                    value: selectedCard,
+                    onChange: setSelectedCard,
+                    placeholder: 'Selecione um cartão',
+                    required: false,
+                    options: creditCards.map((creditCard) => ({ value: creditCard.id, label: creditCard.name })),
                     size: 'full-width', // Define o tamanho do input
                 },
             ],
