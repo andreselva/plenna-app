@@ -8,6 +8,7 @@ import { defaultGastosPorCategoriaData, gastosPorCategoriaOptions } from "./Dash
 import { defaultEvolucaoMensalData, evolucaoMensalOptions } from "./DashboardCharts/EvolucaoMensalChart";
 import { defaultFaturasPorCartaoData, faturasPorCartaoOptions } from "./DashboardCharts/FaturasPorCartaoChart";
 import { CustomDatePicker } from "../../Components/DatePicker/DatePicker";
+import { getStartAndEndOfMonth, getFormattedDateRange } from "../../Utils/DateUtils";
 
 import {
     Chart as ChartJS,
@@ -20,7 +21,7 @@ import {
     LineElement,
     BarElement,
 } from "chart.js";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 ChartJS.register(
     ArcElement,
@@ -57,49 +58,20 @@ const Dashboard = () => {
     const [selectedMonth, setSelectedMonth] = useState(new Date());
     const [selectedRange, setSelectedRange] = useState(null);
 
-
-
     const handleMonthChange = (month) => {
         setSelectedMonth(month);
         setSelectedRange(null);
 
-        const startOfMonth = new Date(month.getFullYear(), month.getMonth(), 1);
-        const endOfMonth = new Date(month.getFullYear(), month.getMonth() + 1, 0);
-
-        const formattedMonthRange = {
-            start: startOfMonth.toISOString().split("T")[0],
-            end: endOfMonth.toISOString().split("T")[0],
-        };
-
+        const formattedMonthRange = getStartAndEndOfMonth(month);
         setFormattedPeriod(formattedMonthRange);
     };
 
     const handleDateRangeSelect = ({ startDate, endDate }) => {
         setSelectedRange({ startDate, endDate });
 
-        const adjustedStartDate = new Date(startDate);
-        adjustedStartDate.setHours(0, 0, 0, 0);
-
-        const adjustedEndDate = new Date(endDate);
-        adjustedEndDate.setHours(23, 59, 59, 999);
-
-        const formatDate = (date) => {
-            const year = date.getFullYear();
-            const month = String(date.getMonth() + 1).padStart(2, '0');
-            const day = String(date.getDate()).padStart(2, '0');
-            return `${year}-${month}-${day}`;
-        };
-
-        const formattedRange = {
-            start: formatDate(adjustedStartDate),
-            end: formatDate(adjustedEndDate),
-        };
-
+        const formattedRange = getFormattedDateRange(startDate, endDate);
         setFormattedPeriod(formattedRange);
     };
-
-    useEffect(() => {
-    }, [formattedPeriod]);
 
     return (
         <div className="Dashboard">
