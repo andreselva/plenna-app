@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 
 const apiUrl = "http://localhost:8000/dashboard";
 
-export const useDashboardData = () => {
+export const useDashboardData = (periodo = {}) => {
     const [data, setData] = useState({
         currentBalance: null,
         expensesByCategory: null,
@@ -16,12 +16,21 @@ export const useDashboardData = () => {
     const hasFetched = useRef(false);
 
     useEffect(() => {
+        hasFetched.current = false;
+
         const fetchData = async () => {
             if (hasFetched.current) return;
 
-            hasFetched.current = true;  
+            hasFetched.current = true;
+            setLoading(true);
             try {
-                const response = await fetch(apiUrl);
+                const headers = {
+                    "Content-Type": "application/json",
+                    "Periodo": JSON.stringify(periodo)
+                };
+
+                const response = await fetch(apiUrl, { headers });
+
                 if (!response.ok) {
                     throw new Error("Erro ao buscar dados do dashboard");
                 }
@@ -51,7 +60,7 @@ export const useDashboardData = () => {
         };
 
         fetchData();
-    }, []);
+    }, [periodo]); // Refaz a requisição sempre que `periodo` mudar
 
     return { data, loading, error };
 };

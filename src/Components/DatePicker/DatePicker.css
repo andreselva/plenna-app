@@ -1,0 +1,55 @@
+.invisible-datepicker {
+    position: absolute;
+    pointer-events: none;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.custom-calendar {
+    background: #2c2f3a; /* tom mais claro que #1e1e2f */
+    color: #f0f0f0;       /* texto claro */
+    border-radius: 12px;
+    padding: 1rem;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+    font-family: 'Segoe UI', sans-serif;
+    z-index: 9999;
+}
+
+.custom-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.8rem;
+    font-size: 1rem;
+    color: #000000; /* texto do header mais claro */
+}
+
+.custom-header button {
+    background: none;
+    border: none;
+    color: #dcdcdc;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.custom-header button:hover {
+    color: #5eead4; /* tom turquesa-claro, moderno */
+}
+
+.custom-day {
+    border-radius: 6px;
+    padding: 0.5rem;
+    transition: background-color 0.3s ease;
+    color: #e5e5e5;
+}
+
+.custom-day:hover {
+    background-color: #5eead4; /* cor clara de destaque */
+    color: #1e1e2f;             /* contraste com fundo claro */
+}
+
+.react-datepicker__triangle {
+    display: none !important;
+}

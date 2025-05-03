@@ -10,7 +10,14 @@ const Revenues = () => {
     return (
         <div className={styles.Revenues}>
             <div className={styles['Revenues-content']}>
-                <BotaoGlobal className={styles['show-revenues-btn']} onClick={() => setIsModalOpen(true)}>
+                <BotaoGlobal
+                    cor="primaria"
+                    className={styles['show-revenues-btn']}
+                    onClick={() => setIsModalOpen(true)}
+                    width='160px'
+                    height='40px'
+                    margin='0 0 10px 0'
+                >
                     Cadastrar receita
                 </BotaoGlobal>
 
