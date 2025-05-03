@@ -37,14 +37,7 @@ export const useExpenseHandler = () => {
             typeOfInstallment: typeOfInstallment
         });
 
-        setNewExpense('');
-        setExpenseDescription('');
-        setExpenseValue('0');
-        setExpenseInvoiceDueDate('');
-        setSelectedCategory(null);
-        setInstallments('');
-        setTypeOfInstallment('U');
-        setIsModalOpen(false);
+        resetForm();
     };
 
     const handleEditExpense = (expense) => {
@@ -81,6 +74,10 @@ export const useExpenseHandler = () => {
             handleAddExpense();
         }
 
+        resetForm();
+    };
+
+    const resetForm = () => {
         setEditingExpense(null);
         setNewExpense('');
         setExpenseDescription('');
@@ -90,7 +87,7 @@ export const useExpenseHandler = () => {
         setInstallments('');
         setTypeOfInstallment('U');
         setIsModalOpen(false);
-    };
+    }
 
     const handleDeleteExpense = (id) => {
         deleteExpense(id);
