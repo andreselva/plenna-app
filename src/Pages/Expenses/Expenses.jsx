@@ -11,7 +11,14 @@ const Expenses = () => {
         <div className={styles.Expenses}>
             <div className={styles['Expenses-content']}>
                 <div className={styles['btn-card']}>
-                    <BotaoGlobal cor="primaria" className={styles['show-expenses-btn']} onClick={() => setIsModalOpen(true)}>
+                    <BotaoGlobal
+                        cor="primaria"
+                        className={styles['show-expenses-btn']}
+                        onClick={() => setIsModalOpen(true)}
+                        width='160px'
+                        height='40px'
+                        margin='0 0 10px 0'
+                    >
                         Cadastrar despesa
                     </BotaoGlobal>
 

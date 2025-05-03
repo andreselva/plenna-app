@@ -10,7 +10,14 @@ export const BankAccounts = () => {
     return (
         <div className={styles.BankAccounts} >
             <div className={styles['BankAccounts-content']}>
-                <BotaoGlobal className={styles['show-btn']} onClick={() => setIsModalOpen(true)}>
+                <BotaoGlobal
+                    cor="primaria"
+                    className={styles['show-btn']}
+                    onClick={() => setIsModalOpen(true)}
+                    width='100px'
+                    height='40px'
+                    margin='0 0 10px 0'
+                >
                     Incluir
                 </BotaoGlobal>
 

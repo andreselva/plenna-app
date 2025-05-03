@@ -11,6 +11,7 @@ declare const styles: {
   readonly "secundaria": string;
   readonly "show-btn": string;
   readonly "vermelho": string;
+  readonly "nenhuma" : string;
 };
 export = styles;
 

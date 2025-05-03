@@ -10,7 +10,14 @@ const Categories = () => {
     return (
         <div className={styles.Categories}>
             <div className={styles['Categories-content']}>
-                <BotaoGlobal className={styles['show-categories-btn']} onClick={() => setIsModalOpen(true)}>
+                <BotaoGlobal
+                    cor="primaria"
+                    className={styles['show-categories-btn']}
+                    onClick={() => setIsModalOpen(true)}
+                    width='160px'
+                    height='40px'
+                    margin='0 0 10px 0'
+                >
                     Cadastrar categoria
                 </BotaoGlobal>
 
