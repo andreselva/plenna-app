@@ -17,7 +17,9 @@ const ModalExpenses = ({
     selectedCard,
     setSelectedCard,
     installments,
-    setInstallments
+    setInstallments,
+    typeOfInstallment,
+    setTypeOfInstallment
 }) => {
     const handleCancel = () => {
         setNewExpense('');
@@ -94,16 +96,30 @@ const ModalExpenses = ({
                     size: 'half-width-large', // Define o tamanho do input
                 },
                 {
+                    id: 'typeOfExpense',
+                    label: 'Tipo de Despesa',
+                    type: 'select',
+                    value: typeOfInstallment,
+                    onChange: setTypeOfInstallment,
+                    required: false,
+                    options: [
+                        { value: 'U', label: 'Única' },
+                        { value: 'P', label: 'Parcelada' },
+                        { value: 'F', label: 'Fixa' }
+                    ],
+                    size: 'half-width-medium',
+                },
+                {
                     id: 'parcelas',
                     label: 'Parcelas',
                     type: 'number',
                     value: installments,
                     onChange: setInstallments,
-                    placeholder: 'Nº de parcelas',
+                    placeholder: 0,
                     required: false,
-                    size: 'half-width-medium', // Define o tamanho do input
+                    size: 'half-width-small',
+                    disabled: typeOfInstallment !== 'P'
                 },
-                
             ],
         },
     ];

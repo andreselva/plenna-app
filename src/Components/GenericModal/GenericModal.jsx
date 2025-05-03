@@ -43,10 +43,13 @@ const GenericModal = ({
                                                 field.onChange(e.target.value)
                                             }
                                             required={field.required}
+                                            disabled={field.disabled}
                                         >
-                                            <option value="">
-                                                {field.placeholder}
-                                            </option>
+                                            {field.placeholder && (
+                                                <option value="">
+                                                    {field.placeholder}
+                                                </option>
+                                            )}
                                             {field.options?.map((option) => (
                                                 <option
                                                     key={option.value}
@@ -67,6 +70,7 @@ const GenericModal = ({
                                             placeholder={field.placeholder}
                                             required={field.required}
                                             step={field.step}
+                                            disabled={field.disabled}
                                         />
                                     )}
                                 </div>
