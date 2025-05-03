@@ -4,6 +4,7 @@ import { CategoryManager } from '../CategoryManager/CategoryManager';
 
 export const useRevenueHandler = () => {
     const { revenues, addRevenue, deleteRevenue, updateRevenue } = RevenuesManager();
+    const { categories } = CategoryManager();
 
     const [selectedCategory, setSelectedCategory] = useState();
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -12,7 +13,8 @@ export const useRevenueHandler = () => {
     const [revenueDescription, setRevenueDescription] = useState('');
     const [revenueValue, setRevenueValue] = useState('');
     const [revenueInvoiceDueDate, setRevenueInvoiceDueDate] = useState('');
-    const { categories } = CategoryManager();
+    const [typeOfInstallment, setTypeOfInstallment] = useState('U');
+    const [installments, setInstallments] = useState('');
 
 
     const handleAddRevenue = () => {
@@ -27,6 +29,8 @@ export const useRevenueHandler = () => {
             value: revenueValue,
             invoiceDueDate: revenueInvoiceDueDate,
             idCategory: selectedCategory,
+            installments: installments,
+            typeOfInstallment: typeOfInstallment
         });
 
         resetForm();
@@ -39,6 +43,8 @@ export const useRevenueHandler = () => {
         setRevenueValue(revenue.value);
         setRevenueInvoiceDueDate(revenue.invoiceDueDate);
         setSelectedCategory(revenue.idCategory);
+        setInstallments(revenue.installments);
+        setTypeOfInstallment(revenue.typeOfInstallment);
         setIsModalOpen(true);
     };
 
@@ -55,6 +61,8 @@ export const useRevenueHandler = () => {
                 value: revenueValue,
                 invoiceDueDate: revenueInvoiceDueDate,
                 idCategory: selectedCategory,
+                installments: installments,
+                typeOfInstallment: typeOfInstallment
             });
         } else {
             handleAddRevenue();
@@ -75,6 +83,8 @@ export const useRevenueHandler = () => {
         setRevenueValue('0');
         setRevenueInvoiceDueDate('');
         setSelectedCategory(null);
+        setInstallments('');
+        setTypeOfInstallment('U');
         setIsModalOpen(false);
     };
 
@@ -98,6 +108,10 @@ export const useRevenueHandler = () => {
         handleAddRevenue,
         handleEditRevenue,
         handleSaveRevenue,
-        handleDeleteRevenue
+        handleDeleteRevenue,
+        typeOfInstallment,
+        setTypeOfInstallment,
+        installments,
+        setInstallments
     };
 };

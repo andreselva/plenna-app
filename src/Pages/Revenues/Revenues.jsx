@@ -5,7 +5,7 @@ import { useRevenueHandler } from '../../Hooks/Handlers/useRevenuesHandler';
 import { BotaoGlobal } from '../../Components/Buttons/ButtonGlobal.tsx';
 
 const Revenues = () => {
-    const { revenues, categories, selectedCategory, setSelectedCategory, isModalOpen, setIsModalOpen, setEditingRevenue, newRevenue, setNewRevenue, revenueValue, setRevenueValue, revenueInvoiceDueDate, setRevenueInvoiceDueDate, handleEditRevenue, handleSaveRevenue, handleDeleteRevenue } = useRevenueHandler();
+    const { revenues, categories, selectedCategory, setSelectedCategory, isModalOpen, setIsModalOpen, setEditingRevenue, newRevenue, setNewRevenue, revenueValue, setRevenueValue, revenueInvoiceDueDate, setRevenueInvoiceDueDate, handleEditRevenue, handleSaveRevenue, handleDeleteRevenue, typeOfInstallment, setTypeOfInstallment, installments, setInstallments } = useRevenueHandler();
 
     return (
         <div className={styles.Revenues}>
@@ -46,6 +46,10 @@ const Revenues = () => {
                     selectedCategory={selectedCategory}
                     setSelectedCategory={setSelectedCategory}
                     setEditingRevenue={setEditingRevenue}
+                    typeOfInstallment={typeOfInstallment}
+                    setTypeOfInstallment={setTypeOfInstallment}
+                    installments={installments}
+                    setInstallments={setInstallments}
                 />
             )}
         </div>

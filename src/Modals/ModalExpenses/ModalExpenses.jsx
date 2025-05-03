@@ -29,6 +29,8 @@ const ModalExpenses = ({
         setSelectedCard('');
         setEditingExpense(null);
         setIsModalOpen(false);
+        setInstallments('');
+        setTypeOfInstallment('U');
     };
 
     const formFields = [
@@ -132,8 +134,8 @@ const ModalExpenses = ({
             onSubmit={handleAddExpense}
             onCancel={handleCancel}
             submitButtonText="Adicionar"
-            width='600px'
-            height='500px'
+            width="600px"
+            height="500px"
         />
     );
 };

@@ -13,6 +13,10 @@ const ModalRevenues = ({
     selectedCategory,
     setSelectedCategory,
     setEditingRevenue,
+    typeOfInstallment,
+    setTypeOfInstallment,
+    installments,
+    setInstallments
 }) => {
     const handleCancel = () => {
         setNewRevenue('');
@@ -21,6 +25,8 @@ const ModalRevenues = ({
         setSelectedCategory('');
         setEditingRevenue(null);
         setIsModalOpen(false);
+        setInstallments('');
+        setTypeOfInstallment('U');
     };
 
     const formFields = [
@@ -35,6 +41,15 @@ const ModalRevenues = ({
                     placeholder: 'Ex: Salário, Freelancer...',
                     required: true,
                     size: 'full-width', // Define o tamanho do input
+                },
+                {
+                    id: 'invoiceDueDate',
+                    label: 'Vencimento',
+                    type: 'date',
+                    value: revenueInvoiceDueDate,
+                    onChange: setRevenueInvoiceDueDate,
+                    required: true,
+                    size: 'half-width', // Define o tamanho do input
                 },
             ],
         },
@@ -52,19 +67,6 @@ const ModalRevenues = ({
                     size: 'half-width', // Define o tamanho do input
                 },
                 {
-                    id: 'invoiceDueDate',
-                    label: 'Vencimento',
-                    type: 'date',
-                    value: revenueInvoiceDueDate,
-                    onChange: setRevenueInvoiceDueDate,
-                    required: true,
-                    size: 'half-width', // Define o tamanho do input
-                },
-            ],
-        },
-        {
-            fields: [
-                {
                     id: 'category',
                     label: 'Categoria',
                     type: 'select',
@@ -75,7 +77,36 @@ const ModalRevenues = ({
                     options: categories
                         .filter((category) => category.type.toUpperCase() === 'RECEITA')
                         .map((category) => ({ value: category.id, label: category.name })),
-                    size: 'half-width-medium', // Define o tamanho do input
+                    size: 'half-width-large', // Define o tamanho do input
+                },
+            ],
+        },
+        {
+            fields: [
+                {
+                    id: 'typeOfExpense',
+                    label: 'Tipo de Despesa',
+                    type: 'select',
+                    value: typeOfInstallment,
+                    onChange: setTypeOfInstallment,
+                    required: false,
+                    options: [
+                        { value: 'U', label: 'Única' },
+                        { value: 'P', label: 'Parcelada' },
+                        { value: 'F', label: 'Fixa' }
+                    ],
+                    size: 'half-width-large',
+                },
+                {
+                    id: 'parcelas',
+                    label: 'Parcelas',
+                    type: 'number',
+                    value: installments,
+                    onChange: setInstallments,
+                    placeholder: 0,
+                    required: false,
+                    size: 'half-width-medium',
+                    disabled: typeOfInstallment !== 'P'
                 },
             ],
         },

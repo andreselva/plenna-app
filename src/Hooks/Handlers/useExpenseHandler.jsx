@@ -17,7 +17,7 @@ export const useExpenseHandler = () => {
     const [expenseInvoiceDueDate, setExpenseInvoiceDueDate] = useState('');
     const [isModalCardOpen, setIsModalCardOpen] = useState(false);
     const [selectedCard, setSelectedCard] = useState(null);
-    const [installments, setInstallments] = useState(0);
+    const [installments, setInstallments] = useState('');
     const [typeOfInstallment, setTypeOfInstallment] = useState('U');
 
     const handleAddExpense = () => {
@@ -42,6 +42,8 @@ export const useExpenseHandler = () => {
         setExpenseValue('0');
         setExpenseInvoiceDueDate('');
         setSelectedCategory(null);
+        setInstallments('');
+        setTypeOfInstallment('U');
         setIsModalOpen(false);
     };
 
@@ -85,6 +87,8 @@ export const useExpenseHandler = () => {
         setExpenseValue('0');
         setExpenseInvoiceDueDate('');
         setSelectedCategory('');
+        setInstallments('');
+        setTypeOfInstallment('U');
         setIsModalOpen(false);
     };
 
