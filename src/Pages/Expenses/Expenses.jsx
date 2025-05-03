@@ -5,7 +5,7 @@ import { useExpenseHandler } from '../../Hooks/Handlers/useExpenseHandler';
 import { BotaoGlobal } from '../../Components/Buttons/ButtonGlobal.tsx';
 
 const Expenses = () => {
-    const { expenses, categories, newExpense, setNewExpense, expenseValue, setExpenseValue, expenseInvoiceDueDate, setExpenseInvoiceDueDate, selectedCategory, setSelectedCategory, isModalOpen, setIsModalOpen, setEditingExpense, handleEditExpense, handleSaveExpense, handleDeleteExpense, accounts, selectedCard, setSelectedCard } = useExpenseHandler();
+    const { expenses, categories, newExpense, setNewExpense, expenseValue, setExpenseValue, expenseInvoiceDueDate, setExpenseInvoiceDueDate, selectedCategory, setSelectedCategory, isModalOpen, setIsModalOpen, setEditingExpense, handleEditExpense, handleSaveExpense, handleDeleteExpense, accounts, selectedCard, setSelectedCard, installments, setInstallments } = useExpenseHandler();
 
     return (
         <div className={styles.Expenses}>
@@ -52,6 +52,8 @@ const Expenses = () => {
                     creditCards={accounts}
                     selectedCard={selectedCard}
                     setSelectedCard={setSelectedCard}
+                    installments={installments}
+                    setInstallments={setInstallments}
                 />
             )}
         </div>

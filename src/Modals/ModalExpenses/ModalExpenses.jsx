@@ -16,6 +16,8 @@ const ModalExpenses = ({
     creditCards,
     selectedCard,
     setSelectedCard,
+    installments,
+    setInstallments
 }) => {
     const handleCancel = () => {
         setNewExpense('');
@@ -38,7 +40,16 @@ const ModalExpenses = ({
                     onChange: setNewExpense,
                     placeholder: 'Ex: Luz, Internet...',
                     required: true,
-                    size: 'full-width', // Define o tamanho do input
+                    size: 'half-width-large', // Define o tamanho do input
+                },
+                {
+                    id: 'invoiceDueDate',
+                    label: 'Vencimento',
+                    type: 'date',
+                    value: expenseInvoiceDueDate,
+                    onChange: setExpenseInvoiceDueDate,
+                    required: true,
+                    size: 'half-width-medium', // Define o tamanho do input
                 },
             ],
         },
@@ -52,21 +63,8 @@ const ModalExpenses = ({
                     onChange: setExpenseValue,
                     placeholder: '0,00',
                     required: true,
-                    size: 'half-width', // Define o tamanho do input
+                    size: 'half-width-middle-medium', // Define o tamanho do input
                 },
-                {
-                    id: 'invoiceDueDate',
-                    label: 'Vencimento',
-                    type: 'date',
-                    value: expenseInvoiceDueDate,
-                    onChange: setExpenseInvoiceDueDate,
-                    required: true,
-                    size: 'half-width', // Define o tamanho do input
-                },
-            ],
-        },
-        {
-            fields: [
                 {
                     id: 'category',
                     label: 'Categoria',
@@ -78,7 +76,7 @@ const ModalExpenses = ({
                     options: categories
                         .filter((category) => category.type.toUpperCase() === 'DESPESA')
                         .map((category) => ({ value: category.id, label: category.name })),
-                    size: 'full-width', // Define o tamanho do input
+                    size: 'half-width-large', // Define o tamanho do input
                 },
             ],
         },
@@ -93,8 +91,19 @@ const ModalExpenses = ({
                     placeholder: 'Selecione um cartão',
                     required: false,
                     options: creditCards.map((creditCard) => ({ value: creditCard.id, label: creditCard.name })),
-                    size: 'full-width', // Define o tamanho do input
+                    size: 'half-width-large', // Define o tamanho do input
                 },
+                {
+                    id: 'parcelas',
+                    label: 'Parcelas',
+                    type: 'number',
+                    value: installments,
+                    onChange: setInstallments,
+                    placeholder: 'Nº de parcelas',
+                    required: false,
+                    size: 'half-width-medium', // Define o tamanho do input
+                },
+                
             ],
         },
     ];
@@ -107,6 +116,8 @@ const ModalExpenses = ({
             onSubmit={handleAddExpense}
             onCancel={handleCancel}
             submitButtonText="Adicionar"
+            width='600px'
+            height='500px'
         />
     );
 };
