@@ -16,7 +16,6 @@ export const useDashboardData = (periodo = {}) => {
     const hasFetched = useRef(false);
 
     useEffect(() => {
-        // Redefine `hasFetched` sempre que o período mudar
         hasFetched.current = false;
 
         const fetchData = async () => {
@@ -27,7 +26,7 @@ export const useDashboardData = (periodo = {}) => {
             try {
                 const headers = {
                     "Content-Type": "application/json",
-                    "Periodo": JSON.stringify(periodo) // Envia o período no header
+                    "Periodo": JSON.stringify(periodo)
                 };
 
                 const response = await fetch(apiUrl, { headers });
