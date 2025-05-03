@@ -37,16 +37,7 @@ ChartJS.register(
 );
 
 const Dashboard = () => {
-    const [formattedPeriod, setFormattedPeriod] = useState(() => {
-        const now = new Date();
-        const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-        const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0);
-
-        return {
-            start: startOfMonth.toISOString().split("T")[0],
-            end: endOfMonth.toISOString().split("T")[0],
-        };
-    });
+    const [formattedPeriod, setFormattedPeriod] = useState(() => getStartAndEndOfMonth());
     const { data, loading } = useDashboardData(formattedPeriod);
     const remainingBalance = data?.saldoRestante ?? 0;
     const saldoOptions = createSaldoOptions(remainingBalance);
