@@ -5,7 +5,7 @@ export const CalendarIcon = () => {
         <div>
             <img src={imgCalendarIcon}
                 alt="Calendário"
-                style={{ width: "24px", height: "24px" }} />
+                style={{ width: "30px", height: "30px" }} />
         </div>
     )
 }
