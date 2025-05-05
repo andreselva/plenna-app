@@ -45,7 +45,14 @@ export const ExpenseManager = () => {
             }
 
             const newExpense = await response.json();
-            setExpenses(oldExpenses => [...oldExpenses, newExpense]);
+
+            if (newExpense.length > 1) {
+                newExpense.forEach(expense => {
+                    setExpenses(oldExpenses => [...oldExpenses, expense]);
+                })
+            } else {
+                setExpenses(oldExpenses => [...oldExpenses, newExpense]);
+            }
         } catch (err) {
             setError(err.message);
         }

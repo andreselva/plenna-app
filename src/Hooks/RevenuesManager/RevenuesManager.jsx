@@ -46,7 +46,15 @@ export const RevenuesManager = () => {
             }
 
             const newRevenue = await response.json();
-            setRevenues((oldRevenues) => [...oldRevenues, newRevenue]);
+
+            if (newRevenue.length > 1) {
+                newRevenue.forEach(revenue => {
+                    setRevenues((oldRevenues) => [...oldRevenues, revenue]);
+                })
+            } else {
+                setRevenues((oldRevenues) => [...oldRevenues, newRevenue]);
+            }
+
         } catch (err) {
             setError(err);
         }
