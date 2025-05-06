@@ -19,6 +19,8 @@ export const useExpenseHandler = () => {
     const [selectedCard, setSelectedCard] = useState(null);
     const [installments, setInstallments] = useState('');
     const [typeOfInstallment, setTypeOfInstallment] = useState('U');
+    const [hasInstallments, setHasInstallments] = useState(false);
+    const [hasSourceAccountId, setBooleanSourceAccountId] = useState(false);
 
     const handleAddExpense = () => {
         if (!newExpense.trim()) {
@@ -34,7 +36,8 @@ export const useExpenseHandler = () => {
             idCategory: selectedCategory,
             idCreditCard: selectedCard,
             installments: installments,
-            typeOfInstallment: typeOfInstallment
+            typeOfInstallment: typeOfInstallment,
+            hasInstallments: hasInstallments
         });
 
         resetForm();
@@ -49,7 +52,9 @@ export const useExpenseHandler = () => {
         setSelectedCategory(expense.idCategory);
         setSelectedCard(expense.idCreditCard);
         setInstallments(expense.installments);
-        setTypeOfInstallment(expense.typeOfInstallment);
+        setTypeOfInstallment(expense.typeOfInstallments);
+        setHasInstallments(expense.hasInstallments);
+        setBooleanSourceAccountId(expense.sourceAccountId > 0);
         setIsModalOpen(true);
     };
 
@@ -68,7 +73,8 @@ export const useExpenseHandler = () => {
                 idCategory: selectedCategory,
                 idCreditCard: selectedCard,
                 installments: installments,
-                typeOfInstallment: typeOfInstallment
+                typeOfInstallment: typeOfInstallment,
+                hasInstallments: hasInstallments
             });
         } else {
             handleAddExpense();
@@ -86,6 +92,7 @@ export const useExpenseHandler = () => {
         setSelectedCategory('');
         setInstallments('');
         setTypeOfInstallment('U');
+        setHasInstallments(false);
         setIsModalOpen(false);
     }
 
@@ -127,6 +134,9 @@ export const useExpenseHandler = () => {
         installments,
         setInstallments,
         typeOfInstallment,
-        setTypeOfInstallment
+        setTypeOfInstallment,
+        hasInstallments,
+        setHasInstallments,
+        hasSourceAccountId
     };
 };

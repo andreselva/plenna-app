@@ -1,4 +1,6 @@
+import { HelpCircle } from 'lucide-react';
 import GenericModal from '../../Components/GenericModal/GenericModal';
+import Tooltip from '../../Components/Tooltip/Tooltip';
 
 const ModalExpenses = ({
     setIsModalOpen,
@@ -19,7 +21,9 @@ const ModalExpenses = ({
     installments,
     setInstallments,
     typeOfInstallment,
-    setTypeOfInstallment
+    setTypeOfInstallment,
+    setHasInstallments,
+    hasSourceAccountId
 }) => {
     const handleCancel = () => {
         setNewExpense('');
@@ -29,9 +33,22 @@ const ModalExpenses = ({
         setSelectedCard('');
         setEditingExpense(null);
         setIsModalOpen(false);
-        setInstallments('');
+        setInstallments(0);
         setTypeOfInstallment('U');
     };
+
+    switch (typeOfInstallment) {
+        case 'F':
+            setInstallments(0);
+            setHasInstallments(true);
+            break;
+        case 'P':
+            setHasInstallments(true);
+            break;
+        default:
+            setInstallments(0);
+            setHasInstallments(false);
+    }
 
     const formFields = [
         {
@@ -99,7 +116,7 @@ const ModalExpenses = ({
                 },
                 {
                     id: 'typeOfExpense',
-                    label: 'Tipo de Despesa',
+                    label: 'Tipo de parcelamento',
                     type: 'select',
                     value: typeOfInstallment,
                     onChange: setTypeOfInstallment,
@@ -109,7 +126,9 @@ const ModalExpenses = ({
                         { value: 'P', label: 'Parcelada' },
                         { value: 'F', label: 'Fixa' }
                     ],
-                    size: 'half-width-medium',
+                    size: 'half-width-large',
+                    //Se possui um id de conta vinculado, o tipo de parcelamento não pode ser alterado.
+                    disabled: hasSourceAccountId
                 },
                 {
                     id: 'parcelas',
@@ -120,8 +139,48 @@ const ModalExpenses = ({
                     placeholder: 0,
                     required: false,
                     size: 'half-width-small',
-                    disabled: typeOfInstallment !== 'P'
+                    //Se possui um id de conta vinculado, não pode ter sua quantidade de parcelas alteradas.
+                    disabled: typeOfInstallment !== 'P' || hasSourceAccountId
                 },
+            ],
+        },
+        {
+            fields: [
+                {
+                    id: 'hasInstallments',
+                    label: (
+                        <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                            Conta parcelada
+                            <Tooltip text="Esta conta foi dividida em múltiplas parcelas.">
+                                <HelpCircle size={15} strokeWidth={1} style={{ cursor: 'help' }} />
+                            </Tooltip>
+                        </span>
+                    ),
+                    type: 'toggle',
+                    value: typeOfInstallment === 'F' || (typeOfInstallment === 'P' && parseInt(installments) > 0),
+                    onChange: () => { },
+                    required: false,
+                    size: 'half-width-medium',
+                    disabled: true,
+                },
+                {
+                    id: 'isInstallment',
+                    label: (
+                        <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                            Faz parte de parcelamento
+                            <Tooltip text="Esta conta faz parte de um parcelamento gerado a partir de outra conta. Não é possível editar o tipo de parcelamento e a quantidade de parcelas.">
+                                <HelpCircle size={15} strokeWidth={1} style={{ cursor: 'help' }} />
+                            </Tooltip>
+                        </span>
+                    ),
+                    type: 'toggle',
+                    value: hasSourceAccountId,
+                    onChange: () => { },
+                    required: false,
+                    size: 'half-width-large',
+                    disabled: true,
+                },
+
             ],
         },
     ];
@@ -135,7 +194,7 @@ const ModalExpenses = ({
             onCancel={handleCancel}
             submitButtonText="Adicionar"
             width="600px"
-            height="500px"
+            height="580px"
         />
     );
 };
