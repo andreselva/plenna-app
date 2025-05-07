@@ -33,7 +33,7 @@ const ModalExpenses = ({
         setSelectedCard('');
         setEditingExpense(null);
         setIsModalOpen(false);
-        setInstallments(0);
+        setInstallments();
         setTypeOfInstallment('U');
     };
 
@@ -46,7 +46,7 @@ const ModalExpenses = ({
             setHasInstallments(true);
             break;
         default:
-            setInstallments(0);
+            setInstallments();
             setHasInstallments(false);
     }
 
