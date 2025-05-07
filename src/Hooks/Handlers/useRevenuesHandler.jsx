@@ -15,6 +15,8 @@ export const useRevenueHandler = () => {
     const [revenueInvoiceDueDate, setRevenueInvoiceDueDate] = useState('');
     const [typeOfInstallment, setTypeOfInstallment] = useState('U');
     const [installments, setInstallments] = useState('');
+    const [hasInstallments, setHasInstallments] = useState(false);
+    const [hasSourceAccountId, setBooleanSourceAccountId] = useState(false);
 
 
     const handleAddRevenue = () => {
@@ -30,7 +32,8 @@ export const useRevenueHandler = () => {
             invoiceDueDate: revenueInvoiceDueDate,
             idCategory: selectedCategory,
             installments: installments,
-            typeOfInstallment: typeOfInstallment
+            typeOfInstallment: typeOfInstallment,
+            hasInstallments: hasInstallments
         });
 
         resetForm();
@@ -44,7 +47,9 @@ export const useRevenueHandler = () => {
         setRevenueInvoiceDueDate(revenue.invoiceDueDate);
         setSelectedCategory(revenue.idCategory);
         setInstallments(revenue.installments);
-        setTypeOfInstallment(revenue.typeOfInstallment);
+        setTypeOfInstallment(revenue.typeOfInstallments);
+        setHasInstallments(revenue.hasInstallments);
+        setBooleanSourceAccountId(revenue.sourceAccountId > 0);
         setIsModalOpen(true);
     };
 
@@ -62,7 +67,8 @@ export const useRevenueHandler = () => {
                 invoiceDueDate: revenueInvoiceDueDate,
                 idCategory: selectedCategory,
                 installments: installments,
-                typeOfInstallment: typeOfInstallment
+                typeOfInstallment: typeOfInstallment,
+                hasInstallments: hasInstallments
             });
         } else {
             handleAddRevenue();
@@ -85,6 +91,8 @@ export const useRevenueHandler = () => {
         setSelectedCategory(null);
         setInstallments('');
         setTypeOfInstallment('U');
+        setHasInstallments(false);
+        setBooleanSourceAccountId(false);
         setIsModalOpen(false);
     };
 
@@ -112,6 +120,10 @@ export const useRevenueHandler = () => {
         typeOfInstallment,
         setTypeOfInstallment,
         installments,
-        setInstallments
+        setInstallments,
+        hasInstallments,
+        setHasInstallments,
+        hasSourceAccountId,
+        setBooleanSourceAccountId
     };
 };

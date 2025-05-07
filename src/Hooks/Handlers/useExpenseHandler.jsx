@@ -93,6 +93,7 @@ export const useExpenseHandler = () => {
         setInstallments('');
         setTypeOfInstallment('U');
         setHasInstallments(false);
+        setBooleanSourceAccountId(false);
         setIsModalOpen(false);
     }
 
@@ -137,6 +138,7 @@ export const useExpenseHandler = () => {
         setTypeOfInstallment,
         hasInstallments,
         setHasInstallments,
-        hasSourceAccountId
+        hasSourceAccountId,
+        setBooleanSourceAccountId
     };
 };

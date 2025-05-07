@@ -1,4 +1,6 @@
 import GenericModal from '../../Components/GenericModal/GenericModal';
+import { HelpCircle } from 'lucide-react';
+import Tooltip from '../../Components/Tooltip/Tooltip';
 
 const ModalRevenues = ({
     setIsModalOpen,
@@ -16,7 +18,10 @@ const ModalRevenues = ({
     typeOfInstallment,
     setTypeOfInstallment,
     installments,
-    setInstallments
+    setInstallments,
+    setHasInstallments,
+    hasSourceAccountId,
+    setBooleanSourceAccountId
 }) => {
     const handleCancel = () => {
         setNewRevenue('');
@@ -27,7 +32,21 @@ const ModalRevenues = ({
         setIsModalOpen(false);
         setInstallments('');
         setTypeOfInstallment('U');
+        setBooleanSourceAccountId(false);
     };
+
+    switch (typeOfInstallment) {
+        case 'F':
+            setInstallments(0);
+            setHasInstallments(true);
+            break;
+        case 'P':
+            setHasInstallments(true);
+            break;
+        default:
+            setInstallments();
+            setHasInstallments(false);
+    }
 
     const formFields = [
         {
@@ -96,6 +115,7 @@ const ModalRevenues = ({
                         { value: 'F', label: 'Fixa' }
                     ],
                     size: 'half-width-large',
+                    disabled: hasSourceAccountId
                 },
                 {
                     id: 'parcelas',
@@ -106,8 +126,47 @@ const ModalRevenues = ({
                     placeholder: 0,
                     required: false,
                     size: 'half-width-medium',
-                    disabled: typeOfInstallment !== 'P'
+                    disabled: typeOfInstallment !== 'P' || hasSourceAccountId
                 },
+            ],
+        },
+        {
+            fields: [
+                {
+                    id: 'hasInstallments',
+                    label: (
+                        <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                            Conta parcelada
+                            <Tooltip text="Esta conta foi dividida em múltiplas parcelas.">
+                                <HelpCircle size={15} strokeWidth={1} style={{ cursor: 'help' }} />
+                            </Tooltip>
+                        </span>
+                    ),
+                    type: 'toggle',
+                    value: typeOfInstallment === 'F' || (typeOfInstallment === 'P' && parseInt(installments) > 0),
+                    onChange: () => { },
+                    required: false,
+                    size: 'half-width-medium',
+                    disabled: true,
+                },
+                {
+                    id: 'isInstallment',
+                    label: (
+                        <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                            Faz parte de parcelamento
+                            <Tooltip text="Esta conta faz parte de um parcelamento gerado a partir de outra conta. Não é possível editar o tipo de parcelamento e a quantidade de parcelas.">
+                                <HelpCircle size={15} strokeWidth={1} style={{ cursor: 'help' }} />
+                            </Tooltip>
+                        </span>
+                    ),
+                    type: 'toggle',
+                    value: hasSourceAccountId,
+                    onChange: () => { },
+                    required: false,
+                    size: 'half-width-large',
+                    disabled: true,
+                },
+
             ],
         },
     ];
@@ -121,7 +180,7 @@ const ModalRevenues = ({
             onCancel={handleCancel}
             submitButtonText="Adicionar"
             width="500px"
-            height="500px"
+            height="580px"
         />
     );
 };

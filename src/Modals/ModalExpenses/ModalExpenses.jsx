@@ -23,7 +23,8 @@ const ModalExpenses = ({
     typeOfInstallment,
     setTypeOfInstallment,
     setHasInstallments,
-    hasSourceAccountId
+    hasSourceAccountId,
+    setBooleanSourceAccountId
 }) => {
     const handleCancel = () => {
         setNewExpense('');
@@ -35,6 +36,7 @@ const ModalExpenses = ({
         setIsModalOpen(false);
         setInstallments();
         setTypeOfInstallment('U');
+        setBooleanSourceAccountId(false);
     };
 
     switch (typeOfInstallment) {
