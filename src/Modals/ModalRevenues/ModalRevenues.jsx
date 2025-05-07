@@ -37,7 +37,7 @@ const ModalRevenues = ({
 
     switch (typeOfInstallment) {
         case 'F':
-            setInstallments(0);
+            setInstallments();
             setHasInstallments(true);
             break;
         case 'P':
@@ -104,7 +104,7 @@ const ModalRevenues = ({
             fields: [
                 {
                     id: 'typeOfExpense',
-                    label: 'Tipo de Despesa',
+                    label: 'Tipo de parcelamento',
                     type: 'select',
                     value: typeOfInstallment,
                     onChange: setTypeOfInstallment,
