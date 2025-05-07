@@ -139,7 +139,7 @@ const ModalExpenses = ({
                     value: installments,
                     onChange: setInstallments,
                     placeholder: 0,
-                    required: false,
+                    required: typeOfInstallment === 'P',
                     size: 'half-width-small',
                     //Se possui um id de conta vinculado, não pode ter sua quantidade de parcelas alteradas.
                     disabled: typeOfInstallment !== 'P' || hasSourceAccountId

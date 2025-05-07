@@ -124,7 +124,7 @@ const ModalRevenues = ({
                     value: installments,
                     onChange: setInstallments,
                     placeholder: 0,
-                    required: false,
+                    required: typeOfInstallment === 'P',
                     size: 'half-width-medium',
                     disabled: typeOfInstallment !== 'P' || hasSourceAccountId
                 },
