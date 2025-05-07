@@ -1,6 +1,7 @@
 import GenericModal from '../../Components/GenericModal/GenericModal';
 import { HelpCircle } from 'lucide-react';
 import Tooltip from '../../Components/Tooltip/Tooltip';
+import { useEffect } from 'react';
 
 const ModalRevenues = ({
     setIsModalOpen,
@@ -35,18 +36,17 @@ const ModalRevenues = ({
         setBooleanSourceAccountId(false);
     };
 
-    switch (typeOfInstallment) {
-        case 'F':
-            setInstallments();
+    useEffect(() => {
+        if (typeOfInstallment === 'F') {
+            setInstallments('');
             setHasInstallments(true);
-            break;
-        case 'P':
+        } else if (typeOfInstallment === 'P') {
             setHasInstallments(true);
-            break;
-        default:
-            setInstallments();
+        } else {
+            setInstallments('');
             setHasInstallments(false);
-    }
+        }
+    }, [typeOfInstallment, setInstallments, setHasInstallments]);
 
     const formFields = [
         {

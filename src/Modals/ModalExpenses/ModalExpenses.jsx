@@ -1,6 +1,7 @@
 import { HelpCircle } from 'lucide-react';
 import GenericModal from '../../Components/GenericModal/GenericModal';
 import Tooltip from '../../Components/Tooltip/Tooltip';
+import { useEffect } from 'react';
 
 const ModalExpenses = ({
     setIsModalOpen,
@@ -34,23 +35,22 @@ const ModalExpenses = ({
         setSelectedCard('');
         setEditingExpense(null);
         setIsModalOpen(false);
-        setInstallments();
+        setInstallments('');
         setTypeOfInstallment('U');
         setBooleanSourceAccountId(false);
     };
 
-    switch (typeOfInstallment) {
-        case 'F':
-            setInstallments(0);
+    useEffect(() => {
+        if (typeOfInstallment === 'F') {
+            setInstallments('');
             setHasInstallments(true);
-            break;
-        case 'P':
+        } else if (typeOfInstallment === 'P') {
             setHasInstallments(true);
-            break;
-        default:
-            setInstallments();
+        } else {
+            setInstallments('');
             setHasInstallments(false);
-    }
+        }
+    }, [typeOfInstallment, setInstallments, setHasInstallments]);
 
     const formFields = [
         {
