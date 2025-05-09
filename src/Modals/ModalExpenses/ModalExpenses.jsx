@@ -23,6 +23,7 @@ const ModalExpenses = ({
     setInstallments,
     typeOfInstallment,
     setTypeOfInstallment,
+    hasInstallments,
     setHasInstallments,
     hasSourceAccountId,
     setBooleanSourceAccountId
@@ -130,7 +131,7 @@ const ModalExpenses = ({
                     ],
                     size: 'half-width-large',
                     //Se possui um id de conta vinculado, o tipo de parcelamento não pode ser alterado.
-                    disabled: hasSourceAccountId
+                    disabled: hasSourceAccountId || hasInstallments
                 },
                 {
                     id: 'parcelas',
@@ -142,7 +143,7 @@ const ModalExpenses = ({
                     required: typeOfInstallment === 'P',
                     size: 'half-width-small',
                     //Se possui um id de conta vinculado, não pode ter sua quantidade de parcelas alteradas.
-                    disabled: typeOfInstallment !== 'P' || hasSourceAccountId
+                    disabled: typeOfInstallment !== 'P' || hasSourceAccountId || hasInstallments
                 },
             ],
         },

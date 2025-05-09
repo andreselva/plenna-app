@@ -20,6 +20,7 @@ const ModalRevenues = ({
     setTypeOfInstallment,
     installments,
     setInstallments,
+    hasInstallments,
     setHasInstallments,
     hasSourceAccountId,
     setBooleanSourceAccountId
@@ -115,7 +116,7 @@ const ModalRevenues = ({
                         { value: 'F', label: 'Fixa' }
                     ],
                     size: 'half-width-large',
-                    disabled: hasSourceAccountId
+                    disabled: hasSourceAccountId || hasInstallments
                 },
                 {
                     id: 'parcelas',
@@ -126,7 +127,7 @@ const ModalRevenues = ({
                     placeholder: 0,
                     required: typeOfInstallment === 'P',
                     size: 'half-width-medium',
-                    disabled: typeOfInstallment !== 'P' || hasSourceAccountId
+                    disabled: typeOfInstallment !== 'P' || hasSourceAccountId || hasInstallments
                 },
             ],
         },
@@ -137,7 +138,7 @@ const ModalRevenues = ({
                     label: (
                         <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
                             Conta parcelada
-                            <Tooltip text="Esta conta foi dividida em múltiplas parcelas.">
+                            <Tooltip text="Esta conta foi dividida em múltiplas parcelas. Não é possível alterar o tipo de parcelamento e a quantidade de parcelas.">
                                 <HelpCircle size={15} strokeWidth={1} style={{ cursor: 'help' }} />
                             </Tooltip>
                         </span>
