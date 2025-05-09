@@ -86,10 +86,22 @@ export const RevenuesManager = () => {
                 throw new Error("Erro ao atualizar categoria!");
             }
 
-            const updatedData = await response.json();
-            setRevenues(prev =>
-                prev.map(revenue => revenue.id === id ? { ...revenue, ...updatedData } : revenue)
-            );
+            const updateRevenues = await response.json();
+
+            // Verifica se updateRevenues é um array ou um único objeto
+            if (Array.isArray(updateRevenues)) {
+                setRevenues(prev =>
+                    prev.map(revenue =>
+                        updateRevenues.find(updated => updated.id === revenue.id) || revenue
+                    )
+                );
+            } else {
+                setRevenues(prev =>
+                    prev.map(revenue =>
+                        revenue.id === id ? { ...revenue, ...updateRevenues } : revenue
+                    )
+                );
+            }
         } catch (err) {
             setError(err);
         }

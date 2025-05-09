@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { RevenuesManager } from '../RevenuesManager/RevenuesManager';
 import { CategoryManager } from '../CategoryManager/CategoryManager';
+import AlertConfirm from '../../Components/Alerts/AlertConfirm';
 
 export const useRevenueHandler = () => {
     const { revenues, addRevenue, deleteRevenue, updateRevenue } = RevenuesManager();
@@ -17,6 +18,8 @@ export const useRevenueHandler = () => {
     const [installments, setInstallments] = useState('');
     const [hasInstallments, setHasInstallments] = useState(false);
     const [hasSourceAccountId, setBooleanSourceAccountId] = useState(false);
+    const [sourceAccountId, setSourceAccountId] = useState('');
+    const updateInstallments = false;
 
 
     const handleAddRevenue = () => {
@@ -50,29 +53,56 @@ export const useRevenueHandler = () => {
         setTypeOfInstallment(revenue.typeOfInstallments);
         setHasInstallments(revenue.hasInstallments);
         setBooleanSourceAccountId(revenue.sourceAccountId > 0);
+        setSourceAccountId(revenue.sourceAccountId);
         setIsModalOpen(true);
     };
 
-    const handleSaveRevenue = () => {
+    const handleSaveRevenue = async () => {
         if (!newRevenue.trim()) {
             alert('O nome da receita não pode ser vazio.');
             return;
         }
 
         if (editingRevenue) {
-            updateRevenue(editingRevenue.id, {
-                name: newRevenue,
-                description: revenueDescription,
-                value: revenueValue,
-                invoiceDueDate: revenueInvoiceDueDate,
-                idCategory: selectedCategory,
-                installments: installments,
-                typeOfInstallment: typeOfInstallment,
-                hasInstallments: hasInstallments
-            });
+            if (hasInstallments) {
+                const result = await AlertConfirm({
+                    title: 'Receita parcelada',
+                    text: 'Esta receita possui parcelas. Deseja aplicar as alterações a todas as parcelas subsequentes?',
+                    icon: 'warning',
+                    confirmButtonText: 'Sim, continuar',
+                    cancelButtonText: 'Cancelar'
+                });
+
+                if (result.isConfirmed) {
+                    updateRevenue(editingRevenue.id, {
+                        name: newRevenue,
+                        description: revenueDescription,
+                        value: revenueValue,
+                        invoiceDueDate: revenueInvoiceDueDate,
+                        idCategory: selectedCategory,
+                        installments: installments,
+                        typeOfInstallment: typeOfInstallment,
+                        hasInstallments: hasInstallments,
+                        updateInstallments: true,
+                        sourceAccountId: sourceAccountId
+                    });
+                };
+            } else {
+                updateRevenue(editingRevenue.id, {
+                    name: newRevenue,
+                    description: revenueDescription,
+                    value: revenueValue,
+                    invoiceDueDate: revenueInvoiceDueDate,
+                    idCategory: selectedCategory,
+                    installments: installments,
+                    typeOfInstallment: typeOfInstallment,
+                    hasInstallments: hasInstallments,
+                    updateInstallments: updateInstallments,
+                    sourceAccountId: sourceAccountId
+                });
+            }
         } else {
-            handleAddRevenue();
-            return; // já faz reset no handleAddRevenue
+            return handleAddRevenue();
         }
 
         resetForm();
