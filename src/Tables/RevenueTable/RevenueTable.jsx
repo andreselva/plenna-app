@@ -7,8 +7,8 @@ const RevenueTable = ({ revenues = [], categories = [], onEdit, onDelete }) => {
         confirmText: 'A exclusão é definitiva!',
         confirmButtonText: 'Excluir',
         cancelButtonText: 'Manter',
-        successMessage: 'Despesa excluída!',
-        errorMessage: 'Erro ao excluir despesa!'
+        successMessage: 'Receita excluída!',
+        errorMessage: 'Erro ao excluir receita!'
     });
 
     return (
