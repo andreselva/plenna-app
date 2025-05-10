@@ -106,8 +106,25 @@ export const useRevenueHandler = () => {
     };
 
 
-    const handleDeleteRevenue = (id) => {
-        deleteRevenue(id);
+    const handleDeleteRevenue = async (revenue) => {
+        if (revenue.hasInstallments) {
+            const result = await AlertConfirm({
+                title: 'Receita parcelada!',
+                text: 'Esta receita possui parcelas. Deseja excluir todas as parcelas?',
+                icon: 'warning',
+                confirmButtonText: 'Sim, excluir',
+                cancelButtonText: 'Não'
+            })
+
+            if (result.isConfirmed) {
+                deleteRevenue(revenue.id, true, revenue.sourceAccountId);
+            } else {
+                deleteRevenue(revenue.id)
+            }
+        } else {
+            deleteRevenue(revenue.id);
+        }
+
     };
 
     const resetForm = () => {

@@ -60,16 +60,31 @@ export const RevenuesManager = () => {
         }
     };
 
-    const deleteRevenue = async (id) => {
-        const response = await fetch(`${apiUrl}/${id}`, {
+    const deleteRevenue = async (id, deleteInstallments = false, sourceAccountId = 0) => {
+        let url = '';
+
+        if (deleteInstallments) {
+            url = `${apiUrl}/${id}?deleteInstallments=${deleteInstallments}?sourceAccountId=${sourceAccountId}`;
+        } else {
+            url = `${apiUrl}/${id}`;
+        }
+        const response = await fetch(`${url}`, {
             method: "DELETE",
         });
 
         if (!response.ok) {
-            throw new Error("Erro ao deletar categoria");
+            throw new Error("Erro ao deletar receita");
         }
 
-        setRevenues((oldRevenues) => oldRevenues.filter((revenue) => revenue.id !== id));
+        if (deleteInstallments) {
+            setRevenues(
+                (oldRevenues) => oldRevenues.filter((revenue) => revenue.id !== id && revenue.sourceAccountId !== id)
+            );
+        } else {
+            setRevenues(
+                (oldRevenues) => oldRevenues.filter((revenue) => revenue.id !== id)
+            );
+        }
     };
 
     const updateRevenue = async (id, updatedRevenue) => {

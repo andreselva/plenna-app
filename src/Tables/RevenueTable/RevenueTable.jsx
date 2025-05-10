@@ -54,7 +54,7 @@ const RevenueTable = ({ revenues = [], categories = [], onEdit, onDelete }) => {
                                     </button>
                                     <button
                                         className={globalStyles['action-button']}
-                                        onClick={() => handleDelete(revenue.id)}
+                                        onClick={() => handleDelete(revenue)}
                                     >
                                         Excluir
                                     </button>

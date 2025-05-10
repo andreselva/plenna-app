@@ -127,8 +127,8 @@ export const useExpenseHandler = () => {
     const handleDeleteExpense = async (expense) => {
         if (expense.hasInstallments) {
             const result = await AlertConfirm({
-                title: 'Despesa parcelada',
-                text: 'Esta despesa possui parcelas. Deseja excluir todas as parcelas subsequentes?',
+                title: 'Despesa parcelada!',
+                text: 'Esta despesa possui parcelas. Deseja excluir todas as parcelas?',
                 icon: 'warning',
                 confirmButtonText: 'Sim, excluir',
                 cancelButtonText: 'Não'
