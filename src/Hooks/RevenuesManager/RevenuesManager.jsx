@@ -64,7 +64,7 @@ export const RevenuesManager = () => {
         let url = '';
 
         if (deleteInstallments) {
-            url = `${apiUrl}/${id}?deleteInstallments=${deleteInstallments}?sourceAccountId=${sourceAccountId}`;
+            url = `${apiUrl}/${id}?deleteInstallments=${deleteInstallments}&sourceAccountId=${sourceAccountId}`;
         } else {
             url = `${apiUrl}/${id}`;
         }
@@ -72,19 +72,11 @@ export const RevenuesManager = () => {
             method: "DELETE",
         });
 
-        if (!response.ok) {
-            throw new Error("Erro ao deletar receita");
-        }
+        const updatedRevenues = await response.json();
 
-        if (deleteInstallments) {
-            setRevenues(
-                (oldRevenues) => oldRevenues.filter((revenue) => revenue.id !== id && revenue.sourceAccountId !== id)
-            );
-        } else {
-            setRevenues(
-                (oldRevenues) => oldRevenues.filter((revenue) => revenue.id !== id)
-            );
-        }
+        if (response.ok && updatedRevenues.revenues) {
+            setRevenues(updatedRevenues.revenues)
+        }        
     };
 
     const updateRevenue = async (id, updatedRevenue) => {

@@ -61,28 +61,22 @@ export const ExpenseManager = () => {
     const deleteExpense = async (id, deleteInstallments = false, sourceAccountId = 0) => {
         let url = '';
         if (deleteInstallments) {
-            url = `${apiUrl}/${id}?deleteInstallments=${deleteInstallments}?sourceAccountId=${sourceAccountId}`;
+            url = `${apiUrl}/${id}?deleteInstallments=${deleteInstallments}&sourceAccountId=${sourceAccountId}`;
         } else {
             url = `${apiUrl}/${id}`;
         }
 
-        const response = await fetch(`${url}`, {
+        const response = await fetch(url, {
             method: "DELETE",
         });
 
-        if (!response.ok) {
-            throw new Error("Erro ao deletar categoria");
-        }
-        if (deleteInstallments) {
-            setExpenses(oldExpenses => oldExpenses.filter(
-                expense => expense.id !== id && expense.sourceAccountId !== id
-            ));
-        } else {
-            setExpenses(oldExpenses => oldExpenses.filter(
-                expense => expense.id !== id
-            ));
+        const updatedExpenses = await response.json();
+
+        if (response.ok && updatedExpenses.expenses) {
+            setExpenses(updatedExpenses.expenses);
         }
     };
+
 
     const updateExpense = async (id, updatedExpense) => {
         try {
