@@ -2,13 +2,14 @@ import { useState } from 'react';
 import { ExpenseManager } from '../../Hooks/ExpenseManager/ExpenseManager';
 import { CategoryManager } from '../../Hooks/CategoryManager/CategoryManager';
 import { useBankAccounts } from '../BankAccountsManager/useBankAccounts';
+import AlertConfirm from '../../Components/Alerts/AlertConfirm';
 
 export const useExpenseHandler = () => {
     const { expenses, addExpense, deleteExpense, updateExpense } = ExpenseManager();
     const { categories } = CategoryManager();
     const { accounts } = useBankAccounts();
 
-    const [selectedCategory, setSelectedCategory] = useState();
+    const [selectedCategory, setSelectedCategory] = useState('');
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingExpense, setEditingExpense] = useState(null);
     const [newExpense, setNewExpense] = useState('');
@@ -21,6 +22,8 @@ export const useExpenseHandler = () => {
     const [typeOfInstallment, setTypeOfInstallment] = useState('U');
     const [hasInstallments, setHasInstallments] = useState(false);
     const [hasSourceAccountId, setBooleanSourceAccountId] = useState(false);
+    const [sourceAccountId, setSourceAccountId] = useState('');
+    const updateInstallments = false;
 
     const handleAddExpense = () => {
         if (!newExpense.trim()) {
@@ -55,33 +58,55 @@ export const useExpenseHandler = () => {
         setTypeOfInstallment(expense.typeOfInstallments);
         setHasInstallments(expense.hasInstallments);
         setBooleanSourceAccountId(expense.sourceAccountId > 0);
+        setSourceAccountId(expense.sourceAccountId);
         setIsModalOpen(true);
     };
 
-    const handleSaveExpense = () => {
+    const handleSaveExpense = async () => {
         if (!newExpense.trim()) {
             alert('O nome da despesa não pode ser vazio.');
             return;
         }
 
-        if (editingExpense) {
-            updateExpense(editingExpense.id, {
-                name: newExpense,
-                description: expenseDescription,
-                value: expenseValue,
-                invoiceDueDate: expenseInvoiceDueDate,
-                idCategory: selectedCategory,
-                idCreditCard: selectedCard,
-                installments: installments,
-                typeOfInstallment: typeOfInstallment,
-                hasInstallments: hasInstallments
-            });
-        } else {
+        if (!editingExpense) {
             handleAddExpense();
+            return;
         }
+
+        const baseData = {
+            name: newExpense,
+            description: expenseDescription,
+            value: expenseValue,
+            invoiceDueDate: expenseInvoiceDueDate,
+            idCategory: selectedCategory,
+            installments: installments,
+            typeOfInstallment: typeOfInstallment,
+            hasInstallments: hasInstallments,
+            sourceAccountId: sourceAccountId
+        };
+
+        let updateInstallmentsFlag = updateInstallments;
+
+        if (hasInstallments) {
+            const result = await AlertConfirm({
+                title: 'Despesa parcelada',
+                text: 'Esta despesa possui parcelas. Deseja aplicar as alterações a todas as parcelas subsequentes?',
+                icon: 'warning',
+                confirmButtonText: 'Sim, alterar',
+                cancelButtonText: 'Não'
+            });
+
+            updateInstallmentsFlag = result.isConfirmed;
+        }
+
+        updateExpense(editingExpense.id, {
+            ...baseData,
+            updateInstallments: updateInstallmentsFlag
+        });
 
         resetForm();
     };
+
 
     const resetForm = () => {
         setEditingExpense(null);

@@ -63,50 +63,46 @@ export const useRevenueHandler = () => {
             return;
         }
 
-        if (editingRevenue) {
-            if (hasInstallments) {
-                const result = await AlertConfirm({
-                    title: 'Receita parcelada',
-                    text: 'Esta receita possui parcelas. Deseja aplicar as alterações a todas as parcelas subsequentes?',
-                    icon: 'warning',
-                    confirmButtonText: 'Sim, continuar',
-                    cancelButtonText: 'Cancelar'
-                });
-
-                if (result.isConfirmed) {
-                    updateRevenue(editingRevenue.id, {
-                        name: newRevenue,
-                        description: revenueDescription,
-                        value: revenueValue,
-                        invoiceDueDate: revenueInvoiceDueDate,
-                        idCategory: selectedCategory,
-                        installments: installments,
-                        typeOfInstallment: typeOfInstallment,
-                        hasInstallments: hasInstallments,
-                        updateInstallments: true,
-                        sourceAccountId: sourceAccountId
-                    });
-                };
-            } else {
-                updateRevenue(editingRevenue.id, {
-                    name: newRevenue,
-                    description: revenueDescription,
-                    value: revenueValue,
-                    invoiceDueDate: revenueInvoiceDueDate,
-                    idCategory: selectedCategory,
-                    installments: installments,
-                    typeOfInstallment: typeOfInstallment,
-                    hasInstallments: hasInstallments,
-                    updateInstallments: updateInstallments,
-                    sourceAccountId: sourceAccountId
-                });
-            }
-        } else {
-            return handleAddRevenue();
+        if (!editingRevenue) {
+            handleAddRevenue();
+            resetForm();
+            return;
         }
+
+        const baseData = {
+            name: newRevenue,
+            description: revenueDescription,
+            value: revenueValue,
+            invoiceDueDate: revenueInvoiceDueDate,
+            idCategory: selectedCategory,
+            installments: installments,
+            typeOfInstallment: typeOfInstallment,
+            hasInstallments: hasInstallments,
+            sourceAccountId: sourceAccountId
+        };
+
+        let updateInstallmentsFlag = updateInstallments;
+
+        if (hasInstallments) {
+            const result = await AlertConfirm({
+                title: 'Receita parcelada',
+                text: 'Esta receita possui parcelas. Deseja aplicar as alterações a todas as parcelas subsequentes?',
+                icon: 'warning',
+                confirmButtonText: 'Sim, alterar',
+                cancelButtonText: 'Não'
+            });
+
+            updateInstallmentsFlag = result.isConfirmed;
+        }
+
+        updateRevenue(editingRevenue.id, {
+            ...baseData,
+            updateInstallments: updateInstallmentsFlag
+        });
 
         resetForm();
     };
+
 
     const handleDeleteRevenue = (id) => {
         deleteRevenue(id);

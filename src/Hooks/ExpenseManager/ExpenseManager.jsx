@@ -82,17 +82,29 @@ export const ExpenseManager = () => {
             });
 
             if (!response.ok) {
-                throw new Error("Erro ao atualizar categoria!");
+                throw new Error("Erro ao atualizar despesa!");
             }
 
             const updatedData = await response.json();
-            setExpenses(prev =>
-                prev.map(expense => expense.id === id ? { ...expense, ...updatedData } : expense)
-            );
+
+            // Verifica se updatedData é um array ou um único objeto
+            if (Array.isArray(updatedData)) {
+                setExpenses(prev =>
+                    prev.map(expense =>
+                        updatedData.find(updated => updated.id === expense.id) || expense
+                    )
+                );
+            } else {
+                setExpenses(prev =>
+                    prev.map(expense =>
+                        expense.id === id ? { ...expense, ...updatedData } : expense
+                    )
+                );
+            }
         } catch (err) {
             setError(err);
         }
-    }
+    };
 
     return { expenses, addExpense, deleteExpense, updateExpense, loading, error };
 }
