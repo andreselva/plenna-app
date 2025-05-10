@@ -51,7 +51,7 @@ const ExpenseTable = ({ expenses = [], categories = [], creditCards = [], onEdit
                                 <td>{creditCard.name || '-'}</td>
                                 <td className={globalStyles.actions}>
                                     <button className={globalStyles['action-button']} onClick={() => onEdit(expense)}>Editar</button>
-                                    <button className={globalStyles['action-button']} onClick={() => handleDelete(expense.id)}>Excluir</button>
+                                    <button className={globalStyles['action-button']} onClick={() => handleDelete(expense)}>Excluir</button>
                                 </td>
                             </tr>
                         );

@@ -4,6 +4,7 @@ import Tooltip from '../../Components/Tooltip/Tooltip';
 import { useEffect } from 'react';
 
 const ModalExpenses = ({
+    idExpense,
     setIsModalOpen,
     handleAddExpense,
     newExpense,
@@ -131,7 +132,7 @@ const ModalExpenses = ({
                     ],
                     size: 'half-width-large',
                     //Se possui um id de conta vinculado, o tipo de parcelamento não pode ser alterado.
-                    disabled: hasSourceAccountId || hasInstallments
+                    disabled: hasSourceAccountId || (hasInstallments && idExpense > 0)
                 },
                 {
                     id: 'parcelas',
@@ -143,7 +144,7 @@ const ModalExpenses = ({
                     required: typeOfInstallment === 'P',
                     size: 'half-width-small',
                     //Se possui um id de conta vinculado, não pode ter sua quantidade de parcelas alteradas.
-                    disabled: typeOfInstallment !== 'P' || hasSourceAccountId || hasInstallments
+                    disabled: typeOfInstallment !== 'P' || hasSourceAccountId || (hasInstallments && idExpense > 0)
                 },
             ],
         },

@@ -58,17 +58,30 @@ export const ExpenseManager = () => {
         }
     };
 
-    const deleteExpense = async (id) => {
-        const response = await fetch(`${apiUrl}/${id}`, {
+    const deleteExpense = async (id, deleteInstallments = false, sourceAccountId = 0) => {
+        let url = '';
+        if (deleteInstallments) {
+            url = `${apiUrl}/${id}?deleteInstallments=${deleteInstallments}?sourceAccountId=${sourceAccountId}`;
+        } else {
+            url = `${apiUrl}/${id}`;
+        }
+
+        const response = await fetch(`${url}`, {
             method: "DELETE",
         });
 
         if (!response.ok) {
             throw new Error("Erro ao deletar categoria");
         }
-        setExpenses(oldExpenses => oldExpenses.filter(
-            expense => expense.id !== id
-        ));
+        if (deleteInstallments) {
+            setExpenses(oldExpenses => oldExpenses.filter(
+                expense => expense.id !== id && expense.sourceAccountId !== id
+            ));
+        } else {
+            setExpenses(oldExpenses => oldExpenses.filter(
+                expense => expense.id !== id
+            ));
+        }
     };
 
     const updateExpense = async (id, updatedExpense) => {

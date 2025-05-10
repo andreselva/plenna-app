@@ -4,6 +4,7 @@ import Tooltip from '../../Components/Tooltip/Tooltip';
 import { useEffect } from 'react';
 
 const ModalRevenues = ({
+    idRevenue,
     setIsModalOpen,
     handleAddRevenue,
     newRevenue,
@@ -116,7 +117,7 @@ const ModalRevenues = ({
                         { value: 'F', label: 'Fixa' }
                     ],
                     size: 'half-width-large',
-                    disabled: hasSourceAccountId || hasInstallments
+                    disabled: hasSourceAccountId || (hasInstallments && idRevenue > 0)
                 },
                 {
                     id: 'parcelas',
@@ -127,7 +128,7 @@ const ModalRevenues = ({
                     placeholder: 0,
                     required: typeOfInstallment === 'P',
                     size: 'half-width-medium',
-                    disabled: typeOfInstallment !== 'P' || hasSourceAccountId || hasInstallments
+                    disabled: typeOfInstallment !== 'P' || hasSourceAccountId || (hasInstallments && idRevenue > 0)
                 },
             ],
         },

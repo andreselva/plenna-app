@@ -23,6 +23,7 @@ export const useExpenseHandler = () => {
     const [hasInstallments, setHasInstallments] = useState(false);
     const [hasSourceAccountId, setBooleanSourceAccountId] = useState(false);
     const [sourceAccountId, setSourceAccountId] = useState('');
+    const [idExpense, setIdExpense] = useState(0);
     const updateInstallments = false;
 
     const handleAddExpense = () => {
@@ -48,6 +49,7 @@ export const useExpenseHandler = () => {
 
     const handleEditExpense = (expense) => {
         setEditingExpense(expense);
+        setIdExpense(expense.id);
         setNewExpense(expense.name);
         setExpenseDescription(expense.description);
         setExpenseValue(expense.value);
@@ -122,8 +124,24 @@ export const useExpenseHandler = () => {
         setIsModalOpen(false);
     }
 
-    const handleDeleteExpense = (id) => {
-        deleteExpense(id);
+    const handleDeleteExpense = async (expense) => {
+        if (expense.hasInstallments) {
+            const result = await AlertConfirm({
+                title: 'Despesa parcelada',
+                text: 'Esta despesa possui parcelas. Deseja excluir todas as parcelas subsequentes?',
+                icon: 'warning',
+                confirmButtonText: 'Sim, excluir',
+                cancelButtonText: 'Não'
+            });
+
+            if (result.isConfirmed) {
+                deleteExpense(expense.id, true, expense.sourceAccountId);
+            } else {
+                deleteExpense(expense.id);
+            }
+        } else {
+            deleteExpense(expense);
+        }
     };
 
     const handleAddCard = () => {
@@ -164,6 +182,7 @@ export const useExpenseHandler = () => {
         hasInstallments,
         setHasInstallments,
         hasSourceAccountId,
-        setBooleanSourceAccountId
+        setBooleanSourceAccountId,
+        idExpense
     };
 };

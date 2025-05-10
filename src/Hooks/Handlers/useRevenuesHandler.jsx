@@ -19,6 +19,7 @@ export const useRevenueHandler = () => {
     const [hasInstallments, setHasInstallments] = useState(false);
     const [hasSourceAccountId, setBooleanSourceAccountId] = useState(false);
     const [sourceAccountId, setSourceAccountId] = useState('');
+    const [idRevenue, setIdRevenue] = useState(0);
     const updateInstallments = false;
 
 
@@ -44,6 +45,7 @@ export const useRevenueHandler = () => {
 
     const handleEditRevenue = (revenue) => {
         setEditingRevenue(revenue);
+        setIdRevenue(revenue.id);
         setNewRevenue(revenue.name);
         setRevenueDescription(revenue.description);
         setRevenueValue(revenue.value);
@@ -150,6 +152,7 @@ export const useRevenueHandler = () => {
         hasInstallments,
         setHasInstallments,
         hasSourceAccountId,
-        setBooleanSourceAccountId
+        setBooleanSourceAccountId,
+        idRevenue
     };
 };
