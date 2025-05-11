@@ -81,6 +81,7 @@ export const useExpenseHandler = () => {
             value: expenseValue,
             invoiceDueDate: expenseInvoiceDueDate,
             idCategory: selectedCategory,
+            idCreditCard: selectedCard,
             installments: installments,
             typeOfInstallment: typeOfInstallment,
             hasInstallments: hasInstallments,
