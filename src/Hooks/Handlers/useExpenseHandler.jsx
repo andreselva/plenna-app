@@ -11,13 +11,13 @@ export const useExpenseHandler = () => {
 
     const [selectedCategory, setSelectedCategory] = useState('');
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [editingExpense, setEditingExpense] = useState(null);
+    const [editingExpense, setEditingExpense] = useState('');
     const [newExpense, setNewExpense] = useState('');
     const [expenseDescription, setExpenseDescription] = useState('');
     const [expenseValue, setExpenseValue] = useState('');
     const [expenseInvoiceDueDate, setExpenseInvoiceDueDate] = useState('');
     const [isModalCardOpen, setIsModalCardOpen] = useState(false);
-    const [selectedCard, setSelectedCard] = useState(null);
+    const [selectedCard, setSelectedCard] = useState('');
     const [installments, setInstallments] = useState('');
     const [typeOfInstallment, setTypeOfInstallment] = useState('U');
     const [hasInstallments, setHasInstallments] = useState(false);

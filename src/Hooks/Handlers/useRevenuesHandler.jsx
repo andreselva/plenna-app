@@ -9,7 +9,7 @@ export const useRevenueHandler = () => {
 
     const [selectedCategory, setSelectedCategory] = useState();
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [editingRevenue, setEditingRevenue] = useState(null);
+    const [editingRevenue, setEditingRevenue] = useState('');
     const [newRevenue, setNewRevenue] = useState('');
     const [revenueDescription, setRevenueDescription] = useState('');
     const [revenueValue, setRevenueValue] = useState('');
