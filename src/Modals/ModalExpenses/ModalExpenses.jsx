@@ -35,7 +35,7 @@ const ModalExpenses = ({
         setExpenseInvoiceDueDate('');
         setSelectedCategory('');
         setSelectedCard('');
-        setEditingExpense(null);
+        setEditingExpense('');
         setIsModalOpen(false);
         setInstallments('');
         setTypeOfInstallment('U');

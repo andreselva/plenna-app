@@ -112,7 +112,7 @@ export const useExpenseHandler = () => {
 
 
     const resetForm = () => {
-        setEditingExpense(null);
+        setEditingExpense('');
         setNewExpense('');
         setExpenseDescription('');
         setExpenseValue('0');

@@ -31,7 +31,7 @@ const ModalRevenues = ({
         setRevenueValue('');
         setRevenueInvoiceDueDate('');
         setSelectedCategory('');
-        setEditingRevenue(null);
+        setEditingRevenue('');
         setIsModalOpen(false);
         setInstallments('');
         setTypeOfInstallment('U');

@@ -128,12 +128,12 @@ export const useRevenueHandler = () => {
     };
 
     const resetForm = () => {
-        setEditingRevenue(null);
+        setEditingRevenue('');
         setNewRevenue('');
         setRevenueDescription('');
         setRevenueValue('0');
         setRevenueInvoiceDueDate('');
-        setSelectedCategory(null);
+        setSelectedCategory('');
         setInstallments('');
         setTypeOfInstallment('U');
         setHasInstallments(false);
