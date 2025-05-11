@@ -46,22 +46,37 @@ export const RevenuesManager = () => {
             }
 
             const newRevenue = await response.json();
-            setRevenues((oldRevenues) => [...oldRevenues, newRevenue]);
+
+            if (newRevenue.length > 1) {
+                newRevenue.forEach(revenue => {
+                    setRevenues((oldRevenues) => [...oldRevenues, revenue]);
+                })
+            } else {
+                setRevenues((oldRevenues) => [...oldRevenues, newRevenue]);
+            }
+
         } catch (err) {
             setError(err);
         }
     };
 
-    const deleteRevenue = async (id) => {
-        const response = await fetch(`${apiUrl}/${id}`, {
+    const deleteRevenue = async (id, deleteInstallments = false, sourceAccountId = 0) => {
+        let url = '';
+
+        if (deleteInstallments) {
+            url = `${apiUrl}/${id}?deleteInstallments=${deleteInstallments}&sourceAccountId=${sourceAccountId}`;
+        } else {
+            url = `${apiUrl}/${id}`;
+        }
+        const response = await fetch(`${url}`, {
             method: "DELETE",
         });
 
-        if (!response.ok) {
-            throw new Error("Erro ao deletar categoria");
-        }
+        const updatedRevenues = await response.json();
 
-        setRevenues((oldRevenues) => oldRevenues.filter((revenue) => revenue.id !== id));
+        if (response.ok && updatedRevenues.revenues) {
+            setRevenues(updatedRevenues.revenues)
+        }        
     };
 
     const updateRevenue = async (id, updatedRevenue) => {
@@ -78,10 +93,22 @@ export const RevenuesManager = () => {
                 throw new Error("Erro ao atualizar categoria!");
             }
 
-            const updatedData = await response.json();
-            setRevenues(prev =>
-                prev.map(revenue => revenue.id === id ? { ...revenue, ...updatedData } : revenue)
-            );
+            const updateRevenues = await response.json();
+
+            // Verifica se updateRevenues é um array ou um único objeto
+            if (Array.isArray(updateRevenues)) {
+                setRevenues(prev =>
+                    prev.map(revenue =>
+                        updateRevenues.find(updated => updated.id === revenue.id) || revenue
+                    )
+                );
+            } else {
+                setRevenues(prev =>
+                    prev.map(revenue =>
+                        revenue.id === id ? { ...revenue, ...updateRevenues } : revenue
+                    )
+                );
+            }
         } catch (err) {
             setError(err);
         }

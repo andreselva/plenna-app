@@ -5,7 +5,7 @@ import { useExpenseHandler } from '../../Hooks/Handlers/useExpenseHandler';
 import { BotaoGlobal } from '../../Components/Buttons/ButtonGlobal.tsx';
 
 const Expenses = () => {
-    const { expenses, categories, newExpense, setNewExpense, expenseValue, setExpenseValue, expenseInvoiceDueDate, setExpenseInvoiceDueDate, selectedCategory, setSelectedCategory, isModalOpen, setIsModalOpen, setEditingExpense, handleEditExpense, handleSaveExpense, handleDeleteExpense, accounts, selectedCard, setSelectedCard } = useExpenseHandler();
+    const { expenses, categories, newExpense, setNewExpense, expenseValue, setExpenseValue, expenseInvoiceDueDate, setExpenseInvoiceDueDate, selectedCategory, setSelectedCategory, isModalOpen, setIsModalOpen, setEditingExpense, handleEditExpense, handleSaveExpense, handleDeleteExpense, accounts, selectedCard, setSelectedCard, installments, setInstallments, typeOfInstallment, setTypeOfInstallment, hasInstallments, setHasInstallments, hasSourceAccountId, setBooleanSourceAccountId, idExpense } = useExpenseHandler();
 
     return (
         <div className={styles.Expenses}>
@@ -52,6 +52,15 @@ const Expenses = () => {
                     creditCards={accounts}
                     selectedCard={selectedCard}
                     setSelectedCard={setSelectedCard}
+                    installments={installments}
+                    setInstallments={setInstallments}
+                    typeOfInstallment={typeOfInstallment}
+                    setTypeOfInstallment={setTypeOfInstallment}
+                    hasInstallments={hasInstallments}
+                    setHasInstallments={setHasInstallments}
+                    hasSourceAccountId={hasSourceAccountId}
+                    setBooleanSourceAccountId={setBooleanSourceAccountId}
+                    idExpense={idExpense}
                 />
             )}
         </div>

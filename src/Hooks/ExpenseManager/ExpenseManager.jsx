@@ -45,24 +45,38 @@ export const ExpenseManager = () => {
             }
 
             const newExpense = await response.json();
-            setExpenses(oldExpenses => [...oldExpenses, newExpense]);
+
+            if (newExpense.length > 1) {
+                newExpense.forEach(expense => {
+                    setExpenses(oldExpenses => [...oldExpenses, expense]);
+                })
+            } else {
+                setExpenses(oldExpenses => [...oldExpenses, newExpense]);
+            }
         } catch (err) {
             setError(err.message);
         }
     };
 
-    const deleteExpense = async (id) => {
-        const response = await fetch(`${apiUrl}/${id}`, {
+    const deleteExpense = async (id, deleteInstallments = false, sourceAccountId = 0) => {
+        let url = '';
+        if (deleteInstallments) {
+            url = `${apiUrl}/${id}?deleteInstallments=${deleteInstallments}&sourceAccountId=${sourceAccountId}`;
+        } else {
+            url = `${apiUrl}/${id}`;
+        }
+
+        const response = await fetch(url, {
             method: "DELETE",
         });
 
-        if (!response.ok) {
-            throw new Error("Erro ao deletar categoria");
+        const updatedExpenses = await response.json();
+
+        if (response.ok && updatedExpenses.expenses) {
+            setExpenses(updatedExpenses.expenses);
         }
-        setExpenses(oldExpenses => oldExpenses.filter(
-            expense => expense.id !== id
-        ));
     };
+
 
     const updateExpense = async (id, updatedExpense) => {
         try {
@@ -75,17 +89,29 @@ export const ExpenseManager = () => {
             });
 
             if (!response.ok) {
-                throw new Error("Erro ao atualizar categoria!");
+                throw new Error("Erro ao atualizar despesa!");
             }
 
             const updatedData = await response.json();
-            setExpenses(prev =>
-                prev.map(expense => expense.id === id ? { ...expense, ...updatedData } : expense)
-            );
+
+            // Verifica se updatedData é um array ou um único objeto
+            if (Array.isArray(updatedData)) {
+                setExpenses(prev =>
+                    prev.map(expense =>
+                        updatedData.find(updated => updated.id === expense.id) || expense
+                    )
+                );
+            } else {
+                setExpenses(prev =>
+                    prev.map(expense =>
+                        expense.id === id ? { ...expense, ...updatedData } : expense
+                    )
+                );
+            }
         } catch (err) {
             setError(err);
         }
-    }
+    };
 
     return { expenses, addExpense, deleteExpense, updateExpense, loading, error };
 }

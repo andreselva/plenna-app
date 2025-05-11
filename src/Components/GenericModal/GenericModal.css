@@ -119,12 +119,18 @@ textarea {
     min-width: 150px; /* Garante um tamanho mínimo para inputs menores */
 }
 
-.half-width-medium {
-    flex: 0.33;
-    min-width: 150px; /* Garante um tamanho mínimo para inputs menores */
-}
 .half-width-large {
     flex: 0.75;
+    min-width: 150px; /* Garante um tamanho mínimo para inputs menores */
+}
+
+.half-width-middle-medium {
+    flex: 0.45;
+    min-width: 150px; /* Garante um tamanho mínimo para inputs menores */
+}
+
+.half-width-medium {
+    flex: 0.33;
     min-width: 150px; /* Garante um tamanho mínimo para inputs menores */
 }
 
