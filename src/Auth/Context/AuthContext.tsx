@@ -1,57 +1,63 @@
+// Auth/Context/AuthContext.tsx
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 
 interface AuthContextType {
     user: any;
-    token: string | null;
-    login: (token: string, userData: any) => void;
+    login: (userData: any) => void;
     logout: () => void;
     isAuthenticated: boolean;
+    isLoading: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-    const [token, setToken] = useState<string | null>(localStorage.getItem('token'));
     const [user, setUser] = useState<any>(null);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        if (token) {
+        (async () => {
             try {
-                const userFromStorage = localStorage.getItem('user');
-                if (userFromStorage) {
-                    const parsedUser = JSON.parse(userFromStorage);
-                    setUser(parsedUser);
+                const res = await fetch('http://localhost:8000/auth', {
+                    credentials: 'include',
+                });
+                if (res.ok) {
+                    const { user } = await res.json();
+                    setUser(user);
                 }
-            } catch (err) {
-                console.error("Erro ao fazer parse do usuário salvo:", err);
-                localStorage.removeItem('user');
+            } catch {
+                // nada
+            } finally {
+                setIsLoading(false);
             }
-        }
-    }, [token]);
+        })();
+    }, []);
 
-    const login = (newToken: string, userData: any) => {
-        setToken(newToken);
-        setUser(userData);
-        localStorage.setItem('token', newToken);
-        localStorage.setItem('user', JSON.stringify(userData));
-    };
+    const login = (userData: any) => setUser(userData);
 
-    const logout = () => {
-        setToken(null);
+    const logout = async () => {
+        await fetch('http://localhost:8000/auth/logout', {
+            method: 'POST',
+            credentials: 'include',
+        });
         setUser(null);
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
     };
 
     return (
-        <AuthContext.Provider value={{ token, user, login, logout, isAuthenticated: !!token }}>
+        <AuthContext.Provider value={{
+            user,
+            login,
+            logout,
+            isAuthenticated: !!user,
+            isLoading,
+        }}>
             {children}
         </AuthContext.Provider>
     );
 };
 
 export const useAuth = () => {
-    const context = useContext(AuthContext);
-    if (!context) throw new Error('useAuth precisa estar dentro de um AuthProvider');
-    return context;
+    const ctx = useContext(AuthContext);
+    if (!ctx) throw new Error('useAuth precisa estar dentro de AuthProvider');
+    return ctx;
 };

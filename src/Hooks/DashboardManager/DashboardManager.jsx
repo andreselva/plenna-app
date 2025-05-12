@@ -15,24 +15,26 @@ export const useDashboardData = (periodo = {}) => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const hasFetched = useRef(false);
-    const { token } = useAuth();
+    const { isAuthenticated } = useAuth();
 
     useEffect(() => {
         hasFetched.current = false;
 
         const fetchData = async () => {
             if (hasFetched.current) return;
+            if (!isAuthenticated) return;
+            if (hasFetched.current) return;
 
             hasFetched.current = true;
             setLoading(true);
             try {
-                const headers = {
-                    "Content-Type": "application/json",
-                    "Periodo": JSON.stringify(periodo),
-                    Authorization: `Bearer ${token}`
-                };
-
-                const response = await fetch(apiUrl, { headers });
+                const response = await fetch(apiUrl, {
+                    method: 'GET',
+                    credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/json', 'periodo': JSON.stringify(periodo),
+                    },
+                });
 
                 if (!response.ok) {
                     throw new Error("Erro ao buscar dados do dashboard");
@@ -63,7 +65,8 @@ export const useDashboardData = (periodo = {}) => {
         };
 
         fetchData();
-    }, [periodo, token]); // Refaz a requisição sempre que `periodo` mudar
+    }, [isAuthenticated, periodo]);
 
     return { data, loading, error };
 };
+
