@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-const apiUrl = "http://localhost:8000/expenses";
+import axiosInstance from "../../api/axiosInstance";
+
 
 export const ExpenseManager = () => {
     const [expenses, setExpenses] = useState([]);
@@ -13,105 +14,69 @@ export const ExpenseManager = () => {
 
             hasFetched.current = true;
             try {
-                const response = await fetch(apiUrl);
-                if (!response.ok) {
-                    throw new Error("Erro ao buscar receitas");
-                }
-
-                const data = await response.json();
+                const { data } = await axiosInstance.get("/expenses");
                 setExpenses(data);
             } catch (err) {
-                setError(err.message);
+                setError(err?.response?.data?.message || "Erro ao buscar despesas");
             } finally {
                 setLoading(false);
             }
-        }
+        };
 
         fetchExpenses();
-    }, [])
+    }, []);
 
     const addExpense = async (expense) => {
         try {
-            const response = await fetch(`${apiUrl}`, {
-                method: 'POST',
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(expense),
-            });
+            const { data: newExpense } = await axiosInstance.post("/expenses", expense);
 
-            if (!response.ok) {
-                throw new Error("Erro ao adicionar nova despesa!");
-            }
-
-            const newExpense = await response.json();
-
-            if (newExpense.length > 1) {
-                newExpense.forEach(expense => {
-                    setExpenses(oldExpenses => [...oldExpenses, expense]);
-                })
+            if (Array.isArray(newExpense)) {
+                setExpenses((prev) => [...prev, ...newExpense]);
             } else {
-                setExpenses(oldExpenses => [...oldExpenses, newExpense]);
+                setExpenses((prev) => [...prev, newExpense]);
             }
         } catch (err) {
-            setError(err.message);
+            setError(err?.response?.data?.message || "Erro ao adicionar despesa!");
         }
     };
 
     const deleteExpense = async (id, deleteInstallments = false, sourceAccountId = 0) => {
-        let url = '';
-        if (deleteInstallments) {
-            url = `${apiUrl}/${id}?deleteInstallments=${deleteInstallments}&sourceAccountId=${sourceAccountId}`;
-        } else {
-            url = `${apiUrl}/${id}`;
-        }
+        try {
+            const url = deleteInstallments
+                ? `/expenses/${id}?deleteInstallments=${deleteInstallments}&sourceAccountId=${sourceAccountId}`
+                : `/expenses/${id}`;
 
-        const response = await fetch(url, {
-            method: "DELETE",
-        });
+            const { data } = await axiosInstance.delete(url);
 
-        const updatedExpenses = await response.json();
-
-        if (response.ok && updatedExpenses.expenses) {
-            setExpenses(updatedExpenses.expenses);
+            if (data.expenses) {
+                setExpenses(data.expenses);
+            }
+        } catch (err) {
+            setError(err?.response?.data?.message || "Erro ao excluir despesa!");
         }
     };
 
-
     const updateExpense = async (id, updatedExpense) => {
         try {
-            const response = await fetch(`${apiUrl}/${id}`, {
-                method: 'PUT',
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(updatedExpense),
-            });
+            const { data: updatedData } = await axiosInstance.put(`/expenses/${id}`, updatedExpense);
 
-            if (!response.ok) {
-                throw new Error("Erro ao atualizar despesa!");
-            }
-
-            const updatedData = await response.json();
-
-            // Verifica se updatedData é um array ou um único objeto
             if (Array.isArray(updatedData)) {
-                setExpenses(prev =>
-                    prev.map(expense =>
-                        updatedData.find(updated => updated.id === expense.id) || expense
+                setExpenses((prev) =>
+                    prev.map((expense) =>
+                        updatedData.find((updated) => updated.id === expense.id) || expense
                     )
                 );
             } else {
-                setExpenses(prev =>
-                    prev.map(expense =>
+                setExpenses((prev) =>
+                    prev.map((expense) =>
                         expense.id === id ? { ...expense, ...updatedData } : expense
                     )
                 );
             }
         } catch (err) {
-            setError(err);
+            setError(err?.response?.data?.message || "Erro ao atualizar despesa!");
         }
     };
 
     return { expenses, addExpense, deleteExpense, updateExpense, loading, error };
-}
+};

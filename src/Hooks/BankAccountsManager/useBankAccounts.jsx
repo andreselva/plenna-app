@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import axiosInstance from "../../api/axiosInstance";
 
 const apiUrl = "http://localhost:8000/bank-accounts";
 
@@ -14,15 +15,10 @@ export const useBankAccounts = () => {
 
             hasFetched.current = true;
             try {
-                const response = await fetch(apiUrl);
-                if (!response.ok) {
-                    throw new Error("Error fetching bank accounts");
-                }
-
-                const data = await response.json();
+                const { data } = await axiosInstance.get(apiUrl);
                 setBankAccounts(data);
             } catch (err) {
-                setError(err.message);
+                setError(err?.response?.data?.message || "Error fetching bank accounts");
             } finally {
                 setLoading(false);
             }
@@ -33,23 +29,10 @@ export const useBankAccounts = () => {
 
     const addBankAccount = async (bankAccount) => {
         try {
-            const response = await fetch(`${apiUrl}`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(bankAccount),
-            });
-
-            if (!response.ok) {
-                throw new Error("Error adding bank account");
-            }
-
-            const newBankAccount = await response.json();
-
+            const { data: newBankAccount } = await axiosInstance.post(apiUrl, bankAccount);
             setBankAccounts((prev) => [...prev, newBankAccount]);
         } catch (err) {
-            setError(err.message);
+            setError(err?.response?.data?.message || "Error adding bank account");
         } finally {
             setLoading(false);
         }
@@ -57,17 +40,10 @@ export const useBankAccounts = () => {
 
     const deleteBankAccount = async (id) => {
         try {
-            const response = await fetch(`${apiUrl}/${id}`, {
-                method: "DELETE",
-            });
-
-            if (!response.ok) {
-                throw new Error("Error deleting bank account");
-            }
-
+            await axiosInstance.delete(`${apiUrl}/${id}`);
             setBankAccounts((prev) => prev.filter((account) => account.id !== id));
         } catch (err) {
-            setError(err.message);
+            setError(err?.response?.data?.message || "Error deleting bank account");
         } finally {
             setLoading(false);
         }
@@ -75,27 +51,14 @@ export const useBankAccounts = () => {
 
     const updateBankAccount = async (id, updatedBankAccount) => {
         try {
-            const response = await fetch(`${apiUrl}/${id}`, {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(updatedBankAccount),
-            });
-
-            if (!response.ok) {
-                throw new Error("Error updating bank account");
-            }
-
-            const updatedAccount = await response.json();
-
+            const { data: updatedAccount } = await axiosInstance.put(`${apiUrl}/${id}`, updatedBankAccount);
             setBankAccounts((prev) =>
                 prev.map((account) =>
                     account.id === id ? updatedAccount : account
                 )
             );
         } catch (err) {
-            setError(err.message);
+            setError(err?.response?.data?.message || "Error updating bank account");
         } finally {
             setLoading(false);
         }
@@ -109,4 +72,4 @@ export const useBankAccounts = () => {
         deleteBankAccount,
         updateBankAccount,
     };
-}
+};
