@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { registerSetUser } from './AuthState';
 
 interface AuthContextType {
     user: any;
@@ -15,6 +16,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
+        registerSetUser(setUser);
         (async () => {
             try {
                 const res = await fetch('http://localhost:8000/auth', {
