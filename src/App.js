@@ -1,31 +1,66 @@
 import './App.css';
-import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Navigate, useLocation } from 'react-router-dom';
 import Sidebar from "./Components/Sidebar/Sidebar";
 import Categories from "./Pages/Categories/Categories";
 import Dashboard from "./Pages/Dashboard/Dashboard";
 import Expenses from "./Pages/Expenses/Expenses";
 import Revenues from "./Pages/Revenues/Revenues";
 import { BankAccounts } from './Pages/BankAccounts/BankAccounts';
+import Signin from './Pages/Signin/Signin';
+import PrivateRoute from './Auth/PrivateRoute';
 
-const App = () => {
-    return (<Router>
-        <div className="App">
-            <div className="MainContent">
-                <Sidebar />
-                <div className="Content">
-                    <Routes>
-                        <Route path="/" element={<Navigate to="/dashboard" />} />
-                        <Route path="/dashboard" element={<Dashboard />} />
-                        <Route path="/categories" element={<Categories />} />
-                        <Route path="/expenses" element={<Expenses />} />
-                        <Route path="/revenues" element={<Revenues />} />
-                        <Route path="/bank-accounts" element={<BankAccounts />} />
-                    </Routes>
-                </div>
+const AppContent = () => {
+    const location = useLocation();
+
+    return (
+        <div className="MainContent">
+            {/* Renderizar a Sidebar apenas se não for a rota de login */}
+            {location.pathname !== '/login' && <Sidebar />}
+
+            <div className="Content">
+                <Routes>
+                    <Route path="/" element={<Navigate to="/dashboard" />} />
+                    <Route path="/login" element={<Signin />} />
+                    <Route path="/dashboard" element={
+                        <PrivateRoute>
+                            <Dashboard />
+                        </PrivateRoute>
+                    } />
+                    <Route path="/categories" element={
+                        <PrivateRoute>
+                            <Categories />
+                        </PrivateRoute>
+                    } />
+                    <Route path="/expenses" element={
+                        <PrivateRoute>
+                            <Expenses />
+                        </PrivateRoute>
+                    } />
+                    <Route path="/revenues" element={
+                        <PrivateRoute>
+                            <Revenues />
+                        </PrivateRoute>
+                    } />
+                    <Route path="/bank-accounts" element={
+                        <PrivateRoute>
+                            <BankAccounts />
+                        </PrivateRoute>
+                    } />
+                </Routes>
             </div>
         </div>
-    </Router>);
+    );
 }
 
+const App = () => {
+    return (
+        <Router>
+            <div className="App">
+                {/* A lógica da Sidebar e conteúdo é agora parte de AppContent */}
+                <AppContent />
+            </div>
+        </Router>
+    );
+}
 
 export default App;

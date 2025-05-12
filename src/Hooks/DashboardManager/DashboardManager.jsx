@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { useAuth } from "../../Auth/Context/AuthContext";
 
 const apiUrl = "http://localhost:8000/dashboard";
 
@@ -14,6 +15,7 @@ export const useDashboardData = (periodo = {}) => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const hasFetched = useRef(false);
+    const { token } = useAuth();
 
     useEffect(() => {
         hasFetched.current = false;
@@ -26,7 +28,8 @@ export const useDashboardData = (periodo = {}) => {
             try {
                 const headers = {
                     "Content-Type": "application/json",
-                    "Periodo": JSON.stringify(periodo)
+                    "Periodo": JSON.stringify(periodo),
+                    Authorization: `Bearer ${token}`
                 };
 
                 const response = await fetch(apiUrl, { headers });
@@ -60,7 +63,7 @@ export const useDashboardData = (periodo = {}) => {
         };
 
         fetchData();
-    }, [periodo]); // Refaz a requisição sempre que `periodo` mudar
+    }, [periodo, token]); // Refaz a requisição sempre que `periodo` mudar
 
     return { data, loading, error };
 };
