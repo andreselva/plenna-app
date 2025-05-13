@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-const apiUrl = "http://localhost:8000/categories";
+import axiosInstance from "../../api/axiosInstance";
 
 export const CategoryManager = () => {
     const [categories, setCategories] = useState([]);
@@ -10,18 +10,13 @@ export const CategoryManager = () => {
     useEffect(() => {
         const fetchCategories = async () => {
             if (hasFetched.current) return;
-
             hasFetched.current = true;
-            try {
-                const response = await fetch(apiUrl);
-                if (!response.ok) {
-                    throw new Error("Erro ao buscar categorias");
-                }
 
-                const data = await response.json();
+            try {
+                const { data } = await axiosInstance.get("/categories");
                 setCategories(data);
             } catch (err) {
-                setError(err.message);
+                setError(err?.response?.data?.message || "Erro ao buscar categorias");
             } finally {
                 setLoading(false);
             }
@@ -32,61 +27,34 @@ export const CategoryManager = () => {
 
     const addCategory = async (category) => {
         try {
-            const response = await fetch(`${apiUrl}`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(category),
-            });
-
-            if (!response.ok) {
-                throw new Error("Erro ao adicionar categoria");
-            }
-
-            const newCategory = await response.json();
-
+            const { data: newCategory } = await axiosInstance.post("/categories", category);
             setCategories((prev) => [...prev, newCategory]);
         } catch (err) {
-            setError(err.message);
+            setError(err?.response?.data?.message || "Erro ao adicionar categoria");
         } finally {
             setLoading(false);
         }
     };
 
     const deleteCategory = async (id) => {
-        const response = await fetch(`${apiUrl}/${id}`, {
-            method: "DELETE",
-        });
-
-        if (!response.ok) {
-            throw new Error("Erro ao deletar categoria");
+        try {
+            await axiosInstance.delete(`/categories/${id}`);
+            setCategories((prev) => prev.filter((category) => category.id !== id));
+        } catch (err) {
+            setError(err?.response?.data?.message || "Erro ao deletar categoria");
         }
-        setCategories((prev) => prev.filter((category) => category.id !== id));
-    }
+    };
 
     const updateCategory = async (id, updatedCategory) => {
         try {
-            const response = await fetch(`${apiUrl}/${id}`, {
-                method: 'PUT',
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(updatedCategory),
-            });
-
-            if (!response.ok) {
-                throw new Error("Erro ao atualizar categoria!");
-            }
-
-            const updatedData = await response.json();
-
-            setCategories(prev =>
-                prev.map(category => category.id === id ? { ...category, ...updatedData } : category)
+            const { data: updatedData } = await axiosInstance.put(`/categories/${id}`, updatedCategory);
+            setCategories((prev) =>
+                prev.map((category) =>
+                    category.id === id ? { ...category, ...updatedData } : category
+                )
             );
-
         } catch (err) {
-            setError(err.message);
+            setError(err?.response?.data?.message || "Erro ao atualizar categoria");
         }
     };
 

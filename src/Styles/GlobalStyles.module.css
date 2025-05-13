@@ -2,8 +2,10 @@
 .container {
     display: flex;
     justify-content: center;
-    align-items: center; /* Alinhar verticalmente ao centro */
-    height: 100vh; /* Garantir que ocupe toda a altura da tela */
+    align-items: center;
+    /* Alinhar verticalmente ao centro */
+    height: 100vh;
+    /* Garantir que ocupe toda a altura da tela */
     width: 100%;
 }
 
@@ -21,7 +23,8 @@
     width: 150vh;
     height: 70vh;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-    overflow-y: auto; /* Para permitir rolagem caso o conteúdo seja muito grande */
+    overflow-y: auto;
+    /* Para permitir rolagem caso o conteúdo seja muito grande */
 }
 
 .card h3 {
@@ -31,18 +34,21 @@
 
 .card table {
     width: 100%;
-    border-collapse: collapse; /* Remover espaçamento entre as células */
+    border-collapse: collapse;
+    /* Remover espaçamento entre as células */
 }
 
 .card th,
 .card td {
     padding: 10px;
     text-align: center;
-    border-bottom: 1px solid #ddd; /* Linha divisória entre as categorias */
+    border-bottom: 1px solid #ddd;
+    /* Linha divisória entre as categorias */
 }
 
 .card th {
-    background-color: #f4f4f4; /* Cor de fundo para o cabeçalho */
+    background-color: #f4f4f4;
+    /* Cor de fundo para o cabeçalho */
     font-weight: bold;
 }
 
@@ -71,14 +77,16 @@
 .container-btn-card {
     display: flex;
     justify-content: space-between;
-    position: relative; /* Importante para o dropdown se posicionar em relação a este elemento */
+    position: relative;
+    /* Importante para o dropdown se posicionar em relação a este elemento */
 
 }
 
 .card-icon {
     width: 18px;
     height: 15px;
-    fill: currentColor; /* usa a cor do texto */
+    fill: currentColor;
+    /* usa a cor do texto */
 }
 
 /* BotaoGlobal.module.css */
@@ -90,28 +98,34 @@
     cursor: pointer;
     border-radius: 5px;
     align-self: flex-start;
-  }
-  
-  .primaria {
+}
+
+/* GlobalStyles.module.css */
+.botao:hover {
+    /* Efeito de hover padrão */
+    background-color: rgba(153, 147, 147, 0.1);
+}
+
+.primaria {
     background-color: #4CAF50;
     color: white;
-  }
-  
-  .secundaria {
+}
+
+.secundaria {
     background-color: #0d82e7;
     color: white;
-  }
-  
-  .vermelho {
+}
+
+.vermelho {
     background-color: #dc3545;
     color: white;
-  }
+}
 
-  .nenhuma {
+.nenhuma {
     background-color: transparent;
     color: inherit;
-  }
-  
-  .icone {
+}
+
+.icone {
     display: inline-flex;
-  }
+}

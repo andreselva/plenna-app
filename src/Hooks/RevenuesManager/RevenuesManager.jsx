@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef } from "react";
-const apiUrl = "http://localhost:8000/revenues";
+import axiosInstance from "../../api/axiosInstance";
 
 export const RevenuesManager = () => {
-    const [revenues, setRevenues] = useState([])
+    const [revenues, setRevenues] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const hasFetched = useRef(false);
@@ -13,104 +13,67 @@ export const RevenuesManager = () => {
             hasFetched.current = true;
 
             try {
-                const response = await fetch(apiUrl);
-
-                if (!response.ok) {
-                    throw new Error("Erro ao buscar as receitas!");
-                }
-
-                const data = await response.json();
+                const { data } = await axiosInstance.get("/revenues");
                 setRevenues(data);
             } catch (err) {
-                setError(err);
+                setError(err?.response?.data?.message || "Erro ao buscar as receitas!");
             } finally {
                 setLoading(false);
             }
-        }
+        };
 
         fetchRevenues();
     }, []);
 
     const addRevenue = async (revenue) => {
         try {
-            const response = await fetch(`${apiUrl}`, {
-                method: 'POST',
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(revenue)
-            });
+            const { data: newRevenue } = await axiosInstance.post("/revenues", revenue);
 
-            if (!response.ok) {
-                throw new Error("Erro ao adicionar nova receita!");
-            }
-
-            const newRevenue = await response.json();
-
-            if (newRevenue.length > 1) {
-                newRevenue.forEach(revenue => {
-                    setRevenues((oldRevenues) => [...oldRevenues, revenue]);
-                })
+            if (Array.isArray(newRevenue)) {
+                setRevenues((prev) => [...prev, ...newRevenue]);
             } else {
-                setRevenues((oldRevenues) => [...oldRevenues, newRevenue]);
+                setRevenues((prev) => [...prev, newRevenue]);
             }
-
         } catch (err) {
-            setError(err);
+            setError(err?.response?.data?.message || "Erro ao adicionar nova receita!");
         }
     };
 
     const deleteRevenue = async (id, deleteInstallments = false, sourceAccountId = 0) => {
-        let url = '';
+        try {
+            const url = deleteInstallments
+                ? `/revenues/${id}?deleteInstallments=${deleteInstallments}&sourceAccountId=${sourceAccountId}`
+                : `/revenues/${id}`;
 
-        if (deleteInstallments) {
-            url = `${apiUrl}/${id}?deleteInstallments=${deleteInstallments}&sourceAccountId=${sourceAccountId}`;
-        } else {
-            url = `${apiUrl}/${id}`;
+            const { data } = await axiosInstance.delete(url);
+
+            if (data.revenues) {
+                setRevenues(data.revenues);
+            }
+        } catch (err) {
+            setError(err?.response?.data?.message || "Erro ao excluir receita!");
         }
-        const response = await fetch(`${url}`, {
-            method: "DELETE",
-        });
-
-        const updatedRevenues = await response.json();
-
-        if (response.ok && updatedRevenues.revenues) {
-            setRevenues(updatedRevenues.revenues)
-        }        
     };
 
     const updateRevenue = async (id, updatedRevenue) => {
         try {
-            const response = await fetch(`${apiUrl}/${id}`, {
-                method: 'PUT',
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(updatedRevenue),
-            });
+            const { data: updatedData } = await axiosInstance.put(`/revenues/${id}`, updatedRevenue);
 
-            if (!response.ok) {
-                throw new Error("Erro ao atualizar categoria!");
-            }
-
-            const updateRevenues = await response.json();
-
-            // Verifica se updateRevenues é um array ou um único objeto
-            if (Array.isArray(updateRevenues)) {
-                setRevenues(prev =>
-                    prev.map(revenue =>
-                        updateRevenues.find(updated => updated.id === revenue.id) || revenue
+            if (Array.isArray(updatedData)) {
+                setRevenues((prev) =>
+                    prev.map((revenue) =>
+                        updatedData.find((updated) => updated.id === revenue.id) || revenue
                     )
                 );
             } else {
-                setRevenues(prev =>
-                    prev.map(revenue =>
-                        revenue.id === id ? { ...revenue, ...updateRevenues } : revenue
+                setRevenues((prev) =>
+                    prev.map((revenue) =>
+                        revenue.id === id ? { ...revenue, ...updatedData } : revenue
                     )
                 );
             }
         } catch (err) {
-            setError(err);
+            setError(err?.response?.data?.message || "Erro ao atualizar receita!");
         }
     };
 

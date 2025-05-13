@@ -10,6 +10,7 @@ interface BotaoGlobalProps {
   height?: string;
   padding?: string;
   margin?: string;
+  hover?: string;
 }
 
 export function BotaoGlobal({
@@ -20,11 +21,14 @@ export function BotaoGlobal({
   width,
   height,
   padding,
-  margin
+  margin,
+  hover
 }: BotaoGlobalProps) {
+  const hoverClass = hover ? `botao-hover-${hover}` : '';
+
   return (
     <button
-      className={`${Styles.botao} ${Styles[cor]}`}
+      className={`${Styles.botao} ${Styles[cor]} ${Styles[hoverClass]}`}
       onClick={onClick}
       style={{ width, height, padding, margin }}
     >

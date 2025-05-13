@@ -1,0 +1,64 @@
+import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { registerSetUser } from './AuthState';
+
+interface AuthContextType {
+    user: any;
+    login: (userData: any) => void;
+    logout: () => void;
+    isAuthenticated: boolean;
+    isLoading: boolean;
+}
+
+const AuthContext = createContext<AuthContextType | null>(null);
+
+export const AuthProvider = ({ children }: { children: ReactNode }) => {
+    const [user, setUser] = useState<any>(null);
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        registerSetUser(setUser);
+        (async () => {
+            try {
+                const res = await fetch('http://localhost:8000/auth', {
+                    credentials: 'include',
+                });
+                if (res.ok) {
+                    const { user } = await res.json();
+                    setUser(user);
+                }
+            } catch {
+                // nada
+            } finally {
+                setIsLoading(false);
+            }
+        })();
+    }, []);
+
+    const login = (userData: any) => setUser(userData);
+
+    const logout = async () => {
+        await fetch('http://localhost:8000/auth/logout', {
+            method: 'POST',
+            credentials: 'include',
+        });
+        setUser(null);
+    };
+
+    return (
+        <AuthContext.Provider value={{
+            user,
+            login,
+            logout,
+            isAuthenticated: !!user,
+            isLoading,
+        }}>
+            {children}
+        </AuthContext.Provider>
+    );
+};
+
+export const useAuth = () => {
+    const ctx = useContext(AuthContext);
+    if (!ctx) throw new Error('useAuth precisa estar dentro de AuthProvider');
+    return ctx;
+};

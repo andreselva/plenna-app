@@ -1,39 +1,38 @@
 import { useState, useEffect, useRef } from "react";
-
-const apiUrl = "http://localhost:8000/dashboard";
+import { useAuth } from "../../Auth/Context/AuthContext";
+import { useNavigate } from "react-router-dom";
+import axiosInstance from "../../api/axiosInstance";
 
 export const useDashboardData = (periodo = {}) => {
     const [data, setData] = useState({
-        currentBalance: null,
-        expensesByCategory: null,
-        billsDue: [],
-        monthlyProgress: null,
-        remainingBalance: 0,
-        creditCardStatements: null
+        saldoData: null,
+        gastosPorCategoriaData: null,
+        contasVencimentoProximo: [],
+        evolucaoMensal: null,
+        saldoRestante: 0,
+        faturasPorCartao: null
     });
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const hasFetched = useRef(false);
+    const { isAuthenticated, logout } = useAuth();
+    const navigate = useNavigate();
 
     useEffect(() => {
         hasFetched.current = false;
 
         const fetchData = async () => {
-            if (hasFetched.current) return;
+            if (hasFetched.current || !isAuthenticated) return;
 
             hasFetched.current = true;
             setLoading(true);
+
             try {
-                const headers = {
-                    "Content-Type": "application/json",
-                    "Periodo": JSON.stringify(periodo)
-                };
-
-                const response = await fetch(apiUrl, { headers });
-
-                if (!response.ok) {
-                    throw new Error("Erro ao buscar dados do dashboard");
-                }
+                const response = await axiosInstance.get('/dashboard', {
+                    headers: {
+                        'periodo': JSON.stringify(periodo)
+                    }
+                });
 
                 const {
                     currentBalance,
@@ -42,7 +41,7 @@ export const useDashboardData = (periodo = {}) => {
                     monthlyProgress,
                     remainingBalance,
                     creditCardStatements
-                } = await response.json();
+                } = response.data;
 
                 setData({
                     saldoData: currentBalance,
@@ -52,15 +51,20 @@ export const useDashboardData = (periodo = {}) => {
                     saldoRestante: remainingBalance,
                     faturasPorCartao: creditCardStatements
                 });
-            } catch (err) {
-                setError(err.message);
+            } catch (err: any) {
+                if (err.response?.status === 401) {
+                    logout();
+                    navigate('/login');
+                } else {
+                    setError(err.message);
+                }
             } finally {
                 setLoading(false);
             }
         };
 
         fetchData();
-    }, [periodo]); // Refaz a requisição sempre que `periodo` mudar
+    }, [isAuthenticated, periodo, logout, navigate, setError]);
 
     return { data, loading, error };
 };

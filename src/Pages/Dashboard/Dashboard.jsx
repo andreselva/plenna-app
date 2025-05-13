@@ -20,6 +20,7 @@ import {
     PointElement,
     LineElement,
     BarElement,
+    Filler
 } from "chart.js";
 import { useState } from "react";
 
@@ -34,6 +35,7 @@ ChartJS.register(
     BarElement,
     centerTextPlugin,
     ChartDataLabels,
+    Filler
 );
 
 const Dashboard = () => {
