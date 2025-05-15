@@ -19,7 +19,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         registerSetUser(setUser);
         (async () => {
             try {
-                const res = await fetch('http://localhost:8000/auth', {
+                const res = await fetch('http://localhost:8001/auth', {
                     credentials: 'include',
                 });
                 if (res.ok) {
@@ -37,7 +37,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const login = (userData: any) => setUser(userData);
 
     const logout = async () => {
-        await fetch('http://localhost:8000/auth/logout', {
+        await fetch('http://localhost:8001/auth/logout', {
             method: 'POST',
             credentials: 'include',
         });

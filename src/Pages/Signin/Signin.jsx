@@ -1,9 +1,9 @@
-// pages/Signin.tsx
 import React, { useState } from 'react';
 import { useAuth } from '../../Auth/Context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { BotaoGlobal } from '../../Components/Buttons/ButtonGlobal';
 import './Signin.css';
+import axiosInstance from '../../api/axiosInstance';
 
 export default function Signin() {
   const [isLogin, setIsLogin] = useState(true);
@@ -25,25 +25,14 @@ export default function Signin() {
   const handleSubmit = async e => {
     e.preventDefault();
 
-    const url = isLogin
-      ? 'http://localhost:8000/auth/login'
-      : 'http://localhost:8000/user/register';
+    const endpoint = isLogin ?'/auth/login': '/user/register';
     const payload = isLogin
       ? { username: formData.username, password: formData.password }
       : formData;
 
     try {
-      const res = await fetch(url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-        credentials: 'include',
-      });
-
-      if (!res.ok) throw new Error('Erro ao autenticar');
-
-      const data = await res.json();
-      login(data.user);
+      const res = await axiosInstance.post(endpoint, payload)
+      login(res.data.user);
       navigate('/dashboard');
     } catch (err) {
       console.error(err);

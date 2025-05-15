@@ -4,7 +4,7 @@ import { fetchUser } from '../Utils/AuthUtils';
 import refreshInstance from './refreshInstance';
 
 const axiosInstance = axios.create({
-    baseURL: 'http://localhost:8000',
+    baseURL: 'http://localhost:8001',
     withCredentials: true,
 });
 
