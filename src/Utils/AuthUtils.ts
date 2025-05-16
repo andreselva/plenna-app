@@ -1,9 +1,10 @@
+import axiosInstance from "../api/axiosInstance";
+
 export async function fetchUser(): Promise<any | null> {
     try {
-        const res = await fetch('http://localhost:8000/auth', { credentials: 'include' });
-        if (!res.ok) return null;
-        const { user } = await res.json();
-        return user;
+        const res = await axiosInstance.get('/auth');
+        const user = res.data.user;  // direto aqui
+        return user || null;
     } catch {
         return null;
     }

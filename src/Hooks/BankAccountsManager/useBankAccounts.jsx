@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import axiosInstance from "../../api/axiosInstance";
 
-const apiUrl = "http://localhost:8000/bank-accounts";
+const apiUrl = "/bank-accounts"; // ajuste para sua rota real na API
 
 export const useBankAccounts = () => {
     const [accounts, setBankAccounts] = useState([]);
@@ -14,6 +14,7 @@ export const useBankAccounts = () => {
             if (hasFetched.current) return;
 
             hasFetched.current = true;
+            setLoading(true);
             try {
                 const { data } = await axiosInstance.get(apiUrl);
                 setBankAccounts(data);
@@ -28,6 +29,7 @@ export const useBankAccounts = () => {
     }, []);
 
     const addBankAccount = async (bankAccount) => {
+        setLoading(true);
         try {
             const { data: newBankAccount } = await axiosInstance.post(apiUrl, bankAccount);
             setBankAccounts((prev) => [...prev, newBankAccount]);
@@ -39,6 +41,7 @@ export const useBankAccounts = () => {
     };
 
     const deleteBankAccount = async (id) => {
+        setLoading(true);
         try {
             await axiosInstance.delete(`${apiUrl}/${id}`);
             setBankAccounts((prev) => prev.filter((account) => account.id !== id));
@@ -50,6 +53,7 @@ export const useBankAccounts = () => {
     };
 
     const updateBankAccount = async (id, updatedBankAccount) => {
+        setLoading(true);
         try {
             const { data: updatedAccount } = await axiosInstance.put(`${apiUrl}/${id}`, updatedBankAccount);
             setBankAccounts((prev) =>

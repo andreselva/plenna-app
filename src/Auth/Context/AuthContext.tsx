@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { registerSetUser } from './AuthState';
+import axiosInstance from '../../api/axiosInstance';
 
 interface AuthContextType {
     user: any;
@@ -16,16 +16,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        registerSetUser(setUser);
         (async () => {
             try {
-                const res = await fetch('http://localhost:8001/auth', {
-                    credentials: 'include',
-                });
-                if (res.ok) {
-                    const { user } = await res.json();
-                    setUser(user);
-                }
+                const res = await axiosInstance('/auth');
+                setUser(res.data.user);
             } catch {
                 // nada
             } finally {
@@ -37,10 +31,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const login = (userData: any) => setUser(userData);
 
     const logout = async () => {
-        await fetch('http://localhost:8001/auth/logout', {
-            method: 'POST',
-            credentials: 'include',
-        });
+        await axiosInstance.post('/auth/logout',);
         setUser(null);
     };
 
