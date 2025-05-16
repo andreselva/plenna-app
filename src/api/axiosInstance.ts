@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const axiosInstance = axios.create({
-    baseURL: 'https://api-financial-system-production.up.railway.app',
+    baseURL: 'https://plenna.me',
     withCredentials: true,
 });
 
