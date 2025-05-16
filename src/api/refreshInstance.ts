@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const refreshInstance = axios.create({
-  baseURL: 'https://plenna.me',
+  baseURL: 'https://api-financial-system-production.up.railway.app',
   withCredentials: true,
 });
 
