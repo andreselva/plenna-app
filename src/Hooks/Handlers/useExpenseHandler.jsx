@@ -141,7 +141,7 @@ export const useExpenseHandler = () => {
                 deleteExpense(expense.id);
             }
         } else {
-            deleteExpense(expense);
+            deleteExpense(expense.id);
         }
     };
 

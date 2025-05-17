@@ -1,11 +1,11 @@
-import axios, { AxiosError } from 'axios';
+import axios, { Axios, AxiosError } from 'axios';
 import refreshInstance from './refreshInstance';
 import { setUserGlobally } from '../Auth/Context/AuthState';
 import { fetchUser } from '../Utils/AuthUtils';
 
 type FailedRequest = {
-    resolve: (value?: unknown) => void;
-    reject: (reason?: any) => void;
+  resolve: (value?: unknown) => void;
+  reject: (reason?: any) => void;
 };
 
 const axiosInstance = axios.create({
@@ -25,6 +25,7 @@ const processQueue = (error: AxiosError | null, token = null) => {
             prom.resolve(token);
         }
     });
+
     failedQueue = [];
 };
 
@@ -32,6 +33,7 @@ axiosInstance.interceptors.response.use(
     response => response,
     async error => {
         const originalRequest = error.config;
+
         // Impede tentativa de refresh infinita
         if (originalRequest.url.includes('/auth/refresh')) {
             return Promise.reject(error);
@@ -55,24 +57,29 @@ axiosInstance.interceptors.response.use(
 
             try {
                 await refreshInstance.post('/auth/refresh');
+
                 const user = await fetchUser();
                 if (user) {
                     setUserGlobally(user);
                 }
+
                 processQueue(null);
                 return axiosInstance(originalRequest);
             } catch (err) {
                 processQueue(err as AxiosError);
+
                 // Protege contra múltiplos redirecionamentos
                 if (!isRedirectingToLogin) {
                     isRedirectingToLogin = true;
                     window.location.href = '/login';
                 }
+
                 return Promise.reject(err); // Impede que continue tentando
             } finally {
                 isRefreshing = false;
             }
         }
+
         return Promise.reject(error);
     }
 );
