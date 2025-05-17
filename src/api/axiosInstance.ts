@@ -1,4 +1,4 @@
-import axios, { Axios, AxiosError } from 'axios';
+import axios, { AxiosError } from 'axios';
 import refreshInstance from './refreshInstance';
 import { setUserGlobally } from '../Auth/Context/AuthState';
 import { fetchUser } from '../Utils/AuthUtils';
