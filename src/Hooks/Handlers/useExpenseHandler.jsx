@@ -3,6 +3,8 @@ import { ExpenseManager } from '../../Hooks/ExpenseManager/ExpenseManager';
 import { CategoryManager } from '../../Hooks/CategoryManager/CategoryManager';
 import { useBankAccounts } from '../BankAccountsManager/useBankAccounts';
 import AlertConfirm from '../../Components/Alerts/AlertConfirm';
+import { validateDate } from '../../Utils/DateUtils';
+import SweetAlert from '../../Components/Alerts/SweetAlert';
 
 export const useExpenseHandler = () => {
     const { expenses, addExpense, deleteExpense, updateExpense } = ExpenseManager();
@@ -67,6 +69,11 @@ export const useExpenseHandler = () => {
     const handleSaveExpense = async () => {
         if (!newExpense.trim()) {
             alert('O nome da despesa não pode ser vazio.');
+            return;
+        }
+
+        if (!validateDate(expenseInvoiceDueDate)) {
+            SweetAlert.error("Data inválida!");
             return;
         }
 
