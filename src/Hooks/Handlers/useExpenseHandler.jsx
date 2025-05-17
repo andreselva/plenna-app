@@ -184,6 +184,7 @@ export const useExpenseHandler = () => {
         setHasInstallments,
         hasSourceAccountId,
         setBooleanSourceAccountId,
-        idExpense
+        idExpense,
+        setIdExpense
     };
 };

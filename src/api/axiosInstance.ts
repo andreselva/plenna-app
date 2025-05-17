@@ -1,10 +1,10 @@
 import axios from 'axios';
 import refreshInstance from './refreshInstance';
-import { fetchUser } from '../Utils/AuthUtils';
-import { setUserGlobally } from '../Auth/Context/AuthState';
+import {fetchUser} from '../Utils/AuthUtils';
+import {setUserGlobally} from '../Auth/Context/AuthState';
 
 const axiosInstance = axios.create({
-    baseURL: 'https://api-financial-system-production.up.railway.app',
+    baseURL: 'http://localhost:8001', //'https://api-financial-system-production.up.railway.app',
     withCredentials: true,
 });
 

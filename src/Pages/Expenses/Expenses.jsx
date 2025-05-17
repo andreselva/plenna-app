@@ -1,11 +1,41 @@
 import styles from './Expenses.module.css';
 import ExpenseTable from "../../Tables/ExpenseTable/ExpenseTable";
 import ModalExpenses from "../../Modals/ModalExpenses/ModalExpenses";
-import { useExpenseHandler } from '../../Hooks/Handlers/useExpenseHandler';
-import { BotaoGlobal } from '../../Components/Buttons/ButtonGlobal.tsx';
+import {useExpenseHandler} from '../../Hooks/Handlers/useExpenseHandler';
+import {BotaoGlobal} from '../../Components/Buttons/ButtonGlobal.tsx';
 
 const Expenses = () => {
-    const { expenses, categories, newExpense, setNewExpense, expenseValue, setExpenseValue, expenseInvoiceDueDate, setExpenseInvoiceDueDate, selectedCategory, setSelectedCategory, isModalOpen, setIsModalOpen, setEditingExpense, handleEditExpense, handleSaveExpense, handleDeleteExpense, accounts, selectedCard, setSelectedCard, installments, setInstallments, typeOfInstallment, setTypeOfInstallment, hasInstallments, setHasInstallments, hasSourceAccountId, setBooleanSourceAccountId, idExpense } = useExpenseHandler();
+    const {
+        expenses,
+        categories,
+        newExpense,
+        setNewExpense,
+        expenseValue,
+        setExpenseValue,
+        expenseInvoiceDueDate,
+        setExpenseInvoiceDueDate,
+        selectedCategory,
+        setSelectedCategory,
+        isModalOpen,
+        setIsModalOpen,
+        setEditingExpense,
+        handleEditExpense,
+        handleSaveExpense,
+        handleDeleteExpense,
+        accounts,
+        selectedCard,
+        setSelectedCard,
+        installments,
+        setInstallments,
+        typeOfInstallment,
+        setTypeOfInstallment,
+        hasInstallments,
+        setHasInstallments,
+        hasSourceAccountId,
+        setBooleanSourceAccountId,
+        idExpense,
+        setIdExpense
+    } = useExpenseHandler();
 
     return (
         <div className={styles.Expenses}>
@@ -61,6 +91,7 @@ const Expenses = () => {
                     hasSourceAccountId={hasSourceAccountId}
                     setBooleanSourceAccountId={setBooleanSourceAccountId}
                     idExpense={idExpense}
+                    setIdExpense={setIdExpense}
                 />
             )}
         </div>

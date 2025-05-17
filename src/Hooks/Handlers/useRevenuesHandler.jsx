@@ -1,11 +1,11 @@
-import { useState } from 'react';
-import { RevenuesManager } from '../RevenuesManager/RevenuesManager';
-import { CategoryManager } from '../CategoryManager/CategoryManager';
+import {useState} from 'react';
+import {RevenuesManager} from '../RevenuesManager/RevenuesManager';
+import {CategoryManager} from '../CategoryManager/CategoryManager';
 import AlertConfirm from '../../Components/Alerts/AlertConfirm';
 
 export const useRevenueHandler = () => {
-    const { revenues, addRevenue, deleteRevenue, updateRevenue } = RevenuesManager();
-    const { categories } = CategoryManager();
+    const {revenues, addRevenue, deleteRevenue, updateRevenue} = RevenuesManager();
+    const {categories} = CategoryManager();
 
     const [selectedCategory, setSelectedCategory] = useState();
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -170,6 +170,7 @@ export const useRevenueHandler = () => {
         setHasInstallments,
         hasSourceAccountId,
         setBooleanSourceAccountId,
-        idRevenue
+        idRevenue,
+        setIdRevenue
     };
 };
