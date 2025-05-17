@@ -4,7 +4,7 @@ import {fetchUser} from '../Utils/AuthUtils';
 import {setUserGlobally} from '../Auth/Context/AuthState';
 
 const axiosInstance = axios.create({
-    baseURL: 'http://localhost:8001', //'https://api-financial-system-production.up.railway.app',
+    baseURL: 'https://api-financial-system-production.up.railway.app',
     withCredentials: true,
 });
 
