@@ -27,3 +27,18 @@ export const getFormattedDateRange = (startDate, endDate) => {
         end: formatDate(adjustedEndDate),
     };
 };
+
+
+export const validateDate = (date) => {
+    if (!date) {
+        return false;
+    }
+    // Valida o formato YYYY-MM-DD
+    const regex = /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/;
+
+    if (!regex.test(date)) {
+        return false;
+    }
+    return true;
+};
+
