@@ -22,6 +22,7 @@
     "start": "serve -s build",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "dev": "react-scripts start",
     "eject": "react-scripts eject",
     "tcm": "typed-css-modules src --pattern '**/*.module.css'"
   },
