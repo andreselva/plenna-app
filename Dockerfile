@@ -1,28 +1,39 @@
-# Imagem oficial do Node.js
-FROM node:20-alpine
+# Stage 1: Build
+FROM node:20-alpine AS build
 
-# Diretório de trabalho dentro do contêiner
 WORKDIR /usr/src/app
 
-ARG NODE_ENV=production
-ENV NODE_ENV=$NODE_ENV
-
-# Copia o .env.production para dentro do container (se ele estiver na raiz do projeto)
-COPY .env.production .env.production
-
-# Copia o package.json e package-lock.json (se existir) para o contêiner
+# Copia package.json e package-lock.json para instalar as dependências
 COPY package*.json ./
 
-# Instale as dependências
+# Instala dependências (prod + dev) para build funcionar
 RUN npm install
 
-RUN npm install -g serve
+# Copia o arquivo de ambiente para o build usar
+COPY .env.production .env.production
 
-# Copia o restante do código para o contêiner
+# Copia o resto do código
 COPY . .
 
-# Executa o build do projeto
+# Executa o build (compila React+TS)
 RUN npm run build
+
+# Stage 2: Runtime
+FROM node:20-alpine
+
+WORKDIR /usr/src/app
+
+# Copia o arquivo de ambiente para runtime, se necessário
+COPY --from=build /usr/src/app/.env.production .env.production
+
+# Define a variável de ambiente para rodar em produção
+ENV NODE_ENV=production
+
+# Copia o build final da etapa de build
+COPY --from=build /usr/src/app/build ./build
+
+# Instala o serve para rodar o app
+RUN npm install -g serve
 
 # Comando para iniciar o servidor
 CMD ["npm", "run", "start:prod"]
