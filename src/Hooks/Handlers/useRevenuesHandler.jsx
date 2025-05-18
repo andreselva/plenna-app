@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { RevenuesManager } from '../RevenuesManager/RevenuesManager';
 import { CategoryManager } from '../CategoryManager/CategoryManager';
 import AlertConfirm from '../../Components/Alerts/AlertConfirm';
+import { validateDate } from '../../Utils/DateUtils';
+import SweetAlert from '../../Components/Alerts/SweetAlert';
 
 export const useRevenueHandler = () => {
     const { revenues, addRevenue, deleteRevenue, updateRevenue } = RevenuesManager();
@@ -62,6 +64,11 @@ export const useRevenueHandler = () => {
     const handleSaveRevenue = async () => {
         if (!newRevenue.trim()) {
             alert('O nome da receita não pode ser vazio.');
+            return;
+        }
+
+        if (!validateDate(revenueInvoiceDueDate)) {
+            SweetAlert.error("Data inválida!");
             return;
         }
 
