@@ -23,7 +23,7 @@ const Sidebar = () => {
 
     return (
         <div className="Sidebar">
-            <div className="Sidebar-title">Financial System</div>
+            <div className="Sidebar-title">Plenna</div>
             <div className="Sidebar-components">
                 <Link to="/dashboard">Dashboard</Link>
                 <Link to="/categories">Categorias</Link>

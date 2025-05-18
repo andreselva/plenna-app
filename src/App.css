@@ -1,8 +1,14 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Raleway:ital,wght@0,100;1,100&family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap');
+
 .App {
     background-color: rgba(200, 243, 255, 0.39);
     height: 100vh;
     display: flex;
     flex-direction: column;
+    font-family: "Nunito", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
 }
 
 .MainContent {
@@ -19,11 +25,7 @@
     box-sizing: border-box;
     height: 100%;
     overflow-y: auto;
-
-    /* Alinhamento central */
     justify-content: center;
     align-items: center;
-
-    /* Remover possíveis margens */
     margin: 0;
 }

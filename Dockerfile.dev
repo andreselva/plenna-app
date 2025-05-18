@@ -1,14 +1,20 @@
 FROM node:20-alpine
 
-WORKDIR /usr/src/app
+WORKDIR /app
 
+# Copia apenas os arquivos de dependência primeiro
 COPY package*.json ./
 
 RUN npm install
 
+# Copia o restante do código
 COPY . .
+
+# Define variáveis para garantir que o React observe mudanças corretamente
+ENV CHOKIDAR_USEPOLLING=true
+ENV HOST=0.0.0.0
 
 EXPOSE 3000
 
-# Rodar o Nest em modo de desenvolvimento com hot reload
-CMD ["npm", "run", "dev"]
+# Usa o script de desenvolvimento
+CMD ["npm", "start"]
