@@ -35,7 +35,6 @@ COPY --from=build /usr/src/app/build ./build
 # Instala o serve para rodar o app
 RUN npm install -g serve
 
-# Comando para iniciar o servidor
-CMD ["npm", "run", "start:prod"]
+CMD ["serve", "-s", "build"]
 
 EXPOSE 3000
