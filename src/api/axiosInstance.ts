@@ -3,7 +3,7 @@ import refreshInstance from './refreshInstance';
 import { fetchUser } from '../Utils/AuthUtils';
 import { setUserGlobally } from '../Auth/Context/AuthState';
 
-console.log("API URL:", process.env.REACT_APP_API_URL)
+console.log("API URL:", process.env.REACT_APP_API_URL);
 const axiosInstance = axios.create({
     baseURL: process.env.REACT_APP_API_URL,
     withCredentials: true,
