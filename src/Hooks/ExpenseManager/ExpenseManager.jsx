@@ -1,20 +1,19 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import axiosInstance from "../../api/axiosInstance";
 
-
-export const ExpenseManager = () => {
+export const ExpenseManager = (periodo = {}) => {
     const [expenses, setExpenses] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const hasFetched = useRef(false);
 
     useEffect(() => {
         const fetchExpenses = async () => {
-            if (hasFetched.current) return;
-
-            hasFetched.current = true;
             try {
-                const { data } = await axiosInstance.get("/expenses");
+                const { data } = await axiosInstance.get("/expenses", {
+                    headers: {
+                        'periodo': JSON.stringify(periodo)
+                    }
+                });
                 setExpenses(data);
             } catch (err) {
                 setError(err?.response?.data?.message || "Erro ao buscar despesas");
@@ -24,7 +23,7 @@ export const ExpenseManager = () => {
         };
 
         fetchExpenses();
-    }, []);
+    }, [periodo]);
 
     const addExpense = async (expense) => {
         try {
@@ -46,7 +45,12 @@ export const ExpenseManager = () => {
                 ? `/expenses/${id}?deleteInstallments=${deleteInstallments}&sourceAccountId=${sourceAccountId}`
                 : `/expenses/${id}`;
 
-            const { data } = await axiosInstance.delete(url);
+            const { data } = await axiosInstance.delete(url, {
+                headers: {
+                    //Passar o período por conta do retorno do backend. Manter mesmo período filtrado.
+                    'periodo': JSON.stringify(periodo)
+                }
+            });
 
             if (data.expenses) {
                 setExpenses(data.expenses);

@@ -8,6 +8,30 @@ import { getFormattedDateRange, getStartAndEndOfMonth } from '../../Utils/DateUt
 import { useState } from 'react';
 
 const Expenses = () => {
+    const [formattedPeriod, setFormattedPeriod] = useState(() => getStartAndEndOfMonth());
+    const [selectedMonth, setSelectedMonth] = useState(() => {
+        const now = new Date();
+        const nextMonthDate = new Date(now);
+        nextMonthDate.setMonth(now.getMonth() + 1);
+        return nextMonthDate;
+    });
+    const [selectedRange, setSelectedRange] = useState(null);
+
+    const handleMonthChange = (month) => {
+        setSelectedMonth(month);
+        setSelectedRange(null);
+
+        const formattedMonthRange = getStartAndEndOfMonth(month);
+        setFormattedPeriod(formattedMonthRange);
+    };
+
+    const handleDateRangeSelect = ({ startDate, endDate }) => {
+        setSelectedRange({ startDate, endDate });
+
+        const formattedRange = getFormattedDateRange(startDate, endDate);
+        setFormattedPeriod(formattedRange);
+    }
+
     const {
         expenses,
         categories,
@@ -38,27 +62,7 @@ const Expenses = () => {
         setBooleanSourceAccountId,
         idExpense,
         setIdExpense
-    } = useExpenseHandler();
-
-    const [selectedMonth, setSelectedMonth] = useState(new Date());
-    const [selectedRange, setSelectedRange] = useState(null);
-    const [formattedPeriod, setFormattedPeriod] = useState(() => getStartAndEndOfMonth());
-
-
-    const handleMonthChange = (month) => {
-        setSelectedMonth(month);
-        setSelectedRange(null);
-
-        const formattedMonthRange = getStartAndEndOfMonth(month);
-        setFormattedPeriod(formattedMonthRange);
-    };
-
-    const handleDateRangeSelect = ({ startDate, endDate }) => {
-        setSelectedRange({ startDate, endDate });
-
-        const formattedRange = getFormattedDateRange(startDate, endDate);
-        setFormattedPeriod(formattedRange);
-    };
+    } = useExpenseHandler(formattedPeriod);;
 
     return (
         <div className={styles.Expenses}>
