@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const refreshInstance = axios.create({
-  baseURL: 'https://api-financial-system-production.up.railway.app',
+  baseURL: process.env.REACT_APP_API_URL,
   withCredentials: true,
 });
 
