@@ -4,7 +4,7 @@ import { fetchUser } from '../Utils/AuthUtils';
 import { setUserGlobally } from '../Auth/Context/AuthState';
 
 const axiosInstance = axios.create({
-    baseURL: 'https://api-financial-system-production.up.railway.app',
+    baseURL: process.env.REACT_APP_API_URL,
     withCredentials: true,
 });
 
