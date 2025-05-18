@@ -1,11 +1,38 @@
 import styles from './Revenues.module.css';
 import RevenueTable from "../../Tables/RevenueTable/RevenueTable";
 import ModalRevenues from "../../Modals/ModalRevenues/ModalRevenues";
-import { useRevenueHandler } from '../../Hooks/Handlers/useRevenuesHandler';
-import { BotaoGlobal } from '../../Components/Buttons/ButtonGlobal.tsx';
+import {useRevenueHandler} from '../../Hooks/Handlers/useRevenuesHandler';
+import {BotaoGlobal} from '../../Components/Buttons/ButtonGlobal.tsx';
 
 const Revenues = () => {
-    const { revenues, categories, selectedCategory, setSelectedCategory, isModalOpen, setIsModalOpen, setEditingRevenue, newRevenue, setNewRevenue, revenueValue, setRevenueValue, revenueInvoiceDueDate, setRevenueInvoiceDueDate, handleEditRevenue, handleSaveRevenue, handleDeleteRevenue, typeOfInstallment, setTypeOfInstallment, installments, setInstallments, hasInstallments, setHasInstallments, hasSourceAccountId, setBooleanSourceAccountId, idRevenue } = useRevenueHandler();
+    const {
+        revenues,
+        categories,
+        selectedCategory,
+        setSelectedCategory,
+        isModalOpen,
+        setIsModalOpen,
+        setEditingRevenue,
+        newRevenue,
+        setNewRevenue,
+        revenueValue,
+        setRevenueValue,
+        revenueInvoiceDueDate,
+        setRevenueInvoiceDueDate,
+        handleEditRevenue,
+        handleSaveRevenue,
+        handleDeleteRevenue,
+        typeOfInstallment,
+        setTypeOfInstallment,
+        installments,
+        setInstallments,
+        hasInstallments,
+        setHasInstallments,
+        hasSourceAccountId,
+        setBooleanSourceAccountId,
+        idRevenue,
+        setIdRevenue
+    } = useRevenueHandler();
 
     return (
         <div className={styles.Revenues}>
@@ -55,6 +82,7 @@ const Revenues = () => {
                     hasSourceAccountId={hasSourceAccountId}
                     setBooleanSourceAccountId={setBooleanSourceAccountId}
                     idRevenue={idRevenue}
+                    setIdRevenue={setIdRevenue}
                 />
             )}
         </div>

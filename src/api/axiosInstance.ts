@@ -1,7 +1,7 @@
 import axios from 'axios';
 import refreshInstance from './refreshInstance';
-import { fetchUser } from '../Utils/AuthUtils';
-import { setUserGlobally } from '../Auth/Context/AuthState';
+import {fetchUser} from '../Utils/AuthUtils';
+import {setUserGlobally} from '../Auth/Context/AuthState';
 
 const axiosInstance = axios.create({
     baseURL: process.env.REACT_APP_API_URL || 'http://localhost:8001',

@@ -21,6 +21,7 @@
   "scripts": {
     "start:prod": "serve -s build",
     "build": "react-scripts build",
+    "dev": "react-scripts start",
     "test": "react-scripts test",
     "start": "react-scripts start",
     "eject": "react-scripts eject",
