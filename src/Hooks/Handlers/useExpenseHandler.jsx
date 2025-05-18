@@ -6,8 +6,8 @@ import AlertConfirm from '../../Components/Alerts/AlertConfirm';
 import { validateDate } from '../../Utils/DateUtils';
 import SweetAlert from '../../Components/Alerts/SweetAlert';
 
-export const useExpenseHandler = (formattedPeriod) => {
-    const { expenses, addExpense, deleteExpense, updateExpense } = ExpenseManager(formattedPeriod);
+export const useExpenseHandler = (periodo) => {
+    const { expenses, addExpense, deleteExpense, updateExpense } = ExpenseManager(periodo);
     const { categories } = CategoryManager();
     const { accounts } = useBankAccounts();
 

@@ -30,7 +30,7 @@ const Expenses = () => {
 
         const formattedRange = getFormattedDateRange(startDate, endDate);
         setFormattedPeriod(formattedRange);
-    }
+    };
 
     const {
         expenses,

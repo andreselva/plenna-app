@@ -1,10 +1,37 @@
 import styles from './Revenues.module.css';
 import RevenueTable from "../../Tables/RevenueTable/RevenueTable";
 import ModalRevenues from "../../Modals/ModalRevenues/ModalRevenues";
-import {useRevenueHandler} from '../../Hooks/Handlers/useRevenuesHandler';
-import {BotaoGlobal} from '../../Components/Buttons/ButtonGlobal.tsx';
+import { useRevenueHandler } from '../../Hooks/Handlers/useRevenuesHandler';
+import { BotaoGlobal } from '../../Components/Buttons/ButtonGlobal.tsx';
+import { useState } from 'react';
+import { getFormattedDateRange, getStartAndEndOfMonth } from '../../Utils/DateUtils';
+import { CustomDatePicker } from '../../Components/DatePicker/DatePicker';
 
 const Revenues = () => {
+    const [formattedPeriod, setFormattedPeriod] = useState(() => getStartAndEndOfMonth());
+    const [selectedMonth, setSelectedMonth] = useState(() => {
+        const now = new Date();
+        const nextMonthDate = new Date(now);
+        nextMonthDate.setMonth(now.getMonth() + 1);
+        return nextMonthDate;
+    });
+    const [selectedRange, setSelectedRange] = useState(null);
+
+    const handleMonthChange = (month) => {
+        setSelectedMonth(month);
+        setSelectedRange(null);
+
+        const formattedMonthRange = getStartAndEndOfMonth(month);
+        setFormattedPeriod(formattedMonthRange);
+    };
+
+    const handleDateRangeSelect = ({ startDate, endDate }) => {
+        setSelectedRange({ startDate, endDate });
+
+        const formattedRange = getFormattedDateRange(startDate, endDate);
+        setFormattedPeriod(formattedRange);
+    };
+
     const {
         revenues,
         categories,
@@ -32,22 +59,29 @@ const Revenues = () => {
         setBooleanSourceAccountId,
         idRevenue,
         setIdRevenue
-    } = useRevenueHandler();
+    } = useRevenueHandler(formattedPeriod);
 
     return (
         <div className={styles.Revenues}>
             <div className={styles['Revenues-content']}>
-                <BotaoGlobal
-                    cor="primaria"
-                    className={styles['show-revenues-btn']}
-                    onClick={() => setIsModalOpen(true)}
-                    width='160px'
-                    height='40px'
-                    margin='0 0 10px 0'
-                >
-                    Cadastrar receita
-                </BotaoGlobal>
-
+                <div className={styles['btn-card']}>
+                    <BotaoGlobal
+                        cor="primaria"
+                        className={styles['show-revenues-btn']}
+                        onClick={() => setIsModalOpen(true)}
+                        width='160px'
+                        height='40px'
+                        margin='0 0 10px 0'
+                    >
+                        Cadastrar receita
+                    </BotaoGlobal>
+                    <CustomDatePicker
+                        onMonthChange={handleMonthChange}
+                        onDateRangeSelect={handleDateRangeSelect}
+                        selectedMonth={selectedMonth}
+                        selectedRange={selectedRange}
+                    />
+                </div>
                 <div className={styles['card-revenues']}>
                     <h3>Receitas</h3>
                     <RevenueTable
