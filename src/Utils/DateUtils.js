@@ -1,7 +1,15 @@
-export const getStartAndEndOfMonth = (date = new Date()) => {
-    const startOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
-    const endOfMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0);
-
+export const getStartAndEndOfMonth = (date = '') => {
+    let startOfMonth;
+    let endOfMonth;
+    if (date === '') {
+        date = new Date();
+        startOfMonth = new Date(date.getFullYear(), date.getMonth() + 1, 1);
+        endOfMonth = new Date(date.getFullYear(), date.getMonth() + 2, 0);
+    } else {
+        startOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
+        endOfMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+    }
+    
     return {
         start: formatDate(startOfMonth),
         end: formatDate(endOfMonth),
