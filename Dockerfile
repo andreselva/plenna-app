@@ -16,6 +16,8 @@ COPY package*.json ./
 # Instale as dependências
 RUN npm install
 
+RUN npm install -g serve
+
 # Copia o restante do código para o contêiner
 COPY . .
 
