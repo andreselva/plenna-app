@@ -11,7 +11,7 @@ export const RevenuesManager = (periodo) => {
             try {
                 const { data } = await axiosInstance.get("/revenues", {
                     headers: {
-                        'periodo': JSON.stringify(periodo)
+                        'X-Periodo': JSON.stringify(periodo)
                     }
                 });
                 setRevenues(data);
@@ -27,13 +27,14 @@ export const RevenuesManager = (periodo) => {
 
     const addRevenue = async (revenue) => {
         try {
-            const { data: newRevenue } = await axiosInstance.post("/revenues", revenue);
-
-            if (Array.isArray(newRevenue)) {
-                setRevenues((prev) => [...prev, ...newRevenue]);
-            } else {
-                setRevenues((prev) => [...prev, newRevenue]);
-            }
+            const { data } = await axiosInstance.post("/revenues", revenue,
+                {
+                    headers: {
+                        'X-Periodo': JSON.stringify(periodo)
+                    }
+                }
+            );
+            setRevenues(data.revenues);
         } catch (err) {
             setError(err?.response?.data?.message || "Erro ao adicionar nova receita!");
         }
@@ -47,7 +48,7 @@ export const RevenuesManager = (periodo) => {
 
             const { data } = await axiosInstance.delete(url, {
                 headers: {
-                    'periodo': JSON.stringify(periodo)
+                    'X-Periodo': JSON.stringify(periodo)
                 }
             });
 
@@ -61,21 +62,12 @@ export const RevenuesManager = (periodo) => {
 
     const updateRevenue = async (id, updatedRevenue) => {
         try {
-            const { data: updatedData } = await axiosInstance.put(`/revenues/${id}`, updatedRevenue);
-
-            if (Array.isArray(updatedData)) {
-                setRevenues((prev) =>
-                    prev.map((revenue) =>
-                        updatedData.find((updated) => updated.id === revenue.id) || revenue
-                    )
-                );
-            } else {
-                setRevenues((prev) =>
-                    prev.map((revenue) =>
-                        revenue.id === id ? { ...revenue, ...updatedData } : revenue
-                    )
-                );
-            }
+            const { data } = await axiosInstance.put(`/revenues/${id}`, updatedRevenue, {
+                headers: {
+                    'X-Periodo': JSON.stringify(periodo)
+                }
+            });
+            setRevenues(data.revenues);
         } catch (err) {
             setError(err?.response?.data?.message || "Erro ao atualizar receita!");
         }

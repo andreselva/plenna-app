@@ -11,7 +11,7 @@ export const ExpenseManager = (periodo = {}) => {
             try {
                 const { data } = await axiosInstance.get("/expenses", {
                     headers: {
-                        'periodo': JSON.stringify(periodo)
+                        'X-Periodo': JSON.stringify(periodo)
                     }
                 });
                 setExpenses(data);
@@ -27,13 +27,12 @@ export const ExpenseManager = (periodo = {}) => {
 
     const addExpense = async (expense) => {
         try {
-            const { data: newExpense } = await axiosInstance.post("/expenses", expense);
-
-            if (Array.isArray(newExpense)) {
-                setExpenses((prev) => [...prev, ...newExpense]);
-            } else {
-                setExpenses((prev) => [...prev, newExpense]);
-            }
+            const { data } = await axiosInstance.post("/expenses", expense, {
+                headers: {
+                    'X-Periodo': JSON.stringify(periodo)
+                }
+            });
+            setExpenses(data.expenses);
         } catch (err) {
             setError(err?.response?.data?.message || "Erro ao adicionar despesa!");
         }
@@ -47,14 +46,10 @@ export const ExpenseManager = (periodo = {}) => {
 
             const { data } = await axiosInstance.delete(url, {
                 headers: {
-                    //Passar o período por conta do retorno do backend. Manter mesmo período filtrado.
-                    'periodo': JSON.stringify(periodo)
+                    'X-Periodo': JSON.stringify(periodo)
                 }
             });
-
-            if (data.expenses) {
-                setExpenses(data.expenses);
-            }
+            setExpenses(data.expenses);
         } catch (err) {
             setError(err?.response?.data?.message || "Erro ao excluir despesa!");
         }
@@ -62,21 +57,12 @@ export const ExpenseManager = (periodo = {}) => {
 
     const updateExpense = async (id, updatedExpense) => {
         try {
-            const { data: updatedData } = await axiosInstance.put(`/expenses/${id}`, updatedExpense);
-
-            if (Array.isArray(updatedData)) {
-                setExpenses((prev) =>
-                    prev.map((expense) =>
-                        updatedData.find((updated) => updated.id === expense.id) || expense
-                    )
-                );
-            } else {
-                setExpenses((prev) =>
-                    prev.map((expense) =>
-                        expense.id === id ? { ...expense, ...updatedData } : expense
-                    )
-                );
-            }
+            const { data } = await axiosInstance.put(`/expenses/${id}`, updatedExpense, {
+                headers: {
+                    'X-Periodo': JSON.stringify(periodo)
+                }
+            });
+            setExpenses(data.expenses);
         } catch (err) {
             setError(err?.response?.data?.message || "Erro ao atualizar despesa!");
         }
