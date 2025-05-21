@@ -1,10 +1,37 @@
 import styles from './Expenses.module.css';
 import ExpenseTable from "../../Tables/ExpenseTable/ExpenseTable";
 import ModalExpenses from "../../Modals/ModalExpenses/ModalExpenses";
-import {useExpenseHandler} from '../../Hooks/Handlers/useExpenseHandler';
-import {BotaoGlobal} from '../../Components/Buttons/ButtonGlobal.tsx';
+import { useExpenseHandler } from '../../Hooks/Handlers/useExpenseHandler';
+import { BotaoGlobal } from '../../Components/Buttons/ButtonGlobal.tsx';
+import { CustomDatePicker } from '../../Components/DatePicker/DatePicker';
+import { getFormattedDateRange, getStartAndEndOfMonth } from '../../Utils/DateUtils';
+import { useState } from 'react';
 
 const Expenses = () => {
+    const [formattedPeriod, setFormattedPeriod] = useState(() => getStartAndEndOfMonth());
+    const [selectedMonth, setSelectedMonth] = useState(() => {
+        const now = new Date();
+        const nextMonthDate = new Date(now);
+        nextMonthDate.setMonth(now.getMonth() + 1);
+        return nextMonthDate;
+    });
+    const [selectedRange, setSelectedRange] = useState(null);
+
+    const handleMonthChange = (month) => {
+        setSelectedMonth(month);
+        setSelectedRange(null);
+
+        const formattedMonthRange = getStartAndEndOfMonth(month);
+        setFormattedPeriod(formattedMonthRange);
+    };
+
+    const handleDateRangeSelect = ({ startDate, endDate }) => {
+        setSelectedRange({ startDate, endDate });
+
+        const formattedRange = getFormattedDateRange(startDate, endDate);
+        setFormattedPeriod(formattedRange);
+    };
+
     const {
         expenses,
         categories,
@@ -35,7 +62,7 @@ const Expenses = () => {
         setBooleanSourceAccountId,
         idExpense,
         setIdExpense
-    } = useExpenseHandler();
+    } = useExpenseHandler(formattedPeriod);;
 
     return (
         <div className={styles.Expenses}>
@@ -51,7 +78,12 @@ const Expenses = () => {
                     >
                         Cadastrar despesa
                     </BotaoGlobal>
-
+                    <CustomDatePicker
+                        onMonthChange={handleMonthChange}
+                        onDateRangeSelect={handleDateRangeSelect}
+                        selectedMonth={selectedMonth}
+                        selectedRange={selectedRange}
+                    />
                 </div>
                 <div className={styles['card-expenses']}>
                     <h3>Despesas</h3>

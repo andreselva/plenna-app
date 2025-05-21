@@ -1,20 +1,19 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import axiosInstance from "../../api/axiosInstance";
 
-
-export const ExpenseManager = () => {
+export const ExpenseManager = (periodo) => {
     const [expenses, setExpenses] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const hasFetched = useRef(false);
 
     useEffect(() => {
         const fetchExpenses = async () => {
-            if (hasFetched.current) return;
-
-            hasFetched.current = true;
             try {
-                const { data } = await axiosInstance.get("/expenses");
+                const { data } = await axiosInstance.get("/expenses", {
+                    headers: {
+                        'X-Periodo': JSON.stringify(periodo)
+                    }
+                });
                 setExpenses(data);
             } catch (err) {
                 setError(err?.response?.data?.message || "Erro ao buscar despesas");
@@ -24,17 +23,16 @@ export const ExpenseManager = () => {
         };
 
         fetchExpenses();
-    }, []);
+    }, [periodo]);
 
     const addExpense = async (expense) => {
         try {
-            const { data: newExpense } = await axiosInstance.post("/expenses", expense);
-
-            if (Array.isArray(newExpense)) {
-                setExpenses((prev) => [...prev, ...newExpense]);
-            } else {
-                setExpenses((prev) => [...prev, newExpense]);
-            }
+            const { data } = await axiosInstance.post("/expenses", expense, {
+                headers: {
+                    'X-Periodo': JSON.stringify(periodo)
+                }
+            });
+            setExpenses(data.expenses);
         } catch (err) {
             setError(err?.response?.data?.message || "Erro ao adicionar despesa!");
         }
@@ -46,11 +44,12 @@ export const ExpenseManager = () => {
                 ? `/expenses/${id}?deleteInstallments=${deleteInstallments}&sourceAccountId=${sourceAccountId}`
                 : `/expenses/${id}`;
 
-            const { data } = await axiosInstance.delete(url);
-
-            if (data.expenses) {
-                setExpenses(data.expenses);
-            }
+            const { data } = await axiosInstance.delete(url, {
+                headers: {
+                    'X-Periodo': JSON.stringify(periodo)
+                }
+            });
+            setExpenses(data.expenses);
         } catch (err) {
             setError(err?.response?.data?.message || "Erro ao excluir despesa!");
         }
@@ -58,21 +57,12 @@ export const ExpenseManager = () => {
 
     const updateExpense = async (id, updatedExpense) => {
         try {
-            const { data: updatedData } = await axiosInstance.put(`/expenses/${id}`, updatedExpense);
-
-            if (Array.isArray(updatedData)) {
-                setExpenses((prev) =>
-                    prev.map((expense) =>
-                        updatedData.find((updated) => updated.id === expense.id) || expense
-                    )
-                );
-            } else {
-                setExpenses((prev) =>
-                    prev.map((expense) =>
-                        expense.id === id ? { ...expense, ...updatedData } : expense
-                    )
-                );
-            }
+            const { data } = await axiosInstance.put(`/expenses/${id}`, updatedExpense, {
+                headers: {
+                    'X-Periodo': JSON.stringify(periodo)
+                }
+            });
+            setExpenses(data.expenses);
         } catch (err) {
             setError(err?.response?.data?.message || "Erro ao atualizar despesa!");
         }

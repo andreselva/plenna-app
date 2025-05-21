@@ -5,8 +5,8 @@ import AlertConfirm from '../../Components/Alerts/AlertConfirm';
 import { validateDate } from '../../Utils/DateUtils';
 import SweetAlert from '../../Components/Alerts/SweetAlert';
 
-export const useRevenueHandler = () => {
-    const {revenues, addRevenue, deleteRevenue, updateRevenue} = RevenuesManager();
+export const useRevenueHandler = (periodo) => {
+    const {revenues, addRevenue, deleteRevenue, updateRevenue} = RevenuesManager(periodo);
     const {categories} = CategoryManager();
 
     const [selectedCategory, setSelectedCategory] = useState();

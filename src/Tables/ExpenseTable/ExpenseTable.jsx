@@ -58,7 +58,7 @@ const ExpenseTable = ({ expenses = [], categories = [], creditCards = [], onEdit
                     })
                 ) : (
                     <tr>
-                        <td colSpan="5">Nenhuma despesa cadastrada</td>
+                        <td colSpan="6">Nenhuma despesa cadastrada</td>
                     </tr>
                 )}
             </tbody>
