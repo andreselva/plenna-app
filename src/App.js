@@ -8,6 +8,7 @@ import Revenues from "./Pages/Revenues/Revenues";
 import { BankAccounts } from './Pages/BankAccounts/BankAccounts';
 import Signin from './Pages/Signin/Signin';
 import PrivateRoute from './Auth/PrivateRoute';
+import Invoices from './Pages/Invoices/Invoices';
 
 const AppContent = () => {
     const location = useLocation();
@@ -44,6 +45,11 @@ const AppContent = () => {
                     <Route path="/bank-accounts" element={
                         <PrivateRoute>
                             <BankAccounts />
+                        </PrivateRoute>
+                    } />
+                    <Route path="/invoices" element={
+                        <PrivateRoute>
+                            <Invoices />
                         </PrivateRoute>
                     } />
                 </Routes>
