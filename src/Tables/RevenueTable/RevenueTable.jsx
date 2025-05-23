@@ -12,40 +12,34 @@ const RevenueTable = ({ revenues = [], categories = [], onEdit, onDelete }) => {
     });
 
     return (
-        <table>
-            <thead>
-                <tr>
-                    <th>Descrição</th>
-                    <th>Valor</th>
-                    <th>Vencimento</th>
-                    <th>Categoria</th>
-                    <th>Ações</th>
-                </tr>
-            </thead>
-            <tbody>
+        <div className={globalStyles.flexibleTable}>
+            {/* Cabeçalho da Tabela */}
+            <div className={`${globalStyles.tableHeader} ${globalStyles.tableRow}`}>
+                <div style={{ flex: '1 1 0%' }}>Descrição</div>
+                <div style={{ flex: '1 1 0%' }}>Valor</div>
+                <div style={{ flex: '1 1 0%' }}>Vencimento</div>
+                <div style={{ flex: '1 1 0%' }}>Categoria</div>
+                <div style={{ flex: '1 1 120px', textAlign: 'center' }}>Ações</div>
+            </div>
+
+            {/* Corpo da Tabela */}
+            <div className={globalStyles.tableBody}>
                 {revenues.length > 0 ? (
                     revenues.map((revenue) => {
                         const category = categories.find(cat => cat.id === revenue.idCategory) || {};
                         return (
-                            <tr key={revenue.id}>
-                                <td>{revenue.name}</td>
-                                <td>{revenue.value}</td>
-                                <td>{revenue.invoiceDueDate.split('-').reverse().join('/')}</td>
-                                <td>
-                                    <span
-                                        style={{
-                                            backgroundColor: category.color ? category.color + "33" : "#000",
-                                            color: "#000",
-                                            fontSize: '15px',
-                                            padding: "4px 8px",
-                                            borderRadius: "10px",
-                                            display: "inline-block",
-                                        }}
-                                    >
-                                        {category.name || 'Categoria não encontrada'}
+                            <div key={revenue.id} className={globalStyles.tableRow}>
+                                <div style={{ flex: '1 1 0%' }}>{revenue.name}</div>
+                                <div style={{ flex: '1 1 0%' }}>{revenue.value}</div>
+                                <div style={{ flex: '1 1 0%' }}>{revenue.invoiceDueDate.split('-').reverse().join('/')}</div>
+                                <div style={{ flex: '1 1 0%' }}>
+                                    <span className={globalStyles.statusBadge} style={{
+                                        backgroundColor: category.color ? `${category.color}33` : 'rgba(0, 0, 0, 0.1)',
+                                    }}>
+                                        {category.name || 'N/A'}
                                     </span>
-                                </td>
-                                <td className={globalStyles.actions}>
+                                </div>
+                                <div className={globalStyles.actions} style={{ flex: '1 1 120px', justifyContent: 'center' }}>
                                     <button
                                         className={globalStyles['action-button']}
                                         onClick={() => onEdit(revenue)}
@@ -58,18 +52,18 @@ const RevenueTable = ({ revenues = [], categories = [], onEdit, onDelete }) => {
                                     >
                                         Excluir
                                     </button>
-                                </td>
-                            </tr>
+                                </div>
+                            </div>
                         );
                     })
                 ) : (
-                    <tr>
-                        <td colSpan="5">Nenhuma receita cadastrada</td>
-                    </tr>
+                    <div className={globalStyles.tableRow} style={{ justifyContent: 'center', padding: '20px' }}>
+                        Nenhuma receita cadastrada
+                    </div>
                 )}
-            </tbody>
-        </table>
-    )
+            </div>
+        </div>
+    );
 };
 
 export default RevenueTable;

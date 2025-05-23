@@ -3,9 +3,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    /* Alinhar verticalmente ao centro */
     height: 100vh;
-    /* Garantir que ocupe toda a altura da tela */
     width: 100%;
 }
 
@@ -13,23 +11,21 @@
     display: flex;
     flex-direction: column;
     text-align: center;
+    z-index: 2;
 }
 
 /* Estilos globais para cards */
 .card {
     border: 1px solid #ccc;
-    padding: 20px;
     border-radius: 5px;
-    width: 150vh;
-    height: 70vh;
+    width: 90em;
+    height: 80vh;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
     overflow-y: auto;
-    /* Para permitir rolagem caso o conteúdo seja muito grande */
 }
 
 .card h3 {
     text-align: center;
-    margin-bottom: 15px;
 }
 
 .card table {
@@ -78,8 +74,7 @@
     display: flex;
     justify-content: space-between;
     position: relative;
-    /* Importante para o dropdown se posicionar em relação a este elemento */
-
+    z-index: 15
 }
 
 .card-icon {
@@ -131,9 +126,10 @@
 }
 
 .flexibleTable {
-    width: 100%;
     display: flex;
     flex-direction: column;
+    height: 60vh;
+    border-radius: 8px;
 }
 
 .tableRow {
@@ -141,19 +137,20 @@
     align-items: center;
     width: 100%;
     border-bottom: 1px solid #e0e0e0;
-    padding: 8px 0;
+    padding: 15px 0 8px 0;
     transition: background-color 0.2s ease-in-out;
     cursor: pointer;
 }
 
-.tableBody .tableRow:hover {
-    background-color: #f9f9f9;
-}
-
 .tableHeader {
+    position: sticky;
+    top: 0;
+    z-index: 1;
     font-weight: bold;
     color: #333;
-    padding-bottom: 12px;
+    padding-top: 25px;
+    cursor: default;
+    background-color: #f4f4f4;
 }
 
 .tableRow>div {
@@ -170,7 +167,12 @@
 }
 
 .expandableContainer {
-    width: 100%;
+    margin: 0 4rem;
+}
+
+.scrollableTableWrapper {
+    max-height: 500px;
+    overflow-y: auto;
 }
 
 .expensesTable {
@@ -185,6 +187,12 @@
     padding: 12px 15px;
     text-align: center;
     width: auto;
+}
+
+.expensesTable th {
+    position: sticky;
+    top: 0;
+    z-index: 1;
 }
 
 .expensesTable td {

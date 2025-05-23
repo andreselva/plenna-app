@@ -8,6 +8,38 @@ import { useState } from 'react';
 import InvoiceTable from '../../Tables/InvoiceTable/InvoiceTable';
 
 const Invoices = () => {
+    const invoices = [
+        {
+            id: 1, name: 'Fatura de Janeiro', invoiceDueDate: '2023-01-31', closingDate: '2023-02-05',
+            paymentDate: '2023-02-10', status: 'Paga', value: 1000,
+            expenses: [
+                { id: 1, name: 'Despesa 1', value: 500, dueDate: '2023-01-15', },
+                { id: 2, name: 'Despesa 2', value: 500, dueDate: '2023-01-15', },
+                { id: 2, name: 'Despesa 2', value: 500, dueDate: '2023-01-15', },
+                { id: 2, name: 'Despesa 2', value: 500, dueDate: '2023-01-15', },
+                { id: 2, name: 'Despesa 2', value: 500, dueDate: '2023-01-15', },
+                { id: 2, name: 'Despesa 2', value: 500, dueDate: '2023-01-15', },
+                { id: 1, name: 'Despesa 1', value: 500, dueDate: '2023-01-15', },
+                { id: 2, name: 'Despesa 2', value: 500, dueDate: '2023-01-15', },
+                { id: 2, name: 'Despesa 2', value: 500, dueDate: '2023-01-15', },
+                { id: 2, name: 'Despesa 2', value: 500, dueDate: '2023-01-15', },
+                { id: 2, name: 'Despesa 2', value: 500, dueDate: '2023-01-15', },
+                { id: 2, name: 'Despesa 2', value: 500, dueDate: '2023-01-15', },
+            ]
+        },
+        {
+            id: 2, name: 'Fatura de Fevereiro', invoiceDueDate: '2023-02-28', closingDate: '2023-03-05',
+            paymentDate: '2023-03-10', status: 'Pendente', value: 1200,
+            expenses: [
+                { id: 4, name: 'Despesa 4', value: 600, dueDate: '2023-02-15', },
+                { id: 2, name: 'Despesa 2', value: 500, dueDate: '2023-01-15', },
+                { id: 2, name: 'Despesa 2', value: 500, dueDate: '2023-01-15', },
+                { id: 2, name: 'Despesa 2', value: 500, dueDate: '2023-01-15', },
+                { id: 2, name: 'Despesa 2', value: 500, dueDate: '2023-01-15', },
+            ]
+        }
+    ];
+
     const [formattedPeriod, setFormattedPeriod] = useState(() => getStartAndEndOfMonth());
     const [selectedMonth, setSelectedMonth] = useState(() => {
         const now = new Date();
@@ -85,12 +117,10 @@ const Invoices = () => {
                         selectedRange={selectedRange}
                     />
                 </div>
-                <div className={styles['card-invoice']} style={{ width: '90em', height: '80vh'}}>
+                <div className={styles['card-invoice']}>
                     <h3>Faturas</h3>
                     <InvoiceTable
-                        expenses={expenses}
-                        categories={categories}
-                        creditCards={accounts}
+                        invoices={invoices}
                         onEdit={handleEditExpense}
                         onDelete={handleDeleteExpense}
                     />

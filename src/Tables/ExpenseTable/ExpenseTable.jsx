@@ -12,57 +12,51 @@ const ExpenseTable = ({ expenses = [], categories = [], creditCards = [], onEdit
     });
 
     return (
-        <table>
-            <thead>
-                <tr>
-                    <th>Descrição</th>
-                    <th>Valor</th>
-                    <th>Vencimento</th>
-                    <th>Categoria</th>
-                    <th>Cartão de crédito</th>
-                    <th>Ações</th>
-                </tr>
-            </thead>
-            <tbody>
+        <div className={globalStyles.flexibleTable} style={{ padding: '20px'}}>
+            {/* Cabeçalho da Tabela */}
+            <div className={`${globalStyles.tableHeader} ${globalStyles.tableRow}`}>
+                <div style={{ flex: '1 1 0%' }}>Descrição</div>
+                <div style={{ flex: '1 1 0%' }}>Valor</div>
+                <div style={{ flex: '1 1 0%' }}>Vencimento</div>
+                <div style={{ flex: '1 1 0%' }}>Categoria</div>
+                <div style={{ flex: '1 1 0%' }}>Cartão de crédito</div>
+                <div style={{ flex: '1 1 120px', textAlign: 'center' }}>Ações</div>
+            </div>
+
+            {/* Corpo da Tabela */}
+            <div className={globalStyles.tableBody} >
                 {expenses.length > 0 ? (
                     expenses.map((expense) => {
-                        const category = categories.find(category => category.id === expense.idCategory) || {};
-                        const creditCard = creditCards.find(creditCard => creditCard.id === expense.idCreditCard) || {}
+                        const category = categories.find(c => c.id === expense.idCategory) || {};
+                        const creditCard = creditCards.find(cc => cc.id === expense.idCreditCard) || {};
 
                         return (
-                            <tr key={expense.id}>
-                                <td>{expense.name}</td>
-                                <td>{expense.value}</td>
-                                <td>{expense.invoiceDueDate.split('-').reverse().join('/')}</td>
-                                <td>
-                                    <span
-                                        style={{
-                                            backgroundColor: category.color ? category.color + "33" : '#000',
-                                            color: "#000",
-                                            fontSize: '15px',
-                                            padding: "4px 8px",
-                                            borderRadius: "10px",
-                                            display: "inline-block",
-                                        }}
-                                    >
-                                        {category.name || 'Categoria não encontrada'}
+                            <div key={expense.id} className={globalStyles.tableRow}>
+                                <div style={{ flex: '1 1 0%' }}>{expense.name}</div>
+                                <div style={{ flex: '1 1 0%' }}>{expense.value}</div>
+                                <div style={{ flex: '1 1 0%' }}>{expense.invoiceDueDate.split('-').reverse().join('/')}</div>
+                                <div style={{ flex: '1 1 0%' }}>
+                                    <span className={globalStyles.statusBadge} style={{
+                                        backgroundColor: category.color ? `${category.color}33` : 'rgba(0, 0, 0, 0.1)',
+                                    }}>
+                                        {category.name || 'N/A'}
                                     </span>
-                                </td>
-                                <td>{creditCard.name || '-'}</td>
-                                <td className={globalStyles.actions}>
+                                </div>
+                                <div style={{ flex: '1 1 0%' }}>{creditCard.name || '-'}</div>
+                                <div className={globalStyles.actions} style={{ flex: '1 1 120px', justifyContent: 'center' }}>
                                     <button className={globalStyles['action-button']} onClick={() => onEdit(expense)}>Editar</button>
                                     <button className={globalStyles['action-button']} onClick={() => handleDelete(expense)}>Excluir</button>
-                                </td>
-                            </tr>
+                                </div>
+                            </div>
                         );
                     })
                 ) : (
-                    <tr>
-                        <td colSpan="6">Nenhuma despesa cadastrada</td>
-                    </tr>
+                    <div className={globalStyles.tableRow} style={{ justifyContent: 'center', padding: '20px' }}>
+                        Nenhuma despesa cadastrada
+                    </div>
                 )}
-            </tbody>
-        </table>
+            </div>
+        </div>
     );
 };
 
