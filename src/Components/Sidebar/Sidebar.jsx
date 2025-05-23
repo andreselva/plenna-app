@@ -38,7 +38,7 @@ const Sidebar = () => {
                 <div
                     className="Sidebar-section-title"
                     onClick={() => toggleSection('financeiro')}
-                    style={{ cursor: 'pointer', color: openSection === 'financeiro' ? '#007BFF' : 'inherit' }}
+                    style={{ cursor: 'pointer', color: openSection === 'financeiro' ? '#9370DB' : 'inherit' }}
                 >
                     Financeiro {openSection === 'financeiro' ? <UpArrowIcon /> : <DownArrowIcon />}
                 </div>

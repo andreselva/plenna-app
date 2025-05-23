@@ -85,7 +85,7 @@ const Invoices = () => {
                         selectedRange={selectedRange}
                     />
                 </div>
-                <div className={styles['card-invoice']}>
+                <div className={styles['card-invoice']} style={{ width: '90em', height: '80vh'}}>
                     <h3>Faturas</h3>
                     <InvoiceTable
                         expenses={expenses}

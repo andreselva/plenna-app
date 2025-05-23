@@ -129,3 +129,68 @@
 .icone {
     display: inline-flex;
 }
+
+.flexibleTable {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.tableRow {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    border-bottom: 1px solid #e0e0e0;
+    padding: 8px 0;
+    transition: background-color 0.2s ease-in-out;
+    cursor: pointer;
+}
+
+.tableRow:hover {
+    background-color: #f9f9f9;
+}
+
+.tableHeader {
+    font-weight: bold;
+    color: #333;
+    padding-bottom: 12px;
+}
+
+.tableRow>div {
+    padding: 0 10px;
+}
+
+.statusBadge {
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 15px;
+    display: inline-block;
+    text-align: center;
+    color: #000;
+}
+
+.expandableContainer {
+    width: 100%;
+}
+
+.expensesTable {
+    width: 100%;
+    background-color: #f9f9f9;
+    border-collapse: collapse;
+    margin: 10px 0;
+}
+
+.expensesTable th,
+.expensesTable td {
+    padding: 12px 15px;
+    text-align: center;
+    width: auto;
+}
+
+.expensesTable td {
+    border-bottom: 0 dotted #b0b0b0;
+}
+
+.expensesTable tr:last-child td {
+    border-bottom: none;
+}
