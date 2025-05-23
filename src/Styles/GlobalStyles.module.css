@@ -146,7 +146,7 @@
     cursor: pointer;
 }
 
-.tableRow:hover {
+.tableBody .tableRow:hover {
     background-color: #f9f9f9;
 }
 
