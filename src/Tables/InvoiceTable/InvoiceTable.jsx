@@ -26,21 +26,21 @@ const InvoiceTable = ({ invoices, onEdit, handleDelete }) => {
                         <React.Fragment key={invoice.id}>
                             {/* Linha Clicável */}
                             <div className={globalStyles.tableRow} onClick={() => toggleInvoice(invoice.id)}>
-                                <div style={{ flex: '2 1 0%', fontWeight: 600 }}>{invoice.name}</div>
-                                <div style={{ flex: '2 1 0%', fontWeight: 600 }}>Vencimento: {invoice.invoiceDueDate.split('-').reverse().join('/')}</div>
-                                <div style={{ flex: '2 1 0%', fontWeight: 600 }}>Fechamento: {invoice.closingDate.split('-').reverse().join('/')}</div>
-                                <div style={{ flex: '2 1 0%', fontWeight: 600 }}>Total: {invoice.value}</div>
+                                <div style={{ flex: '2 1 0%', fontWeight: 400 }}>{invoice.name}</div>
+                                <div style={{ flex: '2 1 0%', fontWeight: 400 }}>Vencimento: {invoice.invoiceDueDate.split('-').reverse().join('/')}</div>
+                                <div style={{ flex: '2 1 0%', fontWeight: 400 }}>Fechamento: {invoice.closingDate.split('-').reverse().join('/')}</div>
+                                <div style={{ flex: '2 1 0%', fontWeight: 400 }}>Total: {invoice.value}</div>
                                 <div style={{ flex: '2 1 0%' }}>
                                     <span className={globalStyles.statusBadge} style={{
                                         backgroundColor: invoice.status.toUpperCase() === 'PAGA' ? "rgba(0, 255, 0, 0.2)" : "rgba(255, 0, 0, 0.2)",
-                                        fontWeight: 600
+                                        fontWeight: 400
                                     }}>
                                         Status: {invoice.status}
                                     </span>
                                 </div>
                                 <div className={globalStyles.actions} style={{ flex: '1 1 120px', justifyContent: 'center' }}>
-                                    <button className={globalStyles['action-button']} onClick={(e) => { e.stopPropagation(); onEdit(invoice); }}>Editar</button>
-                                    <button className={globalStyles['action-button']} onClick={(e) => { e.stopPropagation(); handleDelete(invoice); }}>Excluir</button>
+                                    <button onClick={(e) => { e.stopPropagation(); onEdit(invoice); }}>Editar</button>
+                                    <button onClick={(e) => { e.stopPropagation(); handleDelete(invoice); }}>Excluir</button>
                                 </div>
                             </div>
 

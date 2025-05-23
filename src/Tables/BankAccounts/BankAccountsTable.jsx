@@ -1,3 +1,4 @@
+import { FlexibleTable } from '../../Components/FlexibleTable/FlexibleTable';
 import DeleteConfirmation from '../../Hooks/DeleteConfirmation/DeleteConfirmation';
 import globalStyles from '../../Styles/GlobalStyles.module.css';
 
@@ -10,31 +11,30 @@ export const BankAccountsTable = ({ accounts, onEdit, onDelete }) => {
         successMessage: 'Conta excluída!',
         errorMessage: 'Falha ao remover conta!'
     });
+
+    const columns = [
+        {
+            header: 'Conta',
+            accessor: 'name',
+            style: { flex: '3 1 0%' }
+        },
+        {
+            header: 'Ações',
+            style: { flex: '1 1 120px', display: 'flex', justifyContent: 'center' },
+            renderCell: (account) => (
+                <div className={globalStyles.actions}>
+                    <button onClick={() => onEdit(account)}>Editar</button>
+                    <button onClick={() => handleDelete(account.id)}>Excluir</button>
+                </div>
+            )
+        }
+    ];
+
     return (
-        <table>
-            <thead>
-                <tr>
-                    <th>Conta</th>
-                    <th>Ações</th>
-                </tr>
-            </thead>
-            <tbody>
-                {accounts.length > 0 ? (
-                    accounts.map((account) => (
-                        <tr key={account.id}>
-                            <td>{account.name}</td>
-                            <td className={globalStyles.actions}>
-                                <button className={globalStyles['action-button']} onClick={() => onEdit(account)}>Editar</button>
-                                <button className={globalStyles['action-button']} onClick={() => handleDelete(account.id)}>Excluir</button>
-                            </td>
-                        </tr>
-                    ))
-                ) : (
-                    <tr key="no-accounts">
-                        <td colSpan="2">Nenhuma conta bancária cadastrada</td>
-                    </tr>
-                )}
-            </tbody>
-        </table>
-    )
+        <FlexibleTable
+            columns={columns}
+            data={accounts}
+            noDataMessage="Nenhuma conta bancária cadastrada"
+        />
+    );
 }

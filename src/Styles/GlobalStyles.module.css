@@ -130,6 +130,7 @@
     flex-direction: column;
     height: 60vh;
     border-radius: 8px;
+    padding: 20px;
 }
 
 .tableRow {
