@@ -1,8 +1,8 @@
 import styles from './Categories.module.css';
 import Modal from "../../Modals/ModalCategories/ModalCategories";
 import CategoryTable from "../../Tables/CategoryTable/CategoryTable";
-import { useCategoryHandler } from '../../Hooks/Handlers/useCategoryHandler';
 import { BotaoGlobal } from '../../Components/Buttons/ButtonGlobal.tsx';
+import { useCategoryHandler } from '../../Handlers/useCategoryHandler';
 
 const Categories = () => {
     const { categories, isModalOpen, setIsModalOpen, editingCategory, setEditingCategory, newCategory, setNewCategory, categoryType, setCategoryType, categoryColor, setCategoryColor, handleEditCategory, handleSaveCategory, handleDeleteCategory } = useCategoryHandler();

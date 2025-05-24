@@ -1,9 +1,9 @@
 import {useState} from 'react';
-import {RevenuesManager} from '../RevenuesManager/RevenuesManager';
-import {CategoryManager} from '../CategoryManager/CategoryManager';
-import AlertConfirm from '../../Components/Alerts/AlertConfirm';
-import { validateDate } from '../../Utils/DateUtils';
-import SweetAlert from '../../Components/Alerts/SweetAlert';
+import { RevenuesManager } from '../Hooks/RevenuesManager/RevenuesManager';
+import { CategoryManager } from '../Hooks/CategoryManager/CategoryManager';
+import { validateDate } from '../Utils/DateUtils';
+import SweetAlert from '../Components/Alerts/SweetAlert';
+import AlertConfirm from '../Components/Alerts/AlertConfirm';
 
 export const useRevenueHandler = (periodo) => {
     const {revenues, addRevenue, deleteRevenue, updateRevenue} = RevenuesManager(periodo);
@@ -111,7 +111,6 @@ export const useRevenueHandler = (periodo) => {
 
         resetForm();
     };
-
 
     const handleDeleteRevenue = async (revenue) => {
         if (revenue.hasInstallments) {

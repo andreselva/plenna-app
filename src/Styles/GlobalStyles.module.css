@@ -66,6 +66,20 @@
     background-color: #e0e0e0;
 }
 
+.card .disabled {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.card .disabled button {
+    padding: 5px 10px;
+    background-color: #f4f4f4;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    cursor: default;
+}
+
 .show-btn:hover {
     background-color: #45a049;
 }
@@ -131,6 +145,7 @@
     height: 60vh;
     border-radius: 8px;
     padding: 20px;
+    overflow: hidden;
 }
 
 .tableRow {

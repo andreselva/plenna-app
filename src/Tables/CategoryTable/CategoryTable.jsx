@@ -1,4 +1,3 @@
-import React from 'react';
 import DeleteConfirmation from '../../Hooks/DeleteConfirmation/DeleteConfirmation';
 import globalStyles from '../../Styles/GlobalStyles.module.css';
 import { FlexibleTable } from '../../Components/FlexibleTable/FlexibleTable';

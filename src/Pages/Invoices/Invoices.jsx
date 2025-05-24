@@ -1,46 +1,19 @@
+import { useState } from 'react';
 import styles from './Invoices.module.css';
-import ModalExpenses from "../../Modals/ModalExpenses/ModalExpenses";
-import { useExpenseHandler } from '../../Hooks/Handlers/useExpenseHandler';
-import { BotaoGlobal } from '../../Components/Buttons/ButtonGlobal.tsx';
+import InvoiceTable from '../../Tables/InvoiceTable/InvoiceTable';
 import { CustomDatePicker } from '../../Components/DatePicker/DatePicker';
 import { getFormattedDateRange, getStartAndEndOfMonth } from '../../Utils/DateUtils';
-import { useState } from 'react';
-import InvoiceTable from '../../Tables/InvoiceTable/InvoiceTable';
+import { useInvoiceHandler } from '../../Handlers/useInvoiceHandler';
+import ModalExpenses from '../../Modals/ModalExpenses/ModalExpenses';
+import { useExpenseForm } from '../../Handlers/useExpenseForm';
+import { useBankAccounts } from '../../Hooks/BankAccountsManager/useBankAccounts';
+import { CategoryManager } from '../../Hooks/CategoryManager/CategoryManager';
+import { ExpenseAPI } from '../../Hooks/ExpenseManager/ExpenseAPI';
 
 const Invoices = () => {
-    const invoices = [
-        {
-            id: 1, name: 'Fatura de Janeiro', invoiceDueDate: '2023-01-31', closingDate: '2023-02-05',
-            paymentDate: '2023-02-10', status: 'Paga', value: 1000,
-            expenses: [
-                { id: 1, name: 'Despesa 1', value: 500, dueDate: '2023-01-15', },
-                { id: 2, name: 'Despesa 2', value: 500, dueDate: '2023-01-15', },
-                { id: 2, name: 'Despesa 2', value: 500, dueDate: '2023-01-15', },
-                { id: 2, name: 'Despesa 2', value: 500, dueDate: '2023-01-15', },
-                { id: 2, name: 'Despesa 2', value: 500, dueDate: '2023-01-15', },
-                { id: 2, name: 'Despesa 2', value: 500, dueDate: '2023-01-15', },
-                { id: 1, name: 'Despesa 1', value: 500, dueDate: '2023-01-15', },
-                { id: 2, name: 'Despesa 2', value: 500, dueDate: '2023-01-15', },
-                { id: 2, name: 'Despesa 2', value: 500, dueDate: '2023-01-15', },
-                { id: 2, name: 'Despesa 2', value: 500, dueDate: '2023-01-15', },
-                { id: 2, name: 'Despesa 2', value: 500, dueDate: '2023-01-15', },
-                { id: 2, name: 'Despesa 2', value: 500, dueDate: '2023-01-15', },
-            ]
-        },
-        {
-            id: 2, name: 'Fatura de Fevereiro', invoiceDueDate: '2023-02-28', closingDate: '2023-03-05',
-            paymentDate: '2023-03-10', status: 'Pendente', value: 1200,
-            expenses: [
-                { id: 4, name: 'Despesa 4', value: 600, dueDate: '2023-02-15', },
-                { id: 2, name: 'Despesa 2', value: 500, dueDate: '2023-01-15', },
-                { id: 2, name: 'Despesa 2', value: 500, dueDate: '2023-01-15', },
-                { id: 2, name: 'Despesa 2', value: 500, dueDate: '2023-01-15', },
-                { id: 2, name: 'Despesa 2', value: 500, dueDate: '2023-01-15', },
-            ]
-        }
-    ];
-
     const [formattedPeriod, setFormattedPeriod] = useState(() => getStartAndEndOfMonth());
+    const { categories } = CategoryManager();
+    const { accounts } = useBankAccounts();
     const [selectedMonth, setSelectedMonth] = useState(() => {
         const now = new Date();
         const nextMonthDate = new Date(now);
@@ -65,51 +38,23 @@ const Invoices = () => {
     };
 
     const {
-        expenses,
+        invoices,
+    } = useInvoiceHandler(formattedPeriod);
+
+    const fnExpenses = useExpenseForm({
+        addExpense: (expenseData) => ExpenseAPI.addExpense(expenseData, formattedPeriod),
+        updateExpense: (expenseData) => ExpenseAPI.updateExpense(expenseData, formattedPeriod),
+        deleteExpense: (id, deleteInstallments = false, sourceAccountId = 0) =>
+            ExpenseAPI.deleteExpense(id, formattedPeriod, deleteInstallments, sourceAccountId),
         categories,
-        newExpense,
-        setNewExpense,
-        expenseValue,
-        setExpenseValue,
-        expenseInvoiceDueDate,
-        setExpenseInvoiceDueDate,
-        selectedCategory,
-        setSelectedCategory,
-        isModalOpen,
-        setIsModalOpen,
-        setEditingExpense,
-        handleEditExpense,
-        handleSaveExpense,
-        handleDeleteExpense,
-        accounts,
-        selectedCard,
-        setSelectedCard,
-        installments,
-        setInstallments,
-        typeOfInstallment,
-        setTypeOfInstallment,
-        hasInstallments,
-        setHasInstallments,
-        hasSourceAccountId,
-        setBooleanSourceAccountId,
-        idExpense,
-        setIdExpense
-    } = useExpenseHandler(formattedPeriod);;
+        accounts
+    })
 
     return (
         <div className={styles.Invoices}>
             <div className={styles['Invoices-content']}>
                 <div className={styles['btn-card']}>
-                    <BotaoGlobal
-                        cor="primaria"
-                        className={styles['show-invoices-btn']}
-                        onClick={() => setIsModalOpen(true)}
-                        width='130px'
-                        height='40px'
-                        margin='0 0 10px 0'
-                    >
-                        Criar Fatura
-                    </BotaoGlobal>
+                    <div></div>
                     <CustomDatePicker
                         onMonthChange={handleMonthChange}
                         onDateRangeSelect={handleDateRangeSelect}
@@ -121,42 +66,44 @@ const Invoices = () => {
                     <h3>Faturas</h3>
                     <InvoiceTable
                         invoices={invoices}
-                        onEdit={handleEditExpense}
-                        onDelete={handleDeleteExpense}
+                        onEdit={fnExpenses.handleEditExpense}
+                        onDelete={fnExpenses.handleDeleteExpense}
+                        setIsModalOpen={fnExpenses.setIsModalOpen}
                     />
                 </div>
             </div>
 
-            {isModalOpen && (
+            {fnExpenses.isModalOpen && (
                 <ModalExpenses
-                    setIsModalOpen={setIsModalOpen}
-                    handleAddExpense={handleSaveExpense}
-                    newExpense={newExpense}
-                    setNewExpense={setNewExpense}
-                    expenseValue={expenseValue}
-                    setExpenseValue={setExpenseValue}
-                    expenseInvoiceDueDate={expenseInvoiceDueDate}
-                    setExpenseInvoiceDueDate={setExpenseInvoiceDueDate}
+                    setIsModalOpen={fnExpenses.setIsModalOpen}
+                    handleAddExpense={fnExpenses.handleAddExpense}
+                    newExpense={fnExpenses.newExpense}
+                    setNewExpense={fnExpenses.setNewExpense}
+                    expenseValue={fnExpenses.expenseValue}
+                    setExpenseValue={fnExpenses.setExpenseValue}
+                    expenseInvoiceDueDate={fnExpenses.expenseInvoiceDueDate}
+                    setExpenseInvoiceDueDate={fnExpenses.setExpenseInvoiceDueDate}
                     categories={categories}
-                    selectedCategory={selectedCategory}
-                    setSelectedCategory={setSelectedCategory}
-                    setEditingExpense={setEditingExpense}
+                    selectedCategory={fnExpenses.selectedCategory}
+                    setSelectedCategory={fnExpenses.setSelectedCategory}
+                    setEditingExpense={fnExpenses.setEditingExpense}
                     creditCards={accounts}
-                    selectedCard={selectedCard}
-                    setSelectedCard={setSelectedCard}
-                    installments={installments}
-                    setInstallments={setInstallments}
-                    typeOfInstallment={typeOfInstallment}
-                    setTypeOfInstallment={setTypeOfInstallment}
-                    hasInstallments={hasInstallments}
-                    setHasInstallments={setHasInstallments}
-                    hasSourceAccountId={hasSourceAccountId}
-                    setBooleanSourceAccountId={setBooleanSourceAccountId}
-                    idExpense={idExpense}
-                    setIdExpense={setIdExpense}
+                    selectedCard={fnExpenses.selectedCard}
+                    setSelectedCard={fnExpenses.setSelectedCard}
+                    installments={fnExpenses.installments}
+                    setInstallments={fnExpenses.setInstallments}
+                    typeOfInstallment={fnExpenses.typeOfInstallment}
+                    setTypeOfInstallment={fnExpenses.setTypeOfInstallment}
+                    hasInstallments={fnExpenses.hasInstallments}
+                    setHasInstallments={fnExpenses.setHasInstallments}
+                    hasSourceAccountId={fnExpenses.hasSourceAccountId}
+                    setBooleanSourceAccountId={fnExpenses.setBooleanSourceAccountId}
+                    idExpense={fnExpenses.idExpense}
+                    setIdExpense={fnExpenses.setIdExpense}
                 />
             )}
         </div>
+
     );
 };
 

@@ -1,5 +1,5 @@
 import { BotaoGlobal } from "../../Components/Buttons/ButtonGlobal.tsx";
-import { useBankAccountHandler } from "../../Hooks/Handlers/useBankAccountHandler.jsx";
+import { useBankAccountHandler } from "../../Handlers/useBankAccountHandler.jsx";
 import { ModalBankAccounts } from "../../Modals/ModalBankAccounts/ModalBankAccounts.jsx";
 import { BankAccountsTable } from "../../Tables/BankAccounts/BankAccountsTable.jsx";
 import styles from './BankAccounts.module.css';

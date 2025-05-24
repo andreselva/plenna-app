@@ -1,8 +1,18 @@
 import React, { useState } from 'react';
 import globalStyles from '../../Styles/GlobalStyles.module.css';
 import ExpandableRow from '../../Components/ExpansableRow/ExpansableRow';
+import DeleteConfirmation from '../../Hooks/DeleteConfirmation/DeleteConfirmation';
 
-const InvoiceTable = ({ invoices, onEdit, handleDelete }) => {
+const InvoiceTable = ({ invoices, onEdit, onDelete, setIsModalOpen }) => {
+    const handleDelete = DeleteConfirmation(onDelete, {
+        confirmTitle: 'Deseja realmente excluir?',
+        confirmText: 'A exclusão é definitiva!',
+        confirmButtonText: 'Excluir',
+        cancelButtonText: 'Manter',
+        successMessage: 'Categoria excluída!',
+        errorMessage: 'Falha ao remover categoria!'
+    });
+
     const [expandedInvoiceIds, setExpandedInvoiceIds] = useState(new Set());
 
     const toggleInvoice = (invoiceId) => {
@@ -29,7 +39,7 @@ const InvoiceTable = ({ invoices, onEdit, handleDelete }) => {
                                 <div style={{ flex: '2 1 0%', fontWeight: 400 }}>{invoice.name}</div>
                                 <div style={{ flex: '2 1 0%', fontWeight: 400 }}>Vencimento: {invoice.invoiceDueDate.split('-').reverse().join('/')}</div>
                                 <div style={{ flex: '2 1 0%', fontWeight: 400 }}>Fechamento: {invoice.closingDate.split('-').reverse().join('/')}</div>
-                                <div style={{ flex: '2 1 0%', fontWeight: 400 }}>Total: {invoice.value}</div>
+                                <div style={{ flex: '1 1 0%', fontWeight: 400 }}>Total: {invoice.value}</div>
                                 <div style={{ flex: '2 1 0%' }}>
                                     <span className={globalStyles.statusBadge} style={{
                                         backgroundColor: invoice.status.toUpperCase() === 'PAGA' ? "rgba(0, 255, 0, 0.2)" : "rgba(255, 0, 0, 0.2)",
@@ -38,14 +48,28 @@ const InvoiceTable = ({ invoices, onEdit, handleDelete }) => {
                                         Status: {invoice.status}
                                     </span>
                                 </div>
-                                <div className={globalStyles.actions} style={{ flex: '1 1 120px', justifyContent: 'center' }}>
-                                    <button onClick={(e) => { e.stopPropagation(); onEdit(invoice); }}>Editar</button>
-                                    <button onClick={(e) => { e.stopPropagation(); handleDelete(invoice); }}>Excluir</button>
+                                <div style={{ flex: '1 0 0%' }}>
+                                    {invoice.status.toUpperCase() !== 'PAGA' ? (
+                                        <div className={globalStyles.actions} >
+                                            <button onClick={(e) => { e.stopPropagation(); setIsModalOpen(true) }}>
+                                                Incluir despesa
+                                            </button>
+                                        </div>
+                                    ) : (
+                                        <div className={globalStyles.disabled} >
+                                            <button
+                                                onClick={(e) => e.stopPropagation()}
+                                                disabled={true}
+                                            >
+                                                Incluir despesa
+                                            </button>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
 
                             {/* Linha Expansível */}
-                            <div className={globalStyles.expandableContainer}>
+                            <div className={globalStyles.expandableContainer} >
                                 <ExpandableRow isOpen={expandedInvoiceIds.has(invoice.id)}>
                                     <div className={globalStyles.scrollableTableWrapper}>
                                         <table className={globalStyles.expensesTable} style={{ width: '100%', borderRadius: '10px' }}>
@@ -54,6 +78,7 @@ const InvoiceTable = ({ invoices, onEdit, handleDelete }) => {
                                                     <th>Nome da Despesa</th>
                                                     <th>Valor</th>
                                                     <th>Vencimento</th>
+                                                    <th>Ações</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -63,6 +88,12 @@ const InvoiceTable = ({ invoices, onEdit, handleDelete }) => {
                                                             <td>{expense.name}</td>
                                                             <td>{expense.value}</td>
                                                             <td>{expense.dueDate.split('-').reverse().join('/')}</td>
+                                                            <td>
+                                                                <div className={globalStyles.actions}>
+                                                                    <button onClick={() => { onEdit(expense) }}></button>
+                                                                    <button onClick={() => { handleDelete(expense.id) }}></button>
+                                                                </div>
+                                                            </td>
                                                         </tr>
                                                     ))
                                                 ) : (
@@ -84,8 +115,8 @@ const InvoiceTable = ({ invoices, onEdit, handleDelete }) => {
                         Nenhuma fatura encontrada
                     </div>
                 )}
-            </div>
-        </div>
+            </div >
+        </div >
     );
 };
 
