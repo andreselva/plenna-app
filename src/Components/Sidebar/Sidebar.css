@@ -125,3 +125,15 @@
     align-items: center;
     font-size: 15px;
 }
+
+/* Mantenha este estilo como base */
+.Sidebar-components-item {
+    display: flex;
+    align-items: center;
+}
+
+/* Adicione este novo estilo para o ajuste fino */
+.sidebar-icon {
+    /* Move o ícone 2 píxeis para cima. Ajuste este valor conforme necessário! */
+    transform: translateY(-5px);
+}

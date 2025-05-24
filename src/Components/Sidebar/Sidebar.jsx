@@ -7,6 +7,7 @@ import { useAuth } from '../../Auth/Context/AuthContext';
 import ExpandableRow from '../ExpansableRow/ExpansableRow';
 import { UpArrowIcon } from '../Icons/UpArrow';
 import { DownArrowIcon } from '../Icons/DownArrow';
+import { ChartLine } from 'lucide-react';
 
 const Sidebar = () => {
     const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -33,7 +34,10 @@ const Sidebar = () => {
         <div className="Sidebar">
             <div className="Sidebar-title">Plenna</div>
             <div className="Sidebar-components">
-                <Link to="/dashboard">Dashboard</Link>
+                <div className='Sidebar-components-item'>
+                    {/* <ChartLine className="sidebar-icon" /> */}
+                    <Link to="/dashboard">Dashboard</Link>
+                </div>
                 <Link to="/categories">Categorias</Link>
                 <div
                     className="Sidebar-section-title"

@@ -1,35 +1,35 @@
-import {HelpCircle} from 'lucide-react';
+import { HelpCircle } from 'lucide-react';
 import GenericModal from '../../Components/GenericModal/GenericModal';
 import Tooltip from '../../Components/Tooltip/Tooltip';
-import {useEffect} from 'react';
+import { useEffect } from 'react';
 
 const ModalExpenses = ({
-                           idExpense,
-                           setIsModalOpen,
-                           handleAddExpense,
-                           newExpense,
-                           setNewExpense,
-                           expenseValue,
-                           setExpenseValue,
-                           expenseInvoiceDueDate,
-                           setExpenseInvoiceDueDate,
-                           categories,
-                           selectedCategory,
-                           setSelectedCategory,
-                           setEditingExpense,
-                           creditCards,
-                           selectedCard,
-                           setSelectedCard,
-                           installments,
-                           setInstallments,
-                           typeOfInstallment,
-                           setTypeOfInstallment,
-                           hasInstallments,
-                           setHasInstallments,
-                           hasSourceAccountId,
-                           setBooleanSourceAccountId,
-                           setIdExpense,
-                       }) => {
+    idExpense,
+    setIsModalOpen,
+    handleAddExpense,
+    newExpense,
+    setNewExpense,
+    expenseValue,
+    setExpenseValue,
+    expenseInvoiceDueDate,
+    setExpenseInvoiceDueDate,
+    categories,
+    selectedCategory,
+    setSelectedCategory,
+    setEditingExpense,
+    creditCards,
+    selectedCard,
+    setSelectedCard,
+    installments,
+    setInstallments,
+    typeOfInstallment,
+    setTypeOfInstallment,
+    hasInstallments,
+    setHasInstallments,
+    hasSourceAccountId,
+    setBooleanSourceAccountId,
+    setIdExpense,
+}) => {
     const handleCancel = () => {
         setNewExpense('');
         setExpenseValue('');
@@ -102,7 +102,7 @@ const ModalExpenses = ({
                     required: true,
                     options: categories
                         .filter((category) => category.type.toUpperCase() === 'DESPESA')
-                        .map((category) => ({value: category.id, label: category.name})),
+                        .map((category) => ({ value: category.id, label: category.name })),
                     size: 'half-width-large', // Define o tamanho do input
                 },
             ],
@@ -117,7 +117,7 @@ const ModalExpenses = ({
                     onChange: setSelectedCard,
                     placeholder: 'Selecione um cartão',
                     required: false,
-                    options: creditCards.map((creditCard) => ({value: creditCard.id, label: creditCard.name})),
+                    options: creditCards.map((creditCard) => ({ value: creditCard.id, label: creditCard.name })),
                     size: 'half-width-large', // Define o tamanho do input
                 },
                 {
@@ -128,9 +128,9 @@ const ModalExpenses = ({
                     onChange: setTypeOfInstallment,
                     required: false,
                     options: [
-                        {value: 'U', label: 'Única'},
-                        {value: 'P', label: 'Parcelada'},
-                        {value: 'F', label: 'Fixa'}
+                        { value: 'U', label: 'Única' },
+                        { value: 'P', label: 'Parcelada' },
+                        { value: 'F', label: 'Fixa' }
                     ],
                     size: 'half-width-large',
                     //Se possui um id de conta vinculado, o tipo de parcelamento não pode ser alterado.
@@ -155,10 +155,10 @@ const ModalExpenses = ({
                 {
                     id: 'hasInstallments',
                     label: (
-                        <span style={{display: 'flex', alignItems: 'center', gap: '4px'}}>
+                        <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
                             Conta parcelada
                             <Tooltip text="Esta conta foi dividida em múltiplas parcelas.">
-                                <HelpCircle size={15} strokeWidth={1} style={{cursor: 'help'}}/>
+                                <HelpCircle size={15} strokeWidth={1} style={{ cursor: 'help' }} />
                             </Tooltip>
                         </span>
                     ),
@@ -173,11 +173,11 @@ const ModalExpenses = ({
                 {
                     id: 'isInstallment',
                     label: (
-                        <span style={{display: 'flex', alignItems: 'center', gap: '4px'}}>
+                        <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
                             Faz parte de parcelamento
                             <Tooltip
                                 text="Esta conta faz parte de um parcelamento gerado a partir de outra conta. Não é possível editar o tipo de parcelamento e a quantidade de parcelas.">
-                                <HelpCircle size={15} strokeWidth={1} style={{cursor: 'help'}}/>
+                                <HelpCircle size={15} strokeWidth={1} style={{ cursor: 'help' }} />
                             </Tooltip>
                         </span>
                     ),

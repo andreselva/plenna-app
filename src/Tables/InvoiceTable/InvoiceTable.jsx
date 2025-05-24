@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import globalStyles from '../../Styles/GlobalStyles.module.css';
 import ExpandableRow from '../../Components/ExpansableRow/ExpansableRow';
 import DeleteConfirmation from '../../Hooks/DeleteConfirmation/DeleteConfirmation';
+import { PencilLine, Trash2Icon } from 'lucide-react';
 
 const InvoiceTable = ({ invoices, onEdit, onDelete, setIsModalOpen }) => {
     const handleDelete = DeleteConfirmation(onDelete, {
@@ -35,7 +36,7 @@ const InvoiceTable = ({ invoices, onEdit, onDelete, setIsModalOpen }) => {
                     invoices.map((invoice) => (
                         <React.Fragment key={invoice.id}>
                             {/* Linha Clicável */}
-                            <div className={globalStyles.tableRow} onClick={() => toggleInvoice(invoice.id)}>
+                            <div style={{padding: '25px 0 25px 0'}} className={globalStyles.tableRow} onClick={() => toggleInvoice(invoice.id)}>
                                 <div style={{ flex: '2 1 0%', fontWeight: 400 }}>{invoice.name}</div>
                                 <div style={{ flex: '2 1 0%', fontWeight: 400 }}>Vencimento: {invoice.invoiceDueDate.split('-').reverse().join('/')}</div>
                                 <div style={{ flex: '2 1 0%', fontWeight: 400 }}>Fechamento: {invoice.closingDate.split('-').reverse().join('/')}</div>
@@ -81,7 +82,7 @@ const InvoiceTable = ({ invoices, onEdit, onDelete, setIsModalOpen }) => {
                                                     <th>Ações</th>
                                                 </tr>
                                             </thead>
-                                            <tbody>
+                                            <tbody >
                                                 {invoice.expenses && invoice.expenses.length > 0 ? (
                                                     invoice.expenses.map((expense) => (
                                                         <tr key={expense.id}>
@@ -89,9 +90,13 @@ const InvoiceTable = ({ invoices, onEdit, onDelete, setIsModalOpen }) => {
                                                             <td>{expense.value}</td>
                                                             <td>{expense.dueDate.split('-').reverse().join('/')}</td>
                                                             <td>
-                                                                <div className={globalStyles.actions}>
-                                                                    <button onClick={() => { onEdit(expense) }}></button>
-                                                                    <button onClick={() => { handleDelete(expense.id) }}></button>
+                                                                <div className={globalStyles.actions} style={{ display: 'flex' }}>
+                                                                    <button onClick={() => { onEdit(expense) }}>
+                                                                        <PencilLine width='15px' height='15px' />
+                                                                    </button>
+                                                                    <button onClick={() => { handleDelete(expense.id) }}>
+                                                                        <Trash2Icon width='15px' height='15px' />
+                                                                    </button>
                                                                 </div>
                                                             </td>
                                                         </tr>
