@@ -14,7 +14,7 @@
 
 .modal-content {
     background-color: #fff;
-    padding: 30px;
+    padding: 20px;
     border-radius: 12px;
     width: 100%;
     max-width: 1300px; /* Valor padrão, pode ser sobrescrito dinamicamente */

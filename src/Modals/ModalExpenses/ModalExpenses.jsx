@@ -231,7 +231,7 @@ const ModalExpenses = ({
             onSubmit={handleAddExpense}
             onCancel={handleCancel}
             submitButtonText="Adicionar"
-            width="650px"
+            width="700px"
         />
     );
 };
