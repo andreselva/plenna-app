@@ -58,8 +58,8 @@ export const ModalBankAccounts = ({
             fields: [
                 {
                     id: 'dueDate',
-                    label: 'Vencimento da fatura',
-                    type: 'date',
+                    label: 'Dia de vencimento da fatura',
+                    type: 'text',
                     value: dueDate,
                     onChange: setDueDate,
                     required: true,
@@ -67,8 +67,8 @@ export const ModalBankAccounts = ({
                 },
                 {
                     id: 'closingDate',
-                    label: 'Fechamento da fatura',
-                    type: 'date',
+                    label: 'Dia de fechamento da fatura',
+                    type: 'text',
                     value: closingDate,
                     onChange: setClosingDate,
                     required: true,
@@ -82,10 +82,11 @@ export const ModalBankAccounts = ({
         <GenericModal
             isOpen={true}
             title={editingAccount ? 'Editar conta' : 'Cadastrar conta'}
-            formFields={formFields} // A lista dinâmica é passada para o modal
+            formFields={formFields}
             onSubmit={handleAddAccount}
             onCancel={handleCancel}
             submitButtonText={editingAccount ? 'Salvar' : 'Adicionar'}
+            width="600px"
         />
     );
 };

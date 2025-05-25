@@ -29,6 +29,8 @@ const ModalExpenses = ({
     hasSourceAccountId,
     setBooleanSourceAccountId,
     setIdExpense,
+    linkToInvoice,
+    setLinkToInvoice
 }) => {
     const handleCancel = () => {
         setNewExpense('');
@@ -56,8 +58,9 @@ const ModalExpenses = ({
         }
     }, [typeOfInstallment, setInstallments, setHasInstallments]);
 
-    const formFields = [
+    let formFields = [
         {
+            title: 'Geral',
             fields: [
                 {
                     id: 'expenseName',
@@ -108,18 +111,8 @@ const ModalExpenses = ({
             ],
         },
         {
+            title: 'Parcelamento',
             fields: [
-                {
-                    id: 'creditCard',
-                    label: 'Cartão de crédito',
-                    type: 'select',
-                    value: selectedCard,
-                    onChange: setSelectedCard,
-                    placeholder: 'Selecione um cartão',
-                    required: false,
-                    options: creditCards.map((creditCard) => ({ value: creditCard.id, label: creditCard.name })),
-                    size: 'half-width-large', // Define o tamanho do input
-                },
                 {
                     id: 'typeOfExpense',
                     label: 'Tipo de parcelamento',
@@ -189,10 +182,46 @@ const ModalExpenses = ({
                     size: 'half-width-large',
                     disabled: true,
                 },
-
             ],
         },
+        {
+            title: "Fatura",
+            fields: [
+                {
+                    id: "linkToInvoice",
+                    label: "Vincular a fatura?",
+                    type: 'toggle',
+                    value: linkToInvoice,
+                    onChange: (value) => setLinkToInvoice(value),
+                    required: false,
+                    size: 'half-width-small',
+                    disabled: false
+                }
+            ]
+        }
     ];
+
+    if (linkToInvoice) {
+        formFields.push(
+            {
+                fields: [
+                    {
+                        id: 'account',
+                        label: 'Conta bancária',
+                        type: 'select',
+                        value: selectedCard,
+                        onChange: setSelectedCard,
+                        placeholder: 'Selecione uma conta   ',
+                        required: true,
+                        options: creditCards
+                            .filter((account) => account.generateInvoice === true)
+                            .map((account) => ({ value: account.id, label: account.name })),
+                        size: 'half-width-middle-medium'
+                    }
+                ]
+            },
+        )
+    }
 
     return (
         <GenericModal
@@ -202,8 +231,7 @@ const ModalExpenses = ({
             onSubmit={handleAddExpense}
             onCancel={handleCancel}
             submitButtonText="Adicionar"
-            width="600px"
-            height="580px"
+            width="650px"
         />
     );
 };

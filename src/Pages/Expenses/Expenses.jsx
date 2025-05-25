@@ -61,7 +61,11 @@ const Expenses = () => {
         hasSourceAccountId,
         setBooleanSourceAccountId,
         idExpense,
-        setIdExpense
+        setIdExpense,
+        linkToInvoice,
+        setLinkToInvoice,
+        idInvoice,
+        setIdInvoice
     } = useExpenseHandler(formattedPeriod);
 
     return (
@@ -124,6 +128,8 @@ const Expenses = () => {
                     setBooleanSourceAccountId={setBooleanSourceAccountId}
                     idExpense={idExpense}
                     setIdExpense={setIdExpense}
+                    linkToInvoice={linkToInvoice}
+                    setLinkToInvoice={setLinkToInvoice}
                 />
             )}
         </div>

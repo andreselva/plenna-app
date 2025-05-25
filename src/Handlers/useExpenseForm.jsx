@@ -21,6 +21,8 @@ export const useExpenseForm = ({ addExpense, updateExpense, deleteExpense, categ
     const [hasSourceAccountId, setBooleanSourceAccountId] = useState(false);
     const [sourceAccountId, setSourceAccountId] = useState('');
     const [idExpense, setIdExpense] = useState(0);
+    const [linkToInvoice, setLinkToInvoice] = useState(false);
+    const [idInvoice, setIdInvoice] = useState('');
     const updateInstallments = false;
 
     const resetForm = () => {
@@ -35,6 +37,8 @@ export const useExpenseForm = ({ addExpense, updateExpense, deleteExpense, categ
         setHasInstallments(false);
         setBooleanSourceAccountId(false);
         setIsModalOpen(false);
+        setLinkToInvoice(false);
+        setIdInvoice('');
     };
 
     const handleAddExpense = () => {
@@ -52,7 +56,9 @@ export const useExpenseForm = ({ addExpense, updateExpense, deleteExpense, categ
             idCreditCard: selectedCard,
             installments: installments,
             typeOfInstallment: typeOfInstallment,
-            hasInstallments: hasInstallments
+            hasInstallments: hasInstallments,
+            linkToInvoice: linkToInvoice,
+            idInvoice: idInvoice
         });
 
         resetForm();
@@ -72,25 +78,27 @@ export const useExpenseForm = ({ addExpense, updateExpense, deleteExpense, categ
         setHasInstallments(expense.hasInstallments);
         setBooleanSourceAccountId(expense.sourceAccountId > 0);
         setSourceAccountId(expense.sourceAccountId);
+        setLinkToInvoice(expense.linkToInvoice);
+        setIdInvoice(expense.idInvoice);
         setIsModalOpen(true);
     };
- 
+
     const handleSaveExpense = async () => {
         if (!newExpense.trim()) {
             alert('O nome da despesa não pode ser vazio.');
             return;
         }
- 
+
         if (!validateDate(expenseInvoiceDueDate)) {
             SweetAlert.error("Data inválida!");
             return;
         }
- 
+
         if (!editingExpense) {
             handleAddExpense();
             return;
         }
- 
+
         const baseData = {
             name: newExpense,
             description: expenseDescription,
@@ -101,11 +109,13 @@ export const useExpenseForm = ({ addExpense, updateExpense, deleteExpense, categ
             installments: installments,
             typeOfInstallment: typeOfInstallment,
             hasInstallments: hasInstallments,
-            sourceAccountId: sourceAccountId
+            sourceAccountId: sourceAccountId,
+            linkToInvoice: linkToInvoice,
+            idInvoice: idInvoice
         };
- 
+
         let updateInstallmentsFlag = updateInstallments;
- 
+
         if (hasInstallments) {
             const result = await AlertConfirm({
                 title: 'Despesa parcelada',
@@ -114,15 +124,15 @@ export const useExpenseForm = ({ addExpense, updateExpense, deleteExpense, categ
                 confirmButtonText: 'Sim, alterar',
                 cancelButtonText: 'Não'
             });
- 
+
             updateInstallmentsFlag = result.isConfirmed;
         }
- 
+
         updateExpense(editingExpense.id, {
             ...baseData,
             updateInstallments: updateInstallmentsFlag
         });
- 
+
         resetForm();
     };
 
@@ -135,7 +145,7 @@ export const useExpenseForm = ({ addExpense, updateExpense, deleteExpense, categ
                 confirmButtonText: 'Sim, excluir',
                 cancelButtonText: 'Não'
             });
- 
+
             if (result.isConfirmed) {
                 deleteExpense(expense.id, true, expense.sourceAccountId);
             } else {
@@ -145,7 +155,7 @@ export const useExpenseForm = ({ addExpense, updateExpense, deleteExpense, categ
             deleteExpense(expense.id);
         }
     };
- 
+
     const handleAddCard = () => {
         setIsModalCardOpen(true);
     }
@@ -185,6 +195,10 @@ export const useExpenseForm = ({ addExpense, updateExpense, deleteExpense, categ
         hasSourceAccountId,
         setBooleanSourceAccountId,
         idExpense,
-        setIdExpense
+        setIdExpense,
+        linkToInvoice,
+        setLinkToInvoice,
+        idInvoice,
+        setIdInvoice
     };
 };

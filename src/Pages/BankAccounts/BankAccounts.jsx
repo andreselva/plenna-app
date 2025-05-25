@@ -5,7 +5,7 @@ import { BankAccountsTable } from "../../Tables/BankAccounts/BankAccountsTable.j
 import styles from './BankAccounts.module.css';
 
 export const BankAccounts = () => {
-    const { accounts, newAccount, setNewAccount, isModalOpen, setIsModalOpen, editingAccount, setEditingAccount, handleEditAccount, handleSaveAccount, handleDeleteAccount, generateInvoice, setGenerateInvoice } = useBankAccountHandler();
+    const { accounts, newAccount, setNewAccount, isModalOpen, setIsModalOpen, editingAccount, setEditingAccount, handleEditAccount, handleSaveAccount, handleDeleteAccount, generateInvoice, setGenerateInvoice, dueDate, setDueDate, closingDate, setClosingDate } = useBankAccountHandler();
 
     return (
         <div className={styles.BankAccounts} >
@@ -40,6 +40,10 @@ export const BankAccounts = () => {
                     editingAccount={editingAccount}
                     generateInvoice={generateInvoice}
                     setGerenateInvoice={setGenerateInvoice}
+                    dueDate={dueDate}
+                    setDueDate={setDueDate}
+                    closingDate={closingDate}
+                    setClosingDate={setClosingDate}
                 />
             )
             }
