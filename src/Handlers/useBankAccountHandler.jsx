@@ -6,6 +6,7 @@ export const useBankAccountHandler = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingAccount, setEditingAccount] = useState(null);
     const [newAccount, setNewAccount] = useState('');
+    const [generateInvoice, setGenerateInvoice] = useState(false);
 
     const handleAddAccount = () => {
         if (!newAccount.trim()) {
@@ -15,6 +16,7 @@ export const useBankAccountHandler = () => {
 
         addBankAccount({
             name: newAccount,
+            generateInvoice: generateInvoice
         });
 
         setNewAccount('');
@@ -24,6 +26,7 @@ export const useBankAccountHandler = () => {
     const handleEditAccount = (account) => {
         setEditingAccount(account);
         setNewAccount(account.name);
+        setGenerateInvoice(account.generateInvoice);
         setIsModalOpen(true);
     };
 
@@ -36,6 +39,7 @@ export const useBankAccountHandler = () => {
         if (editingAccount) {
             updateBankAccount(editingAccount.id, {
                 name: newAccount,
+                generateInvoice: generateInvoice
             });
         } else {
             handleAddAccount();
@@ -57,6 +61,8 @@ export const useBankAccountHandler = () => {
         isModalOpen,
         setIsModalOpen,
         editingAccount,
+        generateInvoice,
+        setGenerateInvoice,
         setEditingAccount,
         handleEditAccount,
         handleDeleteAccount,

@@ -139,6 +139,14 @@ textarea {
     min-width: 100px; /* Garante um tamanho mínimo para inputs menores */
 }
 
+.modal-section-title {
+  margin-top: 20px;
+  margin-bottom: 15px;
+  font-size: 1.1em;
+  color: #333;
+  padding-bottom: 5px;
+}
+
 /* Animações */
 @keyframes fadeIn {
     from {
