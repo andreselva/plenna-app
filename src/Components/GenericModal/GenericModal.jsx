@@ -30,7 +30,6 @@ const GenericModal = ({
                 >
                     {formFields.map((group, groupIndex) => (
                         <div key={groupIndex}>
-                            {/* LINHA ADICIONADA: Renderiza o título da seção se ele existir */}
                             {group.title && <h3 className="modal-section-title">{group.title}</h3>}
 
                             <div className="form-group-row">
