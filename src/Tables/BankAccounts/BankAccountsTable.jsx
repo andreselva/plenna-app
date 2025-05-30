@@ -16,7 +16,14 @@ export const BankAccountsTable = ({ accounts, onEdit, onDelete, generateInvoices
         {
             header: 'Conta',
             accessor: 'name',
-            style: { flex: '3 1 0%' }
+            style: { flex: '2 1 0%' }
+        },
+        {
+            header: 'Gera fatura',
+            style: { flex: '2 1 0%' },
+            renderCell: (account) => {
+                return account.generateInvoice ? 'Sim' : 'Não'
+            }
         },
         {
             header: 'Ações',
