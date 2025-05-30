@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useBankAccounts } from '../Hooks/BankAccountsManager/useBankAccounts';
 
 export const useBankAccountHandler = () => {
-    const { accounts, addBankAccount, updateBankAccount, deleteBankAccount } = useBankAccounts();
+    const { accounts, addBankAccount, updateBankAccount, deleteBankAccount, generateInvoices } = useBankAccounts();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingAccount, setEditingAccount] = useState(null);
     const [newAccount, setNewAccount] = useState('');
@@ -62,6 +62,10 @@ export const useBankAccountHandler = () => {
         deleteBankAccount(id);
     };
 
+    const handleGenerateInvoices = (infosAccount) => {
+        generateInvoices(infosAccount)
+    }
+
     return {
         accounts,
         newAccount,
@@ -73,6 +77,7 @@ export const useBankAccountHandler = () => {
         handleEditAccount,
         handleDeleteAccount,
         handleSaveAccount,
+        handleGenerateInvoices,
         generateInvoice,
         setGenerateInvoice,
         dueDate,

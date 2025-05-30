@@ -68,6 +68,21 @@ export const useBankAccounts = () => {
         }
     };
 
+    const generateInvoices = async (infosAccount) => {
+        setLoading(true);
+
+        try {
+            const { data } = await axiosInstance.post(`${apiUrl}/invoices`, infosAccount);
+            if (data.response.ok) {
+                alert('Faturas geradas com sucesso!');
+            }
+        } catch (err) {
+            setError(err?.response?.data?.message || "Erro  ao gerar faturas");
+        } finally {
+            setLoading(false);
+        }
+    }
+
     return {
         accounts,
         loading,
@@ -75,5 +90,6 @@ export const useBankAccounts = () => {
         addBankAccount,
         deleteBankAccount,
         updateBankAccount,
+        generateInvoices
     };
 };
