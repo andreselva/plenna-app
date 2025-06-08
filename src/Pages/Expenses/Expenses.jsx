@@ -65,7 +65,7 @@ const Expenses = () => {
         linkToInvoice,
         setLinkToInvoice,
         idInvoice,
-        setIdInvoice
+        setIdInvoice,
     } = useExpenseHandler(formattedPeriod);
 
     return (
@@ -130,6 +130,8 @@ const Expenses = () => {
                     setIdExpense={setIdExpense}
                     linkToInvoice={linkToInvoice}
                     setLinkToInvoice={setLinkToInvoice}
+                    idInvoice={idInvoice}
+                    setIdInvoice={setIdInvoice}
                 />
             )}
         </div>

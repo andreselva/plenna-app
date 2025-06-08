@@ -6,7 +6,6 @@ import { useBankAccounts } from '../Hooks/BankAccountsManager/useBankAccounts';
 import { useExpenseForm } from './useExpenseForm';
 
 export const useExpenseHandler = (periodo) => {
-    // const { expenses } = useExpense
     const { expenses, addExpense, deleteExpense, updateExpense } = useExpenseManager(periodo);
     const { categories } = CategoryManager();
     const { accounts } = useBankAccounts();
@@ -16,7 +15,7 @@ export const useExpenseHandler = (periodo) => {
         updateExpense,
         deleteExpense,
         categories,
-        accounts
+        accounts,
     });
 
     return {

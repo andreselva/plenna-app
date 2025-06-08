@@ -1,11 +1,15 @@
 import { BotaoGlobal } from "../../Components/Buttons/ButtonGlobal.tsx";
 import { useBankAccountHandler } from "../../Handlers/useBankAccountHandler.jsx";
+import { useInvoiceHandler } from "../../Handlers/useInvoiceHandler.jsx";
 import { ModalBankAccounts } from "../../Modals/ModalBankAccounts/ModalBankAccounts.jsx";
 import { BankAccountsTable } from "../../Tables/BankAccounts/BankAccountsTable.jsx";
 import styles from './BankAccounts.module.css';
 
 export const BankAccounts = () => {
-    const { accounts, newAccount, setNewAccount, isModalOpen, setIsModalOpen, editingAccount, setEditingAccount, handleEditAccount, handleSaveAccount, handleDeleteAccount, generateInvoice, setGenerateInvoice, dueDate, setDueDate, closingDate, setClosingDate, handleGenerateInvoices } = useBankAccountHandler();
+    const { accounts, newAccount, setNewAccount, isModalOpen, setIsModalOpen, editingAccount, setEditingAccount, handleEditAccount, handleSaveAccount, handleDeleteAccount, generateInvoice, setGenerateInvoice, dueDate, setDueDate, closingDate, setClosingDate } = useBankAccountHandler();
+
+    //Chama a handler para gerar as faturas
+    const { handleGenerateInvoices } = useInvoiceHandler();
 
     return (
         <div className={styles.BankAccounts} >

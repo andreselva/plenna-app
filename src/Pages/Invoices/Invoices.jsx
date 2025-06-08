@@ -100,6 +100,10 @@ const Invoices = () => {
                     setBooleanSourceAccountId={fnExpenses.setBooleanSourceAccountId}
                     idExpense={fnExpenses.idExpense}
                     setIdExpense={fnExpenses.setIdExpense}
+                    idInvoice={fnExpenses.idInvoice}
+                    setIdInvoice={fnExpenses.setIdInvoice}
+                    linkToInvoice={fnExpenses.linkToInvoice}
+                    setLinkToInvoice={fnExpenses.setLinkToInvoice}
                 />
             )}
         </div>

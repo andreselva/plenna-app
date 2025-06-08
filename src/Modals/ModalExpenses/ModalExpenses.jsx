@@ -1,7 +1,8 @@
 import { HelpCircle } from 'lucide-react';
 import GenericModal from '../../Components/GenericModal/GenericModal';
 import Tooltip from '../../Components/Tooltip/Tooltip';
-import { useEffect } from 'react';
+import { useEffect, useState, useCallback } from 'react';
+import { useInvoiceHandler } from '../../Handlers/useInvoiceHandler';
 
 const ModalExpenses = ({
     idExpense,
@@ -24,13 +25,14 @@ const ModalExpenses = ({
     setInstallments,
     typeOfInstallment,
     setTypeOfInstallment,
-    hasInstallments,
     setHasInstallments,
     hasSourceAccountId,
     setBooleanSourceAccountId,
     setIdExpense,
     linkToInvoice,
-    setLinkToInvoice
+    setLinkToInvoice,
+    idInvoice,
+    setIdInvoice,
 }) => {
     const handleCancel = () => {
         setNewExpense('');
@@ -44,6 +46,9 @@ const ModalExpenses = ({
         setTypeOfInstallment('U');
         setBooleanSourceAccountId(false);
         setIdExpense(0);
+        setLinkToInvoice(false);
+        setIdInvoice('');
+        setInvoices([]);
     };
 
     useEffect(() => {
@@ -58,6 +63,47 @@ const ModalExpenses = ({
         }
     }, [typeOfInstallment, setInstallments, setHasInstallments]);
 
+    const { handleSearchRelatedInvoices } = useInvoiceHandler();
+    const [invoices, setInvoices] = useState([]);
+
+    const searchForRelatedInvoices = useCallback(async (idBankAccount) => {
+        if (!idBankAccount) {
+            setInvoices([]);
+            return;
+        }
+        try {
+            const fetchedInvoices = await handleSearchRelatedInvoices(idBankAccount);
+            setInvoices(fetchedInvoices || []);
+        } catch (error) {
+            console.error("Erro ao buscar faturas relacionadas:", error);
+            setInvoices([]);
+        }
+    }, [handleSearchRelatedInvoices]);
+
+    const onSelectedCardChange = (newCardId) => {
+        setSelectedCard(newCardId);
+        setIdInvoice('');
+        if (linkToInvoice && newCardId) {
+            searchForRelatedInvoices(newCardId);
+        } else {
+            setInvoices([]);
+        }
+    };
+
+    useEffect(() => {
+        if (linkToInvoice) {
+            if (selectedCard) {
+                searchForRelatedInvoices(selectedCard);
+            } else {
+                setInvoices([]);
+            }
+        } else {
+            setInvoices([]);
+            setIdInvoice('');
+        }
+    }, [linkToInvoice, selectedCard, searchForRelatedInvoices, setIdInvoice]);
+
+
     let formFields = [
         {
             title: 'Geral',
@@ -70,7 +116,7 @@ const ModalExpenses = ({
                     onChange: setNewExpense,
                     placeholder: 'Ex: Luz, Internet...',
                     required: true,
-                    size: 'half-width-large', // Define o tamanho do input
+                    size: 'half-width-large',
                 },
                 {
                     id: 'invoiceDueDate',
@@ -79,7 +125,7 @@ const ModalExpenses = ({
                     value: expenseInvoiceDueDate,
                     onChange: setExpenseInvoiceDueDate,
                     required: true,
-                    size: 'half-width-medium', // Define o tamanho do input
+                    size: 'half-width-medium',
                 },
             ],
         },
@@ -93,7 +139,7 @@ const ModalExpenses = ({
                     onChange: setExpenseValue,
                     placeholder: '0,00',
                     required: true,
-                    size: 'half-width-middle-medium', // Define o tamanho do input
+                    size: 'half-width-middle-medium',
                 },
                 {
                     id: 'category',
@@ -106,7 +152,7 @@ const ModalExpenses = ({
                     options: categories
                         .filter((category) => category.type.toUpperCase() === 'DESPESA')
                         .map((category) => ({ value: category.id, label: category.name })),
-                    size: 'half-width-large', // Define o tamanho do input
+                    size: 'half-width-large',
                 },
             ],
         },
@@ -126,7 +172,6 @@ const ModalExpenses = ({
                         { value: 'F', label: 'Fixa' }
                     ],
                     size: 'half-width-large',
-                    //Se possui um id de conta vinculado, o tipo de parcelamento não pode ser alterado.
                     disabled: hasSourceAccountId || idExpense > 0
                 },
                 {
@@ -138,7 +183,6 @@ const ModalExpenses = ({
                     placeholder: 0,
                     required: typeOfInstallment === 'P',
                     size: 'half-width-small',
-                    //Se possui um id de conta vinculado, não pode ter sua quantidade de parcelas alteradas.
                     disabled: typeOfInstallment !== 'P' || hasSourceAccountId || idExpense > 0
                 },
             ],
@@ -157,8 +201,7 @@ const ModalExpenses = ({
                     ),
                     type: 'toggle',
                     value: typeOfInstallment === 'F' || (typeOfInstallment === 'P' && parseInt(installments) > 0),
-                    onChange: () => {
-                    },
+                    onChange: () => { },
                     required: false,
                     size: 'half-width-medium',
                     disabled: true,
@@ -176,8 +219,7 @@ const ModalExpenses = ({
                     ),
                     type: 'toggle',
                     value: hasSourceAccountId,
-                    onChange: () => {
-                    },
+                    onChange: () => { },
                     required: false,
                     size: 'half-width-large',
                     disabled: true,
@@ -202,25 +244,38 @@ const ModalExpenses = ({
     ];
 
     if (linkToInvoice) {
-        formFields.push(
-            {
-                fields: [
-                    {
-                        id: 'account',
-                        label: 'Conta bancária',
-                        type: 'select',
-                        value: selectedCard,
-                        onChange: setSelectedCard,
-                        placeholder: 'Selecione uma conta   ',
-                        required: true,
-                        options: creditCards
-                            .filter((account) => account.generateInvoice === true)
-                            .map((account) => ({ value: account.id, label: account.name })),
-                        size: 'half-width-middle-medium'
-                    }
-                ]
-            },
-        )
+        formFields.push({
+            fields: [
+                {
+                    id: 'account',
+                    label: 'Conta bancária (Cartão)',
+                    type: 'select',
+                    value: selectedCard,
+                    onChange: onSelectedCardChange,
+                    placeholder: 'Selecione um cartão',
+                    required: true,
+                    options: creditCards
+                        .filter((account) => account.generateInvoice === true)
+                        .map((account) => ({ value: account.id, label: account.name })),
+                    size: 'half-width-middle-medium'
+                },
+                {
+                    id: 'invoices',
+                    label: 'Faturas em aberto',
+                    type: 'select',
+                    value: idInvoice,
+                    onChange: setIdInvoice,
+                    placeholder: !selectedCard ? 'Selecione um cartão primeiro' : (invoices.length === 0 ? 'Nenhuma fatura encontrada' : 'Selecione a fatura'),
+                    required: true,
+                    options: invoices.map((invoice) => ({
+                        value: invoice.id,
+                        label: invoice.name
+                    })),
+                    disabled: !selectedCard || invoices.length === 0,
+                    size: 'half-width-large'
+                }
+            ]
+        });
     }
 
     return (

@@ -62,10 +62,6 @@ export const useBankAccountHandler = () => {
         deleteBankAccount(id);
     };
 
-    const handleGenerateInvoices = (infosAccount) => {
-        generateInvoices(infosAccount)
-    }
-
     return {
         accounts,
         newAccount,
@@ -77,7 +73,6 @@ export const useBankAccountHandler = () => {
         handleEditAccount,
         handleDeleteAccount,
         handleSaveAccount,
-        handleGenerateInvoices,
         generateInvoice,
         setGenerateInvoice,
         dueDate,

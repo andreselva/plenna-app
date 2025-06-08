@@ -44,7 +44,13 @@ export const BankAccountsTable = ({ accounts, onEdit, onDelete, generateInvoices
                 if (account.generateInvoice) {
                     accountActions.push({
                         label: 'Gerar faturas',
-                        handler: () => generateInvoices([{ idAccount: account.id, dueDate: account.dueDate, closingDate: account.closingDate }]
+                        handler: () => generateInvoices(
+                            {
+                                nameAccount: account.name,
+                                idAccount: account.id,
+                                dueDate: account.dueDate,
+                                closingDate: account.closingDate
+                            }
                         )
                     })
                 }
