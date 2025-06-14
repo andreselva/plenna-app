@@ -98,6 +98,16 @@ const ModalExpenses = ({
         }
     }, [linkToInvoice, selectedCard, searchForRelatedInvoices, setIdInvoice]);
 
+    useEffect(() => {
+        if (idInvoice) {
+            const selectedInvoice = invoices.find(invoice => Number(invoice.id) === Number(idInvoice));
+
+            if (selectedInvoice) {
+                setExpenseInvoiceDueDate(selectedInvoice.dueDate);
+            }
+        }
+    }, [idInvoice, invoices, setExpenseInvoiceDueDate]);
+
 
     let formFields = [
         {
@@ -256,11 +266,11 @@ const ModalExpenses = ({
                 },
                 {
                     id: 'invoices',
-                    label: 'Faturas em aberto',
+                    label: 'Fatura',
                     type: 'select',
                     value: idInvoice,
                     onChange: setIdInvoice,
-                    placeholder: !selectedCard ? 'Selecione um cartão primeiro' : (invoices.length === 0 ? 'Nenhuma fatura encontrada' : 'Selecione a fatura'),
+                    placeholder: !selectedCard ? 'Selecione uma cartão' : (invoices.length === 0 ? 'Nenhuma fatura encontrada' : 'Selecione a fatura'),
                     required: true,
                     options: invoices.map((invoice) => ({
                         value: invoice.id,
