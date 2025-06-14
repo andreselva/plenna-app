@@ -12,10 +12,7 @@ export const useRelatedInvoices = () => {
         setLoading(true);
         setError(null);
         try {
-            const { data } = await axiosInstance.get("/invoices/related", {
-                params: { idBankAccount: idBankAccount } 
-            });
-
+            const { data } = await axiosInstance.get(`/invoices/related/${idBankAccount}`);
             if (data && Array.isArray(data.invoices)) {
                 setLoading(false);
                 return data.invoices;

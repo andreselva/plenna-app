@@ -83,11 +83,6 @@ const ModalExpenses = ({
     const onSelectedCardChange = (newCardId) => {
         setSelectedCard(newCardId);
         setIdInvoice('');
-        if (linkToInvoice && newCardId) {
-            searchForRelatedInvoices(newCardId);
-        } else {
-            setInvoices([]);
-        }
     };
 
     useEffect(() => {
