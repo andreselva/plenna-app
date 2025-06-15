@@ -51,6 +51,9 @@ const ModalExpenses = ({
         setInvoices([]);
     };
 
+    const { handleSearchRelatedInvoices } = useInvoiceHandler();
+    const [invoices, setInvoices] = useState([]);
+
     useEffect(() => {
         if (typeOfInstallment === 'F') {
             setInstallments('');
@@ -63,8 +66,6 @@ const ModalExpenses = ({
         }
     }, [typeOfInstallment, setInstallments, setHasInstallments]);
 
-    const { handleSearchRelatedInvoices } = useInvoiceHandler();
-    const [invoices, setInvoices] = useState([]);
 
     const searchForRelatedInvoices = useCallback(async (idBankAccount) => {
         if (!idBankAccount) {
@@ -107,7 +108,6 @@ const ModalExpenses = ({
             }
         }
     }, [idInvoice, invoices, setExpenseInvoiceDueDate]);
-
 
     let formFields = [
         {
