@@ -28,6 +28,22 @@ const InvoiceTable = ({ invoices, onEdit, onDelete, setIsModalOpen }) => {
         });
     };
 
+    const defineStatus = (status) => {
+        const possibleStatus = ['pending', 'paid', 'partial'];
+        if (possibleStatus.includes(status)) {
+            switch (status) {
+                case 'partial':
+                    return 'Pagamento parcial'
+                case 'paid':
+                    return 'Paga'
+                default:
+                    return 'Pendente'
+            }
+        }
+
+        return 'Pendente*';
+    }
+
     return (
         <div className={globalStyles.flexibleTable}>
             {/* Corpo da Tabela */}
@@ -36,17 +52,17 @@ const InvoiceTable = ({ invoices, onEdit, onDelete, setIsModalOpen }) => {
                     invoices.map((invoice) => (
                         <React.Fragment key={invoice.id}>
                             {/* Linha Clicável */}
-                            <div style={{padding: '25px 0 25px 0'}} className={globalStyles.tableRow} onClick={() => toggleInvoice(invoice.id)}>
+                            <div style={{ padding: '25px 0 25px 0' }} className={globalStyles.tableRow} onClick={() => toggleInvoice(invoice.id)}>
                                 <div style={{ flex: '2 1 0%', fontWeight: 400 }}>{invoice.name}</div>
-                                <div style={{ flex: '2 1 0%', fontWeight: 400 }}>Vencimento: {invoice.invoiceDueDate.split('-').reverse().join('/')}</div>
+                                <div style={{ flex: '2 1 0%', fontWeight: 400 }}>Vencimento: {invoice.dueDate.split('-').reverse().join('/')}</div>
                                 <div style={{ flex: '2 1 0%', fontWeight: 400 }}>Fechamento: {invoice.closingDate.split('-').reverse().join('/')}</div>
-                                <div style={{ flex: '1 1 0%', fontWeight: 400 }}>Total: {invoice.value}</div>
+                                <div style={{ flex: '1 1 0%', fontWeight: 400 }}>Total (R$): {invoice.value}</div>
                                 <div style={{ flex: '2 1 0%' }}>
                                     <span className={globalStyles.statusBadge} style={{
                                         backgroundColor: invoice.status.toUpperCase() === 'PAGA' ? "rgba(0, 255, 0, 0.2)" : "rgba(255, 0, 0, 0.2)",
                                         fontWeight: 400
                                     }}>
-                                        Status: {invoice.status}
+                                        Status: {defineStatus(invoice.status)}
                                     </span>
                                 </div>
                                 <div style={{ flex: '1 0 0%' }}>
@@ -88,7 +104,7 @@ const InvoiceTable = ({ invoices, onEdit, onDelete, setIsModalOpen }) => {
                                                         <tr key={expense.id}>
                                                             <td>{expense.name}</td>
                                                             <td>{expense.value}</td>
-                                                            <td>{expense.dueDate.split('-').reverse().join('/')}</td>
+                                                            <td>{expense.invoiceDueDate.split('-').reverse().join('/')}</td>
                                                             <td>
                                                                 <div className={globalStyles.actions} style={{ display: 'flex' }}>
                                                                     <button onClick={() => { onEdit(expense) }}>
