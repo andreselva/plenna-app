@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import globalStyles from '../../Styles/GlobalStyles.module.css';
 import ExpandableRow from '../../Components/ExpansableRow/ExpansableRow';
 import DeleteConfirmation from '../../Hooks/DeleteConfirmation/DeleteConfirmation';
-import { PencilLine, Trash2Icon } from 'lucide-react';
+import { PencilLine, TableOfContentsIcon, Trash2Icon } from 'lucide-react';
+import { ActionDropdown } from '../../Components/ActionDropdown/ActionDropdown';
 
 const InvoiceTable = ({ invoices, onEdit, onDelete, setIsModalOpen }) => {
     const handleDelete = DeleteConfirmation(onDelete, {
@@ -10,8 +11,8 @@ const InvoiceTable = ({ invoices, onEdit, onDelete, setIsModalOpen }) => {
         confirmText: 'A exclusão é definitiva!',
         confirmButtonText: 'Excluir',
         cancelButtonText: 'Manter',
-        successMessage: 'Categoria excluída!',
-        errorMessage: 'Falha ao remover categoria!'
+        successMessage: 'Despesa excluída!',
+        errorMessage: 'Erro ao excluir despesa!'
     });
 
     const [expandedInvoiceIds, setExpandedInvoiceIds] = useState(new Set());
@@ -40,7 +41,6 @@ const InvoiceTable = ({ invoices, onEdit, onDelete, setIsModalOpen }) => {
                     return 'Pendente'
             }
         }
-
         return 'Pendente*';
     }
 
@@ -59,29 +59,25 @@ const InvoiceTable = ({ invoices, onEdit, onDelete, setIsModalOpen }) => {
                                 <div style={{ flex: '1 1 0%', fontWeight: 400 }}>Total (R$): {invoice.value}</div>
                                 <div style={{ flex: '2 1 0%' }}>
                                     <span className={globalStyles.statusBadge} style={{
-                                        backgroundColor: invoice.status.toUpperCase() === 'PAGA' ? "rgba(0, 255, 0, 0.2)" : "rgba(255, 0, 0, 0.2)",
+                                        backgroundColor: invoice.status.toUpperCase() === 'PAID' ? "rgba(0, 255, 0, 0.2)" : "rgba(255, 0, 0, 0.2)",
                                         fontWeight: 400
                                     }}>
                                         Status: {defineStatus(invoice.status)}
                                     </span>
                                 </div>
-                                <div style={{ flex: '1 0 0%' }}>
-                                    {invoice.status.toUpperCase() !== 'PAGA' ? (
-                                        <div className={globalStyles.actions} >
-                                            <button onClick={(e) => { e.stopPropagation(); setIsModalOpen(true) }}>
-                                                Incluir despesa
-                                            </button>
-                                        </div>
-                                    ) : (
-                                        <div className={globalStyles.disabled} >
-                                            <button
-                                                onClick={(e) => e.stopPropagation()}
-                                                disabled={true}
-                                            >
-                                                Incluir despesa
-                                            </button>
-                                        </div>
-                                    )}
+                                <div style={{ flex: '1 0 0%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                                    <ActionDropdown
+                                        buttonLabel={<TableOfContentsIcon width='18px' height='18px' />}
+                                        actions={[
+                                            {
+                                                label: 'Incluir despesa',
+                                                handler: () => {
+                                                    setIsModalOpen(true);
+                                                },
+                                                disabled: invoice.status.toUpperCase() === 'PAID'
+                                            },
+                                        ]}
+                                    />
                                 </div>
                             </div>
 
@@ -107,10 +103,10 @@ const InvoiceTable = ({ invoices, onEdit, onDelete, setIsModalOpen }) => {
                                                             <td>{expense.invoiceDueDate.split('-').reverse().join('/')}</td>
                                                             <td>
                                                                 <div className={globalStyles.actions} style={{ display: 'flex' }}>
-                                                                    <button onClick={() => { onEdit(expense) }}>
+                                                                    <button onClick={() => { onEdit(expense) }} disabled={invoice.status.toUpperCase() === 'PAID'}>
                                                                         <PencilLine width='15px' height='15px' />
                                                                     </button>
-                                                                    <button onClick={() => { handleDelete(expense.id) }}>
+                                                                    <button onClick={() => { handleDelete(expense) }} disabled={invoice.status.toUpperCase() === 'PAID'}>
                                                                         <Trash2Icon width='15px' height='15px' />
                                                                     </button>
                                                                 </div>

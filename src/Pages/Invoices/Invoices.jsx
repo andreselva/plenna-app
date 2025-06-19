@@ -5,10 +5,9 @@ import { CustomDatePicker } from '../../Components/DatePicker/DatePicker';
 import { getFormattedDateRange, getStartAndEndOfMonth } from '../../Utils/DateUtils';
 import { useInvoiceHandler } from '../../Handlers/useInvoiceHandler';
 import ModalExpenses from '../../Modals/ModalExpenses/ModalExpenses';
-import { useExpenseForm } from '../../Handlers/useExpenseForm';
 import { useBankAccounts } from '../../Hooks/BankAccountsManager/useBankAccounts';
 import { CategoryManager } from '../../Hooks/CategoryManager/CategoryManager';
-import { ExpenseAPI } from '../../Hooks/ExpenseManager/ExpenseAPI';
+import { useExpenseHandler } from '../../Handlers/useExpenseHandler';
 
 const Invoices = () => {
     const [formattedPeriod, setFormattedPeriod] = useState(() => getStartAndEndOfMonth());
@@ -41,14 +40,7 @@ const Invoices = () => {
         invoices,
     } = useInvoiceHandler(formattedPeriod);
 
-    const fnExpenses = useExpenseForm({
-        addExpense: (expenseData) => ExpenseAPI.addExpense(expenseData, formattedPeriod),
-        updateExpense: (expenseData) => ExpenseAPI.updateExpense(expenseData, formattedPeriod),
-        deleteExpense: (id, deleteInstallments = false, sourceAccountId = 0) =>
-            ExpenseAPI.deleteExpense(id, formattedPeriod, deleteInstallments, sourceAccountId),
-        categories,
-        accounts
-    })
+    const fnExpenses = useExpenseHandler(formattedPeriod);
 
     return (
         <div className={styles.Invoices}>
@@ -76,7 +68,7 @@ const Invoices = () => {
             {fnExpenses.isModalOpen && (
                 <ModalExpenses
                     setIsModalOpen={fnExpenses.setIsModalOpen}
-                    handleAddExpense={fnExpenses.handleAddExpense}
+                    handleAddExpense={fnExpenses.handleSaveExpense}
                     newExpense={fnExpenses.newExpense}
                     setNewExpense={fnExpenses.setNewExpense}
                     expenseValue={fnExpenses.expenseValue}
