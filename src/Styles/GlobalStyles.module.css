@@ -142,7 +142,7 @@
 .flexibleTable {
     display: flex;
     flex-direction: column;
-    height: 60vh;
+    height: 63.5vh;
     border-radius: 8px;
     padding: 10px;
     overflow: hidden;

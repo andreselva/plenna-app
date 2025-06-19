@@ -128,7 +128,7 @@ const Dashboard = () => {
                                     {contasVencimentoProximo.map((conta, index) => (
                                         <tr key={index}>
                                             <td>{conta.nome}</td>
-                                            <td>{conta.vencimento}</td>
+                                            <td>{conta.vencimento.split('-').reverse().join('/')}</td>
                                             <td>{conta.valor}</td>
                                         </tr>
                                     ))}

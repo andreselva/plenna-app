@@ -48,7 +48,7 @@ const InvoiceTable = ({ invoices, onEdit, onDelete, setIsModalOpen }) => {
         <div className={globalStyles.flexibleTable}>
             {/* Corpo da Tabela */}
             <div className={globalStyles.tableBody}>
-                {invoices && invoices.length > 0 ? (
+                {invoices && invoices.length > 0 ? (    
                     invoices.map((invoice) => (
                         <React.Fragment key={invoice.id}>
                             {/* Linha Clicável */}
