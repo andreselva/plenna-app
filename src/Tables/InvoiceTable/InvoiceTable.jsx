@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import globalStyles from '../../Styles/GlobalStyles.module.css';
 import ExpandableRow from '../../Components/ExpansableRow/ExpansableRow';
 import DeleteConfirmation from '../../Hooks/DeleteConfirmation/DeleteConfirmation';
-import { PencilLine, TableOfContentsIcon, Trash2Icon } from 'lucide-react';
+import { PencilLine, Trash2Icon } from 'lucide-react';
 import { ActionDropdown } from '../../Components/ActionDropdown/ActionDropdown';
 
 const InvoiceTable = ({ invoices, onEdit, onDelete, setIsModalOpen }) => {
@@ -67,7 +67,6 @@ const InvoiceTable = ({ invoices, onEdit, onDelete, setIsModalOpen }) => {
                                 </div>
                                 <div style={{ flex: '1 0 0%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                                     <ActionDropdown
-                                        buttonLabel={<TableOfContentsIcon width='18px' height='18px' />}
                                         actions={[
                                             {
                                                 label: 'Incluir despesa',
