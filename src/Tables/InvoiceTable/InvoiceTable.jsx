@@ -5,7 +5,7 @@ import DeleteConfirmation from '../../Hooks/DeleteConfirmation/DeleteConfirmatio
 import { PencilLine, Trash2Icon } from 'lucide-react';
 import { ActionDropdown } from '../../Components/ActionDropdown/ActionDropdown';
 
-const InvoiceTable = ({ invoices, onEdit, onDelete, setIsModalOpen }) => {
+const InvoiceTable = ({ invoices, onEdit, onDelete, setIsModalOpen, onOpenPaymentModal }) => {
     const handleDelete = DeleteConfirmation(onDelete, {
         confirmTitle: 'Deseja realmente excluir?',
         confirmText: 'A exclusão é definitiva!',
@@ -30,10 +30,10 @@ const InvoiceTable = ({ invoices, onEdit, onDelete, setIsModalOpen }) => {
     };
 
     const defineStatus = (status) => {
-        const possibleStatus = ['pending', 'paid', 'partial'];
+        const possibleStatus = ['pending', 'paid', 'parcial'];
         if (possibleStatus.includes(status)) {
             switch (status) {
-                case 'partial':
+                case 'parcial':
                     return 'Pagamento parcial'
                 case 'paid':
                     return 'Paga'
@@ -48,7 +48,7 @@ const InvoiceTable = ({ invoices, onEdit, onDelete, setIsModalOpen }) => {
         <div className={globalStyles.flexibleTable}>
             {/* Corpo da Tabela */}
             <div className={globalStyles.tableBody}>
-                {invoices && invoices.length > 0 ? (    
+                {invoices && invoices.length > 0 ? (
                     invoices.map((invoice) => (
                         <React.Fragment key={invoice.id}>
                             {/* Linha Clicável */}
@@ -75,6 +75,13 @@ const InvoiceTable = ({ invoices, onEdit, onDelete, setIsModalOpen }) => {
                                                 },
                                                 disabled: invoice.status.toUpperCase() === 'PAID'
                                             },
+                                            {
+                                                label: 'Pagar fatura',
+                                                handler: () => {
+                                                    onOpenPaymentModal(invoice);
+                                                },
+                                                disabled: invoice.status.toUpperCase() === 'PAID'
+                                            }
                                         ]}
                                     />
                                 </div>

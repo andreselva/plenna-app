@@ -22,7 +22,6 @@ const ModalRevenues = ({
                            setTypeOfInstallment,
                            installments,
                            setInstallments,
-                           hasInstallments,
                            setHasInstallments,
                            hasSourceAccountId,
                            setBooleanSourceAccountId

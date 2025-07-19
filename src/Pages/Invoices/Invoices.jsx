@@ -8,8 +8,15 @@ import ModalExpenses from '../../Modals/ModalExpenses/ModalExpenses';
 import { useBankAccounts } from '../../Hooks/BankAccountsManager/useBankAccounts';
 import { CategoryManager } from '../../Hooks/CategoryManager/CategoryManager';
 import { useExpenseHandler } from '../../Handlers/useExpenseHandler';
+import { PaymentInvoiceModal } from '../../Modals/PaymentModal/PaymentInvoiceModal';
 
 const Invoices = () => {
+    const [selectedInvoice, setSelectedInvoice] = useState(null);
+    const handleOpenPaymentModal = (invoice) => {
+        setSelectedInvoice(invoice);
+        setPaymentModalOpen(true);
+    };
+
     const [formattedPeriod, setFormattedPeriod] = useState(() => getStartAndEndOfMonth());
     const { categories } = CategoryManager();
     const { accounts } = useBankAccounts();
@@ -38,6 +45,13 @@ const Invoices = () => {
 
     const {
         invoices,
+        isPaymentModalOpen,
+        setPaymentModalOpen,
+        handlePayment,
+        amountValue,
+        setAmountValue,
+        paymentDate,
+        setPaymentDate
     } = useInvoiceHandler(formattedPeriod);
 
     const fnExpenses = useExpenseHandler(formattedPeriod);
@@ -61,6 +75,7 @@ const Invoices = () => {
                         onEdit={fnExpenses.handleEditExpense}
                         onDelete={fnExpenses.handleDeleteExpense}
                         setIsModalOpen={fnExpenses.setIsModalOpen}
+                        onOpenPaymentModal={handleOpenPaymentModal}
                     />
                 </div>
             </div>
@@ -96,6 +111,18 @@ const Invoices = () => {
                     setIdInvoice={fnExpenses.setIdInvoice}
                     linkToInvoice={fnExpenses.linkToInvoice}
                     setLinkToInvoice={fnExpenses.setLinkToInvoice}
+                />
+            )}
+
+            {isPaymentModalOpen && (
+                <PaymentInvoiceModal
+                    invoice={selectedInvoice}
+                    setIsModalPaymentOpen={setPaymentModalOpen}
+                    handlePayment={handlePayment}
+                    amountValue={amountValue}
+                    setAmountValue={setAmountValue}
+                    paymentDate={paymentDate}
+                    setPaymentDate={setPaymentDate}
                 />
             )}
         </div>
