@@ -55,8 +55,8 @@ const InvoiceTable = ({ invoices, onEdit, onDelete, setIsModalOpen, onOpenPaymen
                                 <div style={{ flex: '1 1 0%', fontWeight: 400 }}>{invoice.name}</div>
                                 <div style={{ flex: '2 1 0%', fontWeight: 400 }}>Vencimento: {invoice.dueDate.split('-').reverse().join('/')}</div>
                                 <div style={{ flex: '2 1 0%', fontWeight: 400 }}>Fechamento: {invoice.closingDate.split('-').reverse().join('/')}</div>
-                                <div style={{ flex: '1 1 0%', fontWeight: 400 }}>Pago: {invoice.totalPaid}</div>
-                                <div style={{ flex: '1 1 0%', fontWeight: 400 }}>Total: {invoice.value}</div>
+                                <div style={{ flex: '1 1 0%', fontWeight: 400 }}>Pago: {invoice.totalPaid.toFixed(2)}</div>
+                                <div style={{ flex: '1 1 0%', fontWeight: 400 }}>Total: {invoice.value.toFixed(2)}</div>
                                 <div style={{ flex: '2 1 0%' }}>
                                     <span className={globalStyles.statusBadge} style={{
                                         backgroundColor: invoice.status.toUpperCase() === 'PAID' ? "rgba(0, 255, 0, 0.2)" : "rgba(255, 0, 0, 0.2)",
