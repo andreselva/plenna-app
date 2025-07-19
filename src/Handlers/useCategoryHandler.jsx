@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { CategoryManager } from "../CategoryManager/CategoryManager";
+import { CategoryManager } from '../Hooks/CategoryManager/CategoryManager';
 
 export const useCategoryHandler = () => {
     const { categories, addCategory, deleteCategory, updateCategory } = CategoryManager();

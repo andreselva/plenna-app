@@ -1,11 +1,11 @@
 import styles from './Revenues.module.css';
 import RevenueTable from "../../Tables/RevenueTable/RevenueTable";
 import ModalRevenues from "../../Modals/ModalRevenues/ModalRevenues";
-import { useRevenueHandler } from '../../Hooks/Handlers/useRevenuesHandler';
 import { BotaoGlobal } from '../../Components/Buttons/ButtonGlobal.tsx';
 import { useState } from 'react';
 import { getFormattedDateRange, getStartAndEndOfMonth } from '../../Utils/DateUtils';
 import { CustomDatePicker } from '../../Components/DatePicker/DatePicker';
+import { useRevenueHandler } from '../../Handlers/useRevenuesHandler';
 
 const Revenues = () => {
     const [formattedPeriod, setFormattedPeriod] = useState(() => getStartAndEndOfMonth());

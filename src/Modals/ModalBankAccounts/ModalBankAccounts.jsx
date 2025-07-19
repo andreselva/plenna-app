@@ -7,15 +7,23 @@ export const ModalBankAccounts = ({
     newAccount,
     setEditingAccount,
     editingAccount,
+    generateInvoice,
+    setGerenateInvoice,
+    dueDate,
+    setDueDate,
+    closingDate,
+    setClosingDate
 }) => {
     const handleCancel = () => {
         setNewAccount('');
         setEditingAccount(null);
         setIsModalOpen(false);
+        setGerenateInvoice(false);
     };
 
-    const formFields = [
+    let formFields = [
         {
+            title: 'Geral',
             fields: [
                 {
                     id: 'nameAccount',
@@ -26,10 +34,50 @@ export const ModalBankAccounts = ({
                     placeholder: 'Ex: Sicredi, Bradesco...',
                     required: true,
                     size: 'full-width',
-                },
-            ],
+                }
+            ]
         },
+        {
+            fields: [
+                {
+                    id: 'isInstallment',
+                    label: 'Gerar fatura?',
+                    type: 'toggle',
+                    value: generateInvoice,
+                    onChange: (value) => setGerenateInvoice(value),
+                    required: false,
+                    size: 'half-width-medium',
+                    disabled: false,
+                },
+            ]
+        }
     ];
+
+    if (generateInvoice) {
+        formFields.push({
+            title: 'Configurações da fatura',
+            fields: [
+                {
+                    id: 'dueDate',
+                    label: 'Dia de vencimento da fatura',
+                    type: 'text',
+                    value: dueDate,
+                    onChange: setDueDate,
+                    required: true,
+                    size: 'half-width-middle-medium'
+                },
+                {
+                    id: 'closingDate',
+                    label: 'Dia de fechamento da fatura',
+                    type: 'text',
+                    value: closingDate,
+                    onChange: setClosingDate,
+                    required: true,
+                    size: 'half-width-middle-medium'
+                }
+            ]
+        });
+    }
 
     return (
         <GenericModal
@@ -39,6 +87,7 @@ export const ModalBankAccounts = ({
             onSubmit={handleAddAccount}
             onCancel={handleCancel}
             submitButtonText={editingAccount ? 'Salvar' : 'Adicionar'}
+            width="600px"
         />
     );
 };

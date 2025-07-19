@@ -1,11 +1,15 @@
 import { BotaoGlobal } from "../../Components/Buttons/ButtonGlobal.tsx";
-import { useBankAccountHandler } from "../../Hooks/Handlers/useBankAccountHandler.jsx";
+import { useBankAccountHandler } from "../../Handlers/useBankAccountHandler.jsx";
+import { useInvoiceHandler } from "../../Handlers/useInvoiceHandler.jsx";
 import { ModalBankAccounts } from "../../Modals/ModalBankAccounts/ModalBankAccounts.jsx";
 import { BankAccountsTable } from "../../Tables/BankAccounts/BankAccountsTable.jsx";
 import styles from './BankAccounts.module.css';
 
 export const BankAccounts = () => {
-    const { accounts, newAccount, setNewAccount, isModalOpen, setIsModalOpen, editingAccount, setEditingAccount, handleEditAccount, handleSaveAccount, handleDeleteAccount } = useBankAccountHandler();
+    const { accounts, newAccount, setNewAccount, isModalOpen, setIsModalOpen, editingAccount, setEditingAccount, handleEditAccount, handleSaveAccount, handleDeleteAccount, generateInvoice, setGenerateInvoice, dueDate, setDueDate, closingDate, setClosingDate } = useBankAccountHandler();
+
+    //Chama a handler para gerar as faturas
+    const { handleGenerateInvoices } = useInvoiceHandler();
 
     return (
         <div className={styles.BankAccounts} >
@@ -27,6 +31,7 @@ export const BankAccounts = () => {
                         accounts={accounts}
                         onEdit={handleEditAccount}
                         onDelete={handleDeleteAccount}
+                        generateInvoices={handleGenerateInvoices}
                     />
                 </div>
             </div>
@@ -38,6 +43,12 @@ export const BankAccounts = () => {
                     newAccount={newAccount}
                     setEditingAccount={setEditingAccount}
                     editingAccount={editingAccount}
+                    generateInvoice={generateInvoice}
+                    setGerenateInvoice={setGenerateInvoice}
+                    dueDate={dueDate}
+                    setDueDate={setDueDate}
+                    closingDate={closingDate}
+                    setClosingDate={setClosingDate}
                 />
             )
             }

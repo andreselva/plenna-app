@@ -1,11 +1,11 @@
+import { useState } from 'react';
 import styles from './Expenses.module.css';
 import ExpenseTable from "../../Tables/ExpenseTable/ExpenseTable";
+import { useExpenseHandler } from '../../Handlers/useExpenseHandler';
 import ModalExpenses from "../../Modals/ModalExpenses/ModalExpenses";
-import { useExpenseHandler } from '../../Hooks/Handlers/useExpenseHandler';
 import { BotaoGlobal } from '../../Components/Buttons/ButtonGlobal.tsx';
 import { CustomDatePicker } from '../../Components/DatePicker/DatePicker';
 import { getFormattedDateRange, getStartAndEndOfMonth } from '../../Utils/DateUtils';
-import { useState } from 'react';
 
 const Expenses = () => {
     const [formattedPeriod, setFormattedPeriod] = useState(() => getStartAndEndOfMonth());
@@ -61,8 +61,12 @@ const Expenses = () => {
         hasSourceAccountId,
         setBooleanSourceAccountId,
         idExpense,
-        setIdExpense
-    } = useExpenseHandler(formattedPeriod);;
+        setIdExpense,
+        linkToInvoice,
+        setLinkToInvoice,
+        idInvoice,
+        setIdInvoice,
+    } = useExpenseHandler(formattedPeriod);
 
     return (
         <div className={styles.Expenses}>
@@ -124,6 +128,10 @@ const Expenses = () => {
                     setBooleanSourceAccountId={setBooleanSourceAccountId}
                     idExpense={idExpense}
                     setIdExpense={setIdExpense}
+                    linkToInvoice={linkToInvoice}
+                    setLinkToInvoice={setLinkToInvoice}
+                    idInvoice={idInvoice}
+                    setIdInvoice={setIdInvoice}
                 />
             )}
         </div>

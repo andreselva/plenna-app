@@ -22,6 +22,7 @@ const ModalCategories = ({
 
     const formFields = [
         {
+            title: 'Geral',
             fields: [
                 {
                     id: 'categoryName',

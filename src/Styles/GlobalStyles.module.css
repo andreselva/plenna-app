@@ -3,9 +3,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    /* Alinhar verticalmente ao centro */
     height: 100vh;
-    /* Garantir que ocupe toda a altura da tela */
     width: 100%;
 }
 
@@ -13,23 +11,21 @@
     display: flex;
     flex-direction: column;
     text-align: center;
+    z-index: 2;
 }
 
 /* Estilos globais para cards */
 .card {
     border: 1px solid #ccc;
-    padding: 20px;
     border-radius: 5px;
-    width: 150vh;
-    height: 70vh;
+    width: 90em;
+    height: 80vh;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
     overflow-y: auto;
-    /* Para permitir rolagem caso o conteúdo seja muito grande */
 }
 
 .card h3 {
     text-align: center;
-    margin-bottom: 15px;
 }
 
 .card table {
@@ -70,6 +66,20 @@
     background-color: #e0e0e0;
 }
 
+.card .disabled {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.card .disabled button {
+    padding: 5px 10px;
+    background-color: #f4f4f4;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    cursor: default;
+}
+
 .show-btn:hover {
     background-color: #45a049;
 }
@@ -78,8 +88,7 @@
     display: flex;
     justify-content: space-between;
     position: relative;
-    /* Importante para o dropdown se posicionar em relação a este elemento */
-
+    z-index: 15
 }
 
 .card-icon {
@@ -128,4 +137,85 @@
 
 .icone {
     display: inline-flex;
+}
+
+.flexibleTable {
+    display: flex;
+    flex-direction: column;
+    height: 63.5vh;
+    border-radius: 8px;
+    padding: 10px;
+    overflow: hidden;
+    overflow-y: auto;
+}
+
+.tableRow {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    border-bottom: 1px solid #e0e0e0;
+    padding: 15px 0 15px 0;
+    transition: background-color 0.2s ease-in-out;
+    cursor: pointer;
+}
+
+.tableHeader {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    font-weight: bold;
+    color: #333;
+    padding-top: 25px;
+    cursor: default;
+    background-color: #f4f4f4;
+}
+
+.tableRow>div {
+    padding: 0 10px;
+}
+
+.statusBadge {
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 15px;
+    display: inline-block;
+    text-align: center;
+    color: #000;
+}
+
+.expandableContainer {
+    margin: 0 4rem;
+}
+
+.scrollableTableWrapper {
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+.expensesTable {
+    width: 100%;
+    background-color: #f9f9f9;
+    border-collapse: collapse;
+    margin: 10px 0;
+}
+
+.expensesTable th,
+.expensesTable td {
+    padding: 5px 0 5px 0;
+    text-align: center;
+    width: auto;
+}
+
+.expensesTable th {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+.expensesTable td {
+    border-bottom: 0 dotted #b0b0b0;
+}
+
+.expensesTable tr:last-child td {
+    border-bottom: none;
 }

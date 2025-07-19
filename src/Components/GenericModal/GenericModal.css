@@ -14,7 +14,7 @@
 
 .modal-content {
     background-color: #fff;
-    padding: 30px;
+    padding: 20px;
     border-radius: 12px;
     width: 100%;
     max-width: 1300px; /* Valor padrão, pode ser sobrescrito dinamicamente */
@@ -137,6 +137,15 @@ textarea {
 .half-width-small {
     flex: 0.25;
     min-width: 100px; /* Garante um tamanho mínimo para inputs menores */
+}
+
+.modal-section-title {
+  margin-top: 20px;
+  margin-bottom: 15px;
+  font-size: 1.1em;
+  color: #333;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 5px;
 }
 
 /* Animações */

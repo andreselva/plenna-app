@@ -1,11 +1,14 @@
 import { useState } from 'react';
-import { useBankAccounts } from '../BankAccountsManager/useBankAccounts';
+import { useBankAccounts } from '../Hooks/BankAccountsManager/useBankAccounts';
 
 export const useBankAccountHandler = () => {
-    const { accounts, addBankAccount, updateBankAccount, deleteBankAccount } = useBankAccounts();
+    const { accounts, addBankAccount, updateBankAccount, deleteBankAccount, generateInvoices } = useBankAccounts();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingAccount, setEditingAccount] = useState(null);
     const [newAccount, setNewAccount] = useState('');
+    const [generateInvoice, setGenerateInvoice] = useState(false);
+    const [dueDate, setDueDate] = useState('');
+    const [closingDate, setClosingDate] = useState('');
 
     const handleAddAccount = () => {
         if (!newAccount.trim()) {
@@ -15,6 +18,9 @@ export const useBankAccountHandler = () => {
 
         addBankAccount({
             name: newAccount,
+            generateInvoice: generateInvoice,
+            dueDate: dueDate,
+            closingDate: closingDate
         });
 
         setNewAccount('');
@@ -24,6 +30,9 @@ export const useBankAccountHandler = () => {
     const handleEditAccount = (account) => {
         setEditingAccount(account);
         setNewAccount(account.name);
+        setGenerateInvoice(account.generateInvoice);
+        setDueDate(account.dueDate);
+        setClosingDate(account.closingDate);
         setIsModalOpen(true);
     };
 
@@ -36,6 +45,9 @@ export const useBankAccountHandler = () => {
         if (editingAccount) {
             updateBankAccount(editingAccount.id, {
                 name: newAccount,
+                generateInvoice: generateInvoice,
+                dueDate: dueDate,
+                closingDate: closingDate,
             });
         } else {
             handleAddAccount();
@@ -60,6 +72,12 @@ export const useBankAccountHandler = () => {
         setEditingAccount,
         handleEditAccount,
         handleDeleteAccount,
-        handleSaveAccount
+        handleSaveAccount,
+        generateInvoice,
+        setGenerateInvoice,
+        dueDate,
+        setDueDate,
+        closingDate,
+        setClosingDate
     };
 };

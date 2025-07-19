@@ -1,3 +1,4 @@
+import { FlexibleTable } from '../../Components/FlexibleTable/FlexibleTable';
 import DeleteConfirmation from '../../Hooks/DeleteConfirmation/DeleteConfirmation';
 import globalStyles from '../../Styles/GlobalStyles.module.css';
 
@@ -11,65 +12,64 @@ const RevenueTable = ({ revenues = [], categories = [], onEdit, onDelete }) => {
         errorMessage: 'Erro ao excluir receita!'
     });
 
+    // Definição das colunas para a tabela de receitas
+    const columns = [
+        {
+            header: 'Descrição',
+            accessor: 'name',
+            style: { flex: '1 1 0%' },
+        },
+        {
+            header: 'Valor',
+            accessor: 'value',
+            style: { flex: '1 1 0%' },
+        },
+        {
+            header: 'Vencimento',
+            style: { flex: '1 1 0%' },
+            renderCell: (revenue) => revenue.invoiceDueDate.split('-').reverse().join('/'),
+        },
+        {
+            header: 'Categoria',
+            style: { flex: '1 1 0%' },
+            renderCell: (revenue) => {
+                const category = categories.find(cat => cat.id === revenue.idCategory) || {};
+                return (
+                    <span className={globalStyles.statusBadge} style={{
+                        backgroundColor: category.color ? `${category.color}33` : 'rgba(0, 0, 0, 0.1)',
+                    }}>
+                        {category.name || 'N/A'}
+                    </span>
+                );
+            },
+        },
+        {
+            header: 'Ações',
+            style: { flex: '1 1 120px' },
+            renderCell: (revenue) => (
+                <div className={globalStyles.actions}>
+                    <button
+                        onClick={() => onEdit(revenue)}
+                    >
+                        Editar
+                    </button>
+                    <button
+                        onClick={() => handleDelete(revenue)}
+                    >
+                        Excluir
+                    </button>
+                </div>
+            ),
+        },
+    ];
+
     return (
-        <table>
-            <thead>
-                <tr>
-                    <th>Descrição</th>
-                    <th>Valor</th>
-                    <th>Vencimento</th>
-                    <th>Categoria</th>
-                    <th>Ações</th>
-                </tr>
-            </thead>
-            <tbody>
-                {revenues.length > 0 ? (
-                    revenues.map((revenue) => {
-                        const category = categories.find(cat => cat.id === revenue.idCategory) || {};
-                        return (
-                            <tr key={revenue.id}>
-                                <td>{revenue.name}</td>
-                                <td>{revenue.value}</td>
-                                <td>{revenue.invoiceDueDate.split('-').reverse().join('/')}</td>
-                                <td>
-                                    <span
-                                        style={{
-                                            backgroundColor: category.color ? category.color + "33" : "#000",
-                                            color: "#000",
-                                            fontSize: '15px',
-                                            padding: "4px 8px",
-                                            borderRadius: "10px",
-                                            display: "inline-block",
-                                        }}
-                                    >
-                                        {category.name || 'Categoria não encontrada'}
-                                    </span>
-                                </td>
-                                <td className={globalStyles.actions}>
-                                    <button
-                                        className={globalStyles['action-button']}
-                                        onClick={() => onEdit(revenue)}
-                                    >
-                                        Editar
-                                    </button>
-                                    <button
-                                        className={globalStyles['action-button']}
-                                        onClick={() => handleDelete(revenue)}
-                                    >
-                                        Excluir
-                                    </button>
-                                </td>
-                            </tr>
-                        );
-                    })
-                ) : (
-                    <tr>
-                        <td colSpan="5">Nenhuma receita cadastrada</td>
-                    </tr>
-                )}
-            </tbody>
-        </table>
-    )
+        <FlexibleTable
+            columns={columns}
+            data={revenues}
+            noDataMessage="Nenhuma receita cadastrada"
+        />
+    );
 };
 
 export default RevenueTable;

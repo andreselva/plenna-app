@@ -1,8 +1,9 @@
+import { ActionDropdown } from '../../Components/ActionDropdown/ActionDropdown';
+import { FlexibleTable } from '../../Components/FlexibleTable/FlexibleTable';
 import DeleteConfirmation from '../../Hooks/DeleteConfirmation/DeleteConfirmation';
-import globalStyles from '../../Styles/GlobalStyles.module.css';
 
-export const BankAccountsTable = ({ accounts, onEdit, onDelete }) => {
-    const handleDelete = DeleteConfirmation(onDelete, {
+export const BankAccountsTable = ({ accounts, onEdit, onDelete, generateInvoices }) => {
+    const handleDeleteWithConfirmation = DeleteConfirmation(onDelete, {
         confirmTitle: 'Deseja realmente excluir?',
         confirmText: 'A exclusão é definitiva!',
         confirmButtonText: 'Excluir',
@@ -10,31 +11,65 @@ export const BankAccountsTable = ({ accounts, onEdit, onDelete }) => {
         successMessage: 'Conta excluída!',
         errorMessage: 'Falha ao remover conta!'
     });
+
+    const columns = [
+        {
+            header: 'Conta',
+            accessor: 'name',
+            style: { flex: '2 1 0%' }
+        },
+        {
+            header: 'Gera fatura',
+            style: { flex: '2 1 0%' },
+            renderCell: (account) => {
+                return account.generateInvoice ? 'Sim' : 'Não'
+            }
+        },
+        {
+            header: 'Ações',
+            style: { flex: '1 1 120px', display: 'flex', justifyContent: 'center' },
+            renderCell: (account) => {
+                let accountActions = [
+                    {
+                        label: 'Editar',
+                        handler: () => onEdit(account)
+                    },
+                    {
+                        label: 'Excluir',
+                        handler: () => handleDeleteWithConfirmation(account.id)
+                    },
+                ];
+
+                //Só mostra a opção de gerar faturas caso a conta possua essa opção habilitada
+                if (account.generateInvoice) {
+                    accountActions.push({
+                        label: 'Gerar faturas',
+                        handler: () => generateInvoices(
+                            {
+                                nameAccount: account.name,
+                                idAccount: account.id,
+                                dueDate: account.dueDate,
+                                closingDate: account.closingDate
+                            }
+                        )
+                    })
+                }
+
+                return (
+                    <ActionDropdown
+                        actions={accountActions}
+                    />
+                );
+            }
+        }
+    ];
+
+
     return (
-        <table>
-            <thead>
-                <tr>
-                    <th>Conta</th>
-                    <th>Ações</th>
-                </tr>
-            </thead>
-            <tbody>
-                {accounts.length > 0 ? (
-                    accounts.map((account) => (
-                        <tr key={account.id}>
-                            <td>{account.name}</td>
-                            <td className={globalStyles.actions}>
-                                <button className={globalStyles['action-button']} onClick={() => onEdit(account)}>Editar</button>
-                                <button className={globalStyles['action-button']} onClick={() => handleDelete(account.id)}>Excluir</button>
-                            </td>
-                        </tr>
-                    ))
-                ) : (
-                    <tr key="no-accounts">
-                        <td colSpan="2">Nenhuma conta bancária cadastrada</td>
-                    </tr>
-                )}
-            </tbody>
-        </table>
-    )
+        <FlexibleTable
+            columns={columns}
+            data={accounts}
+            noDataMessage="Nenhuma conta bancária cadastrada"
+        />
+    );
 }

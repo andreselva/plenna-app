@@ -1,9 +1,9 @@
 .Sidebar {
-    width: 250px;
+    width: 230px;
     background-color: #2c2f3a;
     color: white;
     height: 100vh;
-    padding: 20px;
+    padding: 20px 10px 5px 10px;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
@@ -14,7 +14,14 @@
     justify-content: center;
     flex-direction: column;
     align-items: center;
-    gap: 20px;
+    gap: 10px;
+}
+
+.Sidebar-components a {
+    display: block;
+    padding: 6px 12px;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    border-radius: 10px;
 }
 
 .Sidebar-components a:hover {
@@ -77,7 +84,7 @@
 .dropdown-up {
     position: absolute;
     bottom: 6px;
-    left: 231px;
+    left: 13.8rem;
     background: #fff;
     border: 1px solid #ddd;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -109,4 +116,24 @@
 
 .dropdown-up button:hover {
     background: #f0f0f031;
+}
+
+.Sidebar-submenu {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 15px;
+}
+
+/* Mantenha este estilo como base */
+.Sidebar-components-item {
+    display: flex;
+    align-items: center;
+}
+
+/* Adicione este novo estilo para o ajuste fino */
+.sidebar-icon {
+    /* Move o ícone 2 píxeis para cima. Ajuste este valor conforme necessário! */
+    transform: translateY(-5px);
 }

@@ -1,6 +1,6 @@
-import React from 'react';
 import DeleteConfirmation from '../../Hooks/DeleteConfirmation/DeleteConfirmation';
 import globalStyles from '../../Styles/GlobalStyles.module.css';
+import { FlexibleTable } from '../../Components/FlexibleTable/FlexibleTable';
 
 const CategoryTable = ({ categories, onEdit, onDelete }) => {
     const handleDelete = DeleteConfirmation(onDelete, {
@@ -12,61 +12,47 @@ const CategoryTable = ({ categories, onEdit, onDelete }) => {
         errorMessage: 'Falha ao remover categoria!'
     });
 
-    return (
-        <table>
-            <thead>
-                <tr>
-                    <th>Nome da Categoria</th>
-                    <th>Tipo</th>
-                    <th>Ações</th>
-                </tr>
-            </thead>
-            <tbody>
-                {categories.length > 0 ? (
-                    categories.map((category) => (
-                        <tr key={category.id}>
-                            <td>
-                                <span
-                                    style={{
-                                        backgroundColor: category.color + "33",
-                                        color: "#000",
-                                        fontSize: '15px',
-                                        padding: "4px 8px",
-                                        borderRadius: "10px",
-                                        display: "inline-block",
-                                    }}
-                                >
-                                    {category.name}
-                                </span>
-                            </td>
-                            <td>
-                                <span
-                                    style={{
-                                        backgroundColor: category.type.toUpperCase() === 'RECEITA' ? "rgba(0, 255, 0, 0.2)" : "rgba(255, 0, 0, 0.2)",
-                                        color: "#000",
-                                        fontSize: '15px',
-                                        padding: "4px 8px",
-                                        borderRadius: "10px",
-                                        display: "inline-block",
-                                    }}
-                                >
-                                    {category.type}
-                                </span>
-                            </td>
+    const columns = [
+        {
+            header: 'Nome da Categoria',
+            style: { flex: '2 1 0%' },
+            renderCell: (category) => (
+                <span className={globalStyles.statusBadge} style={{
+                    backgroundColor: `${category.color}33`
+                }}>
+                    {category.name}
+                </span>
+            )
+        },
+        {
+            header: 'Tipo',
+            style: { flex: '1 1 0%' },
+            renderCell: (category) => (
+                <span className={globalStyles.statusBadge} style={{
+                    backgroundColor: category.type.toUpperCase() === 'RECEITA' ? "rgba(0, 255, 0, 0.2)" : "rgba(255, 0, 0, 0.2)"
+                }}>
+                    {category.type}
+                </span>
+            )
+        },
+        {
+            header: 'Ações',
+            style: { flex: '1 1 120px' },
+            renderCell: (category) => (
+                <div className={globalStyles.actions}>
+                    <button className={globalStyles['action-button']} onClick={() => onEdit(category)}>Editar</button>
+                    <button className={globalStyles['action-button']} onClick={() => handleDelete(category.id)}>Excluir</button>
+                </div>
+            )
+        }
+    ];
 
-                            <td className={globalStyles.actions}>
-                                <button className={globalStyles['action-button']} onClick={() => onEdit(category)}>Editar</button>
-                                <button className={globalStyles['action-button']} onClick={() => handleDelete(category.id)}>Excluir</button>
-                            </td>
-                        </tr>
-                    ))
-                ) : (
-                    <tr>
-                        <td colSpan="3">Nenhuma categoria cadastrada</td>
-                    </tr>
-                )}
-            </tbody>
-        </table>
+    return (
+        <FlexibleTable
+            columns={columns}
+            data={categories}
+            noDataMessage="Nenhuma categoria cadastrada"
+        />
     );
 };
 
