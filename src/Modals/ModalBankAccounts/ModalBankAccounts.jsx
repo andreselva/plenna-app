@@ -23,6 +23,7 @@ export const ModalBankAccounts = ({
 
     let formFields = [
         {
+            title: 'Geral',
             fields: [
                 {
                     id: 'nameAccount',
