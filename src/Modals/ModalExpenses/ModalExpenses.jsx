@@ -1,7 +1,7 @@
 import { HelpCircle } from 'lucide-react';
 import GenericModal from '../../Components/GenericModal/GenericModal';
 import Tooltip from '../../Components/Tooltip/Tooltip';
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState } from 'react';
 import { useInvoiceHandler } from '../../Handlers/useInvoiceHandler';
 
 const ModalExpenses = ({
@@ -66,43 +66,41 @@ const ModalExpenses = ({
         }
     }, [typeOfInstallment, setInstallments, setHasInstallments]);
 
-
-    const searchForRelatedInvoices = useCallback(async (idBankAccount) => {
-        if (!idBankAccount) {
-            setInvoices([]);
-            return;
-        }
-        try {
-            const fetchedInvoices = await handleSearchRelatedInvoices(idBankAccount);
-            setInvoices(fetchedInvoices || []);
-        } catch (error) {
-            console.error("Erro ao buscar faturas relacionadas:", error);
-            setInvoices([]);
-        }
-    }, [handleSearchRelatedInvoices]);
-
     const onSelectedCardChange = (newCardId) => {
         setSelectedCard(newCardId);
         setIdInvoice('');
     };
 
     useEffect(() => {
-        if (linkToInvoice) {
-            if (selectedCard) {
-                searchForRelatedInvoices(selectedCard);
-            } else {
+        const fetchAndSetInvoices = async (cardId) => {
+            if (!cardId) {
+                setInvoices([]);
+                return;
+            }
+            try {
+                const fetchedInvoices = await handleSearchRelatedInvoices(cardId);
+                setInvoices(fetchedInvoices || []);
+                if (idInvoice) {
+                    setIdInvoice(String(idInvoice));
+                }
+            } catch (error) {
+                console.error("Erro ao buscar faturas relacionadas:", error);
                 setInvoices([]);
             }
+        };
+
+        if (linkToInvoice) {
+            fetchAndSetInvoices(selectedCard);
         } else {
             setInvoices([]);
             setIdInvoice('');
         }
-    }, [linkToInvoice, selectedCard, searchForRelatedInvoices, setIdInvoice]);
+    }, [linkToInvoice, selectedCard, handleSearchRelatedInvoices]);
+
 
     useEffect(() => {
-        if (idInvoice) {
-            const selectedInvoice = invoices.find(invoice => Number(invoice.id) === Number(idInvoice));
-
+        if (idInvoice && invoices.length > 0) {
+            const selectedInvoice = invoices.find(invoice => String(invoice.id) === String(idInvoice));
             if (selectedInvoice) {
                 setExpenseInvoiceDueDate(selectedInvoice.dueDate);
             }
@@ -153,7 +151,7 @@ const ModalExpenses = ({
                     value: selectedCategory,
                     onChange: setSelectedCategory,
                     placeholder: 'Selecione uma categoria',
-                    required: true,
+                    _required: true,
                     options: categories
                         .filter((category) => category.type.toUpperCase() === 'DESPESA')
                         .map((category) => ({ value: category.id, label: category.name })),
@@ -188,7 +186,7 @@ const ModalExpenses = ({
                     placeholder: 0,
                     required: typeOfInstallment === 'P',
                     size: 'half-width-small',
-                    disabled: typeOfInstallment !== 'P' || hasSourceAccountId || idExpense > 0
+                    _disabled: typeOfInstallment !== 'P' || hasSourceAccountId || idExpense > 0
                 },
             ],
         },
@@ -261,7 +259,7 @@ const ModalExpenses = ({
                     required: true,
                     options: creditCards
                         .filter((account) => account.generateInvoice === true)
-                        .map((account) => ({ value: account.id, label: account.name })),
+                        .map((account) => ({ value: String(account.id), label: account.name })),
                     size: 'half-width-middle-medium'
                 },
                 {
@@ -269,11 +267,12 @@ const ModalExpenses = ({
                     label: 'Fatura',
                     type: 'select',
                     value: idInvoice,
-                    onChange: setIdInvoice,
-                    placeholder: !selectedCard ? 'Selecione uma cartão' : (invoices.length === 0 ? 'Nenhuma fatura encontrada' : 'Selecione a fatura'),
+                    onChange: (value) => setIdInvoice(value),
+                    placeholder: !selectedCard ? 'Selecione um cartão' : (invoices.length === 0 ? 'Nenhuma fatura encontrada' : 'Selecione a fatura'),
                     required: true,
+                    // MODIFICADO: Garantir que o valor da opção seja uma string
                     options: invoices.map((invoice) => ({
-                        value: invoice.id,
+                        value: String(invoice.id),
                         label: invoice.name
                     })),
                     disabled: !selectedCard || invoices.length === 0,

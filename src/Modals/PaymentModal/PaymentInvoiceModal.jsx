@@ -7,15 +7,21 @@ export const PaymentInvoiceModal = ({
     amountValue,
     setAmountValue,
     paymentDate,
-    setPaymentDate
+    setPaymentDate,
 }) => {
 
     if (!invoice) {
         return null;
     }
 
+    const paymentAmount = parseFloat(amountValue) || 0;
+    const newTotalPaid = invoice.totalPaid + paymentAmount;
+    const remainingToPay = invoice.value - newTotalPaid;
+
     const handleCancel = () => {
         setIsModalPaymentOpen(false);
+        setPaymentDate('');
+        setAmountValue(0);
     }
 
     const handleSubmit = () => {
@@ -29,6 +35,34 @@ export const PaymentInvoiceModal = ({
     }
 
     const formFields = [
+        {
+            fields: [
+                {
+                    label: "Fatura",
+                    name: "invoiceName",
+                    value: invoice.name,
+                    readOnly: true
+                },
+                {
+                    label: "Valor Total (R$)",
+                    name: "totalValue",
+                    value: invoice.value.toFixed(2),
+                    readOnly: true
+                },
+                {
+                    label: "Valor Pago (R$)",
+                    name: "totalPaid",
+                    value: newTotalPaid.toFixed(2),
+                    readOnly: true
+                },
+                {
+                    label: "Valor Restante (R$)",
+                    name: "remainingToPay",
+                    value: remainingToPay.toFixed(2),
+                    readOnly: true
+                }
+            ]
+        },
         {
             fields: [
                 {
@@ -60,7 +94,7 @@ export const PaymentInvoiceModal = ({
             onSubmit={handleSubmit}
             onCancel={handleCancel}
             submitButtonText="Registrar Pagamento"
-            width="800px"
+            width="700px"
             height="auto"
         />
     );

@@ -41,22 +41,22 @@ const InvoiceTable = ({ invoices, onEdit, onDelete, setIsModalOpen, onOpenPaymen
                     return 'Pendente'
             }
         }
-        return 'Pendente*';
+        return 'N/A';
     }
 
     return (
         <div className={globalStyles.flexibleTable}>
-            {/* Corpo da Tabela */}
             <div className={globalStyles.tableBody}>
                 {invoices && invoices.length > 0 ? (
                     invoices.map((invoice) => (
                         <React.Fragment key={invoice.id}>
                             {/* Linha Clicável */}
                             <div style={{ padding: '25px 0 25px 0' }} className={globalStyles.tableRow} onClick={() => toggleInvoice(invoice.id)}>
-                                <div style={{ flex: '2 1 0%', fontWeight: 400 }}>{invoice.name}</div>
+                                <div style={{ flex: '1 1 0%', fontWeight: 400 }}>{invoice.name}</div>
                                 <div style={{ flex: '2 1 0%', fontWeight: 400 }}>Vencimento: {invoice.dueDate.split('-').reverse().join('/')}</div>
                                 <div style={{ flex: '2 1 0%', fontWeight: 400 }}>Fechamento: {invoice.closingDate.split('-').reverse().join('/')}</div>
-                                <div style={{ flex: '1 1 0%', fontWeight: 400 }}>Total (R$): {invoice.value}</div>
+                                <div style={{ flex: '1 1 0%', fontWeight: 400 }}>Pago: {invoice.totalPaid}</div>
+                                <div style={{ flex: '1 1 0%', fontWeight: 400 }}>Total: {invoice.value}</div>
                                 <div style={{ flex: '2 1 0%' }}>
                                     <span className={globalStyles.statusBadge} style={{
                                         backgroundColor: invoice.status.toUpperCase() === 'PAID' ? "rgba(0, 255, 0, 0.2)" : "rgba(255, 0, 0, 0.2)",
@@ -109,10 +109,20 @@ const InvoiceTable = ({ invoices, onEdit, onDelete, setIsModalOpen, onOpenPaymen
                                                             <td>{expense.invoiceDueDate.split('-').reverse().join('/')}</td>
                                                             <td>
                                                                 <div className={globalStyles.actions} style={{ display: 'flex' }}>
-                                                                    <button onClick={() => { onEdit(expense) }} disabled={invoice.status.toUpperCase() === 'PAID'}>
+                                                                    <button
+                                                                        onClick={() => { onEdit(expense) }}
+                                                                        disabled={
+                                                                            invoice.status.toUpperCase().includes('PAID') ||
+                                                                            invoice.status.toUpperCase().includes('PARCIAL')
+                                                                        }>
                                                                         <PencilLine width='15px' height='15px' />
                                                                     </button>
-                                                                    <button onClick={() => { handleDelete(expense) }} disabled={invoice.status.toUpperCase() === 'PAID'}>
+                                                                    <button
+                                                                        onClick={() => { handleDelete(expense) }}
+                                                                        disabled={
+                                                                            invoice.status.toUpperCase().includes('PAID') ||
+                                                                            invoice.status.toUpperCase().includes('PARCIAL')
+                                                                        }>
                                                                         <Trash2Icon width='15px' height='15px' />
                                                                     </button>
                                                                 </div>

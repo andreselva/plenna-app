@@ -51,7 +51,9 @@ const Invoices = () => {
         amountValue,
         setAmountValue,
         paymentDate,
-        setPaymentDate
+        setPaymentDate,
+        totalPaid,
+        setTotalPaid
     } = useInvoiceHandler(formattedPeriod);
 
     const fnExpenses = useExpenseHandler(formattedPeriod);
@@ -123,6 +125,8 @@ const Invoices = () => {
                     setAmountValue={setAmountValue}
                     paymentDate={paymentDate}
                     setPaymentDate={setPaymentDate}
+                    totalPaid={totalPaid}
+                    setTotalPaid={setTotalPaid}
                 />
             )}
         </div>
