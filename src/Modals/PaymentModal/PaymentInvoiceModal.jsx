@@ -32,7 +32,7 @@ export const PaymentInvoiceModal = ({
         }
         handlePayment(invoice, paymentData);
         setIsModalPaymentOpen(false);
-    }
+    }   
 
     const formFields = [
         {
