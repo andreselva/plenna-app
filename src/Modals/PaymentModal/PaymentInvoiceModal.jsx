@@ -26,13 +26,14 @@ export const PaymentInvoiceModal = ({
 
     const handleSubmit = () => {
         const paymentData = {
-            type: invoice,
-            amount: amountValue,
-            date: paymentDate
+            payableId: invoice.id,
+            value: amountValue,
+            paymentDate: paymentDate,
+            payableType: "invoice"
         }
-        handlePayment(invoice, paymentData);
+        handlePayment(paymentData);
         setIsModalPaymentOpen(false);
-    }   
+    }
 
     const formFields = [
         {

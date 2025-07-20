@@ -6,6 +6,7 @@ import ModalExpenses from "../../Modals/ModalExpenses/ModalExpenses";
 import { BotaoGlobal } from '../../Components/Buttons/ButtonGlobal.tsx';
 import { CustomDatePicker } from '../../Components/DatePicker/DatePicker';
 import { getFormattedDateRange, getStartAndEndOfMonth } from '../../Utils/DateUtils';
+import { PaymentModalExpense } from '../../Modals/ModalExpenses/PaymentModalExpense';
 
 const Expenses = () => {
     const [formattedPeriod, setFormattedPeriod] = useState(() => getStartAndEndOfMonth());
@@ -66,7 +67,21 @@ const Expenses = () => {
         setLinkToInvoice,
         idInvoice,
         setIdInvoice,
+        status,
+        setStatus,
+        optionsStatus,
+        handleRegisterPayment,
+        isPaymentModalOpen,
+        setIsPaymentModalOpen,
+        paymentDate,
+        setPaymentDate
     } = useExpenseHandler(formattedPeriod);
+
+    const [selectedExpense, setSelectedExpense] = useState(null);
+    const handleOpenPaymentModal = (expense) => {
+        setSelectedExpense(expense);
+        setIsPaymentModalOpen(true);
+    };
 
     return (
         <div className={styles.Expenses}>
@@ -97,6 +112,7 @@ const Expenses = () => {
                         creditCards={accounts}
                         onEdit={handleEditExpense}
                         onDelete={handleDeleteExpense}
+                        onPayment={handleOpenPaymentModal}
                     />
                 </div>
             </div>
@@ -132,6 +148,19 @@ const Expenses = () => {
                     setLinkToInvoice={setLinkToInvoice}
                     idInvoice={idInvoice}
                     setIdInvoice={setIdInvoice}
+                    status={status}
+                    setStatus={setStatus}
+                    optionsStatus={optionsStatus}
+                />
+            )}
+
+            {isPaymentModalOpen && selectedExpense && (
+                <PaymentModalExpense
+                    expense={selectedExpense}
+                    setIsPaymentModalOpen={setIsPaymentModalOpen}
+                    handlePayment={handleRegisterPayment}
+                    paymentDate={paymentDate}
+                    setPaymentDate={setPaymentDate}
                 />
             )}
         </div>

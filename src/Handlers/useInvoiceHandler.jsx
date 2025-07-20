@@ -7,7 +7,7 @@ import { usePaymentManager } from '../Hooks/PaymentManager/usePaymentManager';
 export const useInvoiceHandler = (periodo) => {
     const [isPaymentModalOpen, setPaymentModalOpen] = useState(false);
     const [amountValue, setAmountValue] = useState(0);
-    const [paymentDate, setPaymentDate] =  useState('');
+    const [paymentDate, setPaymentDate] = useState('');
     const [totalPaid, setTotalPaid] = useState(0);
 
     const {
@@ -28,20 +28,16 @@ export const useInvoiceHandler = (periodo) => {
     };
 
     const {
-        registerPaymentInvoice
+        registerPayment
     } = usePaymentManager();
 
-    const handlePayment = useCallback(async (invoice, paymentData) => {
-        const paymentValue = paymentData.amount;
+    const handlePayment = useCallback(async (paymentData) => {
+        const result = await AlertConfirm(`Registrar pagamento`, `Você confirma o pagamento de R$ ${paymentData.value}?`, 'warning');
 
-        if (invoice && paymentValue > 0) {
-            const result = await AlertConfirm(`Registrar pagamento`, `Você confirma o pagamento de R$ ${paymentValue} para a fatura ${invoice.name}?`, 'warning');
-
-            if (result.isConfirmed) {
-                registerPaymentInvoice(invoice, paymentData);
-            }
+        if (result.isConfirmed) {
+            registerPayment(paymentData);
         }
-    }, [registerPaymentInvoice]);
+    }, [registerPayment]);
 
     const handleSearchRelatedInvoices = useCallback(async (idBankAccount) => {
         return await fetchRelated(idBankAccount);

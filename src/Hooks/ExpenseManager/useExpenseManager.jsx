@@ -5,7 +5,7 @@ import { ExpenseAPI } from "./ExpenseAPI";
 export const useExpenseManager = (periodo) => {
     //Usa o hook de busca para obter a lista e o controle de recarga.
     const { expenses, loading, error: fetchError, refetch } = useExpensesList(periodo);
-    
+
     // Podemos ter um estado de erro separado para as ações de manipulação
     const [actionError, setActionError] = useState(null);
 
@@ -40,12 +40,22 @@ export const useExpenseManager = (periodo) => {
         }
     };
 
-    return { 
-        expenses, 
-        addExpense, 
-        deleteExpense, 
-        updateExpense, 
-        loading, 
-        error: fetchError || actionError 
+    const registerPaymentExpense = async (id, paymentData) => {
+        try {
+            await ExpenseAPI.registerPayment(id, paymentData, periodo);
+            await refetch();
+        } catch (err) {
+            setActionError(err);
+        }
+    }
+
+    return {
+        expenses,
+        addExpense,
+        deleteExpense,
+        updateExpense,
+        registerPaymentExpense,
+        loading,
+        error: fetchError || actionError
     };
 };

@@ -33,6 +33,9 @@ const ModalExpenses = ({
     setLinkToInvoice,
     idInvoice,
     setIdInvoice,
+    status,
+    setStatus,
+    optionsStatus
 }) => {
     const handleCancel = () => {
         setNewExpense('');
@@ -46,9 +49,9 @@ const ModalExpenses = ({
         setTypeOfInstallment('U');
         setBooleanSourceAccountId(false);
         setIdExpense(0);
-        setLinkToInvoice(false);
         setIdInvoice('');
         setInvoices([]);
+        setStatus('pending');
     };
 
     const { handleSearchRelatedInvoices } = useInvoiceHandler();
@@ -128,6 +131,17 @@ const ModalExpenses = ({
                     value: expenseInvoiceDueDate,
                     onChange: setExpenseInvoiceDueDate,
                     required: true,
+                    size: 'half-width-medium',
+                },
+                {
+                    id: 'statusExpense',
+                    label: 'Situação',
+                    type: 'select',
+                    value: status,
+                    onChange: setStatus,
+                    required: true,
+                    disabled: idInvoice > 0,
+                    options: optionsStatus.map((option) => ({ value: option.id, label: option.name })),
                     size: 'half-width-medium',
                 },
             ],
@@ -270,7 +284,6 @@ const ModalExpenses = ({
                     onChange: (value) => setIdInvoice(value),
                     placeholder: !selectedCard ? 'Selecione um cartão' : (invoices.length === 0 ? 'Nenhuma fatura encontrada' : 'Selecione a fatura'),
                     required: true,
-                    // MODIFICADO: Garantir que o valor da opção seja uma string
                     options: invoices.map((invoice) => ({
                         value: String(invoice.id),
                         label: invoice.name
