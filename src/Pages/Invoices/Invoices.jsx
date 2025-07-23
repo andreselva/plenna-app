@@ -113,6 +113,9 @@ const Invoices = () => {
                     setIdInvoice={fnExpenses.setIdInvoice}
                     linkToInvoice={fnExpenses.linkToInvoice}
                     setLinkToInvoice={fnExpenses.setLinkToInvoice}
+                    status={fnExpenses.status}
+                    setStatus={fnExpenses.setStatus}
+                    optionsStatus={fnExpenses.optionsStatus}
                 />
             )}
 
