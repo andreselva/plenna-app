@@ -8,7 +8,7 @@ import ModalExpenses from '../../Modals/ModalExpenses/ModalExpenses';
 import { useBankAccounts } from '../../Hooks/BankAccountsManager/useBankAccounts';
 import { CategoryManager } from '../../Hooks/CategoryManager/CategoryManager';
 import { useExpenseHandler } from '../../Handlers/useExpenseHandler';
-import { PaymentInvoiceModal } from '../../Modals/PaymentModal/PaymentInvoiceModal';
+import { PaymentModal } from '../../Modals/PaymentModal/PaymentModal';
 
 const Invoices = () => {
     const [selectedInvoice, setSelectedInvoice] = useState(null);
@@ -52,8 +52,6 @@ const Invoices = () => {
         setAmountValue,
         paymentDate,
         setPaymentDate,
-        totalPaid,
-        setTotalPaid
     } = useInvoiceHandler(formattedPeriod);
 
     const fnExpenses = useExpenseHandler(formattedPeriod);
@@ -120,16 +118,11 @@ const Invoices = () => {
             )}
 
             {isPaymentModalOpen && (
-                <PaymentInvoiceModal
-                    invoice={selectedInvoice}
+                <PaymentModal
+                    payableItem={selectedInvoice}
+                    payableType="invoice"
                     setIsModalPaymentOpen={setPaymentModalOpen}
                     handlePayment={handlePayment}
-                    amountValue={amountValue}
-                    setAmountValue={setAmountValue}
-                    paymentDate={paymentDate}
-                    setPaymentDate={setPaymentDate}
-                    totalPaid={totalPaid}
-                    setTotalPaid={setTotalPaid}
                 />
             )}
         </div>

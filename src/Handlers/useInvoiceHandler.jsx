@@ -8,7 +8,6 @@ export const useInvoiceHandler = (periodo) => {
     const [isPaymentModalOpen, setPaymentModalOpen] = useState(false);
     const [amountValue, setAmountValue] = useState(0);
     const [paymentDate, setPaymentDate] = useState('');
-    const [totalPaid, setTotalPaid] = useState(0);
 
     const {
         invoices,
@@ -54,8 +53,6 @@ export const useInvoiceHandler = (periodo) => {
         setPaymentDate,
         isPaymentModalOpen,
         setPaymentModalOpen,
-        totalPaid,
-        setTotalPaid,
         loading: managerLoading || relatedLoading,
         error: managerError || relatedError
     };

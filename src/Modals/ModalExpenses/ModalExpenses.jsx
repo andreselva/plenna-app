@@ -202,7 +202,7 @@ const ModalExpenses = ({
                     placeholder: 0,
                     required: typeOfInstallment === 'P',
                     size: 'half-width-small',
-                    _disabled: typeOfInstallment !== 'P' || hasSourceAccountId || idExpense > 0
+                    disabled: typeOfInstallment !== 'P' || hasSourceAccountId || idExpense > 0
                 },
             ],
         },

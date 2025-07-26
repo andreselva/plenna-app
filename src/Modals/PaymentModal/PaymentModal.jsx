@@ -1,35 +1,35 @@
+import { useState } from "react";
 import GenericModal from "../../Components/GenericModal/GenericModal";
 
-export const PaymentInvoiceModal = ({
-    invoice,
+export const PaymentModal = ({
+    payableItem,
+    payableType,
     setIsModalPaymentOpen,
     handlePayment,
-    amountValue,
-    setAmountValue,
-    paymentDate,
-    setPaymentDate,
 }) => {
+    const [amountValue, setAmountValue] = useState('');
+    const [paymentDate, setPaymentDate] = useState(() => new Date().toISOString().split('T')[0]);
 
-    if (!invoice) {
+    if (!payableItem) {
         return null;
     }
 
+    const typeLabel = payableType === 'invoice' ? 'Fatura' : 'Despesa';
+
     const paymentAmount = parseFloat(amountValue) || 0;
-    const newTotalPaid = invoice.totalPaid + paymentAmount;
-    const remainingToPay = invoice.value - newTotalPaid;
+    const newTotalPaid = payableItem.totalPaid + paymentAmount;
+    const remainingToPay = payableItem.value - newTotalPaid;
 
     const handleCancel = () => {
         setIsModalPaymentOpen(false);
-        setPaymentDate('');
-        setAmountValue(0);
     }
 
     const handleSubmit = () => {
         const paymentData = {
-            payableId: invoice.id,
+            payableId: payableItem.id,
             value: amountValue,
             paymentDate: paymentDate,
-            payableType: "invoice"
+            payableType: payableType
         }
         handlePayment(paymentData);
         setIsModalPaymentOpen(false);
@@ -37,22 +37,23 @@ export const PaymentInvoiceModal = ({
 
     const formFields = [
         {
-            title: 'Informações da Fatura',
+            // Título dinâmico
+            title: `Informações da ${typeLabel}`,
             fields: [
                 {
-                    label: "Fatura",
-                    name: "invoiceName",
-                    value: invoice.name,
+                    label: typeLabel,
+                    name: "itemName",
+                    value: payableItem.name,
                     readOnly: true,
                 },
                 {
                     label: "Valor Total (R$)",
                     name: "totalValue",
-                    value: invoice.value.toFixed(2),
+                    value: payableItem.value.toFixed(2),
                     readOnly: true,
                 },
                 {
-                    label: "Valor Pago (R$)",
+                    label: "Valor já Pago (R$)",
                     name: "totalPaid",
                     value: newTotalPaid.toFixed(2),
                     readOnly: true,
@@ -93,7 +94,8 @@ export const PaymentInvoiceModal = ({
     return (
         <GenericModal
             isOpen={true}
-            title={`Pagar Fatura: ${invoice.name}`}
+            // Título do modal dinâmico
+            title={`Pagar ${typeLabel}: ${payableItem.name}`}
             formFields={formFields}
             onSubmit={handleSubmit}
             onCancel={handleCancel}
