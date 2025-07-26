@@ -7,6 +7,7 @@ import { BotaoGlobal } from '../../Components/Buttons/ButtonGlobal.tsx';
 import { CustomDatePicker } from '../../Components/DatePicker/DatePicker';
 import { getFormattedDateRange, getStartAndEndOfMonth } from '../../Utils/DateUtils';
 import { PaymentModalExpense } from '../../Modals/ModalExpenses/PaymentModalExpense';
+import { ReversePaymentModal } from '../../Modals/PaymentModal/ReversePaymentModal';
 
 const Expenses = () => {
     const [formattedPeriod, setFormattedPeriod] = useState(() => getStartAndEndOfMonth());
@@ -83,6 +84,18 @@ const Expenses = () => {
         setIsPaymentModalOpen(true);
     };
 
+    const [isReverseModalOpen, setIsReverseModalOpen] = useState(false);
+    const [selectedExpenseForReverse, setSelectedExpenseForReverse] = useState(null);
+
+    const handleOpenReverseModal = (expense) => {
+        setSelectedExpenseForReverse(expense);
+        setIsReverseModalOpen(true);
+    };
+
+    const handleCloseReverseModal = () => {
+        setIsReverseModalOpen(false);
+    };
+
     return (
         <div className={styles.Expenses}>
             <div className={styles['Expenses-content']}>
@@ -113,6 +126,7 @@ const Expenses = () => {
                         onEdit={handleEditExpense}
                         onDelete={handleDeleteExpense}
                         onPayment={handleOpenPaymentModal}
+                        onReversePayment={handleOpenReverseModal}
                     />
                 </div>
             </div>
@@ -161,6 +175,15 @@ const Expenses = () => {
                     handlePayment={handleRegisterPayment}
                     paymentDate={paymentDate}
                     setPaymentDate={setPaymentDate}
+                />
+            )}
+
+            {isReverseModalOpen && (
+                <ReversePaymentModal
+                    isOpen={isReverseModalOpen}
+                    onClose={handleCloseReverseModal}
+                    entityType="expense"
+                    entityData={selectedExpenseForReverse}
                 />
             )}
         </div>

@@ -52,6 +52,8 @@ const ModalExpenses = ({
         setIdInvoice('');
         setInvoices([]);
         setStatus('pending');
+        setLinkToInvoice(false);
+        setHasInstallments(false);
     };
 
     const { handleSearchRelatedInvoices } = useInvoiceHandler();
@@ -298,11 +300,11 @@ const ModalExpenses = ({
     return (
         <GenericModal
             isOpen={true}
-            title="Cadastrar Despesa"
+            title={idExpense > 0 ? "Editar Despesa" : "Cadastrar Despesa"}
             formFields={formFields}
             onSubmit={handleAddExpense}
             onCancel={handleCancel}
-            submitButtonText="Adicionar"
+            submitButtonText="Salvar"
             width="700px"
         />
     );

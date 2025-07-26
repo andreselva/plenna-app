@@ -44,6 +44,9 @@ export const useExpenseForm = ({ addExpense, updateExpense, deleteExpense, regis
         setLinkToInvoice(false);
         setIdInvoice('');
         setStatus('pending');
+        setSelectedCard('');
+        setSourceAccountId('');
+        setIdExpense(0);
     };
 
     const handleAddExpense = () => {

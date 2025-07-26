@@ -37,34 +37,37 @@ export const PaymentInvoiceModal = ({
 
     const formFields = [
         {
+            title: 'Informações da Fatura',
             fields: [
                 {
                     label: "Fatura",
                     name: "invoiceName",
                     value: invoice.name,
-                    readOnly: true
+                    readOnly: true,
                 },
                 {
                     label: "Valor Total (R$)",
                     name: "totalValue",
                     value: invoice.value.toFixed(2),
-                    readOnly: true
+                    readOnly: true,
                 },
                 {
                     label: "Valor Pago (R$)",
                     name: "totalPaid",
                     value: newTotalPaid.toFixed(2),
-                    readOnly: true
+                    readOnly: true,
+
                 },
                 {
                     label: "Valor Restante (R$)",
                     name: "remainingToPay",
                     value: remainingToPay.toFixed(2),
-                    readOnly: true
+                    readOnly: true,
                 }
             ]
         },
         {
+            title: 'Pagamento',
             fields: [
                 {
                     label: "Valor do Pagamento",
@@ -81,7 +84,7 @@ export const PaymentInvoiceModal = ({
                     onChange: setPaymentDate,
                     type: "date",
                     required: true,
-                    defaultValue: new Date().toISOString().split('T')[0]
+                    defaultValue: new Date().toISOString().split('T')[0],
                 },
             ]
         }

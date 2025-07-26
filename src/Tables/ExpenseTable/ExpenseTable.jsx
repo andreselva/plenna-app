@@ -3,7 +3,7 @@ import { FlexibleTable } from "../../Components/FlexibleTable/FlexibleTable";
 import DeleteConfirmation from "../../Hooks/DeleteConfirmation/DeleteConfirmation";
 import globalStyles from '../../Styles/GlobalStyles.module.css';
 
-const ExpenseTable = ({ expenses = [], categories = [], creditCards = [], onEdit, onDelete, onPayment }) => {
+const ExpenseTable = ({ expenses = [], categories = [], creditCards = [], onEdit, onDelete, onPayment, onReversePayment }) => {
     const handleDelete = DeleteConfirmation(onDelete, {
         confirmTitle: 'Deseja realmente excluir?',
         confirmText: 'A exclusão é definitiva!',
@@ -82,7 +82,7 @@ const ExpenseTable = ({ expenses = [], categories = [], creditCards = [], onEdit
                     },
                     {
                         label: 'Excluir',
-                        handler: () => handleDelete(expense.id)
+                        handler: () => handleDelete(expense)
                     }
                 ];
 
@@ -90,6 +90,13 @@ const ExpenseTable = ({ expenses = [], categories = [], creditCards = [], onEdit
                     expenseActions.push({
                         label: 'Efetuar pagamento',
                         handler: () => onPayment(expense)
+                    })
+                }
+
+                if (!expense.idInvoice > 0 && (expense.status === 'paid' || expense.status === 'partial')) {
+                    expenseActions.push({
+                        label: 'Estornar pagamento',
+                        handler: () => onReversePayment(expense)
                     })
                 }
 
