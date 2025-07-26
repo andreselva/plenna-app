@@ -46,11 +46,13 @@ export const usePaymentManager = () => {
     /**
      * Estorna (exclui) um pagamento específico.
      */
-    const reversePayment = useCallback(async (paymentId) => {
+    const reversePayment = useCallback(async (reservePaymentData) => {
         setLoading(true);
         setError(null);
         try {
-            await axiosInstance.delete(`/payment/${paymentId}`);
+            await axiosInstance.delete(`/payment/reverse`, {
+                data: reservePaymentData,
+            });
             // AlertToast.success("Pagamento estornado com sucesso!");
             return true;
         } catch (err) {

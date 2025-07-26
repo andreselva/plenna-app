@@ -60,13 +60,13 @@ export const useExpenseForm = ({ addExpense, updateExpense, deleteExpense, regis
             description: expenseDescription,
             value: expenseValue,
             invoiceDueDate: expenseInvoiceDueDate,
-            idCategory: selectedCategory,
-            idCreditCard: selectedCard,
-            installments: installments,
+            idCategory: selectedCategory === '' ? 0 : selectedCategory,
+            idCreditCard: selectedCard === '' ? 0 : selectedCard,
+            installments: installments === '' ? 0 : installments,
             typeOfInstallment: typeOfInstallment,
             hasInstallments: hasInstallments,
             linkToInvoice: linkToInvoice,
-            idInvoice: idInvoice,
+            idInvoice: idInvoice === '' ? 0 : idInvoice,
             status: status
         });
 
