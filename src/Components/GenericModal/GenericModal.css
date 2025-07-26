@@ -30,11 +30,12 @@
     color: #333;
 }
 
-/* Classe para o container de 'children' */
 .modal-body {
-    flex-grow: 1; /* Permite que o corpo cresça e preencha o espaço */
-    overflow-y: auto; /* Adiciona scroll se o conteúdo for muito grande */
-    margin-bottom: 24px;
+    flex-grow: 1;
+    overflow-y: auto;
+    margin-bottom: 5px;
+    margin-right: -24px;
+    padding-right: 24px;
 }
 
 /* Estilos para o formulário */
@@ -86,17 +87,15 @@
     box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
 }
 
-/* Container para os botões */
 .modal-buttons {
     display: flex;
     justify-content: flex-end;
     gap: 12px;
-    margin-top: auto; /* Empurra os botões para o final */
-    padding-top: 16px; /* Espaço entre o conteúdo e os botões */
+    margin-top: auto;
+    padding-top: 16px;
     border-top: 1px solid #eee;
 }
 
-/* Estilos genéricos para os botões */
 .modal-buttons button {
     padding: 10px 20px;
     border-radius: 5px;
@@ -125,7 +124,9 @@
     background-color: #e0e0e0;
 }
 
-input, select, textarea {
+input,
+select,
+textarea {
     width: 100%;
     padding: 12px;
     margin-bottom: 20px;
@@ -136,7 +137,9 @@ input, select, textarea {
     box-sizing: border-box;
 }
 
-input:focus, select:focus, textarea:focus {
+input:focus,
+select:focus,
+textarea:focus {
     border-color: #4CAF50;
     outline: none;
 }
@@ -151,7 +154,8 @@ input[type="color"] {
 
 textarea {
     height: 100px;
-    resize: vertical; /* Permite redimensionar verticalmente */
+    resize: vertical;
+    /* Permite redimensionar verticalmente */
 }
 
 .full-width {
@@ -160,36 +164,41 @@ textarea {
 
 .half-width {
     flex: 0.5;
-    min-width: 150px; /* Garante um tamanho mínimo para inputs menores */
+    min-width: 150px;
+    /* Garante um tamanho mínimo para inputs menores */
 }
 
 .half-width-large {
     flex: 0.75;
-    min-width: 150px; /* Garante um tamanho mínimo para inputs menores */
+    min-width: 150px;
+    /* Garante um tamanho mínimo para inputs menores */
 }
 
 .half-width-middle-medium {
     flex: 0.45;
-    min-width: 150px; /* Garante um tamanho mínimo para inputs menores */
+    min-width: 150px;
+    /* Garante um tamanho mínimo para inputs menores */
 }
 
 .half-width-medium {
     flex: 0.33;
-    min-width: 150px; /* Garante um tamanho mínimo para inputs menores */
+    min-width: 150px;
+    /* Garante um tamanho mínimo para inputs menores */
 }
 
 .half-width-small {
     flex: 0.25;
-    min-width: 100px; /* Garante um tamanho mínimo para inputs menores */
+    min-width: 100px;
+    /* Garante um tamanho mínimo para inputs menores */
 }
 
 .modal-section-title {
-  margin-top: 20px;
-  margin-bottom: 15px;
-  font-size: 1.1em;
-  color: #424242;
-  border-bottom: 1px solid #eee;
-  padding-bottom: 5px;
+    margin-top: 20px;
+    margin-bottom: 15px;
+    font-size: 1.1em;
+    color: #424242;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 5px;
 }
 
 /* Animações */
@@ -197,6 +206,7 @@ textarea {
     from {
         opacity: 0;
     }
+
     to {
         opacity: 1;
     }
@@ -207,6 +217,7 @@ textarea {
         transform: translateY(30px);
         opacity: 0;
     }
+
     to {
         transform: translateY(0);
         opacity: 1;
