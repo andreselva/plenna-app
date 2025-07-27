@@ -1,0 +1,71 @@
+.payment-status-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 150px;
+    color: #6c757d;
+    font-style: italic;
+}
+
+.payment-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.payment-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 0.5rem;
+    border-bottom: 1px solid #e9ecef;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.payment-item:hover {
+    background-color: #f8f9fa;
+}
+
+.payment-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem; 
+}
+
+.payment-date {
+    font-size: 0.875rem; 
+    color: #6c757d; 
+}
+
+.payment-value {
+    font-weight: 600;
+    color: #212529;
+}
+
+.reverse-payment-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    width: 36px;
+    height: 36px;
+    
+    background: transparent;
+    border: none;
+    border-radius: 50%;
+    
+    color: #dc3545;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+}
+
+.reverse-payment-button:hover {
+    background-color: #dc3545;
+    color: white;
+}
+
+.payment-item:last-child {
+  border-bottom: none;
+} 

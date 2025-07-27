@@ -37,8 +37,18 @@ const updateExpense = async (id, updatedExpense, periodo) => {
     }
 };
 
+const registerPayment = async (paymentData) => {
+    try {
+        const { data } = await axiosInstance.post(`/expenses/payments`, paymentData);
+        return data;
+    } catch (err) {
+        throw err?.response?.data?.message || "Erro ao registrar pagamento!";
+    }
+}
+
 export const ExpenseAPI = {
     addExpense,
     deleteExpense,
-    updateExpense
+    updateExpense,
+    registerPayment
 };

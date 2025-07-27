@@ -4,8 +4,9 @@ import { useState } from 'react';
 import AlertConfirm from '../Components/Alerts/AlertConfirm';
 import { validateDate } from '../Utils/DateUtils';
 import SweetAlert from '../Components/Alerts/SweetAlert';
+import { optionsStatus } from '../Types/status.options';
 
-export const useExpenseForm = ({ addExpense, updateExpense, deleteExpense, categories, accounts }) => {
+export const useExpenseForm = ({ addExpense, updateExpense, deleteExpense, registerPayment, categories, accounts }) => {
     const [selectedCategory, setSelectedCategory] = useState('');
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingExpense, setEditingExpense] = useState('');
@@ -23,6 +24,9 @@ export const useExpenseForm = ({ addExpense, updateExpense, deleteExpense, categ
     const [idExpense, setIdExpense] = useState(0);
     const [linkToInvoice, setLinkToInvoice] = useState(false);
     const [idInvoice, setIdInvoice] = useState('');
+    const [status, setStatus] = useState('');
+    const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
+    const [paymentDate, setPaymentDate] = useState('');
     const updateInstallments = false;
 
     const resetForm = () => {
@@ -39,6 +43,10 @@ export const useExpenseForm = ({ addExpense, updateExpense, deleteExpense, categ
         setIsModalOpen(false);
         setLinkToInvoice(false);
         setIdInvoice('');
+        setStatus('pending');
+        setSelectedCard('');
+        setSourceAccountId('');
+        setIdExpense(0);
     };
 
     const handleAddExpense = () => {
@@ -52,13 +60,14 @@ export const useExpenseForm = ({ addExpense, updateExpense, deleteExpense, categ
             description: expenseDescription,
             value: expenseValue,
             invoiceDueDate: expenseInvoiceDueDate,
-            idCategory: selectedCategory,
-            idCreditCard: selectedCard,
-            installments: installments,
+            idCategory: selectedCategory === '' ? 0 : selectedCategory,
+            idCreditCard: selectedCard === '' ? 0 : selectedCard,
+            installments: installments === '' ? 0 : installments,
             typeOfInstallment: typeOfInstallment,
             hasInstallments: hasInstallments,
             linkToInvoice: linkToInvoice,
-            idInvoice: idInvoice
+            idInvoice: idInvoice === '' ? 0 : idInvoice,
+            status: status
         });
 
         resetForm();
@@ -74,12 +83,13 @@ export const useExpenseForm = ({ addExpense, updateExpense, deleteExpense, categ
         setSelectedCategory(expense.idCategory);
         setSelectedCard(expense.idCreditCard);
         setInstallments(expense.installments);
-        setTypeOfInstallment(expense.typeOfInstallments);
+        setTypeOfInstallment(expense.typeOfInstallment);
         setHasInstallments(expense.hasInstallments);
         setBooleanSourceAccountId(expense.sourceAccountId > 0);
         setSourceAccountId(expense.sourceAccountId);
         setLinkToInvoice(expense.linkToInvoice);
         setIdInvoice(expense.idInvoice);
+        setStatus(expense.status)
         setIsModalOpen(true);
     };
 
@@ -111,7 +121,8 @@ export const useExpenseForm = ({ addExpense, updateExpense, deleteExpense, categ
             hasInstallments: hasInstallments,
             sourceAccountId: sourceAccountId,
             linkToInvoice: linkToInvoice,
-            idInvoice: idInvoice
+            idInvoice: idInvoice,
+            status: status
         };
 
         let updateInstallmentsFlag = updateInstallments;
@@ -160,45 +171,11 @@ export const useExpenseForm = ({ addExpense, updateExpense, deleteExpense, categ
         setIsModalCardOpen(true);
     }
 
+    const handleRegisterPayment = (paymentData) => {
+        registerPayment(paymentData);
+    }
+
     return {
-        categories,
-        accounts,
-        newExpense,
-        setNewExpense,
-        expenseDescription,
-        setExpenseDescription,
-        expenseValue,
-        setExpenseValue,
-        expenseInvoiceDueDate,
-        setExpenseInvoiceDueDate,
-        selectedCategory,
-        setSelectedCategory,
-        isModalOpen,
-        setIsModalOpen,
-        isModalCardOpen,
-        setIsModalCardOpen,
-        editingExpense,
-        setEditingExpense,
-        handleAddExpense,
-        handleEditExpense,
-        handleSaveExpense,
-        handleDeleteExpense,
-        handleAddCard,
-        selectedCard,
-        setSelectedCard,
-        installments,
-        setInstallments,
-        typeOfInstallment,
-        setTypeOfInstallment,
-        hasInstallments,
-        setHasInstallments,
-        hasSourceAccountId,
-        setBooleanSourceAccountId,
-        idExpense,
-        setIdExpense,
-        linkToInvoice,
-        setLinkToInvoice,
-        idInvoice,
-        setIdInvoice,
+        categories, accounts, newExpense, setNewExpense, expenseDescription, setExpenseDescription, expenseValue, setExpenseValue, expenseInvoiceDueDate, setExpenseInvoiceDueDate, selectedCategory, setSelectedCategory, isModalOpen, setIsModalOpen, isModalCardOpen, setIsModalCardOpen, editingExpense, setEditingExpense, handleAddExpense, handleEditExpense, handleSaveExpense, handleDeleteExpense, handleAddCard, selectedCard, setSelectedCard, installments, setInstallments, typeOfInstallment, setTypeOfInstallment, hasInstallments, setHasInstallments, hasSourceAccountId, setBooleanSourceAccountId, idExpense, setIdExpense, linkToInvoice, setLinkToInvoice, idInvoice, setIdInvoice, status, setStatus, optionsStatus, handleRegisterPayment, isPaymentModalOpen, setIsPaymentModalOpen, paymentDate, setPaymentDate
     };
 };

@@ -33,6 +33,9 @@ const ModalExpenses = ({
     setLinkToInvoice,
     idInvoice,
     setIdInvoice,
+    status,
+    setStatus,
+    optionsStatus
 }) => {
     const handleCancel = () => {
         setNewExpense('');
@@ -46,9 +49,11 @@ const ModalExpenses = ({
         setTypeOfInstallment('U');
         setBooleanSourceAccountId(false);
         setIdExpense(0);
-        setLinkToInvoice(false);
         setIdInvoice('');
         setInvoices([]);
+        setStatus('pending');
+        setLinkToInvoice(false);
+        setHasInstallments(false);
     };
 
     const { handleSearchRelatedInvoices } = useInvoiceHandler();
@@ -130,6 +135,17 @@ const ModalExpenses = ({
                     required: true,
                     size: 'half-width-medium',
                 },
+                {
+                    id: 'statusExpense',
+                    label: 'Situação',
+                    type: 'select',
+                    value: status,
+                    onChange: setStatus,
+                    required: true,
+                    disabled: idInvoice > 0,
+                    options: optionsStatus.map((option) => ({ value: option.id, label: option.name })),
+                    size: 'half-width-medium',
+                },
             ],
         },
         {
@@ -186,7 +202,7 @@ const ModalExpenses = ({
                     placeholder: 0,
                     required: typeOfInstallment === 'P',
                     size: 'half-width-small',
-                    _disabled: typeOfInstallment !== 'P' || hasSourceAccountId || idExpense > 0
+                    disabled: typeOfInstallment !== 'P' || hasSourceAccountId || idExpense > 0
                 },
             ],
         },
@@ -270,7 +286,6 @@ const ModalExpenses = ({
                     onChange: (value) => setIdInvoice(value),
                     placeholder: !selectedCard ? 'Selecione um cartão' : (invoices.length === 0 ? 'Nenhuma fatura encontrada' : 'Selecione a fatura'),
                     required: true,
-                    // MODIFICADO: Garantir que o valor da opção seja uma string
                     options: invoices.map((invoice) => ({
                         value: String(invoice.id),
                         label: invoice.name
@@ -285,11 +300,11 @@ const ModalExpenses = ({
     return (
         <GenericModal
             isOpen={true}
-            title="Cadastrar Despesa"
+            title={idExpense > 0 ? "Editar Despesa" : "Cadastrar Despesa"}
             formFields={formFields}
             onSubmit={handleAddExpense}
             onCancel={handleCancel}
-            submitButtonText="Adicionar"
+            submitButtonText="Salvar"
             width="700px"
         />
     );

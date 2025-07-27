@@ -8,7 +8,8 @@ import ModalExpenses from '../../Modals/ModalExpenses/ModalExpenses';
 import { useBankAccounts } from '../../Hooks/BankAccountsManager/useBankAccounts';
 import { CategoryManager } from '../../Hooks/CategoryManager/CategoryManager';
 import { useExpenseHandler } from '../../Handlers/useExpenseHandler';
-import { PaymentInvoiceModal } from '../../Modals/PaymentModal/PaymentInvoiceModal';
+import { PaymentModal } from '../../Modals/PaymentModal/PaymentModal';
+import { ReversePaymentModal } from '../../Modals/PaymentModal/ReversePaymentModal';
 
 const Invoices = () => {
     const [selectedInvoice, setSelectedInvoice] = useState(null);
@@ -43,17 +44,23 @@ const Invoices = () => {
         setFormattedPeriod(formattedRange);
     };
 
+    const [isReverseModalOpen, setIsReverseModalOpen] = useState(false);
+    const [selectedInvoiceForReserve, setSelectedInvoiceForReserve] = useState(null);
+
+    const handleOpenReverseModal = (expense) => {
+        setSelectedInvoiceForReserve(expense);
+        setIsReverseModalOpen(true);
+    };
+
+    const handleCloseReverseModal = () => {
+        setIsReverseModalOpen(false);
+    };
+
     const {
         invoices,
         isPaymentModalOpen,
         setPaymentModalOpen,
         handlePayment,
-        amountValue,
-        setAmountValue,
-        paymentDate,
-        setPaymentDate,
-        totalPaid,
-        setTotalPaid
     } = useInvoiceHandler(formattedPeriod);
 
     const fnExpenses = useExpenseHandler(formattedPeriod);
@@ -78,6 +85,7 @@ const Invoices = () => {
                         onDelete={fnExpenses.handleDeleteExpense}
                         setIsModalOpen={fnExpenses.setIsModalOpen}
                         onOpenPaymentModal={handleOpenPaymentModal}
+                        onReversePayment={handleOpenReverseModal}
                     />
                 </div>
             </div>
@@ -113,20 +121,27 @@ const Invoices = () => {
                     setIdInvoice={fnExpenses.setIdInvoice}
                     linkToInvoice={fnExpenses.linkToInvoice}
                     setLinkToInvoice={fnExpenses.setLinkToInvoice}
+                    status={fnExpenses.status}
+                    setStatus={fnExpenses.setStatus}
+                    optionsStatus={fnExpenses.optionsStatus}
                 />
             )}
 
             {isPaymentModalOpen && (
-                <PaymentInvoiceModal
-                    invoice={selectedInvoice}
+                <PaymentModal
+                    payableItem={selectedInvoice}
+                    payableType="invoice"
                     setIsModalPaymentOpen={setPaymentModalOpen}
                     handlePayment={handlePayment}
-                    amountValue={amountValue}
-                    setAmountValue={setAmountValue}
-                    paymentDate={paymentDate}
-                    setPaymentDate={setPaymentDate}
-                    totalPaid={totalPaid}
-                    setTotalPaid={setTotalPaid}
+                />
+            )}
+
+            {isReverseModalOpen && (
+                <ReversePaymentModal
+                    isOpen={isReverseModalOpen}
+                    onClose={handleCloseReverseModal}
+                    entityType="invoice"
+                    entityData={selectedInvoiceForReserve}
                 />
             )}
         </div>

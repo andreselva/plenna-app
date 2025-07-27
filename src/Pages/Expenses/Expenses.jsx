@@ -6,6 +6,8 @@ import ModalExpenses from "../../Modals/ModalExpenses/ModalExpenses";
 import { BotaoGlobal } from '../../Components/Buttons/ButtonGlobal.tsx';
 import { CustomDatePicker } from '../../Components/DatePicker/DatePicker';
 import { getFormattedDateRange, getStartAndEndOfMonth } from '../../Utils/DateUtils';
+import { ReversePaymentModal } from '../../Modals/PaymentModal/ReversePaymentModal';
+import { PaymentModal } from '../../Modals/PaymentModal/PaymentModal';
 
 const Expenses = () => {
     const [formattedPeriod, setFormattedPeriod] = useState(() => getStartAndEndOfMonth());
@@ -66,7 +68,31 @@ const Expenses = () => {
         setLinkToInvoice,
         idInvoice,
         setIdInvoice,
+        status,
+        setStatus,
+        optionsStatus,
+        handleRegisterPayment,
+        isPaymentModalOpen,
+        setIsPaymentModalOpen,
     } = useExpenseHandler(formattedPeriod);
+
+    const [selectedExpense, setSelectedExpense] = useState(null);
+    const handleOpenPaymentModal = (expense) => {
+        setSelectedExpense(expense);
+        setIsPaymentModalOpen(true);
+    };
+
+    const [isReverseModalOpen, setIsReverseModalOpen] = useState(false);
+    const [selectedExpenseForReverse, setSelectedExpenseForReverse] = useState(null);
+
+    const handleOpenReverseModal = (expense) => {
+        setSelectedExpenseForReverse(expense);
+        setIsReverseModalOpen(true);
+    };
+
+    const handleCloseReverseModal = () => {
+        setIsReverseModalOpen(false);
+    };
 
     return (
         <div className={styles.Expenses}>
@@ -97,6 +123,8 @@ const Expenses = () => {
                         creditCards={accounts}
                         onEdit={handleEditExpense}
                         onDelete={handleDeleteExpense}
+                        onPayment={handleOpenPaymentModal}
+                        onReversePayment={handleOpenReverseModal}
                     />
                 </div>
             </div>
@@ -132,6 +160,27 @@ const Expenses = () => {
                     setLinkToInvoice={setLinkToInvoice}
                     idInvoice={idInvoice}
                     setIdInvoice={setIdInvoice}
+                    status={status}
+                    setStatus={setStatus}
+                    optionsStatus={optionsStatus}
+                />
+            )}
+
+            {isPaymentModalOpen && selectedExpense && (
+                <PaymentModal
+                    payableItem={selectedExpense}
+                    payableType="expense"
+                    setIsModalPaymentOpen={setIsPaymentModalOpen}
+                    handlePayment={handleRegisterPayment}
+                />
+            )}
+
+            {isReverseModalOpen && (
+                <ReversePaymentModal
+                    isOpen={isReverseModalOpen}
+                    onClose={handleCloseReverseModal}
+                    entityType="expense"
+                    entityData={selectedExpenseForReverse}
                 />
             )}
         </div>

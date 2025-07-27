@@ -1,8 +1,9 @@
+import { ActionDropdown } from "../../Components/ActionDropdown/ActionDropdown";
 import { FlexibleTable } from "../../Components/FlexibleTable/FlexibleTable";
 import DeleteConfirmation from "../../Hooks/DeleteConfirmation/DeleteConfirmation";
 import globalStyles from '../../Styles/GlobalStyles.module.css';
 
-const ExpenseTable = ({ expenses = [], categories = [], creditCards = [], onEdit, onDelete }) => {
+const ExpenseTable = ({ expenses = [], categories = [], creditCards = [], onEdit, onDelete, onPayment, onReversePayment }) => {
     const handleDelete = DeleteConfirmation(onDelete, {
         confirmTitle: 'Deseja realmente excluir?',
         confirmText: 'A exclusão é definitiva!',
@@ -21,7 +22,7 @@ const ExpenseTable = ({ expenses = [], categories = [], creditCards = [], onEdit
         {
             header: 'Valor',
             accessor: 'value',
-            style: { flex: '1 1 0%', textAlign: 'right' } // Alinhando valor à direita como exemplo
+            style: { flex: '1 1 0%', textAlign: 'center' }
         },
         {
             header: 'Vencimento',
@@ -51,14 +52,60 @@ const ExpenseTable = ({ expenses = [], categories = [], creditCards = [], onEdit
             }
         },
         {
+            header: 'Status',
+            accessor: 'status',
+            style: { flex: '1 1 0%', textAlign: 'center' },
+            renderCell: (expense) => {
+                const statusMap = {
+                    pending: 'Pendente',
+                    paid: 'Paga',
+                    partial: 'Parcial',
+                    cancelled: 'Cancelada'
+                };
+                return (
+                    <span className={globalStyles.statusBadge} style={{
+                        backgroundColor: expense.status === 'paid' ? '#28a74533' : expense.status === 'partial' ? '#ffc10733' : '#dc354533'
+                    }}>
+                        {statusMap[expense.status] || '-'}
+                    </span>
+                );
+            }
+        },
+        {
             header: 'Ações',
-            style: { flex: '1 1 120px' },
-            renderCell: (expense) => (
-                <div className={globalStyles.actions}>
-                    <button className={globalStyles['action-button']} onClick={() => onEdit(expense)}>Editar</button>
-                    <button className={globalStyles['action-button']} onClick={() => handleDelete(expense)}>Excluir</button>
-                </div>
-            )
+            style: { flex: '1 1 50px', textAlign: 'center' },
+            renderCell: (expense) => {
+                let expenseActions = [
+                    {
+                        label: 'Editar',
+                        handler: () => onEdit(expense)
+                    },
+                    {
+                        label: 'Excluir',
+                        handler: () => handleDelete(expense)
+                    }
+                ];
+
+                if (!expense.idInvoice > 0 && expense.status !== 'paid') {
+                    expenseActions.push({
+                        label: 'Efetuar pagamento',
+                        handler: () => onPayment(expense)
+                    })
+                }
+
+                if (!expense.idInvoice > 0 && (expense.status === 'paid' || expense.status === 'partial')) {
+                    expenseActions.push({
+                        label: 'Estornar pagamento',
+                        handler: () => onReversePayment(expense)
+                    })
+                }
+
+                return (
+                    <ActionDropdown
+                        actions={expenseActions}
+                    />
+                );
+            }
         }
     ];
 
