@@ -1,5 +1,6 @@
 import { useState } from "react";
 import GenericModal from "../../Components/GenericModal/GenericModal";
+import AlertConfirm from "../../Components/Alerts/AlertConfirm";
 
 export const PaymentModal = ({
     payableItem,
@@ -24,7 +25,17 @@ export const PaymentModal = ({
         setIsModalPaymentOpen(false);
     }
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
+        const result = await AlertConfirm({
+            title: 'Registrar Pagamento',
+            text: `Você está pagando R$ ${amountValue} dessa ${typeLabel.toLowerCase()}. Você confirma o pagamento?`,
+            icon: 'warning',
+            confirmButtonText: 'Pagar',
+            cancelButtonText: 'Não'
+        });
+
+        if (!result.isConfirmed) return;
+
         const paymentData = {
             payableId: payableItem.id,
             value: amountValue,
@@ -37,7 +48,6 @@ export const PaymentModal = ({
 
     const formFields = [
         {
-            // Título dinâmico
             title: `Informações da ${typeLabel}`,
             fields: [
                 {
@@ -45,25 +55,28 @@ export const PaymentModal = ({
                     name: "itemName",
                     value: payableItem.name,
                     readOnly: true,
+                    disabled: true
                 },
                 {
                     label: "Valor Total (R$)",
                     name: "totalValue",
                     value: payableItem.value.toFixed(2),
                     readOnly: true,
+                    disabled: true
                 },
                 {
                     label: "Valor já Pago (R$)",
                     name: "totalPaid",
                     value: newTotalPaid.toFixed(2),
                     readOnly: true,
-
+                    disabled: true
                 },
                 {
                     label: "Valor Restante (R$)",
                     name: "remainingToPay",
                     value: remainingToPay.toFixed(2),
                     readOnly: true,
+                    disabled: true
                 }
             ]
         },
@@ -94,7 +107,6 @@ export const PaymentModal = ({
     return (
         <GenericModal
             isOpen={true}
-            // Título do modal dinâmico
             title={`Pagar ${typeLabel}: ${payableItem.name}`}
             formFields={formFields}
             onSubmit={handleSubmit}

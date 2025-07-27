@@ -9,6 +9,7 @@ import { useBankAccounts } from '../../Hooks/BankAccountsManager/useBankAccounts
 import { CategoryManager } from '../../Hooks/CategoryManager/CategoryManager';
 import { useExpenseHandler } from '../../Handlers/useExpenseHandler';
 import { PaymentModal } from '../../Modals/PaymentModal/PaymentModal';
+import { ReversePaymentModal } from '../../Modals/PaymentModal/ReversePaymentModal';
 
 const Invoices = () => {
     const [selectedInvoice, setSelectedInvoice] = useState(null);
@@ -43,15 +44,23 @@ const Invoices = () => {
         setFormattedPeriod(formattedRange);
     };
 
+    const [isReverseModalOpen, setIsReverseModalOpen] = useState(false);
+    const [selectedInvoiceForReserve, setSelectedInvoiceForReserve] = useState(null);
+
+    const handleOpenReverseModal = (expense) => {
+        setSelectedInvoiceForReserve(expense);
+        setIsReverseModalOpen(true);
+    };
+
+    const handleCloseReverseModal = () => {
+        setIsReverseModalOpen(false);
+    };
+
     const {
         invoices,
         isPaymentModalOpen,
         setPaymentModalOpen,
         handlePayment,
-        amountValue,
-        setAmountValue,
-        paymentDate,
-        setPaymentDate,
     } = useInvoiceHandler(formattedPeriod);
 
     const fnExpenses = useExpenseHandler(formattedPeriod);
@@ -76,6 +85,7 @@ const Invoices = () => {
                         onDelete={fnExpenses.handleDeleteExpense}
                         setIsModalOpen={fnExpenses.setIsModalOpen}
                         onOpenPaymentModal={handleOpenPaymentModal}
+                        onReversePayment={handleOpenReverseModal}
                     />
                 </div>
             </div>
@@ -123,6 +133,15 @@ const Invoices = () => {
                     payableType="invoice"
                     setIsModalPaymentOpen={setPaymentModalOpen}
                     handlePayment={handlePayment}
+                />
+            )}
+
+            {isReverseModalOpen && (
+                <ReversePaymentModal
+                    isOpen={isReverseModalOpen}
+                    onClose={handleCloseReverseModal}
+                    entityType="invoice"
+                    entityData={selectedInvoiceForReserve}
                 />
             )}
         </div>

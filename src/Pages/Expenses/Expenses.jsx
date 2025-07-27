@@ -74,8 +74,6 @@ const Expenses = () => {
         handleRegisterPayment,
         isPaymentModalOpen,
         setIsPaymentModalOpen,
-        paymentDate,
-        setPaymentDate
     } = useExpenseHandler(formattedPeriod);
 
     const [selectedExpense, setSelectedExpense] = useState(null);

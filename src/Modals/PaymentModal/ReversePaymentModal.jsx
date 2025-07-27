@@ -3,6 +3,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { usePaymentManager } from '../../Hooks/PaymentManager/usePaymentManager';
 import { BanknoteXIcon } from 'lucide-react';
 import GenericModal from '../../Components/GenericModal/GenericModal';
+import AlertConfirm from '../../Components/Alerts/AlertConfirm';
 
 
 const entityConfig = {
@@ -30,11 +31,21 @@ export const ReversePaymentModal = ({ isOpen, onClose, entityType, entityData })
     }, [isOpen, fetchPayments]);
 
     const handleReversePayment = async (paymentId) => {
+        const result = await AlertConfirm({
+            title: 'Estornar Pagamento',
+            text: 'Esta ação não pode ser desfeita. Deseja continuar com o estorno do pagamento?',
+            icon: 'warning',
+            confirmButtonText: 'Estornar',
+            cancelButtonText: 'Não'
+        });
+
+        if (!result.isConfirmed) return;
+        
         const reversePaymentData = {
             paymentId,
             entityType,
             entityId: entityData.id,
-        }   
+        }
         const success = await reversePayment(reversePaymentData);
         if (success) {
             fetchPayments();
@@ -57,8 +68,8 @@ export const ReversePaymentModal = ({ isOpen, onClose, entityType, entityData })
             <>
                 {(loading || (!loading && payments.length === 0)) && (
                     <div className="payment-status-container">
-                        {loading ? <p>Carregando pagamentos...</p> 
-                                 : <p>Nenhum pagamento encontrado para esta entidade.</p>}
+                        {loading ? <p>Carregando pagamentos...</p>
+                            : <p>Nenhum pagamento encontrado para esta entidade.</p>}
                     </div>
                 )}
 

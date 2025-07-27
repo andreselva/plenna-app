@@ -1,13 +1,10 @@
 import { useCallback, useState } from 'react';
 import { useInvoiceManager } from "../Hooks/InvoiceManager/useInvoiceManager";
 import { useRelatedInvoices } from '../Hooks/InvoiceManager/useRelatedInvoices';
-import AlertConfirm from '../Components/Alerts/AlertConfirm';
 import { usePaymentManager } from '../Hooks/PaymentManager/usePaymentManager';
 
 export const useInvoiceHandler = (periodo) => {
     const [isPaymentModalOpen, setPaymentModalOpen] = useState(false);
-    const [amountValue, setAmountValue] = useState(0);
-    const [paymentDate, setPaymentDate] = useState('');
 
     const {
         invoices,
@@ -31,11 +28,7 @@ export const useInvoiceHandler = (periodo) => {
     } = usePaymentManager();
 
     const handlePayment = useCallback(async (paymentData) => {
-        const result = await AlertConfirm(`Registrar pagamento`, `Você confirma o pagamento de R$ ${paymentData.value}?`, 'warning');
-
-        if (result.isConfirmed) {
-            registerPayment(paymentData);
-        }
+        registerPayment(paymentData);
     }, [registerPayment]);
 
     const handleSearchRelatedInvoices = useCallback(async (idBankAccount) => {
@@ -47,10 +40,6 @@ export const useInvoiceHandler = (periodo) => {
         handleGenerateInvoices,
         handleSearchRelatedInvoices,
         handlePayment,
-        amountValue,
-        setAmountValue,
-        paymentDate,
-        setPaymentDate,
         isPaymentModalOpen,
         setPaymentModalOpen,
         loading: managerLoading || relatedLoading,
