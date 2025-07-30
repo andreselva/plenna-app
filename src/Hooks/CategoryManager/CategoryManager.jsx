@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import axiosInstance from "../../api/axiosInstance";
 import AlertToast from "../../Components/Alerts/AlertToast";
-import SweetAlert from "../../Components/Alerts/SweetAlert";
 
 export const CategoryManager = () => {
     const [categories, setCategories] = useState([]);
