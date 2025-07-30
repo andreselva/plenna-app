@@ -12,12 +12,12 @@ export const useInvoiceManager = (periodo) => {
             setLoading(true);
             setError(null);
             try {
-                const { data } = await axiosInstance.get("/invoices", {
+                const { data: response } = await axiosInstance.get("/invoices", {
                     headers: {
                         'X-Periodo': JSON.stringify(periodo)
                     }
                 });
-                setInvoices(data.invoices || []);
+                setInvoices(response.payload.invoices || []);
             } catch (err) {
                 setError(err?.response?.data?.message || "Erro ao buscar as faturas!");
                 setInvoices([]);

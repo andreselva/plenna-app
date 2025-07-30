@@ -28,7 +28,7 @@ export const useDashboardData = (periodo = {}) => {
             setLoading(true);
 
             try {
-                const response = await axiosInstance.get('/dashboard', {
+                const {data: response} = await axiosInstance.get('/dashboard', {
                     headers: {
                         'periodo': JSON.stringify(periodo)
                     }
@@ -41,7 +41,7 @@ export const useDashboardData = (periodo = {}) => {
                     monthlyProgress,
                     remainingBalance,
                     creditCardStatements
-                } = response.data;
+                } = response.payload.dashboardData;
 
                 setData({
                     saldoData: currentBalance,
