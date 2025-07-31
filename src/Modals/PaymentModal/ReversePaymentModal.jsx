@@ -46,8 +46,8 @@ export const ReversePaymentModal = ({ isOpen, onClose, entityType, entityData })
             entityType,
             entityId: entityData.id,
         }
-        const success = await reversePayment(reversePaymentData);
-        if (success) {
+        const reverseResult = await reversePayment(reversePaymentData);
+        if (reverseResult && reverseResult.isSuccess) {
             fetchPayments();
         }
     };

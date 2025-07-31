@@ -12,17 +12,13 @@ export const useRelatedInvoices = () => {
         setLoading(true);
         setError(null);
         try {
-            const { data } = await axiosInstance.get(`/invoices/related/${idBankAccount}`);
-            if (data && Array.isArray(data.invoices)) {
+            const { data: response, status } = await axiosInstance.get(`/invoices/related/${idBankAccount}`);
+            if (response && status >= 200 && status <= 204 ) {
                 setLoading(false);
-                return data.invoices;
-            } else if (data && Array.isArray(data)) { 
-                setLoading(false);
-                return data;
-            }   
-
+                return response.payload.invoices;
+            }
             setLoading(false);
-            console.warn("Resposta inesperada ou sem faturas de fetchRelated:", data);
+            console.warn("Resposta inesperada ou sem faturas de fetchRelated:", response);
             return [];
         } catch (err) {
             console.error("Erro ao buscar faturas relacionadas (useRelatedInvoices):", err);

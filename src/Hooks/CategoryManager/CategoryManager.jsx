@@ -2,6 +2,8 @@ import { useState, useEffect, useRef } from "react";
 import axiosInstance from "../../api/axiosInstance";
 import AlertToast from "../../Components/Alerts/AlertToast";
 
+const endpoint = "/categories";
+
 export const CategoryManager = () => {
     const [categories, setCategories] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -14,7 +16,7 @@ export const CategoryManager = () => {
             hasFetched.current = true;
 
             try {
-                const { data: response, status } = await axiosInstance.get("/categories");
+                const { data: response, status } = await axiosInstance.get(endpoint);
                 if (response && status >= 200 && status <= 204) {
                     setCategories(response.payload.categories);
                     return;
@@ -34,7 +36,7 @@ export const CategoryManager = () => {
 
     const addCategory = async (category) => {
         try {
-            const { data: response, status } = await axiosInstance.post("/categories", category);
+            const { data: response, status } = await axiosInstance.post(endpoint, category);
             if (response && status >= 200 && status <= 204) {
                 setCategories((prev) => [...prev, response.payload.category]);
                 AlertToast({icon: 'success', title: 'Categoria criada com sucesso.'});
@@ -52,7 +54,7 @@ export const CategoryManager = () => {
 
     const deleteCategory = async (id) => {
         try {
-            const { data: response, status } = await axiosInstance.delete(`/categories/${id}`);
+            const { data: response, status } = await axiosInstance.delete(`${endpoint}/${id}`);
             if (response.payload.success && status >= 200 && status <= 204) {
                 setCategories((prev) => prev.filter((category) => category.id !== id));
                 AlertToast({ icon: 'success', title: 'Categoria excluída com sucesso' });
@@ -68,7 +70,7 @@ export const CategoryManager = () => {
     
     const updateCategory = async (id, updatedCategory) => {
         try {
-            const { data: response, status } = await axiosInstance.put(`/categories/${id}`, updatedCategory);
+            const { data: response, status } = await axiosInstance.put(`${endpoint}/${id}`, updatedCategory);
             if (response && status >= 200 && status <= 204) {
                 setCategories((prev) =>
                     prev.map((category) =>
