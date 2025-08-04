@@ -4,7 +4,7 @@ import {fetchUser} from '../Utils/AuthUtils';
 import {setUserGlobally} from '../Auth/Context/AuthState';
 
 const axiosInstance = axios.create({
-    baseURL: '/',
+    baseURL: process.env.REACT_URL_API || 'localhost:3001',
     withCredentials: true,
 });
 
@@ -15,7 +15,7 @@ axiosInstance.interceptors.response.use(
         const currentPath = window.location.pathname;
         const isOnLoginPage = currentPath === '/login';
 
-        if (originalRequest.url.includes('/api/auth/refresh')) {
+        if (originalRequest.url.includes('/auth/refresh')) {
             return Promise.reject(error);
         }
 
@@ -28,7 +28,7 @@ axiosInstance.interceptors.response.use(
             originalRequest._retry = true;
 
             try {
-                await refreshInstance.post('/api/auth/refresh');
+                await refreshInstance.post('/auth/refresh');
 
                 const user = await fetchUser();
                 if (user) {

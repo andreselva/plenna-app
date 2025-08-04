@@ -16,7 +16,7 @@ export const useExpensesList = (periodo) => {
         setLoading(true);
         setError(null);
         try {
-            const { data: response, status } = await axiosInstance.get("/api/expenses", {
+            const { data: response, status } = await axiosInstance.get("/expenses", {
                 headers: { 'X-Periodo': JSON.stringify(periodo) }
             });
 

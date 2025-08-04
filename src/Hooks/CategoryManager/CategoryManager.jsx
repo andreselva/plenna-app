@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import axiosInstance from "../../api/axiosInstance";
 import AlertToast from "../../Components/Alerts/AlertToast";
 
-const endpoint = "/api/categories";
+const endpoint = "/categories";
 
 export const CategoryManager = () => {
     const [categories, setCategories] = useState([]);
