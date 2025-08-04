@@ -33,7 +33,6 @@ export const usePaymentManager = () => {
 
     /**
      * Busca todos os pagamentos associados a uma entidade específica.
-     * (Não necessita de alterações, pois seu padrão para leitura de dados já é adequado)
      */
     const getPaymentsByEntity = useCallback(async (entityType, entityId) => {
         setLoading(true);
