@@ -25,7 +25,7 @@ export default function Signin() {
   const handleSubmit = async e => {
     e.preventDefault();
 
-    const endpoint = isLogin ?'/auth/login': '/user/register';
+    const endpoint = isLogin ?'/api/auth/login': '/api/user/register';
     const payload = isLogin
       ? { username: formData.username, password: formData.password }
       : formData;
