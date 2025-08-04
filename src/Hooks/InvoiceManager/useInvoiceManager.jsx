@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axiosInstance from "../../api/axiosInstance";
 import AlertToast from "../../Components/Alerts/AlertToast";
+import { Operations } from "../../enum/operations.enum";
 
 export const useInvoiceManager = (periodo) => {
     const [invoices, setInvoices] = useState([]);
@@ -12,14 +13,22 @@ export const useInvoiceManager = (periodo) => {
             setLoading(true);
             setError(null);
             try {
-                const { data } = await axiosInstance.get("/invoices", {
+                const { data: response, status } = await axiosInstance.get("/invoices", {
                     headers: {
                         'X-Periodo': JSON.stringify(periodo)
                     }
                 });
-                setInvoices(data.invoices || []);
+
+                if (response && status >= 200 && status <= 204) {
+                    setInvoices(response.payload.invoices || []);
+                    return;
+                }
+                
+                throw new Error('Ocorreu um erro ao buscar as faturas!');
             } catch (err) {
-                setError(err?.response?.data?.message || "Erro ao buscar as faturas!");
+                const errorMessage = defineErrorMessage(err, Operations.BUSCAR);
+                AlertToast({icon: 'error', title: errorMessage});
+                setError(errorMessage);
                 setInvoices([]);
             } finally {
                 setLoading(false);
@@ -44,20 +53,22 @@ export const useInvoiceManager = (periodo) => {
 
             if (response.status >= 200 && response.status < 300) {
                 AlertToast({ icon: 'success', title: 'Faturas criadas com sucesso!' });
-            } else {
-                const errorMessage = response.data?.message || "Resposta inesperada do servidor.";
-                AlertToast({ icon: 'error', title: errorMessage });
-                setError(errorMessage);
             }
         } catch (err) {
-            console.error("Erro na chamada API para gerar faturas:", err.response || err);
-            const errorMessage = err.response?.data?.message || "Erro ao gerar faturas";
+            const errorMessage = defineErrorMessage(Operations.CREATE);
             AlertToast({ icon: 'error', title: errorMessage });
             setError(errorMessage);
         } finally {
             setLoading(false);
         }
     };
+
+    const defineErrorMessage = (err, operation) => {
+        if (err?.response?.data?.message) {
+            return `Ocorreu um erro ao ${operation} despesa: ${err.response.data.message}.`;
+        }
+        return `Ocorreu um erro ao ${operation} despesa.` ;
+    }
 
     return { invoices, generateInvoices, loading, error };
 };

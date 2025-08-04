@@ -8,8 +8,6 @@ const CategoryTable = ({ categories, onEdit, onDelete }) => {
         confirmText: 'A exclusão é definitiva!',
         confirmButtonText: 'Excluir',
         cancelButtonText: 'Manter',
-        successMessage: 'Categoria excluída!',
-        errorMessage: 'Falha ao remover categoria!'
     });
 
     const columns = [

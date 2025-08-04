@@ -18,8 +18,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     useEffect(() => {
         (async () => {
             try {
-                const res = await axiosInstance('/auth');
-                setUser(res.data.user);
+                const {data: response} = await axiosInstance('/auth');
+                setUser(response.payload.user);
             } catch {
                 // nada
             } finally {

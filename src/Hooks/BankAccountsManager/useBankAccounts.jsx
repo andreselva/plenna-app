@@ -1,7 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import axiosInstance from "../../api/axiosInstance";
+import AlertToast from "../../Components/Alerts/AlertToast";
+import { Operations } from "../../enum/operations.enum";
 
-const apiUrl = "/bank-accounts"; // ajuste para sua rota real na API
+const apiUrl = "/bank-accounts";
 
 export const useBankAccounts = () => {
     const [accounts, setBankAccounts] = useState([]);
@@ -16,10 +18,16 @@ export const useBankAccounts = () => {
             hasFetched.current = true;
             setLoading(true);
             try {
-                const { data } = await axiosInstance.get(apiUrl);
-                setBankAccounts(data);
+                const { data: response, status } = await axiosInstance.get(apiUrl);
+                if (response && status >= 200 && status <= 204) {
+                    setBankAccounts(response.payload.bankAccounts);
+                    return;
+                }
+                throw new Error('Um erro ocorreu ao buscar as contas bancárias.');
             } catch (err) {
-                setError(err?.response?.data?.message || "Error fetching bank accounts");
+                const errorMessage = defineErrorMessage(err, Operations.BUSCAR);
+                AlertToast({ icon: 'error', title: errorMessage });
+                setError(errorMessage);
             } finally {
                 setLoading(false);
             }
@@ -31,10 +39,18 @@ export const useBankAccounts = () => {
     const addBankAccount = async (bankAccount) => {
         setLoading(true);
         try {
-            const { data: newBankAccount } = await axiosInstance.post(apiUrl, bankAccount);
-            setBankAccounts((prev) => [...prev, newBankAccount]);
+            const { data: response, status } = await axiosInstance.post(apiUrl, bankAccount);
+            if (response && status >= 200 && status <= 204) {
+                setBankAccounts((prev) => [...prev, response.payload.bankAccount]);
+                AlertToast({icon: 'success', title: 'Conta bancária criada com sucesso.'});
+                return;
+            }
+
+            throw new Error('Ocorreu um erro ao criar a conta bancária.');
         } catch (err) {
-            setError(err?.response?.data?.message || "Error adding bank account");
+            const errorMessage = defineErrorMessage(err, Operations.CREATE);
+            AlertToast({ icon: 'error', title: errorMessage});
+            setError(errorMessage);
         } finally {
             setLoading(false);
         }
@@ -43,10 +59,18 @@ export const useBankAccounts = () => {
     const deleteBankAccount = async (id) => {
         setLoading(true);
         try {
-            await axiosInstance.delete(`${apiUrl}/${id}`);
-            setBankAccounts((prev) => prev.filter((account) => account.id !== id));
+            const { data: response, status } = await axiosInstance.delete(`${apiUrl}/${id}`);
+            if (response && status >= 200 && status <= 204) {
+                setBankAccounts((prev) => prev.filter((account) => account.id !== id));
+                AlertToast({icon: 'success', title: 'Conta bancária excluída com sucesso.'});
+                return;
+            }
+
+            throw new Error('Ocorreu um erro durante a exclusão da conta bancária.');
         } catch (err) {
-            setError(err?.response?.data?.message || "Error deleting bank account");
+            const errorMessage = defineErrorMessage(err, Operations.DELETE);
+            AlertToast({icon: 'error', title: errorMessage});
+            setError(errorMessage);
         } finally {
             setLoading(false);
         }
@@ -55,18 +79,34 @@ export const useBankAccounts = () => {
     const updateBankAccount = async (id, updatedBankAccount) => {
         setLoading(true);
         try {
-            const { data: updatedAccount } = await axiosInstance.put(`${apiUrl}/${id}`, updatedBankAccount);
-            setBankAccounts((prev) =>
-                prev.map((account) =>
-                    account.id === id ? updatedAccount : account
-                )
-            );
+            const { data: response, status } = await axiosInstance.put(`${apiUrl}/${id}`, updatedBankAccount);
+
+            if (response && status >= 200 && status <= 204) {
+                setBankAccounts((prev) =>
+                    prev.map((account) =>
+                        account.id === id ? response.payload.bankAccount : account
+                    )
+                );
+                AlertToast({icon: 'success', title: 'Conta bancária atualizada com sucesso.'});
+                return;
+            }
+
+            throw new Error('Ocorreu um erro ao atualizar a conta bancária.');
         } catch (err) {
-            setError(err?.response?.data?.message || "Error updating bank account");
+            const errorMessage = defineErrorMessage(err, Operations.UPDATE);
+            AlertToast({icon: 'error', title: errorMessage});
+            setError(errorMessage);
         } finally {
             setLoading(false);
         }
     };
+
+    const defineErrorMessage = (err, operation) => {
+        if (err?.response?.data?.message) {
+            return `Ocorreu um erro ao ${operation} conta bancária: ${err.response.data.message}.`;
+        }
+        return `Ocorreu um erro ao ${operation} conta bancária.` ;
+    }
 
     return {
         accounts,

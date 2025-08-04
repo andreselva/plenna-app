@@ -1,7 +1,13 @@
 import { useEffect, useState, useCallback } from "react";
 import axiosInstance from "../../api/axiosInstance";
+import AlertToast from "../../Components/Alerts/AlertToast";
 
-export const useExpensesList = (periodo) => {
+/**
+ * Método responsável por fazer a listagem das despesas.
+ * @param {*} periodo 
+ * @returns 
+ */
+export const useExpensesList = (periodo) => {   
     const [expenses, setExpenses] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -10,12 +16,19 @@ export const useExpensesList = (periodo) => {
         setLoading(true);
         setError(null);
         try {
-            const { data } = await axiosInstance.get("/expenses", {
+            const { data: response, status } = await axiosInstance.get("/expenses", {
                 headers: { 'X-Periodo': JSON.stringify(periodo) }
             });
-            setExpenses(data);
+
+            if (response && status >= 200 && status <= 204) {
+                setExpenses(response.payload.expenses);
+                return;
+            }
+            throw new Error('Ocorreu um erro ao buscar as despesas.');
         } catch (err) {
-            setError(err?.response?.data?.message || "Erro ao buscar despesas");
+            const errorMessage = err?.response?.data?.message ? `Ocorreu um erro ao buscar as despesas: ${err.response.data.message}.` : `Ocorreu um erro ao buscar as despesas.`;
+            AlertToast({ icon: 'error', title: errorMessage });
+            setError(errorMessage);
         } finally {
             setLoading(false);
         }
