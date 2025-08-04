@@ -13,7 +13,7 @@ export const useInvoiceManager = (periodo) => {
             setLoading(true);
             setError(null);
             try {
-                const { data: response, status } = await axiosInstance.get("/invoices", {
+                const { data: response, status } = await axiosInstance.get("/api/invoices", {
                     headers: {
                         'X-Periodo': JSON.stringify(periodo)
                     }
@@ -49,7 +49,7 @@ export const useInvoiceManager = (periodo) => {
         setLoading(true);
         setError(null);
         try {
-            const response = await axiosInstance.post("/invoices/create", infosAccount);
+            const response = await axiosInstance.post("/api/invoices/create", infosAccount);
 
             if (response.status >= 200 && response.status < 300) {
                 AlertToast({ icon: 'success', title: 'Faturas criadas com sucesso!' });

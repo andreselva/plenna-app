@@ -28,7 +28,7 @@ export const useDashboardData = (periodo = {}) => {
             setLoading(true);
 
             try {
-                const {data: response} = await axiosInstance.get('/dashboard', {
+                const {data: response} = await axiosInstance.get('/api/dashboard', {
                     headers: {
                         'periodo': JSON.stringify(periodo)
                     }

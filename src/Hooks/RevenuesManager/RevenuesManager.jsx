@@ -11,7 +11,7 @@ export const RevenuesManager = (periodo) => {
     useEffect(() => {
         const fetchRevenues = async () => {
             try {
-                const { data: response, status } = await axiosInstance.get("/revenues", {
+                const { data: response, status } = await axiosInstance.get("/api/revenues", {
                     headers: {
                         'X-Periodo': JSON.stringify(periodo)
                     }
@@ -37,7 +37,7 @@ export const RevenuesManager = (periodo) => {
 
     const addRevenue = async (revenue) => {
         try {
-            const { data: response, status } = await axiosInstance.post("/revenues", revenue, {
+            const { data: response, status } = await axiosInstance.post("/api/revenues", revenue, {
                     headers: {
                         'X-Periodo': JSON.stringify(periodo)
                     }
@@ -60,8 +60,8 @@ export const RevenuesManager = (periodo) => {
     const deleteRevenue = async (id, deleteInstallments = false, sourceAccountId = 0) => {
         try {
             const url = deleteInstallments
-                ? `/revenues/${id}?deleteInstallments=${deleteInstallments}&sourceAccountId=${sourceAccountId}`
-                : `/revenues/${id}`;
+                ? `/api/revenues/${id}?deleteInstallments=${deleteInstallments}&sourceAccountId=${sourceAccountId}`
+                : `/api/revenues/${id}`;
 
             const { data: response, status } = await axiosInstance.delete(url, {
                 headers: {
@@ -85,7 +85,7 @@ export const RevenuesManager = (periodo) => {
 
     const updateRevenue = async (id, updatedRevenue) => {
         try {
-            const { data: response, status } = await axiosInstance.put(`/revenues/${id}`, updatedRevenue, {
+            const { data: response, status } = await axiosInstance.put(`/api/revenues/${id}`, updatedRevenue, {
                 headers: {
                     'X-Periodo': JSON.stringify(periodo)
                 }

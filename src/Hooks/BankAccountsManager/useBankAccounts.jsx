@@ -3,7 +3,7 @@ import axiosInstance from "../../api/axiosInstance";
 import AlertToast from "../../Components/Alerts/AlertToast";
 import { Operations } from "../../enum/operations.enum";
 
-const apiUrl = "/bank-accounts";
+const apiUrl = "/api/bank-accounts";
 
 export const useBankAccounts = () => {
     const [accounts, setBankAccounts] = useState([]);
