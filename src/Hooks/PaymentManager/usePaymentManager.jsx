@@ -2,7 +2,7 @@ import { useState, useCallback } from "react";
 import axiosInstance from "../../api/axiosInstance";
 import AlertToast from "../../Components/Alerts/AlertToast";
 
-const endpoint = "/payment";
+const endpoint = "/api/payment";
 
 export const usePaymentManager = () => {
     const [loading, setLoading] = useState(false);
