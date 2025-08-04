@@ -38,7 +38,7 @@ export const useRevenueHandler = (periodo) => {
             invoiceDueDate: revenueInvoiceDueDate,
             idCategory: selectedCategory,
             installments: installments,
-            typeOfInstallment: typeOfInstallment,
+            typeOfInstallments: typeOfInstallment,
             hasInstallments: hasInstallments
         });
 
@@ -85,7 +85,7 @@ export const useRevenueHandler = (periodo) => {
             invoiceDueDate: revenueInvoiceDueDate,
             idCategory: selectedCategory,
             installments: installments,
-            typeOfInstallment: typeOfInstallment,
+            typeOfInstallments: typeOfInstallment,
             hasInstallments: hasInstallments,
             sourceAccountId: sourceAccountId
         };
