@@ -32,7 +32,7 @@ export default function Signin() {
 
     try {
       const res = await axiosInstance.post(endpoint, payload)
-      login(res.data.user);
+      login(res.data.payload.user);
       navigate('/dashboard');
     } catch (err) {
       console.error(err);
