@@ -2,7 +2,7 @@ import React from 'react';
 import Skeleton from '../../Components/Skeleton/Skeleton';
 import "./Dashboard.css";
 
-const DashboardSkeleton = () => {
+export const DashboardSkeleton = () => {
     return (
         <div className="Dashboard">
             <div className="Dashboard-content">
@@ -46,5 +46,3 @@ const DashboardSkeleton = () => {
         </div>
     );
 };
-
-export default DashboardSkeleton;

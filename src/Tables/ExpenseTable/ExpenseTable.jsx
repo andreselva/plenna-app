@@ -2,8 +2,13 @@ import { ActionDropdown } from "../../Components/ActionDropdown/ActionDropdown";
 import { FlexibleTable } from "../../Components/FlexibleTable/FlexibleTable";
 import DeleteConfirmation from "../../Hooks/DeleteConfirmation/DeleteConfirmation";
 import globalStyles from '../../Styles/GlobalStyles.module.css';
+import { ExpenseTableSkeleton } from "./ExpenseTableSkeleton";
 
-const ExpenseTable = ({ expenses = [], categories = [], creditCards = [], onEdit, onDelete, onPayment, onReversePayment }) => {
+const ExpenseTable = ({ expenses = [], categories = [], creditCards = [], onEdit, onDelete, onPayment, onReversePayment, loading, error }) => {
+    if (loading) {
+        return <ExpenseTableSkeleton />
+    }
+
     const handleDelete = DeleteConfirmation(onDelete, {
         confirmTitle: 'Deseja realmente excluir?',
         confirmText: 'A exclusão é definitiva!',

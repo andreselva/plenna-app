@@ -6,7 +6,26 @@ import { BankAccountsTable } from "../../Tables/BankAccounts/BankAccountsTable.j
 import styles from './BankAccounts.module.css';
 
 export const BankAccounts = () => {
-    const { accounts, newAccount, setNewAccount, isModalOpen, setIsModalOpen, editingAccount, setEditingAccount, handleEditAccount, handleSaveAccount, handleDeleteAccount, generateInvoice, setGenerateInvoice, dueDate, setDueDate, closingDate, setClosingDate } = useBankAccountHandler();
+    const { 
+        accounts, 
+        newAccount, 
+        setNewAccount, 
+        isModalOpen, 
+        setIsModalOpen, 
+        editingAccount, 
+        setEditingAccount, 
+        handleEditAccount, 
+        handleSaveAccount, 
+        handleDeleteAccount, 
+        generateInvoice, 
+        setGenerateInvoice, 
+        dueDate, 
+        setDueDate, 
+        closingDate, 
+        setClosingDate,
+        loading,
+        error
+    } = useBankAccountHandler();
 
     //Chama a handler para gerar as faturas
     const { handleGenerateInvoices } = useInvoiceHandler();
@@ -32,6 +51,8 @@ export const BankAccounts = () => {
                         onEdit={handleEditAccount}
                         onDelete={handleDeleteAccount}
                         generateInvoices={handleGenerateInvoices}
+                        loading={loading}
+                        error={error}
                     />
                 </div>
             </div>

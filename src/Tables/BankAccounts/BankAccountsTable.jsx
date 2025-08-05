@@ -1,8 +1,13 @@
 import { ActionDropdown } from '../../Components/ActionDropdown/ActionDropdown';
 import { FlexibleTable } from '../../Components/FlexibleTable/FlexibleTable';
 import DeleteConfirmation from '../../Hooks/DeleteConfirmation/DeleteConfirmation';
+import { BankAccountsTableSkeleton } from './BankAccountsTableSkeleton';
 
-export const BankAccountsTable = ({ accounts, onEdit, onDelete, generateInvoices }) => {
+export const BankAccountsTable = ({ accounts, onEdit, onDelete, generateInvoices, loading, error }) => {
+    if (loading) {
+        return <BankAccountsTableSkeleton />;
+    }
+
     const handleDeleteWithConfirmation = DeleteConfirmation(onDelete, {
         confirmTitle: 'Deseja realmente excluir?',
         confirmText: 'A exclusão é definitiva!',

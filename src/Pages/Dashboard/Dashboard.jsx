@@ -10,6 +10,7 @@ import { defaultEvolucaoMensalData, evolucaoMensalOptions } from "./DashboardCha
 import { defaultFaturasPorCartaoData, faturasPorCartaoOptions } from "./DashboardCharts/FaturasPorCartaoChart";
 import { CustomDatePicker } from "../../Components/DatePicker/DatePicker";
 import { getStartAndEndOfMonth, getFormattedDateRange } from "../../Utils/DateUtils";
+import { DashboardSkeleton } from "./DashboardSkeleton";
 
 import {
     Chart as ChartJS,
@@ -23,7 +24,6 @@ import {
     BarElement,
     Filler
 } from "chart.js";
-import DashboardSkeleton from "./DashboardSkeleton";
 
 ChartJS.register(
     ArcElement,
