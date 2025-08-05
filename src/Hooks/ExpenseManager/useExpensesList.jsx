@@ -38,5 +38,5 @@ export const useExpensesList = (periodo) => {
         fetchExpenses();
     }, [fetchExpenses]);
 
-    return { expenses, loading, error, refetch: fetchExpenses };
+    return { expenses, loading, setLoading, error, refetch: fetchExpenses };
 };

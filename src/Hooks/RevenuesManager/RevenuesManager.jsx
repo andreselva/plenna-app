@@ -10,6 +10,7 @@ export const RevenuesManager = (periodo) => {
 
     useEffect(() => {
         const fetchRevenues = async () => {
+            setLoading(true);
             try {
                 const { data: response, status } = await axiosInstance.get("/revenues", {
                     headers: {
@@ -36,6 +37,7 @@ export const RevenuesManager = (periodo) => {
     }, [periodo]);
 
     const addRevenue = async (revenue) => {
+        setLoading(true);
         try {
             const { data: response, status } = await axiosInstance.post("/revenues", revenue, {
                     headers: {
@@ -54,10 +56,13 @@ export const RevenuesManager = (periodo) => {
             const errorMessage = defineErrorMessage(err, Operations.CREATE);
             AlertToast({icon: 'error', title: errorMessage});
             setError(errorMessage);
+        } finally {
+            setLoading(false);
         }
     };
 
     const deleteRevenue = async (id, deleteInstallments = false, sourceAccountId = 0) => {
+        setLoading(true);
         try {
             const url = deleteInstallments
                 ? `/revenues/${id}?deleteInstallments=${deleteInstallments}&sourceAccountId=${sourceAccountId}`
@@ -80,10 +85,13 @@ export const RevenuesManager = (periodo) => {
             const errorMessage = defineErrorMessage(err, Operations.DELETE);
             AlertToast({icon: 'error', title: errorMessage})
             setError(errorMessage);
+        } finally {
+            setLoading(false);
         }
     };
 
     const updateRevenue = async (id, updatedRevenue) => {
+        setLoading(true);
         try {
             const { data: response, status } = await axiosInstance.put(`/revenues/${id}`, updatedRevenue, {
                 headers: {
@@ -102,6 +110,8 @@ export const RevenuesManager = (periodo) => {
             const errorMessage = defineErrorMessage(err, Operations.UPDATE);
             AlertToast({icon: 'error', title: errorMessage});
             setError(errorMessage);
+        } finally {
+            setLoading(false);
         }
     };
 

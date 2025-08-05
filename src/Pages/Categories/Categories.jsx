@@ -5,7 +5,24 @@ import { BotaoGlobal } from '../../Components/Buttons/ButtonGlobal.tsx';
 import { useCategoryHandler } from '../../Handlers/useCategoryHandler';
 
 const Categories = () => {
-    const { categories, isModalOpen, setIsModalOpen, editingCategory, setEditingCategory, newCategory, setNewCategory, categoryType, setCategoryType, categoryColor, setCategoryColor, handleEditCategory, handleSaveCategory, handleDeleteCategory } = useCategoryHandler();
+    const { 
+        categories, 
+        isModalOpen, 
+        setIsModalOpen, 
+        editingCategory, 
+        setEditingCategory, 
+        newCategory, 
+        setNewCategory, 
+        categoryType, 
+        setCategoryType, 
+        categoryColor, 
+        setCategoryColor, 
+        handleEditCategory, 
+        handleSaveCategory, 
+        handleDeleteCategory,
+        loading,
+        error
+    } = useCategoryHandler();
 
     return (
         <div className={styles.Categories}>
@@ -28,6 +45,8 @@ const Categories = () => {
                         categories={categories}
                         onEdit={handleEditCategory}
                         onDelete={handleDeleteCategory}
+                        loading={loading}
+                        error={error}
                     />
                 </div>
             </div>

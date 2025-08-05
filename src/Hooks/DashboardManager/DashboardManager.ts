@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef } from "react";
-import { useAuth } from "../../Auth/Context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../api/axiosInstance";
 
@@ -15,17 +14,15 @@ export const useDashboardData = (periodo = {}) => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const hasFetched = useRef(false);
-    const { isAuthenticated, logout } = useAuth();
     const navigate = useNavigate();
 
     useEffect(() => {
         hasFetched.current = false;
 
         const fetchData = async () => {
-            if (hasFetched.current || !isAuthenticated) return;
-
-            hasFetched.current = true;
+            if (hasFetched.current) return;
             setLoading(true);
+            hasFetched.current = true;
 
             try {
                 const {data: response} = await axiosInstance.get('/dashboard', {
@@ -52,19 +49,14 @@ export const useDashboardData = (periodo = {}) => {
                     faturasPorCartao: creditCardStatements
                 });
             } catch (err: any) {
-                if (err.response?.status === 401) {
-                    logout();
-                    navigate('/login');
-                } else {
-                    setError(err.message);
-                }
+                setError(err.message);
             } finally {
                 setLoading(false);
             }
         };
 
         fetchData();
-    }, [isAuthenticated, periodo, logout, navigate, setError]);
+    }, [periodo, navigate, setError]);
 
     return { data, loading, error };
 };

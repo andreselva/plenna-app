@@ -1,8 +1,14 @@
 import DeleteConfirmation from '../../Hooks/DeleteConfirmation/DeleteConfirmation';
 import globalStyles from '../../Styles/GlobalStyles.module.css';
 import { FlexibleTable } from '../../Components/FlexibleTable/FlexibleTable';
+import { ActionDropdown } from '../../Components/ActionDropdown/ActionDropdown';
+import { CategoryTableSkeleton } from './CategoryTableSkeleton';
 
-const CategoryTable = ({ categories, onEdit, onDelete }) => {
+const CategoryTable = ({ categories, onEdit, onDelete, loading, error }) => {
+    if (loading) {
+        return <CategoryTableSkeleton />;
+    }
+    
     const handleDelete = DeleteConfirmation(onDelete, {
         confirmTitle: 'Deseja realmente excluir?',
         confirmText: 'A exclusão é definitiva!',
@@ -36,12 +42,25 @@ const CategoryTable = ({ categories, onEdit, onDelete }) => {
         {
             header: 'Ações',
             style: { flex: '1 1 120px' },
-            renderCell: (category) => (
-                <div className={globalStyles.actions}>
-                    <button className={globalStyles['action-button']} onClick={() => onEdit(category)}>Editar</button>
-                    <button className={globalStyles['action-button']} onClick={() => handleDelete(category.id)}>Excluir</button>
-                </div>
-            )
+            renderCell: (category) => {
+                let categoryActions = [
+                    {
+                        label: 'Editar',
+                        handler: () => onEdit(category)
+                    },
+                    {
+                        label: 'Excluir',
+                        habdler: () => handleDelete(category.id)
+                    }
+                ];
+
+                return (
+                    <ActionDropdown
+                        actions={categoryActions}
+                    />
+                )
+            }
+            
         }
     ];
 

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { CategoryManager } from '../Hooks/CategoryManager/CategoryManager';
 
 export const useCategoryHandler = () => {
-    const { categories, addCategory, deleteCategory, updateCategory } = CategoryManager();
+    const { categories, addCategory, deleteCategory, updateCategory, loading, error } = CategoryManager();
 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingCategory, setEditingCategory] = useState(null);
@@ -88,6 +88,8 @@ export const useCategoryHandler = () => {
         handleAddCategory,
         handleEditCategory,
         handleSaveCategory,
-        handleDeleteCategory
+        handleDeleteCategory,
+        loading,
+        error
     };
 };

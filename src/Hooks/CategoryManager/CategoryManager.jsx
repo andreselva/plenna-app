@@ -14,6 +14,7 @@ export const CategoryManager = () => {
         const fetchCategories = async () => {
             if (hasFetched.current) return;
             hasFetched.current = true;
+            setLoading(true);
 
             try {
                 const { data: response, status } = await axiosInstance.get(endpoint);
@@ -35,6 +36,7 @@ export const CategoryManager = () => {
     }, []);
 
     const addCategory = async (category) => {
+        setLoading(true);
         try {
             const { data: response, status } = await axiosInstance.post(endpoint, category);
             if (response && status >= 200 && status <= 204) {
@@ -53,6 +55,7 @@ export const CategoryManager = () => {
     };
 
     const deleteCategory = async (id) => {
+        setLoading(true);
         try {
             const { data: response, status } = await axiosInstance.delete(`${endpoint}/${id}`);
             if (response.payload.success && status >= 200 && status <= 204) {
@@ -65,11 +68,14 @@ export const CategoryManager = () => {
             const errorMessage = defineErrorMessage(err, 'deletar');
             AlertToast({icon: 'error', title: errorMessage});
             setError(errorMessage);
+        } finally {
+            setLoading(false);
         }
     }
     
     const updateCategory = async (id, updatedCategory) => {
         try {
+            setLoading(true);
             const { data: response, status } = await axiosInstance.put(`${endpoint}/${id}`, updatedCategory);
             if (response && status >= 200 && status <= 204) {
                 setCategories((prev) =>
@@ -85,6 +91,8 @@ export const CategoryManager = () => {
             const errorMessage = defineErrorMessage(err, 'atualizar');
             AlertToast({ icon: 'error', title: errorMessage })
             setError(err?.response?.data?.message || "Erro ao atualizar categoria");
+        } finally {
+            setLoading(false);
         }
     };
 
