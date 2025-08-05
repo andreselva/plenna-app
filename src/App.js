@@ -62,7 +62,6 @@ const App = () => {
     return (
         <Router>
             <div className="App">
-                {/* A lógica da Sidebar e conteúdo é agora parte de AppContent */}
                 <AppContent />
             </div>
         </Router>
