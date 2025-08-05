@@ -1,12 +1,18 @@
+// src/pages/Signin/Signin.js
+
 import React, { useState } from 'react';
 import { useAuth } from '../../Auth/Context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { BotaoGlobal } from '../../Components/Buttons/ButtonGlobal';
 import './Signin.css';
 import axiosInstance from '../../api/axiosInstance';
+import Loader from '../../Components/Loader/Loader';
+import SweetAlert from '../../Components/Alerts/SweetAlert';
+import AlertToast from '../../Components/Alerts/AlertToast';
 
 export default function Signin() {
   const [isLogin, setIsLogin] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: '', username: '', email: '', password: ''
   });
@@ -24,25 +30,30 @@ export default function Signin() {
 
   const handleSubmit = async e => {
     e.preventDefault();
-
-    const endpoint = isLogin ?'/auth/login': '/user/register';
+    
+    const endpoint = isLogin ? '/auth/login' : '/user/register';
     const payload = isLogin
       ? { username: formData.username, password: formData.password }
       : formData;
-
+    
+    setLoading(true);
     try {
-      const res = await axiosInstance.post(endpoint, payload)
+      const res = await axiosInstance.post(endpoint, payload);
       login(res.data.payload.user);
       navigate('/dashboard');
     } catch (err) {
       console.error(err);
-      alert('Erro ao autenticar');
+      AlertToast({icon: 'error', title: 'Erro ao autenticar. Verifique suas credenciais.'});
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div className="auth-container">
       <div className="auth-box">
+        {loading && <Loader />}
+        
         <h2>{isLogin ? 'Login' : 'Crie sua conta'}</h2>
         <form onSubmit={handleSubmit}>
           {!isLogin && (
@@ -65,7 +76,7 @@ export default function Signin() {
             type="password" name="password" placeholder="Senha"
             value={formData.password} onChange={handleChange} required
           />
-          <BotaoGlobal cor="primaria" width="100px" height="30px" type="submit">
+          <BotaoGlobal cor="primaria" width="100px" height="30px" type="submit" disabled={loading}>
             {isLogin ? 'Entrar' : 'Registrar'}
           </BotaoGlobal>
         </form>
@@ -74,6 +85,7 @@ export default function Signin() {
           <BotaoGlobal
             cor="secundaria" width="100px" height="30px"
             onClick={toggleMode}
+            disabled={loading}
           >
             {isLogin ? 'Crie uma' : 'Faça login'}
           </BotaoGlobal>
