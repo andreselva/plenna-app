@@ -31,8 +31,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const login = (userData: any) => setUser(userData);
 
     const logout = async () => {
-        await axiosInstance.post('/auth/logout',);
-        setUser(null);
+        try {
+            setIsLoading(true);
+            await axiosInstance.post('/auth/logout',);
+            setUser(null);
+        } catch {
+            //
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     return (
