@@ -61,6 +61,8 @@ const Invoices = () => {
         isPaymentModalOpen,
         setPaymentModalOpen,
         handlePayment,
+        loading,
+        error
     } = useInvoiceHandler(formattedPeriod);
 
     const fnExpenses = useExpenseHandler(formattedPeriod);
@@ -86,6 +88,8 @@ const Invoices = () => {
                         setIsModalOpen={fnExpenses.setIsModalOpen}
                         onOpenPaymentModal={handleOpenPaymentModal}
                         onReversePayment={handleOpenReverseModal}
+                        loading={loading}
+                        error={error}
                     />
                 </div>
             </div>

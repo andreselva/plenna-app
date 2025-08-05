@@ -4,8 +4,10 @@ import ExpandableRow from '../../Components/ExpansableRow/ExpansableRow';
 import DeleteConfirmation from '../../Hooks/DeleteConfirmation/DeleteConfirmation';
 import { PencilLine, Trash2Icon } from 'lucide-react';
 import { ActionDropdown } from '../../Components/ActionDropdown/ActionDropdown';
+import Loader from '../../Components/Loader/Loader';
+import InvoiceTableSkeleton from './InvoiceTableSkeleton';
 
-const InvoiceTable = ({ invoices, onEdit, onDelete, setIsModalOpen, onOpenPaymentModal, onReversePayment }) => {
+const InvoiceTable = ({ invoices, onEdit, onDelete, setIsModalOpen, onOpenPaymentModal, onReversePayment, loading, error }) => {
     const handleDelete = DeleteConfirmation(onDelete, {
         confirmTitle: 'Deseja realmente excluir?',
         confirmText: 'A exclusão é definitiva!',
@@ -44,6 +46,10 @@ const InvoiceTable = ({ invoices, onEdit, onDelete, setIsModalOpen, onOpenPaymen
         return 'N/A';
     }
 
+    if (loading) {
+        return <InvoiceTableSkeleton />
+    }
+
     return (
         <div className={globalStyles.flexibleTable}>
             <div className={globalStyles.tableBody}>
@@ -68,7 +74,6 @@ const InvoiceTable = ({ invoices, onEdit, onDelete, setIsModalOpen, onOpenPaymen
                                 handler: () => onReversePayment(invoice)
                             })
                         }
-
 
                         return (
                             <React.Fragment key={invoice.id}>

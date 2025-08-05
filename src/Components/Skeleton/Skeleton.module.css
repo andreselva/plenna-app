@@ -1,0 +1,31 @@
+/* A base para todos os skeletons. Contém apenas a animação. */
+.skeleton {
+  background-color: #e2e8f0;
+  background-image: linear-gradient(to right, #e2e8f0 0%, #f1f5f9 50%, #e2e8f0 100%);
+  background-repeat: no-repeat;
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite linear;
+}
+
+/* Modificadores de variante */
+.text {
+  height: 20px; /* Altura padrão para texto */
+  border-radius: 4px;
+}
+
+.rect {
+  border-radius: 4px;
+}
+
+.circle {
+  border-radius: 50%;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
