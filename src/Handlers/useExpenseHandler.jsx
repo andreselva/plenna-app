@@ -7,7 +7,7 @@ import { useExpenseForm } from './useExpenseForm';
 import { usePaymentManager } from '../Hooks/PaymentManager/usePaymentManager';
 
 export const useExpenseHandler = (periodo) => {
-    const { expenses, addExpense, deleteExpense, updateExpense } = useExpenseManager(periodo);
+    const { expenses, addExpense, deleteExpense, updateExpense, loading, error } = useExpenseManager(periodo);
     const { registerPayment } = usePaymentManager();
     const { categories } = CategoryManager();
     const { accounts } = useBankAccounts();
@@ -23,6 +23,8 @@ export const useExpenseHandler = (periodo) => {
 
     return {
         expenses,
-        ...formLogic
+        ...formLogic,
+        loading,
+        error
     };
 };

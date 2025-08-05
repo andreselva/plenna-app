@@ -2,6 +2,7 @@
 import { Navigate } from 'react-router-dom';
 import { useAuth } from './Context/AuthContext';
 import { JSX } from 'react';
+import Loader from '../Components/Loader/Loader';
 
 interface PrivateRouteProps {
     children: JSX.Element;
@@ -13,7 +14,7 @@ const PrivateRoute = ({ children }: PrivateRouteProps) => {
     // Enquanto ainda estamos checando o cookie no backend,
     // mostramos um indicador de carregamento.
     if (isLoading) {
-        return <div>Carregando sessão...</div>;
+        return <Loader />;
     }
 
     // Se não estiver autenticado, redireciona ao login.

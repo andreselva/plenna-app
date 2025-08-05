@@ -1,4 +1,5 @@
 import "./Dashboard.css";
+import { useState } from "react";
 import { Doughnut, Line, Bar } from "react-chartjs-2";
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { useDashboardData } from "../../Hooks/DashboardManager/DashboardManager";
@@ -9,6 +10,7 @@ import { defaultEvolucaoMensalData, evolucaoMensalOptions } from "./DashboardCha
 import { defaultFaturasPorCartaoData, faturasPorCartaoOptions } from "./DashboardCharts/FaturasPorCartaoChart";
 import { CustomDatePicker } from "../../Components/DatePicker/DatePicker";
 import { getStartAndEndOfMonth, getFormattedDateRange } from "../../Utils/DateUtils";
+import { DashboardSkeleton } from "./DashboardSkeleton";
 
 import {
     Chart as ChartJS,
@@ -22,7 +24,6 @@ import {
     BarElement,
     Filler
 } from "chart.js";
-import { useState } from "react";
 
 ChartJS.register(
     ArcElement,
@@ -41,6 +42,17 @@ ChartJS.register(
 const Dashboard = () => {
     const [formattedPeriod, setFormattedPeriod] = useState(() => getStartAndEndOfMonth());
     const { data, loading } = useDashboardData(formattedPeriod);
+    const [selectedMonth, setSelectedMonth] = useState(() => {
+        const now = new Date();
+        const nextMonthDate = new Date(now);
+        nextMonthDate.setMonth(now.getMonth() + 1);
+        return nextMonthDate;
+    });
+    const [selectedRange, setSelectedRange] = useState(null);
+
+    if (loading) {
+        return <DashboardSkeleton />
+    }
     
     const remainingBalance = data?.saldoRestante ?? 0;
     const saldoOptions = createSaldoOptions(remainingBalance);
@@ -49,14 +61,7 @@ const Dashboard = () => {
     const contasVencimentoProximo = data?.contasVencimentoProximo || [];
     const evolucaoMensalData = data?.evolucaoMensal || defaultEvolucaoMensalData;
     const faturasPorCartaoData = data?.faturasPorCartao || defaultFaturasPorCartaoData;
-    const [selectedMonth, setSelectedMonth] = useState(() => {
-        const now = new Date();
-        const nextMonthDate = new Date(now);
-        nextMonthDate.setMonth(now.getMonth() + 1);
-        return nextMonthDate;
-    });
-
-    const [selectedRange, setSelectedRange] = useState(null);
+    
 
     const handleMonthChange = (month) => {
         setSelectedMonth(month);

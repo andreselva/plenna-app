@@ -6,7 +6,7 @@ import SweetAlert from '../Components/Alerts/SweetAlert';
 import AlertConfirm from '../Components/Alerts/AlertConfirm';
 
 export const useRevenueHandler = (periodo) => {
-    const {revenues, addRevenue, deleteRevenue, updateRevenue} = RevenuesManager(periodo);
+    const {revenues, addRevenue, deleteRevenue, updateRevenue, loading, error} = RevenuesManager(periodo);
     const {categories} = CategoryManager();
 
     const [selectedCategory, setSelectedCategory] = useState();
@@ -177,6 +177,8 @@ export const useRevenueHandler = (periodo) => {
         hasSourceAccountId,
         setBooleanSourceAccountId,
         idRevenue,
-        setIdRevenue
+        setIdRevenue,
+        loading,
+        error
     };
 };

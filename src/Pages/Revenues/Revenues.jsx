@@ -58,7 +58,9 @@ const Revenues = () => {
         hasSourceAccountId,
         setBooleanSourceAccountId,
         idRevenue,
-        setIdRevenue
+        setIdRevenue,
+        loading,
+        error
     } = useRevenueHandler(formattedPeriod);
 
     return (
@@ -89,6 +91,8 @@ const Revenues = () => {
                         categories={categories}
                         onEdit={handleEditRevenue}
                         onDelete={handleDeleteRevenue}
+                        loading={loading}
+                        error={error}
                     />
                 </div>
             </div>

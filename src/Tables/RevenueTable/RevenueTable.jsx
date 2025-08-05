@@ -1,8 +1,14 @@
+import { ActionDropdown } from '../../Components/ActionDropdown/ActionDropdown';
 import { FlexibleTable } from '../../Components/FlexibleTable/FlexibleTable';
 import DeleteConfirmation from '../../Hooks/DeleteConfirmation/DeleteConfirmation';
+import { RevenueTableSkeleton } from '../../Pages/Revenues/RevenueTableSkeleton';
 import globalStyles from '../../Styles/GlobalStyles.module.css';
 
-const RevenueTable = ({ revenues = [], categories = [], onEdit, onDelete }) => {
+const RevenueTable = ({ revenues = [], categories = [], onEdit, onDelete, loading, error }) => {
+    if (loading) {
+        return <RevenueTableSkeleton />;
+    }
+    
     const handleDelete = DeleteConfirmation(onDelete, {
         confirmTitle: 'Deseja realmente excluir?',
         confirmText: 'A exclusão é definitiva!',
@@ -46,20 +52,24 @@ const RevenueTable = ({ revenues = [], categories = [], onEdit, onDelete }) => {
         {
             header: 'Ações',
             style: { flex: '1 1 120px' },
-            renderCell: (revenue) => (
-                <div className={globalStyles.actions}>
-                    <button
-                        onClick={() => onEdit(revenue)}
-                    >
-                        Editar
-                    </button>
-                    <button
-                        onClick={() => handleDelete(revenue)}
-                    >
-                        Excluir
-                    </button>
-                </div>
-            ),
+            renderCell: (revenue) => {
+                 let revenueActions = [
+                    {
+                        label: 'Editar',
+                        handler: () => onEdit(revenue)
+                    },
+                    {
+                        label: 'Excluir',
+                        handler: () => handleDelete(revenue)
+                    }
+                ];
+
+                return (
+                    <ActionDropdown
+                        actions={revenueActions}
+                    />
+                );
+            },
         },
     ];
 

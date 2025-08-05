@@ -74,6 +74,8 @@ const Expenses = () => {
         handleRegisterPayment,
         isPaymentModalOpen,
         setIsPaymentModalOpen,
+        loading,
+        error
     } = useExpenseHandler(formattedPeriod);
 
     const [selectedExpense, setSelectedExpense] = useState(null);
@@ -125,6 +127,8 @@ const Expenses = () => {
                         onDelete={handleDeleteExpense}
                         onPayment={handleOpenPaymentModal}
                         onReversePayment={handleOpenReverseModal}
+                        loading={loading}
+                        error={error}
                     />
                 </div>
             </div>
