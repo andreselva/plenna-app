@@ -29,6 +29,9 @@ COPY --from=build /usr/src/app/.env.production .env.production
 # Define a variável de ambiente para rodar em produção
 ENV NODE_ENV=production
 
+# Copia o arquivo de configuração do serve para a raiz do app no contêiner
+COPY serve.json ./
+
 # Copia o build final da etapa de build
 COPY --from=build /usr/src/app/build ./build
 
