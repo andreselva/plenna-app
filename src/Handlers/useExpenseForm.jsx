@@ -56,15 +56,15 @@ export const useExpenseForm = ({ addExpense, updateExpense, deleteExpense, regis
         addExpense({
             name: newExpense,
             description: expenseDescription,
-            value: expenseValue,
+            value: Number(expenseValue),
             invoiceDueDate: expenseInvoiceDueDate,
-            idCategory: selectedCategory === '' ? 0 : selectedCategory,
-            idCreditCard: selectedCard === '' ? 0 : selectedCard,
-            installments: installments === '' ? 0 : installments,
+            idCategory: selectedCategory === '' ? 0 : Number(selectedCategory),
+            idCreditCard: selectedCard === '' ? 0 : Number(selectedCard),
+            installments: installments === '' ? 0 : Number(installments),
             typeOfInstallment: typeOfInstallment,
             hasInstallments: hasInstallments,
             linkToInvoice: linkToInvoice,
-            idInvoice: idInvoice === '' ? 0 : idInvoice,
+            idInvoice: idInvoice === '' ? 0 : Number(idInvoice),
             status: status
         });
 
@@ -112,14 +112,14 @@ export const useExpenseForm = ({ addExpense, updateExpense, deleteExpense, regis
             description: expenseDescription,
             value: expenseValue,
             invoiceDueDate: expenseInvoiceDueDate,
-            idCategory: selectedCategory,
-            idCreditCard: selectedCard,
-            installments: installments,
+            idCategory: Number(selectedCategory),
+            idCreditCard: Number(selectedCard),
+            installments: Number(installments),
             typeOfInstallment: typeOfInstallment,
             hasInstallments: hasInstallments,
-            sourceAccountId: sourceAccountId,
+            sourceAccountId: Number(sourceAccountId) ?? 0,
             linkToInvoice: linkToInvoice,
-            idInvoice: idInvoice,
+            idInvoice: Number(idInvoice) ?? 0,
             status: status
         };
 

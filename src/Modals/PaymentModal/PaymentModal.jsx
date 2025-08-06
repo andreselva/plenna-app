@@ -37,8 +37,8 @@ export const PaymentModal = ({
         if (!result.isConfirmed) return;
 
         const paymentData = {
-            payableId: payableItem.id,
-            value: amountValue,
+            payableId: Number(payableItem.id),
+            value: Number(amountValue),
             paymentDate: paymentDate,
             payableType: payableType
         }
