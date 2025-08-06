@@ -1,43 +1,21 @@
 # Stage 1: Build
 FROM node:20-alpine AS build
-
 WORKDIR /usr/src/app
-
-# Copia package.json e package-lock.json para instalar as dependências
 COPY package*.json ./
-
-# Instala dependências (prod + dev) para build funcionar
 RUN npm install
-
-# Copia o arquivo de ambiente para o build usar
 COPY .env.production .env.production
-
-# Copia o resto do código
 COPY . .
-
-# Executa o build (compila React+TS)
 RUN npm run build
 
-# Stage 2: Runtime
-FROM node:20-alpine
-
-WORKDIR /usr/src/app
-
-# Copia o arquivo de ambiente para runtime, se necessário
-COPY --from=build /usr/src/app/.env.production .env.production
-
-# Define a variável de ambiente para rodar em produção
-ENV NODE_ENV=production
-
-# Copia o arquivo de configuração do serve para a raiz do app no contêiner
-COPY serve.json ./
-
-# Copia o build final da etapa de build
-COPY --from=build /usr/src/app/build ./build
-
-# Instala o serve para rodar o app
-RUN npm install -g serve
-
-CMD ["serve", "-s", "build"]
-
-EXPOSE 3000
+# Stage 2: Produção com Nginx
+FROM nginx:1.25-alpine
+# Copia os arquivos da pasta build para a pasta padrão do Nginx
+COPY --from=build /usr/src/app/build /usr/share/nginx/html
+# Remove a configuração padrão do Nginx
+RUN rm /etc/nginx/conf.d/default.conf
+# Copia nossa configuração customizada
+COPY nginx/nginx.conf /etc/nginx/conf.d/nginx.conf
+# Expõe a porta 80, a Railway vai gerenciar
+EXPOSE 80
+# Comando para iniciar o Nginx
+CMD ["nginx", "-g", "daemon off;"]
