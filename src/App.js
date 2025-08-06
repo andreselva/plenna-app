@@ -9,6 +9,7 @@ import { BankAccounts } from './Pages/BankAccounts/BankAccounts';
 import Signin from './Pages/Signin/Signin';
 import PrivateRoute from './Auth/PrivateRoute';
 import Invoices from './Pages/Invoices/Invoices';
+import NotFound from './Pages/NotFound/NotFound';
 
 const AppContent = () => {
     const location = useLocation();
@@ -16,7 +17,7 @@ const AppContent = () => {
     return (
         <div className="MainContent">
             {/* Renderizar a Sidebar apenas se não for a rota de login */}
-            {location.pathname !== '/login' && <Sidebar />}
+            {location.pathname !== '/login' && location.pathname !== '/sitemap.xml' && <Sidebar />}
 
             <div className="Content">
                 <Routes>
@@ -52,6 +53,7 @@ const AppContent = () => {
                             <Invoices />
                         </PrivateRoute>
                     } />
+                <Route path="*" element={<NotFound />} />
                 </Routes>
             </div>
         </div>
