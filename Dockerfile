@@ -15,7 +15,7 @@ COPY --from=build /usr/src/app/build /usr/share/nginx/html
 RUN rm /etc/nginx/conf.d/default.conf
 # Copia nossa configuração customizada
 COPY nginx/nginx.conf /etc/nginx/conf.d/nginx.conf
-# Expõe a porta 80, a Railway vai gerenciar
-EXPOSE 80
+# Expõe a porta 8080, a Railway vai gerenciar
+EXPOSE 8080
 # Comando para iniciar o Nginx
 CMD ["nginx", "-g", "daemon off;"]
