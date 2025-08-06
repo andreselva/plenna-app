@@ -38,6 +38,9 @@ COPY --from=build /usr/src/app/build ./build
 # Instala o serve para rodar o app
 RUN npm install -g serve
 
+RUN echo "### Listando arquivos na raiz do app:" && ls -la
+RUN echo "### Listando arquivos dentro da pasta build:" && ls -la build
+
 CMD ["serve", "-s", "build"]
 
 EXPOSE 3000
