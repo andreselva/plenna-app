@@ -1,9 +1,8 @@
 {
-  "redirects": [
+  "rewrites": [
     {
       "source": "/sitemap.xml",
-      "destination": "/page-does-not-exist",
-      "type": 302
+      "destination": "/sitemap-nao-existe-aqui.html"
     }
   ]
 }
