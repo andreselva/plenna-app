@@ -50,7 +50,7 @@ const CategoryTable = ({ categories, onEdit, onDelete, loading, error }) => {
                     },
                     {
                         label: 'Excluir',
-                        habdler: () => handleDelete(category.id)
+                        handler: () => handleDelete(category.id)
                     }
                 ];
 
