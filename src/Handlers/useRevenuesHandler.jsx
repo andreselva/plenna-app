@@ -34,10 +34,10 @@ export const useRevenueHandler = (periodo) => {
         addRevenue({
             name: newRevenue,
             description: revenueDescription,
-            value: revenueValue,
+            value: Number(revenueValue),
             invoiceDueDate: revenueInvoiceDueDate,
-            idCategory: selectedCategory,
-            installments: installments,
+            idCategory: Number(selectedCategory),
+            installments: Number(installments),
             typeOfInstallments: typeOfInstallment,
             hasInstallments: hasInstallments
         });
@@ -81,13 +81,13 @@ export const useRevenueHandler = (periodo) => {
         const baseData = {
             name: newRevenue,
             description: revenueDescription,
-            value: revenueValue,
+            value: Number(revenueValue),
             invoiceDueDate: revenueInvoiceDueDate,
-            idCategory: selectedCategory,
-            installments: installments,
+            idCategory: Number(selectedCategory),
+            installments: Number(installments),
             typeOfInstallments: typeOfInstallment,
             hasInstallments: hasInstallments,
-            sourceAccountId: sourceAccountId
+            sourceAccountId: Number(sourceAccountId)
         };
 
         let updateInstallmentsFlag = updateInstallments;
