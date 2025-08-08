@@ -4,6 +4,7 @@ import { usePaymentManager } from '../../Hooks/PaymentManager/usePaymentManager'
 import { BanknoteXIcon } from 'lucide-react';
 import GenericModal from '../../Components/GenericModal/GenericModal';
 import AlertConfirm from '../../Components/Alerts/AlertConfirm';
+import Loader from '../../Components/Loader/Loader';
 
 
 const entityConfig = {
@@ -13,7 +14,7 @@ const entityConfig = {
     default: { title: 'Estornar Pagamentos' },
 };
 
-export const ReversePaymentModal = ({ isOpen, onClose, entityType, entityData }) => {
+export const ReversePaymentModal = ({ isOpen, onClose, entityType, entityData, refetch = () => {}}) => {
     const [payments, setPayments] = useState([]);
     const { loading, getPaymentsByEntity, reversePayment } = usePaymentManager();
 
@@ -49,6 +50,7 @@ export const ReversePaymentModal = ({ isOpen, onClose, entityType, entityData })
         const reverseResult = await reversePayment(reversePaymentData);
         if (reverseResult && reverseResult.isSuccess) {
             fetchPayments();
+            refetch();
         }
     };
 
@@ -68,8 +70,8 @@ export const ReversePaymentModal = ({ isOpen, onClose, entityType, entityData })
             <>
                 {(loading || (!loading && payments.length === 0)) && (
                     <div className="payment-status-container">
-                        {loading ? <p>Carregando pagamentos...</p>
-                            : <p>Nenhum pagamento encontrado para esta entidade.</p>}
+                        {loading ? <Loader />
+                            : <p>Nenhum pagamento encontrado.</p>}
                     </div>
                 )}
 
@@ -79,7 +81,7 @@ export const ReversePaymentModal = ({ isOpen, onClose, entityType, entityData })
                             <li key={payment.id} className="payment-item">
                                 <div className="payment-info">
                                     <span className="payment-date">
-                                        {new Date(payment.paymentDate).toLocaleDateString('pt-BR')}
+                                        {new Date(payment.payment_date).toLocaleDateString('pt-BR')}
                                     </span>
                                     <strong className="payment-value">
                                         {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(payment.value)}

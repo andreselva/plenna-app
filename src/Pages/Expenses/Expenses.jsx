@@ -35,47 +35,12 @@ const Expenses = () => {
     };
 
     const {
-        expenses,
-        categories,
-        newExpense,
-        setNewExpense,
-        expenseValue,
-        setExpenseValue,
-        expenseInvoiceDueDate,
-        setExpenseInvoiceDueDate,
-        selectedCategory,
-        setSelectedCategory,
-        isModalOpen,
-        setIsModalOpen,
-        setEditingExpense,
-        handleEditExpense,
-        handleSaveExpense,
-        handleDeleteExpense,
-        accounts,
-        selectedCard,
-        setSelectedCard,
-        installments,
-        setInstallments,
-        typeOfInstallment,
-        setTypeOfInstallment,
-        hasInstallments,
-        setHasInstallments,
-        hasSourceAccountId,
-        setBooleanSourceAccountId,
-        idExpense,
-        setIdExpense,
-        linkToInvoice,
-        setLinkToInvoice,
-        idInvoice,
-        setIdInvoice,
-        status,
-        setStatus,
-        optionsStatus,
-        handleRegisterPayment,
-        isPaymentModalOpen,
-        setIsPaymentModalOpen,
-        loading,
-        error
+        expenses, categories, newExpense, setNewExpense, expenseValue, setExpenseValue, expenseInvoiceDueDate, setExpenseInvoiceDueDate,
+        selectedCategory, setSelectedCategory, isModalOpen, setIsModalOpen, setEditingExpense, handleEditExpense, handleSaveExpense,
+        handleDeleteExpense, accounts, selectedCard, setSelectedCard, installments, setInstallments, typeOfInstallment, setTypeOfInstallment,
+        hasInstallments, setHasInstallments, hasSourceAccountId, setBooleanSourceAccountId, idExpense, setIdExpense, linkToInvoice, setLinkToInvoice,
+        idInvoice, setIdInvoice, status, setStatus, optionsStatus, handleRegisterPayment, isPaymentModalOpen, setIsPaymentModalOpen, loading, error,
+        refetch
     } = useExpenseHandler(formattedPeriod);
 
     const [selectedExpense, setSelectedExpense] = useState(null);
@@ -176,6 +141,7 @@ const Expenses = () => {
                     payableType="expense"
                     setIsModalPaymentOpen={setIsPaymentModalOpen}
                     handlePayment={handleRegisterPayment}
+                    refetch={refetch}
                 />
             )}
 
@@ -185,6 +151,7 @@ const Expenses = () => {
                     onClose={handleCloseReverseModal}
                     entityType="expense"
                     entityData={selectedExpenseForReverse}
+                    refetch={refetch}
                 />
             )}
         </div>

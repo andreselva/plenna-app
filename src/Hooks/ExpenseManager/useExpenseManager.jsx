@@ -109,6 +109,7 @@ export const useExpenseManager = (periodo) => {
         updateExpense,
         registerPaymentExpense,
         loading,
-        error: fetchError || error
+        error: fetchError || error,
+        refetch
     };
 };

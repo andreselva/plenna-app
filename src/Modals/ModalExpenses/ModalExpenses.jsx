@@ -58,6 +58,7 @@ const ModalExpenses = ({
 
     const { handleSearchRelatedInvoices } = useInvoiceHandler();
     const [invoices, setInvoices] = useState([]);
+    const [loadingModal, setLoadingModal] = useState(false);
 
     useEffect(() => {
         if (typeOfInstallment === 'F') {
@@ -83,6 +84,7 @@ const ModalExpenses = ({
                 return;
             }
             try {
+                setLoadingModal(true);
                 const fetchedInvoices = await handleSearchRelatedInvoices(cardId);
                 setInvoices(fetchedInvoices || []);
                 if (idInvoice) {
@@ -91,6 +93,8 @@ const ModalExpenses = ({
             } catch (error) {
                 console.error("Erro ao buscar faturas relacionadas:", error);
                 setInvoices([]);
+            } finally {
+                setLoadingModal(false);
             }
         };
 
@@ -101,7 +105,6 @@ const ModalExpenses = ({
             setIdInvoice('');
         }
     }, [linkToInvoice, selectedCard, handleSearchRelatedInvoices]);
-
 
     useEffect(() => {
         if (idInvoice && invoices.length > 0) {
@@ -306,6 +309,7 @@ const ModalExpenses = ({
             onCancel={handleCancel}
             submitButtonText="Salvar"
             width="700px"
+            loading={loadingModal}
         />
     );
 };

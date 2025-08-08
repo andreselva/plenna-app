@@ -1,5 +1,5 @@
 .loader-container {
-  position: absolute; /* Desprende o loader do fluxo normal da página. */
+  position: absolute;
   
   /* Faz o container ocupar todo o espaço do pai. 'inset: 0' é um atalho para top, right, bottom e left = 0. */
   inset: 0; 
@@ -23,7 +23,7 @@
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  border-left-color: #09f; /* Cor do spinner, pode ajustar */
+  border-left-color: rgb(126, 38, 177); /* Cor do spinner */
   animation: spin 1s ease infinite;
 }
 
