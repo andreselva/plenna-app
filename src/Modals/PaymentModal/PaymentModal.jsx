@@ -7,6 +7,7 @@ export const PaymentModal = ({
     payableType,
     setIsModalPaymentOpen,
     handlePayment,
+    refetch = () => {}
 }) => {
     const [amountValue, setAmountValue] = useState('');
     const [paymentDate, setPaymentDate] = useState(() => new Date().toISOString().split('T')[0]);
@@ -42,8 +43,9 @@ export const PaymentModal = ({
             paymentDate: paymentDate,
             payableType: payableType
         }
-        handlePayment(paymentData);
+        await handlePayment(paymentData);
         setIsModalPaymentOpen(false);
+        refetch();
     }
 
     const formFields = [

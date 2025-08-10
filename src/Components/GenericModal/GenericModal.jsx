@@ -1,6 +1,7 @@
 import React from 'react';
 import './GenericModal.css';
 import ToggleSwitch from '../ToogleSwitch/ToggleSwitch';
+import Loader from '../../Components/Loader/Loader';
 
 const GenericModal = ({
     isOpen,
@@ -14,6 +15,7 @@ const GenericModal = ({
     hideSubmitButton = false,
     width = '500px',
     height = 'auto',
+    loading = false
 }) => {
     if (!isOpen) {
         return null;
@@ -38,7 +40,12 @@ const GenericModal = ({
                 className="modal-content"
                 style={{ width: width, height: height }}
                 onClick={(e) => e.stopPropagation()}
-            >
+                >
+                {loading && (
+                    <div className="modal-loader-overlay">
+                        <Loader />
+                    </div>
+                )}
                 {title && <h2 className="modal-title">{title}</h2>}
 
                 {children ? (
