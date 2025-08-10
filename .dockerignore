@@ -9,9 +9,6 @@ Dockerfile.dev
 docker-compose.yml
 .dockerignore
 
-# Ignorar arquivos de ambiente (serão injetados pelo Docker Compose ou Railway)
-.env*
-
 # Ignorar logs e outros arquivos desnecessários
 *.log
 npm-debug.log*
