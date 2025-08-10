@@ -1,4 +1,4 @@
-import { ReactComponent as DownArrowSVG } from "../../assets/icons/seta-baixo.svg";
+import DownArrowSVG from "../../assets/icons/seta-baixo.svg?react";
 
 export const DownArrowIcon = () => {
     return (

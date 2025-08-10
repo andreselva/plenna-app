@@ -1,4 +1,4 @@
-import { ReactComponent as UpArrowSVG } from "../../assets/icons/seta-cima.svg";
+import UpArrowSVG from "../../assets/icons/seta-cima.svg?react";
 
 export const UpArrowIcon = () => {
     return (

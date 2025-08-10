@@ -1,4 +1,4 @@
-import { ReactComponent as UserSettingSVG } from '../../assets/icons/user-settings.svg';
+import UserSettingSVG from '../../assets/icons/user-settings.svg?react';
 import './Icon.css';
 
 export const UserSettingsIcon = () => {

@@ -9,13 +9,8 @@ RUN npm run build
 
 # Stage 2: Produção com Nginx
 FROM nginx:1.25-alpine
-# Copia os arquivos da pasta build para a pasta padrão do Nginx
-COPY --from=build /usr/src/app/build /usr/share/nginx/html
-# Remove a configuração padrão do Nginx
+COPY --from=build /usr/src/app/dist /usr/share/nginx/html
 RUN rm /etc/nginx/conf.d/default.conf
-# Copia nossa configuração customizada
 COPY nginx/nginx.conf /etc/nginx/conf.d/nginx.conf
-# Expõe a porta 8080, a Railway vai gerenciar
 EXPOSE 8080
-# Comando para iniciar o Nginx
 CMD ["nginx", "-g", "daemon off;"]
