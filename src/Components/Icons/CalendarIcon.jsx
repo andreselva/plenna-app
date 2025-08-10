@@ -1,4 +1,4 @@
-import { ReactComponent as CalendarSVG } from "../../assets/icons/calendar.svg";
+import CalendarSVG from "../../assets/icons/calendar.svg?react";
 
 export const CalendarIcon = () => {
     return (

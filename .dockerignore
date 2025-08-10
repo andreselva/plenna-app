@@ -1,5 +1,24 @@
+# Ignorar dependências locais (serão instaladas no contêiner)
 node_modules
-dist
-*.log
+
+# Ignorar o Git e configurações do Docker
 .git
 .gitignore
+Dockerfile
+Dockerfile.dev
+docker-compose.yml
+.dockerignore
+
+# Ignorar arquivos de ambiente (serão injetados pelo Docker Compose ou Railway)
+.env*
+
+# Ignorar logs e outros arquivos desnecessários
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Ignorar metadados do SO e editores
+.DS_Store
+.idea/
+.vscode/
