@@ -1,5 +1,3 @@
-// src/pages/Signin/Signin.js
-
 import React, { useState } from 'react';
 import { useAuth } from '../../Auth/Context/AuthContext';
 import { useNavigate } from 'react-router-dom';
@@ -7,31 +5,44 @@ import { BotaoGlobal } from '../../Components/Buttons/ButtonGlobal';
 import './Signin.css';
 import axiosInstance from '../../api/axiosInstance';
 import Loader from '../../Components/Loader/Loader';
-import SweetAlert from '../../Components/Alerts/SweetAlert';
 import AlertToast from '../../Components/Alerts/AlertToast';
 
 export default function Signin() {
   const [isLogin, setIsLogin] = useState(true);
   const [loading, setLoading] = useState(false);
-  const [formData, setFormData] = useState({
-    name: '', username: '', email: '', password: ''
-  });
+  
+  const initialState = {
+    name: '',
+    username: '',
+    email: '',
+    password: '',
+    document: '',
+    address: '',
+    number: '',
+    complement: '',
+    neighborhood: '',
+    city: '', 
+    state: '',
+    zipCode: ''
+  };
 
+  const [formData, setFormData] = useState(initialState);
   const { login } = useAuth();
   const navigate = useNavigate();
 
   const toggleMode = () => {
     setIsLogin(prev => !prev);
-    setFormData({ name: '', username: '', email: '', password: '' });
+    setFormData(initialState); 
   };
 
-  const handleChange = e =>
+  const handleChange = e => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+  }
 
   const handleSubmit = async e => {
     e.preventDefault();
     
-    const endpoint = isLogin ? '/auth/login' : '/user/register';
+    const endpoint = isLogin ? '/auth/login' : '/management/register-user';
     const payload = isLogin
       ? { username: formData.username, password: formData.password }
       : formData;
@@ -43,7 +54,7 @@ export default function Signin() {
       navigate('/dashboard');
     } catch (err) {
       console.error(err);
-      AlertToast({icon: 'error', title: 'Erro ao autenticar. Verifique suas credenciais.'});
+      AlertToast({icon: 'error', title: 'Erro. Verifique seus dados.'});
     } finally {
       setLoading(false);
     }
@@ -51,45 +62,81 @@ export default function Signin() {
 
   return (
     <div className="auth-container">
-      <div className="auth-box">
+<div className={`auth-box ${!isLogin ? 'register-mode' : ''}`}>
         {loading && <Loader />}
         
-        <h2>{isLogin ? 'Login' : 'Crie sua conta'}</h2>
+        <h2 className="auth-title">{isLogin ? 'Login' : 'Crie sua conta'}</h2>
+        
         <form onSubmit={handleSubmit}>
           {!isLogin && (
             <>
-              <input
-                type="text" name="name" placeholder="Nome completo"
-                value={formData.name} onChange={handleChange} required
-              />
-              <input
-                type="email" name="email" placeholder="E-mail"
-                value={formData.email} onChange={handleChange} required
-              />
+              <div className="input-group">
+                <label htmlFor="name">Nome completo</label>
+                <input id="name" type="text" name="name" value={formData.name} onChange={handleChange} required />
+              </div>
+              <div className="input-group">
+                <label htmlFor="email">E-mail</label>
+                <input id="email" type="email" name="email" value={formData.email} onChange={handleChange} required />
+              </div>
+              <div className="input-group">
+                <label htmlFor="document">CPF</label>
+                <input id="document" type="text" name="document" value={formData.document} onChange={handleChange} required />
+              </div>
+              <div className="input-group">
+                <label htmlFor="address">Endereço</label>
+                <input id="address" type="text" name="address" value={formData.address} onChange={handleChange} required />
+              </div>
+              <div className="input-group-row">
+                <div className="input-group">
+                  <label htmlFor="number">Número</label>
+                  <input id="number" type="text" name="number" value={formData.number} onChange={handleChange} required />
+                </div>
+                <div className="input-group">
+                  <label htmlFor="complement">Complemento</label>
+                  <input id="complement" type="text" name="complement" value={formData.complement} onChange={handleChange} />
+                </div>
+              </div>
+              <div className="input-group">
+                <label htmlFor="neighborhood">Bairro</label>
+                <input id="neighborhood" type="text" name="neighborhood" value={formData.neighborhood} onChange={handleChange} required />
+              </div>
+              <div className="input-group-row">
+                <div className="input-group">
+                  <label htmlFor="city">Cidade</label>
+                  <input id="city" type="text" name="city" value={formData.city} onChange={handleChange} required />
+                </div>
+                <div className="input-group">
+                  <label htmlFor="state">Estado</label>
+                  <input id="state" type="text" name="state" value={formData.state} onChange={handleChange} required />
+                </div>
+                <div className="input-group">
+                  <label htmlFor='zipCode'>CEP</label>
+                  <input id='zipCode' type='text' name='zipCode' value={formData.zipCode} onChange={handleChange} required />
+                </div>
+              </div>
             </>
           )}
-          <input
-            type="text" name="username" placeholder="Usuário"
-            value={formData.username} onChange={handleChange} required
-          />
-          <input
-            type="password" name="password" placeholder="Senha"
-            value={formData.password} onChange={handleChange} required
-          />
-          <BotaoGlobal cor="primaria" width="100px" height="30px" type="submit" disabled={loading}>
+
+          <div className="input-group">
+            <label htmlFor="username">Usuário</label>
+            <input id="username" type="text" name="username" value={formData.username} onChange={handleChange} required />
+          </div>
+          <div className="input-group">
+            <label htmlFor="password">Senha</label>
+            <input id="password" type="password" name="password" value={formData.password} onChange={handleChange} required />
+          </div>
+          
+          <BotaoGlobal cor="primaria" width="100%" height="45px" type="submit" disabled={loading}>
             {isLogin ? 'Entrar' : 'Registrar'}
           </BotaoGlobal>
         </form>
-        <p>
-          {isLogin ? 'Não tem uma conta?' : 'Já tem uma conta?'}{' '}
-          <BotaoGlobal
-            cor="secundaria" width="100px" height="30px"
-            onClick={toggleMode}
-            disabled={loading}
-          >
+        
+        <div className="toggle-auth">
+          <p>{isLogin ? 'Não tem uma conta?' : 'Já tem uma conta?'}</p>
+          <button className="toggle-button" onClick={toggleMode} disabled={loading}>
             {isLogin ? 'Crie uma' : 'Faça login'}
-          </BotaoGlobal>
-        </p>
+          </button>
+        </div>
       </div>
     </div>
   );
