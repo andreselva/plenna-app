@@ -125,7 +125,8 @@
 
 .Sidebar.collapsed .Sidebar-item {
     justify-content: center;
-    padding: 10px 6px;
+    padding: 10px 0;
+    gap: 0;
 }
 
 .Sidebar.collapsed .sidebar-item-text {
