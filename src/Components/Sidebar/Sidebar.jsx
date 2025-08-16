@@ -1,73 +1,78 @@
-import { useState, useRef, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import './Sidebar.css';
-import { UserSettingsIcon } from '../Icons/UserSettingIcon';
-import { BotaoGlobal } from '../Buttons/ButtonGlobal';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../../Auth/Context/AuthContext';
-import ExpandableRow from '../ExpansableRow/ExpansableRow';
-import { UpArrowIcon } from '../Icons/UpArrow';
-import { DownArrowIcon } from '../Icons/DownArrow';
+import avatarUrl from '../../assets/avatar-padrao.svg';
+import { 
+    ArrowLeft, 
+    BanknoteArrowDown, 
+    BanknoteArrowUp, 
+    Bolt, 
+    BriefcaseBusiness, 
+    CreditCard, 
+    Landmark, 
+    LayoutDashboard, 
+    LogOut
+} from 'lucide-react';
+
+const SidebarItem = ({ icon, text, to, onClick }) => {
+    return (
+        <Link to={to} onClick={onClick} className="Sidebar-item">
+            <div className='item-icon'>{icon}</div>
+            {text}
+        </Link>
+    );
+};
+
+const navItems = [
+    { icon: <LayoutDashboard />, text: 'Dashboard', to: '/dashboard' },
+    { icon: <BriefcaseBusiness />, text: 'Categorias', to: '/categories' },
+    { icon: <BanknoteArrowDown />, text: 'Despesas', to: '/expenses' },
+    { icon: <BanknoteArrowUp />, text: 'Receitas', to: '/revenues' },
+    { icon: <Landmark />, text: 'Contas Bancárias', to: '/bank-accounts' },
+    { icon: <CreditCard />, text: 'Faturas', to: '/invoices' }
+];
 
 const Sidebar = () => {
-    const [dropdownOpen, setDropdownOpen] = useState(false);
-    const [openSection, setOpenSection] = useState(null);
-    const dropdownRef = useRef(null);
     const { logout } = useAuth();
-
-    useEffect(() => {
-        function handleClickOutside(event) {
-            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-                setDropdownOpen(false);
-            }
-        }
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => document.removeEventListener('mousedown', handleClickOutside);
-    }, []);
-
-    const toggleSection = (section) => {
-        setOpenSection(openSection === section ? null : section);
+    const handleLogout = () => {
+        logout();
     };
 
     return (
         <div className="Sidebar">
-            <div className="Sidebar-title">Plenna</div>
-            <div className="Sidebar-components">
-                <div className='Sidebar-components-item'>
-                    <Link to="/dashboard">Dashboard</Link>
+            <button className='sidebar-toggle-button'>
+                <span className='arrow'><ArrowLeft width={15}/></span>
+            </button>
+            <div className="Sidebar-title">
+                <div className='profile-picture'>
+                    <img src={avatarUrl} alt="Foto de perfil" />
                 </div>
-                <Link to="/categories">Categorias</Link>
-                <div
-                    className="Sidebar-section-title"
-                    onClick={() => toggleSection('financeiro')}
-                    style={{ cursor: 'pointer', color: openSection === 'financeiro' ? '#9370DB' : 'inherit' }}
-                >
-                    Financeiro {openSection === 'financeiro' ? <UpArrowIcon /> : <DownArrowIcon />}
-                </div>
+            </div>
 
-                <ExpandableRow isOpen={openSection === 'financeiro'}>
-                    <div className="Sidebar-submenu">
-                        <Link to="/expenses">Despesas</Link>
-                        <Link to="/revenues">Receitas</Link>
-                        <Link to="/bank-accounts">Contas Bancárias</Link>
-                        <Link to="/invoices">Faturas</Link>
-                    </div>
-                </ExpandableRow>
-            </div>
+            <nav className="Sidebar-nav">
+                {navItems.map((item) => (
+                    <SidebarItem 
+                        key={item.text} 
+                        icon={item.icon} 
+                        text={item.text} 
+                        to={item.to} 
+                    />
+                ))}
+            </nav>
+
             <div className='Sidebar-footer'>
-                <div className='Sidebar-footer-itens' ref={dropdownRef} style={{ position: 'relative' }}>
-                    <div></div>
-                    <BotaoGlobal cor='nenhuma' onClick={() => setDropdownOpen((open) => !open)}>
-                        <UserSettingsIcon />
-                    </BotaoGlobal>
-                    {dropdownOpen && (
-                        <div className="dropdown-up">
-                            <button>Perfil</button>
-                            <button>Configurações</button>
-                            <button onClick={logout}>Sair</button>
-                        </div>
-                    )}
-                </div>
-            </div>
+                <SidebarItem 
+                    icon={<Bolt />} 
+                    text="Configurações" 
+                    to="/settings" 
+                />
+                <SidebarItem 
+                    icon={<LogOut />} 
+                    text="Logout" 
+                    to="/login" 
+                    onClick={handleLogout} 
+                />
+            </div>   
         </div>
     );
 };
