@@ -7,6 +7,7 @@ import axiosInstance from '../../api/axiosInstance';
 import Loader from '../../Components/Loader/Loader';
 import AlertToast from '../../Components/Alerts/AlertToast';
 import SigninImageJPG from '../../assets/icons/signin.jpg';
+import { LogInIcon } from 'lucide-react';
 
 export default function Signin() {
   const [isLogin, setIsLogin] = useState(true);
@@ -128,7 +129,7 @@ export default function Signin() {
             </div>
             
             <BotaoGlobal cor="roxo" width="100%" height="45px" type="submit" disabled={loading}>
-              {isLogin ? 'Entrar' : 'Registrar'}
+              {isLogin ? <div className='log-in'>Entrar <LogInIcon className="w-4 h-4" /> </div> : 'Registrar'}
             </BotaoGlobal>
           </form>
           

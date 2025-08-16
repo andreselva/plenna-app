@@ -31,13 +31,13 @@
   border-radius: 3px;
   box-shadow: 0 8px 25px var(--box-shadow-color);
   text-align: center;
-  min-height: 550px;
+  min-height: 700px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   transition: width 0.4s cubic-bezier(.42,.63,1,.99);
-  z-index: 2; 
-  left: 6rem;
+  z-index: 2;
+  left: 8rem;
 }
 
 .image-section {
@@ -60,6 +60,13 @@
   color: white;
   font-size: 3rem;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);  
+}
+
+.log-in {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2%;
 }
 
 .auth-box form { max-height: 60vh; overflow-y: auto; overflow-x: hidden; padding: 5px 15px 5px 5px; margin: 0 -15px 0 -5px; }
