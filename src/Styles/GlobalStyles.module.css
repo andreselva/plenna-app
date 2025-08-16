@@ -132,6 +132,10 @@
     color: white;
 }
 
+.roxo {
+    background-color: #7748ce;
+}
+
 .nenhuma {
     background-color: transparent;
     color: inherit;
