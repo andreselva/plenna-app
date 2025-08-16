@@ -110,7 +110,7 @@ export const useExpenseForm = ({ addExpense, updateExpense, deleteExpense, regis
         const baseData = {
             name: newExpense,
             description: expenseDescription,
-            value: expenseValue,
+            value: Number(expenseValue),
             invoiceDueDate: expenseInvoiceDueDate,
             idCategory: Number(selectedCategory),
             idCreditCard: Number(selectedCard),
