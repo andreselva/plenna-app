@@ -1,9 +1,11 @@
 import './Sidebar.css';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../Auth/Context/AuthContext';
 import avatarUrl from '../../assets/avatar-padrao.svg';
 import { 
-    ArrowLeft, 
+    ArrowLeft,
+    ArrowRight,
     BanknoteArrowDown, 
     BanknoteArrowUp, 
     Bolt, 
@@ -18,7 +20,7 @@ const SidebarItem = ({ icon, text, to, onClick }) => {
     return (
         <Link to={to} onClick={onClick} className="Sidebar-item">
             <div className='item-icon'>{icon}</div>
-            {text}
+            <span className="sidebar-item-text">{text}</span>
         </Link>
     );
 };
@@ -33,16 +35,22 @@ const navItems = [
 ];
 
 const Sidebar = () => {
+    const [isCollapsed, setIsCollapsed] = useState(false);
     const { logout } = useAuth();
     const handleLogout = () => {
         logout();
     };
 
+    const toggleSidebar = () => {
+        setIsCollapsed(!isCollapsed);
+    };
+
     return (
-        <div className="Sidebar">
-            <button className='sidebar-toggle-button'>
-                <span className='arrow'><ArrowLeft width={15}/></span>
-            </button>
+        <div className={`Sidebar ${isCollapsed ? 'collapsed' : ''}`}>
+            <button className='sidebar-toggle-button' onClick={toggleSidebar}>
+                <span className='arrow'>
+                    {isCollapsed ? <ArrowRight width={15}/> : <ArrowLeft width={15}/>}
+                </span>            </button>
             <div className="Sidebar-title">
                 <div className='profile-picture'>
                     <img src={avatarUrl} alt="Foto de perfil" />
