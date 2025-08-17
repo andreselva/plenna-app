@@ -1,7 +1,7 @@
-import styles from './Categories.module.css';
 import Modal from "../../Modals/ModalCategories/ModalCategories";
 import CategoryTable from "../../Tables/CategoryTable/CategoryTable";
 import { useCategoryHandler } from '../../Handlers/useCategoryHandler';
+import globalStyles from '../../Styles/GlobalStyles.module.css'
 
 const Categories = () => {
     const { 
@@ -24,15 +24,15 @@ const Categories = () => {
     } = useCategoryHandler();
 
     return (
-        <div className={styles.Categories}>
-            <div className={styles['Categories-content']}>
-                <div className={styles['categories-title']}>
-                    <div className={styles['categories-title-items']}>
-                        <button className={styles['title-items-button']} onClick={() => setIsModalOpen(true)} />
-                        <span className={styles['title-items-span']}>Categorias</span>
+        <div className={globalStyles.container}>
+            <div className={globalStyles['container-content']}>
+                <div className={globalStyles['content-title']}>
+                    <div className={globalStyles['content-title-items']}>
+                        <button className={globalStyles['title-items-button']} onClick={() => setIsModalOpen(true)} />
+                        <span className={globalStyles['title-items-span']}>Categorias</span>
                     </div>
                 </div>
-                <div className={styles['card-categories']}>
+                <div className={globalStyles.card}>
                     <CategoryTable
                         categories={categories}
                         onEdit={handleEditCategory}

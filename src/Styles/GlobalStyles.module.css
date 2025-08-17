@@ -1,7 +1,7 @@
 :root {
     --cor-global-button: #7748ce;
     --cor-global-button-hover: #7748ce8f;
-    --cor-content-title: #ccb9ff34;
+    --cor-content-title: #cfbffa17;
     --cor-header-table: #fdfcf9;
 }
 
@@ -23,7 +23,6 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-size: 16px;
     margin: 0 0 0 0;
     border: 1px solid #7748ce1c;
     border-radius: 10px;
@@ -51,31 +50,31 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 2rem;
-    height: 2rem;
+    width: 2.2rem;
+    height: 2.2rem;
     transition: background-color 0.3s ease;
 }
 
 .title-items-button:hover {
-    background-color: var(--cor-global-button-hover); /* Cor de fundo mais escura no hover */
+    background-color: var(--cor-global-button-hover);
 }
 
 .title-items-button::before {
     content: '+'; 
     display: block;
-    font-size: 2.5rem;   /* NOVO: Aumenta o tamanho do símbolo */
-    font-weight: 300;   /* NOVO: Deixa a linha do símbolo mais fina (ou use 'bold' para mais grossa) */
-    line-height: 1;    /* NOVO: Ajusta o alinhamento vertical */
+    font-size: 2.5rem;  
+    font-weight: 300; 
+    line-height: 1;
     transition: transform 0.3s ease-in-out;
     transition: transform 0.3s ease-in-out;
 }
 
 .title-items-span {
-    font-size: 18px;
+    font-size: 20px;
 }
 
 .title-items-button:hover::before {
-transform: rotate(90deg); /* Rotação de 90 graus ao passar o mouse */
+    transform: rotate(90deg);
 }
 
 /* Estilos globais para cards */
@@ -216,6 +215,11 @@ transform: rotate(90deg); /* Rotação de 90 graus ao passar o mouse */
     overflow-y: auto;
     scroll-behavior: smooth;
     justify-content: center;
+    font-family: "Poppins", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 'SemiBold';
+    font-size: 0.9rem;
+    font-style: normal;
 }
 
 .tableBody {
