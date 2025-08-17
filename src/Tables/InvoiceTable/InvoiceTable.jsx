@@ -2,10 +2,17 @@ import React, { useState } from 'react';
 import globalStyles from '../../Styles/GlobalStyles.module.css';
 import ExpandableRow from '../../Components/ExpansableRow/ExpansableRow';
 import DeleteConfirmation from '../../Hooks/DeleteConfirmation/DeleteConfirmation';
-import { PencilLine, Trash2Icon } from 'lucide-react';
+import { PencilLine, Trash2Icon, FilePlus2, HandCoins, BanknoteXIcon } from 'lucide-react';
 import { ActionDropdown } from '../../Components/ActionDropdown/ActionDropdown';
-import Loader from '../../Components/Loader/Loader';
 import InvoiceTableSkeleton from './InvoiceTableSkeleton';
+import { darkenHexColor } from '../../Utils/DarkenColor';
+
+const STATUS_COLORS = {
+    paid: '#28a745',
+    parcial: '#ffc107',
+    pending: '#dc3545',
+    default: '#6c757d'
+};
 
 const InvoiceTable = ({ invoices, onEdit, onDelete, setIsModalOpen, onOpenPaymentModal, onReversePayment, loading, error }) => {
     const handleDelete = DeleteConfirmation(onDelete, {
@@ -16,38 +23,32 @@ const InvoiceTable = ({ invoices, onEdit, onDelete, setIsModalOpen, onOpenPaymen
         successMessage: 'Item excluído com sucesso!',
         errorMessage: 'Erro ao excluir item!'
     });
-    const possibleStatus = ['pending', 'paid', 'parcial'];
 
     const [expandedInvoiceIds, setExpandedInvoiceIds] = useState(new Set());
 
     const toggleInvoice = (invoiceId) => {
-        setExpandedInvoiceIds((prevExpandedInvoiceIds) => {
-            const newExpandedInvoiceIds = new Set(prevExpandedInvoiceIds);
-            if (newExpandedInvoiceIds.has(invoiceId)) {
-                newExpandedInvoiceIds.delete(invoiceId);
+        setExpandedInvoiceIds((prev) => {
+            const newSet = new Set(prev);
+            if (newSet.has(invoiceId)) {
+                newSet.delete(invoiceId);
             } else {
-                newExpandedInvoiceIds.add(invoiceId);
+                newSet.add(invoiceId);
             }
-            return newExpandedInvoiceIds;
+            return newSet;
         });
     };
 
-    const defineStatus = (status) => {
-        if (possibleStatus.includes(status)) {
-            switch (status) {
-                case 'parcial':
-                    return 'Pagamento parcial'
-                case 'paid':
-                    return 'Paga'
-                default:
-                    return 'Pendente'
-            }
-        }
-        return 'N/A';
-    }
+    const getStatusText = (status) => {
+        const statusMap = {
+            parcial: 'Pagamento parcial',
+            paid: 'Paga',
+            pending: 'Pendente'
+        };
+        return statusMap[status] || 'N/A';
+    };
 
     if (loading) {
-        return <InvoiceTableSkeleton />
+        return <InvoiceTableSkeleton />;
     }
 
     return (
@@ -56,53 +57,56 @@ const InvoiceTable = ({ invoices, onEdit, onDelete, setIsModalOpen, onOpenPaymen
                 {invoices && invoices.length > 0 ? (
                     invoices.map((invoice) => {
                         const invoiceActions = [];
-
-                        if (invoice.status.toUpperCase() !== 'PAID') {
+                        if (invoice.status.toLowerCase() !== 'paid') {
                             invoiceActions.push({
-                                label: 'Incluir despesa',
+                                icon: <FilePlus2 size={14} />,
+                                text: 'Incluir despesa',
                                 handler: () => setIsModalOpen(true),
                             });
                             invoiceActions.push({
-                                label: 'Pagar fatura',
+                                icon: <HandCoins size={14} />,
+                                text: 'Pagar fatura',
                                 handler: () => onOpenPaymentModal(invoice),
                             });
                         }
-
-                        if (invoice.status.toUpperCase() === 'PAID' || invoice.status.toUpperCase() === 'PARCIAL') {
+                        if (['paid', 'parcial'].includes(invoice.status.toLowerCase())) {
                             invoiceActions.push({
-                                label: 'Estornar Pagamento',
+                                icon: <BanknoteXIcon size={14} />,
+                                text: 'Estornar Pagamento',
                                 handler: () => onReversePayment(invoice)
-                            })
+                            });
                         }
+
+                        const baseColor = STATUS_COLORS[invoice.status.toLowerCase()] || STATUS_COLORS.default;
 
                         return (
                             <React.Fragment key={invoice.id}>
-                                {/* Linha Clicável */}
-                                <div style={{ padding: '25px 0 25px 0' }} className={globalStyles.tableRow} onClick={() => toggleInvoice(invoice.id)}>
-                                    <div style={{ flex: '1 1 0%', fontWeight: 400 }}>{invoice.name}</div>
-                                    <div style={{ flex: '2 1 0%', fontWeight: 400 }}>Vencimento: {invoice.dueDate.split('-').reverse().join('/')}</div>
-                                    <div style={{ flex: '2 1 0%', fontWeight: 400 }}>Fechamento: {invoice.closingDate.split('-').reverse().join('/')}</div>
-                                    <div style={{ flex: '1 1 0%', fontWeight: 400 }}>Pago: {invoice.totalPaid.toFixed(2)}</div>
-                                    <div style={{ flex: '1 1 0%', fontWeight: 400 }}>Total: {invoice.value.toFixed(2)}</div>
-                                    <div style={{ flex: '2 1 0%' }}>
+                                <div className={globalStyles.tableRow} onClick={() => toggleInvoice(invoice.id)}>
+                                    <div style={{ flex: '1 1 20%', justifyContent: 'center' }}>{invoice.name}</div>
+                                    <div style={{ flex: '1 1 15%', justifyContent: 'center' }}>Vencimento: {invoice.dueDate.split('-').reverse().join('/')}</div>
+                                    <div style={{ flex: '1 1 15%', justifyContent: 'center' }}>Fechamento: {invoice.closingDate.split('-').reverse().join('/')}</div>
+                                    <div style={{ flex: '1 1 10%', justifyContent: 'center' }}>Pago: {invoice.totalPaid.toFixed(2)}</div>
+                                    <div style={{ flex: '1 1 10%', justifyContent: 'center' }}>Total: {invoice.value.toFixed(2)}</div>
+                                    <div style={{ flex: '1 1 15%', justifyContent: 'center' }}>
                                         <span className={globalStyles.statusBadge} style={{
-                                            backgroundColor: invoice.status.toUpperCase() === 'PAID' ? "rgba(0, 255, 0, 0.2)" : "rgba(255, 0, 0, 0.2)",
-                                            fontWeight: 400
+                                            backgroundColor: `${baseColor}33`,
+                                            color: darkenHexColor(baseColor, 25),
+                                            padding: '4px 10px'
                                         }}>
-                                            Status: {defineStatus(invoice.status)}
+                                            {getStatusText(invoice.status)}
                                         </span>
                                     </div>
-                                    <div style={{ flex: '1 0 0%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                                    <div style={{ flex: '1 1 15%', justifyContent: 'center' }}>
                                         <ActionDropdown actions={invoiceActions} />
                                     </div>
                                 </div>
 
-                                {/* Linha Expansível */}
+                                {/* Linha Expansível (lógica inalterada) */}
                                 <div className={globalStyles.expandableContainer} >
                                     <ExpandableRow isOpen={expandedInvoiceIds.has(invoice.id)}>
                                         <div className={globalStyles.scrollableTableWrapper}>
-                                            <table className={globalStyles.expensesTable} style={{ width: '100%', borderRadius: '10px' }}>
-                                                <thead style={{ color: '#4F4F4F' }}>
+                                            <table className={globalStyles.expensesTable}>
+                                                <thead>
                                                     <tr>
                                                         <th>Nome da Despesa</th>
                                                         <th>Valor</th>
@@ -110,29 +114,25 @@ const InvoiceTable = ({ invoices, onEdit, onDelete, setIsModalOpen, onOpenPaymen
                                                         <th>Ações</th>
                                                     </tr>
                                                 </thead>
-                                                <tbody >
+                                                <tbody>
                                                     {invoice.expenses && invoice.expenses.length > 0 ? (
                                                         invoice.expenses.map((expense) => (
                                                             <tr key={expense.id}>
                                                                 <td>{expense.name}</td>
-                                                                <td>{expense.value}</td>
+                                                                <td>{expense.value.toFixed(2)}</td>
                                                                 <td>{expense.invoiceDueDate.split('-').reverse().join('/')}</td>
                                                                 <td>
-                                                                    <div className={globalStyles.actions} style={{ display: 'flex' }}>
+                                                                    <div className={globalStyles.actions}>
                                                                         <button
                                                                             onClick={() => { onEdit(expense) }}
-                                                                            disabled={ // Ações na despesa individual continuam com a lógica original
-                                                                                invoice.status.toUpperCase().includes('PAID') ||
-                                                                                invoice.status.toUpperCase().includes('PARCIAL')
-                                                                            }>
+                                                                            disabled={['paid', 'parcial'].includes(invoice.status.toLowerCase())}
+                                                                        >
                                                                             <PencilLine width='15px' height='15px' />
                                                                         </button>
                                                                         <button
                                                                             onClick={() => { handleDelete(expense) }}
-                                                                            disabled={
-                                                                                invoice.status.toUpperCase().includes('PAID') ||
-                                                                                invoice.status.toUpperCase().includes('PARCIAL')
-                                                                            }>
+                                                                            disabled={['paid', 'parcial'].includes(invoice.status.toLowerCase())}
+                                                                        >
                                                                             <Trash2Icon width='15px' height='15px' />
                                                                         </button>
                                                                     </div>

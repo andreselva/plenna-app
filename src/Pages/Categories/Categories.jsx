@@ -1,8 +1,7 @@
-import styles from './Categories.module.css';
 import Modal from "../../Modals/ModalCategories/ModalCategories";
 import CategoryTable from "../../Tables/CategoryTable/CategoryTable";
-import { BotaoGlobal } from '../../Components/Buttons/ButtonGlobal.tsx';
 import { useCategoryHandler } from '../../Handlers/useCategoryHandler';
+import globalStyles from '../../Styles/GlobalStyles.module.css'
 
 const Categories = () => {
     const { 
@@ -25,22 +24,15 @@ const Categories = () => {
     } = useCategoryHandler();
 
     return (
-        <div className={styles.Categories}>
-            <div className={styles['Categories-content']}>
-                <BotaoGlobal
-                    cor="primaria"
-                    className={styles['show-categories-btn']}
-                    onClick={() => setIsModalOpen(true)}
-                    width='160px'
-                    height='40px'
-                    margin='0 0 10px 0'
-                >
-                    Cadastrar categoria
-                </BotaoGlobal>
-
-                <div className={styles['card-categories']}>
-                    <h3>Categorias</h3>
-
+        <div className={globalStyles.container}>
+            <div className={globalStyles['container-content']}>
+                <div className={globalStyles['content-title']}>
+                    <div className={globalStyles['content-title-items']}>
+                        <button className={globalStyles['title-items-button']} onClick={() => setIsModalOpen(true)} />
+                        <span className={globalStyles['title-items-span']}>Categorias</span>
+                    </div>
+                </div>
+                <div className={globalStyles.card}>
                     <CategoryTable
                         categories={categories}
                         onEdit={handleEditCategory}

@@ -1,9 +1,9 @@
 :root {
-  --primary-color: #007bff;
+  --primary-color: #4f5153;
   --secondary-color: #6c757d;
-  --background-color: #f8f9fa;
+  --background-color: #d6d1dad3;
   --box-background: #ffffff;
-  --text-color: #333;
+  --text-color: #000000b7;
   --input-border-color: #ced4da;
   --input-focus-border: #80bdff;
   --box-shadow-color: rgba(0, 0, 0, 0.1);
@@ -11,126 +11,114 @@
 
 .auth-container {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
-  background-color: var(--background-color);
-  padding: 20px;
-  box-sizing: border-box;
+  width: 95%;
+  height: 95vh;
+  border-radius: 3px;
+  box-shadow: 0 8px 25px var(--box-shadow-color);
+  background-color: var(--box-background);
+  overflow: hidden;
 }
 
-/* A "caixa" que contém o formulário */
-.auth-box {
-  background-color: var(--box-background);
-  padding: 30px 40px; /* Padding vertical um pouco menor */
-  border-radius: 12px;
-  box-shadow: 0 8px 25px var(--box-shadow-color);
-  width: 600px;
-  text-align: center;
-  position: relative;
-  transition: max-width 0.4s ease-in-out, min-height 0.4s ease-in-out;
+.form-section { width: 20%; position: relative; display: flex; justify-content: center; align-items: center; }
 
-  /* Altura mínima para o formulário de login */
-  min-height: 650px;
+.auth-box {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 350px;
+  background-color: var(--box-background);
+  padding: 30px 40px;
+  border-radius: 3px;
+  box-shadow: 0 8px 25px var(--box-shadow-color);
+  text-align: center;
+  min-height: 700px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
+  transition: width 0.4s cubic-bezier(.42,.63,1,.99);
+  z-index: 2;
+  left: 8rem;
 }
 
-/* Estilo para o elemento FORM, para controlar a rolagem */
-.auth-box form {
-    max-height: 60vh; /* Altura máxima de 60% da tela */
-    overflow-y: auto; /* Adiciona scroll INTERNO se precisar */
-    overflow-x: hidden;
-    padding: 5px 15px 5px 5px; /* Espaço para a barra de rolagem não colar nos campos */
-    margin: 0 -15px 0 -5px;
-}
-
-
-/* Título do formulário */
-.auth-title {
-  margin-bottom: 25px; /* Um pouco menor */
-  color: var(--text-color);
-  font-size: 2rem;
-  font-weight: 600;
-}
-
-/* Agrupa a label e o input */
-.input-group {
-  margin-bottom: 15px; /* Espaçamento menor entre os campos */
-  text-align: left;
-}
-
-.input-group label {
-  display: block;
-  margin-bottom: 6px; /* Um pouco menor */
-  color: var(--secondary-color);
-  font-weight: 500;
-  font-size: 0.9rem;
-}
-
-.input-group input,
-.input-group .InputMask { /* Garante que o input mask pegue o estilo */
-  width: 100%;
-  padding: 12px 15px;
-  border: 1px solid var(--input-border-color);
-  border-radius: 8px;
-  font-size: 1rem;
-  box-sizing: border-box;
-  transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-}
-
-.input-group input:focus,
-.input-group .InputMask:focus {
-  outline: none;
-  border-color: var(--input-focus-border);
-  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
-}
-
-.input-group-row {
-  display: flex;
-  gap: 15px;
-  align-items: flex-start; /* Alinha os itens no topo */
-}
-
-.input-group-row .input-group {
+.image-section {
   flex: 1;
-  margin-bottom: 15px;
+  position: relative;
 }
 
-.toggle-auth {
-  margin-top: 25px;
-  color: var(--secondary-color);
+.image-section img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.7;
 }
 
-.toggle-auth p {
-  margin-right: 10px;
-  display: inline;
+.app-name {
+  position: absolute;
+  bottom: 2rem;   
+  right: 2.5rem;
+  z-index: 10; 
+  color: white;
+  font-size: 3rem;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);  
 }
 
-.toggle-button {
-  background: none;
-  border: none;
-  color: var(--primary-color);
-  font-weight: 600;
-  cursor: pointer;
-  font-size: 1rem;
-  padding: 0;
+.log-in {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2%;
 }
 
-.toggle-button:hover {
-  text-decoration: underline;
-}
+.auth-box form { max-height: 60vh; overflow-y: auto; overflow-x: hidden; padding: 5px 15px 5px 5px; margin: 0 -15px 0 -5px; }
+.auth-title { margin-bottom: 90px; color: #7748cecb; font-size: 1.4rem; font-weight: 600; text-align: left; }
+.input-group { margin-bottom: 15px; text-align: left; }
+.input-group label { display: block; margin-bottom: 6px; color: var(--secondary-color); font-weight: 500; font-size: 0.9rem; }
+.input-group input, .input-group .InputMask { width: 100%; padding: 12px 15px; border: 1px solid var(--input-border-color); border-radius: 8px; font-size: 1rem; box-sizing: border-box; transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out; }
+.input-group input:focus, .input-group .InputMask:focus { outline: none; border-color: var(--input-focus-border); box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25); }
+.input-group-row { display: flex; gap: 15px; align-items: flex-start; }
+.input-group-row .input-group { flex: 1; margin-bottom: 15px; }
+.toggle-auth { margin-top: 25px; color: var(--secondary-color); }
+.toggle-auth p { margin-right: 10px; display: inline; }
+.toggle-button { background: none; border: none; color: var(--text-color); font-weight: 600; cursor: pointer; font-size: 1rem; padding: 0; }
+.toggle-button:hover { text-decoration: underline; }
 
-/* Regras para o modo de cadastro */
 .auth-box.register-mode {
-  width: 1500px; /* Mais largo */
-  min-height: 0; /* Remove a altura mínima do login */
-  padding-top: 40px; /* Espaço para o título */
+  width: 850px;
+  max-height: 70vh;
+  padding-top: 40px;
   padding-bottom: 40px;
 }
 
-/* Em telas menores, volta para uma coluna */
+@media (max-width: 950px) {
+  .image-section {
+    display: none;
+  }
+  .form-section {
+    width: 100%;
+    height: 100vh;
+  }
+  .auth-box {
+    position: relative; /* Em telas pequenas, ele vira um bloco normal */
+    transform: none;
+    top: auto;
+    width: 100%;
+    max-width: 500px;
+    box-shadow: none;
+    left: 0;
+    height: 100vh;
+    justify-content: center;
+  }
+  .auth-container {
+    box-shadow: none;
+    background: none;
+    height: 100vh;
+  }
+
+  .auth-title {
+    margin-bottom: 30px;
+  }
+}
+
 @media (max-width: 768px) {
   .input-group-row {
     flex-direction: column;

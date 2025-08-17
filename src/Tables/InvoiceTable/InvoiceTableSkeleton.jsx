@@ -3,22 +3,26 @@ import globalStyles from '../../Styles/GlobalStyles.module.css';
 import Skeleton from '../../Components/Skeleton/Skeleton';
 
 const InvoiceTableSkeleton = () => {
-  const skeletonRows = Array.from({ length: 5 });
+  const skeletonRows = Array.from({ length: 6 });
 
   return (
     <div className={globalStyles.flexibleTable}>
       <div className={globalStyles.tableBody}>
         {skeletonRows.map((_, index) => (
-          <div key={index} style={{ padding: '25px 0 25px 0' }} className={globalStyles.tableRow}>
+          <div key={index} className={globalStyles.tableRow}>
             
-            <div style={{ flex: '1 1 0%' }}><Skeleton width="90%" /></div>
-            <div style={{ flex: '2 1 0%' }}><Skeleton width="70%" /></div>
-            <div style={{ flex: '2 1 0%' }}><Skeleton width="70%" /></div>
-            <div style={{ flex: '1 1 0%' }}><Skeleton width="50%" /></div>
-            <div style={{ flex: '1 1 0%' }}><Skeleton width="50%" /></div>
-            <div style={{ flex: '2 1 0%' }}><Skeleton width="100px" height="24px" /></div>
-            <div style={{ flex: '1 0 0%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-              <Skeleton variant="circle" width="30px" height="30px" />
+            <div style={{ flex: '1 1 20%', display: 'flex', justifyContent: 'center' }}><Skeleton width="80%" height="18px" /></div>
+            <div style={{ flex: '1 1 15%', display: 'flex', justifyContent: 'center' }}><Skeleton width="90%" height="18px" /></div>
+            <div style={{ flex: '1 1 15%', display: 'flex', justifyContent: 'center' }}><Skeleton width="90%" height="18px" /></div>
+            <div style={{ flex: '1 1 10%', display: 'flex', justifyContent: 'center' }}><Skeleton width="70%" height="18px" /></div>
+            <div style={{ flex: '1 1 10%', display: 'flex', justifyContent: 'center' }}><Skeleton width="70%" height="18px" /></div>
+            
+            <div style={{ flex: '1 1 15%', display: 'flex', justifyContent: 'center' }}>
+                <Skeleton width="90px" height="28px" borderRadius="14px" />
+            </div>
+
+            <div style={{ flex: '1 1 15%', display: 'flex', justifyContent: 'center' }}>
+              <Skeleton variant="circle" width="32px" height="32px" />
             </div>
             
           </div>

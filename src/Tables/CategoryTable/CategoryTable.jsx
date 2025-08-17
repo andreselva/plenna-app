@@ -3,6 +3,9 @@ import globalStyles from '../../Styles/GlobalStyles.module.css';
 import { FlexibleTable } from '../../Components/FlexibleTable/FlexibleTable';
 import { ActionDropdown } from '../../Components/ActionDropdown/ActionDropdown';
 import { CategoryTableSkeleton } from './CategoryTableSkeleton';
+import { darkenHexColor } from '../../Utils/DarkenColor';
+// <-- MUDANÇA AQUI: Importe os ícones que você vai usar -->
+import { Pencil, Trash2 } from 'lucide-react';
 
 const CategoryTable = ({ categories, onEdit, onDelete, loading, error }) => {
     if (loading) {
@@ -16,13 +19,17 @@ const CategoryTable = ({ categories, onEdit, onDelete, loading, error }) => {
         cancelButtonText: 'Manter',
     });
 
+    const RECEITA_COLOR = '#28a745';
+    const DESPESA_COLOR = '#dc3545';
+
     const columns = [
         {
             header: 'Nome da Categoria',
-            style: { flex: '2 1 0%' },
+            style: { flex: '0 0 50%', display: 'flex', justifyContent: 'center'} ,
             renderCell: (category) => (
                 <span className={globalStyles.statusBadge} style={{
-                    backgroundColor: `${category.color}33`
+                    backgroundColor: `${category.color}33`,
+                    color: darkenHexColor(category.color, 30),
                 }}>
                     {category.name}
                 </span>
@@ -30,26 +37,37 @@ const CategoryTable = ({ categories, onEdit, onDelete, loading, error }) => {
         },
         {
             header: 'Tipo',
-            style: { flex: '1 1 0%' },
-            renderCell: (category) => (
-                <span className={globalStyles.statusBadge} style={{
-                    backgroundColor: category.type.toUpperCase() === 'RECEITA' ? "rgba(0, 255, 0, 0.2)" : "rgba(255, 0, 0, 0.2)"
-                }}>
-                    {category.type}
-                </span>
-            )
+            style: { flex: '0 0 20%', display: 'flex', justifyContent:'center'},
+            renderCell: (category) => {
+                const isReceita = category.type.toUpperCase() === 'RECEITA';
+                const baseColor = isReceita ? RECEITA_COLOR : DESPESA_COLOR;
+                
+                return (
+                    <span className={globalStyles.statusBadge} 
+                        style={{
+                            backgroundColor: `${baseColor}33`,
+                            color: darkenHexColor(baseColor, 25),
+                            width: '35%'
+                        }}
+                    >
+                        {category.type}
+                    </span>
+                );
+            }
         },
         {
             header: 'Ações',
-            style: { flex: '1 1 120px' },
+            style: { flex: '0 0 30%', display:'flex', justifyContent: 'center'},
             renderCell: (category) => {
                 let categoryActions = [
                     {
-                        label: 'Editar',
+                        icon: <Pencil size={14} />,
+                        text: 'Editar',
                         handler: () => onEdit(category)
                     },
                     {
-                        label: 'Excluir',
+                        icon: <Trash2 size={14} />,
+                        text: 'Excluir',
                         handler: () => handleDelete(category.id)
                     }
                 ];

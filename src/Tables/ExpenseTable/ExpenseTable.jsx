@@ -1,8 +1,18 @@
+import { BanknoteXIcon, HandCoins, Pencil, Trash2 } from "lucide-react";
 import { ActionDropdown } from "../../Components/ActionDropdown/ActionDropdown";
 import { FlexibleTable } from "../../Components/FlexibleTable/FlexibleTable";
 import DeleteConfirmation from "../../Hooks/DeleteConfirmation/DeleteConfirmation";
 import globalStyles from '../../Styles/GlobalStyles.module.css';
+import { darkenHexColor } from "../../Utils/DarkenColor";
 import { ExpenseTableSkeleton } from "./ExpenseTableSkeleton";
+
+const STATUS_COLORS = {
+    paid: '#28a745',
+    partial: '#ffc107',
+    pending: '#dc3545',
+    cancelled: '#6c757d',
+    default: '#6c757d'
+};
 
 const ExpenseTable = ({ expenses = [], categories = [], creditCards = [], onEdit, onDelete, onPayment, onReversePayment, loading, error }) => {
     if (loading) {
@@ -22,44 +32,50 @@ const ExpenseTable = ({ expenses = [], categories = [], creditCards = [], onEdit
         {
             header: 'Descrição',
             accessor: 'name',
-            style: { flex: '1 1 0%' }
+            style: { flex: '1 1 25%', display: 'flex', justifyContent: 'center' }
         },
         {
             header: 'Valor',
             accessor: 'value',
-            style: { flex: '1 1 0%', textAlign: 'center' }
+            style: { flex: '1 1 5%', display: 'flex', justifyContent: 'center' }
         },
         {
             header: 'Vencimento',
-            style: { flex: '1 1 0%' },
-            renderCell: (expense) => expense.invoiceDueDate.split('-').reverse().join('/')
+            renderCell: (expense) => (
+                expense.invoiceDueDate ? expense.invoiceDueDate.split('-').reverse().join('/') : '-'
+            ),
+            style: { flex: '1 1 10%', display: 'flex', justifyContent: 'center' },
         },
         {
             header: 'Categoria',
-            style: { flex: '1 1 0%' },
             renderCell: (expense) => {
-                const category = categories.find(c => c.id === expense.idCategory) || {};
-                return (
-                    <span className={globalStyles.statusBadge} style={{
-                        backgroundColor: category.color ? `${category.color}33` : 'rgba(0, 0, 0, 0.1)',
-                    }}>
-                        {category.name || 'N/A'}
-                    </span>
-                );
-            }
+                const category = categories.find(c => c.id === expense.idCategory);
+                if (category && category.color) {
+                    return (
+                        <span className={globalStyles.statusBadge}
+                        style={{
+                            backgroundColor: `${category.color}33`,
+                            color: darkenHexColor(category.color, 25),
+                            padding: '4px 10px'
+                        }}>
+                            {category.name}
+                        </span>
+                    );
+                }
+                return category ? category.name : '-';
+            },
+            style: { flex: '1 1 15%', display: 'flex', justifyContent: 'center' },
         },
         {
             header: 'Cartão de crédito',
-            style: { flex: '1 1 0%' },
             renderCell: (expense) => {
                 const creditCard = creditCards.find(cc => cc.id === expense.idCreditCard) || {};
                 return creditCard.name || '-';
-            }
+            },
+            style: { flex: '1 1 15%', display: 'flex', justifyContent: 'center' },
         },
         {
             header: 'Status',
-            accessor: 'status',
-            style: { flex: '1 1 0%', textAlign: 'center' },
             renderCell: (expense) => {
                 const statusMap = {
                     pending: 'Pendente',
@@ -67,50 +83,52 @@ const ExpenseTable = ({ expenses = [], categories = [], creditCards = [], onEdit
                     partial: 'Parcial',
                     cancelled: 'Cancelada'
                 };
+                const baseColor = STATUS_COLORS[expense.status] || STATUS_COLORS.default;
                 return (
                     <span className={globalStyles.statusBadge} style={{
-                        backgroundColor: expense.status === 'paid' ? '#28a74533' : expense.status === 'partial' ? '#ffc10733' : '#dc354533'
+                        backgroundColor: `${baseColor}33`,
+                        color: darkenHexColor(baseColor, 25),
+                        padding: '4px 10px'
                     }}>
                         {statusMap[expense.status] || '-'}
                     </span>
                 );
-            }
+            },
+            style: { flex: '1 1 15%', display: 'flex', justifyContent: 'center' },
         },
         {
             header: 'Ações',
-            style: { flex: '1 1 50px', textAlign: 'center' },
             renderCell: (expense) => {
                 let expenseActions = [
                     {
-                        label: 'Editar',
+                        icon: <Pencil size={14} />,
+                        text: 'Editar',
                         handler: () => onEdit(expense)
                     },
                     {
+                        icon: <Trash2 size={14}/>,
                         label: 'Excluir',
                         handler: () => handleDelete(expense)
                     }
                 ];
 
-                if (!expense.idInvoice > 0 && expense.status !== 'paid') {
+                if (!expense.idInvoice && expense.status !== 'paid') {
                     expenseActions.push({
+                        icon: <HandCoins size={14}/>,
                         label: 'Efetuar pagamento',
                         handler: () => onPayment(expense)
                     })
                 }
-
-                if (!expense.idInvoice > 0 && (expense.status === 'paid' || expense.status === 'partial')) {
+                if (!expense.idInvoice && (expense.status === 'paid' || expense.status === 'partial')) {
                     expenseActions.push({
+                        icon: <BanknoteXIcon size={14}/>,
                         label: 'Estornar pagamento',
                         handler: () => onReversePayment(expense)
                     })
                 }
-
-                return (
-                    <ActionDropdown
-                        actions={expenseActions}
-                    />
-                );
-            }
+                return <ActionDropdown actions={expenseActions} />;
+            },
+            style: { flex: '1 1 10%', display: 'flex', justifyContent: 'center' },
         }
     ];
 
