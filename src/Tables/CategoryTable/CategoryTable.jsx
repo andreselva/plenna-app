@@ -19,7 +19,7 @@ const CategoryTable = ({ categories, onEdit, onDelete, loading, error }) => {
     const columns = [
         {
             header: 'Nome da Categoria',
-            style: { flex: '0 0 10%'} ,
+            style: { flex: '0 0 50%', display: 'flex', justifyContent: 'center'} ,
             renderCell: (category) => (
                 <span className={globalStyles.statusBadge} style={{
                     backgroundColor: `${category.color}33`
@@ -30,10 +30,11 @@ const CategoryTable = ({ categories, onEdit, onDelete, loading, error }) => {
         },
         {
             header: 'Tipo',
-            style: { flex: '0 0 0%'},
+            style: { flex: '0 0 20%', display: 'flex', justifyContent:'center'},
             renderCell: (category) => (
                 <span className={globalStyles.statusBadge} style={{
-                    backgroundColor: category.type.toUpperCase() === 'RECEITA' ? "rgba(0, 255, 0, 0.2)" : "rgba(255, 0, 0, 0.2)"
+                    backgroundColor: category.type.toUpperCase() === 'RECEITA' ? "rgba(0, 255, 0, 0.2)" : "rgba(255, 0, 0, 0.2)",
+                    width: '40%'
                 }}>
                     {category.type}
                 </span>
@@ -41,7 +42,7 @@ const CategoryTable = ({ categories, onEdit, onDelete, loading, error }) => {
         },
         {
             header: 'Ações',
-            style: { flex: '0 0 0%'},
+            style: { flex: '0 0 30%', display:'flex', justifyContent: 'center'},
             renderCell: (category) => {
                 let categoryActions = [
                     {

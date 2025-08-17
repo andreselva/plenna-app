@@ -21,7 +21,7 @@
 .Content {
     display: flex;
     flex: 1;
-    /* background-color: #f4f4f4; */
+    /* background-color: #f5f2fa; */
     box-sizing: border-box;
     height: 100%;
     overflow-y: auto;
