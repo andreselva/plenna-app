@@ -1,18 +1,19 @@
 import { useState } from 'react';
-import styles from './Invoices.module.css';
-import InvoiceTable from '../../Tables/InvoiceTable/InvoiceTable';
-import { CustomDatePicker } from '../../Components/DatePicker/DatePicker';
-import { getFormattedDateRange, getStartAndEndOfMonth } from '../../Utils/DateUtils';
-import { useInvoiceHandler } from '../../Handlers/useInvoiceHandler';
-import ModalExpenses from '../../Modals/ModalExpenses/ModalExpenses';
-import { useBankAccounts } from '../../Hooks/BankAccountsManager/useBankAccounts';
 import { CategoryManager } from '../../Hooks/CategoryManager/CategoryManager';
+import { useBankAccounts } from '../../Hooks/BankAccountsManager/useBankAccounts';
 import { useExpenseHandler } from '../../Handlers/useExpenseHandler';
+import { useInvoiceHandler } from '../../Handlers/useInvoiceHandler';
+import { getFormattedDateRange, getStartAndEndOfMonth } from '../../Utils/DateUtils';
+import { CustomDatePicker } from '../../Components/DatePicker/DatePicker';
 import { PaymentModal } from '../../Modals/PaymentModal/PaymentModal';
 import { ReversePaymentModal } from '../../Modals/PaymentModal/ReversePaymentModal';
+import ModalExpenses from '../../Modals/ModalExpenses/ModalExpenses';
+import InvoiceTable from '../../Tables/InvoiceTable/InvoiceTable';
+import globalStyles from '../../Styles/GlobalStyles.module.css';
 
 const Invoices = () => {
     const [selectedInvoice, setSelectedInvoice] = useState(null);
+    const [isPaymentModalOpen, setPaymentModalOpen] = useState(false);
     const handleOpenPaymentModal = (invoice) => {
         setSelectedInvoice(invoice);
         setPaymentModalOpen(true);
@@ -32,14 +33,12 @@ const Invoices = () => {
     const handleMonthChange = (month) => {
         setSelectedMonth(month);
         setSelectedRange(null);
-
         const formattedMonthRange = getStartAndEndOfMonth(month);
         setFormattedPeriod(formattedMonthRange);
     };
 
     const handleDateRangeSelect = ({ startDate, endDate }) => {
         setSelectedRange({ startDate, endDate });
-
         const formattedRange = getFormattedDateRange(startDate, endDate);
         setFormattedPeriod(formattedRange);
     };
@@ -58,8 +57,6 @@ const Invoices = () => {
 
     const {
         invoices,
-        isPaymentModalOpen,
-        setPaymentModalOpen,
         handlePayment,
         loading,
         error
@@ -68,10 +65,12 @@ const Invoices = () => {
     const fnExpenses = useExpenseHandler(formattedPeriod);
 
     return (
-        <div className={styles.Invoices}>
-            <div className={styles['Invoices-content']}>
-                <div className={styles['btn-card']}>
-                    <div></div>
+        <div className={globalStyles.container}>
+            <div className={globalStyles['container-content']}>
+                <div className={globalStyles['content-title']}>
+                    <div className={globalStyles['content-title-items']}>
+                        <span className={globalStyles['title-items-span']}>Faturas</span>
+                    </div>
                     <CustomDatePicker
                         onMonthChange={handleMonthChange}
                         onDateRangeSelect={handleDateRangeSelect}
@@ -79,8 +78,7 @@ const Invoices = () => {
                         selectedRange={selectedRange}
                     />
                 </div>
-                <div className={styles['card-invoice']}>
-                    <h3>Faturas</h3>
+                <div className={globalStyles.card}>
                     <InvoiceTable
                         invoices={invoices}
                         onEdit={fnExpenses.handleEditExpense}

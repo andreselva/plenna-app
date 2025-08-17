@@ -229,13 +229,17 @@
 
 .tableRow {
     display: flex;
-    justify-content: space-around;
+    /* justify-content: space-around; */
     align-items: center;
     width: 100%;
     border-bottom: 1px solid #e0e0e070;
     padding: 10px 0px 10px 0px;
     transition: background-color 0.2s ease-in-out;
     flex-shrink: 0;
+}
+
+.tableRow > div {
+    text-align: center;
 }
 
 .tableHeader {

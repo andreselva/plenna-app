@@ -1,11 +1,10 @@
-import styles from './Revenues.module.css';
+import { useState } from 'react';
 import RevenueTable from "../../Tables/RevenueTable/RevenueTable";
 import ModalRevenues from "../../Modals/ModalRevenues/ModalRevenues";
-import { BotaoGlobal } from '../../Components/Buttons/ButtonGlobal.tsx';
-import { useState } from 'react';
 import { getFormattedDateRange, getStartAndEndOfMonth } from '../../Utils/DateUtils';
 import { CustomDatePicker } from '../../Components/DatePicker/DatePicker';
 import { useRevenueHandler } from '../../Handlers/useRevenuesHandler';
+import globalStyles from '../../Styles/GlobalStyles.module.css';
 
 const Revenues = () => {
     const [formattedPeriod, setFormattedPeriod] = useState(() => getStartAndEndOfMonth());
@@ -64,19 +63,13 @@ const Revenues = () => {
     } = useRevenueHandler(formattedPeriod);
 
     return (
-        <div className={styles.Revenues}>
-            <div className={styles['Revenues-content']}>
-                <div className={styles['btn-card']}>
-                    <BotaoGlobal
-                        cor="primaria"
-                        className={styles['show-revenues-btn']}
-                        onClick={() => setIsModalOpen(true)}
-                        width='160px'
-                        height='40px'
-                        margin='0 0 10px 0'
-                    >
-                        Cadastrar receita
-                    </BotaoGlobal>
+        <div className={globalStyles.container}>
+            <div className={globalStyles['container-content']}>
+                <div className={globalStyles['content-title']}>
+                    <div className={globalStyles['content-title-items']}>
+                        <button className={globalStyles['title-items-button']} onClick={() => setIsModalOpen(true)} />
+                        <span className={globalStyles['title-items-span']}>Receitas</span>
+                    </div>
                     <CustomDatePicker
                         onMonthChange={handleMonthChange}
                         onDateRangeSelect={handleDateRangeSelect}
@@ -84,8 +77,7 @@ const Revenues = () => {
                         selectedRange={selectedRange}
                     />
                 </div>
-                <div className={styles['card-revenues']}>
-                    <h3>Receitas</h3>
+                <div className={globalStyles.card}>
                     <RevenueTable
                         revenues={revenues}
                         categories={categories}

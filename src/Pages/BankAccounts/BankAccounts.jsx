@@ -1,51 +1,44 @@
-import { BotaoGlobal } from "../../Components/Buttons/ButtonGlobal.tsx";
 import { useBankAccountHandler } from "../../Handlers/useBankAccountHandler.jsx";
 import { useInvoiceHandler } from "../../Handlers/useInvoiceHandler.jsx";
 import { ModalBankAccounts } from "../../Modals/ModalBankAccounts/ModalBankAccounts.jsx";
 import { BankAccountsTable } from "../../Tables/BankAccounts/BankAccountsTable.jsx";
-import styles from './BankAccounts.module.css';
+import globalStyles from '../../Styles/GlobalStyles.module.css';
 
 export const BankAccounts = () => {
-    const { 
-        accounts, 
-        newAccount, 
-        setNewAccount, 
-        isModalOpen, 
-        setIsModalOpen, 
-        editingAccount, 
-        setEditingAccount, 
-        handleEditAccount, 
-        handleSaveAccount, 
-        handleDeleteAccount, 
-        generateInvoice, 
-        setGenerateInvoice, 
-        dueDate, 
-        setDueDate, 
-        closingDate, 
+    const {
+        accounts,
+        newAccount,
+        setNewAccount,
+        isModalOpen,
+        setIsModalOpen,
+        editingAccount,
+        setEditingAccount,
+        handleEditAccount,
+        handleSaveAccount,
+        handleDeleteAccount,
+        generateInvoice,
+        setGenerateInvoice,
+        dueDate,
+        setDueDate,
+        closingDate,
         setClosingDate,
         loading,
         error
     } = useBankAccountHandler();
 
-    //Chama a handler para gerar as faturas
     const { handleGenerateInvoices } = useInvoiceHandler();
 
     return (
-        <div className={styles.BankAccounts} >
-            <div className={styles['BankAccounts-content']}>
-                <BotaoGlobal
-                    cor="primaria"
-                    className={styles['show-btn']}
-                    onClick={() => setIsModalOpen(true)}
-                    width='100px'
-                    height='40px'
-                    margin='0 0 10px 0'
-                >
-                    Incluir
-                </BotaoGlobal>
+        <div className={globalStyles.container} >
+            <div className={globalStyles['container-content']}>
+                <div className={globalStyles['content-title']}>
+                    <div className={globalStyles['content-title-items']}>
+                        <button className={globalStyles['title-items-button']} onClick={() => setIsModalOpen(true)} />
+                        <span className={globalStyles['title-items-span']}>Contas Bancárias</span>
+                    </div>
+                </div>
 
-                <div className={styles['card-bank-accounts']}>
-                    <h3>Contas bancárias</h3>
+                <div className={globalStyles.card}>
                     <BankAccountsTable
                         accounts={accounts}
                         onEdit={handleEditAccount}
@@ -71,10 +64,7 @@ export const BankAccounts = () => {
                     closingDate={closingDate}
                     setClosingDate={setClosingDate}
                 />
-            )
-            }
+            )}
         </div >
     );
-
-
 }
