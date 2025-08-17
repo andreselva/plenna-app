@@ -4,6 +4,8 @@ import { FlexibleTable } from '../../Components/FlexibleTable/FlexibleTable';
 import { ActionDropdown } from '../../Components/ActionDropdown/ActionDropdown';
 import { CategoryTableSkeleton } from './CategoryTableSkeleton';
 import { darkenHexColor } from '../../Utils/DarkenColor';
+// <-- MUDANÇA AQUI: Importe os ícones que você vai usar -->
+import { Pencil, Trash2 } from 'lucide-react';
 
 const CategoryTable = ({ categories, onEdit, onDelete, loading, error }) => {
     if (loading) {
@@ -59,11 +61,13 @@ const CategoryTable = ({ categories, onEdit, onDelete, loading, error }) => {
             renderCell: (category) => {
                 let categoryActions = [
                     {
-                        label: 'Editar',
+                        icon: <Pencil size={14} />,
+                        text: 'Editar',
                         handler: () => onEdit(category)
                     },
                     {
-                        label: 'Excluir',
+                        icon: <Trash2 size={14} />,
+                        text: 'Excluir',
                         handler: () => handleDelete(category.id)
                     }
                 ];

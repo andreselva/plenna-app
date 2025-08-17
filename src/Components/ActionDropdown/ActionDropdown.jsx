@@ -1,8 +1,8 @@
-import { TableOfContentsIcon } from 'lucide-react';
+import { SquarePen } from 'lucide-react';
 import React, { useState, useRef, useEffect } from 'react';
 import './ActionDropdown.css';
 
-export const ActionDropdown = ({ actions = [], buttonLabel = <TableOfContentsIcon width='18px' height='18px' /> }) => {
+export const ActionDropdown = ({ actions = [], buttonLabel = <SquarePen width='18px' height='18px' /> }) => {
     const [isOpen, setIsOpen] = useState(false);
     const dropdownRef = useRef(null);
 
@@ -54,10 +54,10 @@ export const ActionDropdown = ({ actions = [], buttonLabel = <TableOfContentsIco
                         if (actionItem.disabled) {
                             itemClasses += " action-dropdown-menu-item-disabled";
                         }
-
+                        
                         return (
                             <li
-                                key={actionItem.label || `action-${index}`}
+                                key={actionItem.text || `action-${index}`}
                                 className={itemClasses}
                                 onClick={(e) => {
                                     e.stopPropagation();
@@ -79,7 +79,8 @@ export const ActionDropdown = ({ actions = [], buttonLabel = <TableOfContentsIco
                                 }}
                                 aria-disabled={actionItem.disabled ? 'true' : 'false'}
                             >
-                                {actionItem.label}
+                                {actionItem.icon && <span className="action-dropdown-icon">{actionItem.icon}</span>}
+                                {actionItem.label || actionItem.text}
                             </li>
                         );
                     })}
