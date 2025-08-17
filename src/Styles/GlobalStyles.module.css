@@ -1,25 +1,86 @@
+:root {
+    --cor-global-button: #7748ce;
+    --cor-global-button-hover: #7748ce8f;
+}
+
 /* Estilos globais para containers */
 .container {
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
-    width: 100%;
 }
 
 .container-content {
     display: flex;
     flex-direction: column;
-    text-align: center;
-    z-index: 2;
+    gap: 10px;
+}
+
+.content-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 16px;
+    margin: 0 0 0 0;
+    border: none;
+    border-radius: 10px;
+    height: 4vh;
+    padding: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+.content-title-items {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: center;
+}
+
+.title-items-button {
+    background-color: var(--cor-global-button);
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 50%;
+    font-size: 1.2rem;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 2rem;
+    height: 2rem;
+    transition: background-color 0.3s ease;
+}
+
+.title-items-button:hover {
+    background-color: var(--cor-global-button-hover); /* Cor de fundo mais escura no hover */
+}
+
+.title-items-button::before {
+    content: '+'; 
+    display: block;
+    font-size: 2.5rem;   /* NOVO: Aumenta o tamanho do símbolo */
+    font-weight: 300;   /* NOVO: Deixa a linha do símbolo mais fina (ou use 'bold' para mais grossa) */
+    line-height: 1;    /* NOVO: Ajusta o alinhamento vertical */
+    transition: transform 0.3s ease-in-out;
+    transition: transform 0.3s ease-in-out;
+}
+
+.title-items-span {
+    font-size: 18px;
+}
+
+.title-items-button:hover::before {
+transform: rotate(90deg); /* Rotação de 90 graus ao passar o mouse */
 }
 
 /* Estilos globais para cards */
 .card {
     border: 1px solid #ccc;
-    border-radius: 5px;
-    width: 90em;
-    height: 80vh;
+    border-radius: 10px;
+    width: 95rem;
+    height: 85vh;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
     overflow-y: auto;
     position: relative;
@@ -148,37 +209,46 @@
 .flexibleTable {
     display: flex;
     flex-direction: column;
-    height: 63.5vh;
+    height: 81vh;
     border-radius: 8px;
-    padding: 10px;
     overflow: hidden;
     overflow-y: auto;
     scroll-behavior: smooth;
+    justify-content: center;
+}
+
+.tableBody {
+    flex: 1;
+    overflow-y: auto;
+    scroll-behavior: smooth;
+    overflow-x: hidden;
 }
 
 .tableRow {
     display: flex;
+    justify-content: space-around;
     align-items: center;
     width: 100%;
     border-bottom: 1px solid #e0e0e0;
-    padding: 15px 0 15px 0;
+    padding: 10px 0px 10px 0px;
     transition: background-color 0.2s ease-in-out;
     cursor: pointer;
+    flex-shrink: 0;
 }
 
 .tableHeader {
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-start;
     position: sticky;
     top: 0;
     z-index: 1;
     font-weight: bold;
     color: #333;
-    padding-top: 25px;
     cursor: default;
-    background-color: #f4f4f4;
-}
-
-.tableRow>div {
-    padding: 0 10px;
+    background-color: #f4f4f4; 
+    border-bottom: 1px solid #e0e0e0;
+    padding: 25px 0px 15px 0px;
 }
 
 .statusBadge {
@@ -188,6 +258,7 @@
     display: inline-block;
     text-align: center;
     color: #000;
+    width: 100%;
 }
 
 .expandableContainer {

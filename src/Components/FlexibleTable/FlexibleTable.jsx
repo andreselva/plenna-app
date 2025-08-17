@@ -23,7 +23,7 @@ export const FlexibleTable = ({ columns, data, noDataMessage }) => {
                         </div>
                     ))
                 ) : (
-                    <div className={globalStyles.tableRow} style={{ justifyContent: 'center', padding: '20px' }}>
+                    <div className={globalStyles.tableRow}>
                         {noDataMessage || "Nenhum item encontrado"}
                     </div>
                 )}
