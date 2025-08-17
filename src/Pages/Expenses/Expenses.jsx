@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import styles from './Expenses.module.css';
 import ExpenseTable from "../../Tables/ExpenseTable/ExpenseTable";
 import { useExpenseHandler } from '../../Handlers/useExpenseHandler';
 import ModalExpenses from "../../Modals/ModalExpenses/ModalExpenses";
@@ -8,6 +7,7 @@ import { CustomDatePicker } from '../../Components/DatePicker/DatePicker';
 import { getFormattedDateRange, getStartAndEndOfMonth } from '../../Utils/DateUtils';
 import { ReversePaymentModal } from '../../Modals/PaymentModal/ReversePaymentModal';
 import { PaymentModal } from '../../Modals/PaymentModal/PaymentModal';
+import globalStyles from '../../Styles/GlobalStyles.module.css';
 
 const Expenses = () => {
     const [formattedPeriod, setFormattedPeriod] = useState(() => getStartAndEndOfMonth());
@@ -62,19 +62,13 @@ const Expenses = () => {
     };
 
     return (
-        <div className={styles.Expenses}>
-            <div className={styles['Expenses-content']}>
-                <div className={styles['btn-card']}>
-                    <BotaoGlobal
-                        cor="primaria"
-                        className={styles['show-expenses-btn']}
-                        onClick={() => setIsModalOpen(true)}
-                        width='160px'
-                        height='40px'
-                        margin='0 0 10px 0'
-                    >
-                        Cadastrar despesa
-                    </BotaoGlobal>
+        <div className={globalStyles.container}>
+            <div className={globalStyles['container-content']}>
+                <div className={globalStyles['content-title']}>
+                    <div className={globalStyles['content-title-items']}>
+                        <button className={globalStyles['title-items-button']} onClick={() => setIsModalOpen(true)} />
+                        <span className={globalStyles['title-items-span']}>Despesas</span>
+                    </div>
                     <CustomDatePicker
                         onMonthChange={handleMonthChange}
                         onDateRangeSelect={handleDateRangeSelect}
@@ -82,8 +76,7 @@ const Expenses = () => {
                         selectedRange={selectedRange}
                     />
                 </div>
-                <div className={styles['card-expenses']}>
-                    <h3>Despesas</h3>
+                <div className={globalStyles.card}>
                     <ExpenseTable
                         expenses={expenses}
                         categories={categories}
