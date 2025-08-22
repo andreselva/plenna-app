@@ -1,9 +1,7 @@
-// Arquivo: SaldoCard.jsx
 import React from 'react';
-import { Wallet } from 'lucide-react'; // Importando um ícone para o saldo
+import { Wallet } from 'lucide-react';
 import './SaldoCard.css';
 
-// A função getBalanceStatus continua a mesma
 const getBalanceStatus = (finalBalance, revenues) => {
     if (revenues <= 0) {
         return finalBalance < 0 ? 'status-critical' : 'status-neutral';
@@ -25,14 +23,11 @@ const SaldoCard = ({ saldoData }) => {
     };
 
     return (
-        // A classe base 'card' e a específica 'saldo-card' continuam as mesmas
         <div className="card saldo-card">
-            {/* NOVO: Cabeçalho padronizado com ícone e título */}
             <div className="saldo-header">
                 <Wallet className="saldo-icon" size={20} />
                 <span className="saldo-title">Saldo do Período</span>
             </div>
-            {/* NOVO: Corpo padronizado */}
             <div className="saldo-body">
                 <div className={`saldo-final ${balanceClass}`}>
                     {formatCurrency(finalBalance)}

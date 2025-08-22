@@ -29,7 +29,7 @@ export const gastosPorCategoriaOptions = {
             }
         },
         datalabels: {
-            display: false, // Diz ao plugin para não mostrar nenhum rótulo
+            display: false,
         }
     },
 };

@@ -35,7 +35,7 @@
     display: flex;
     flex-wrap: wrap;
     width: 100%;
-    gap: var(--default-gap); /* Usar 'gap' é mais moderno e robusto que 'justify-content: space-between' para espaçamento */
+    gap: var(--default-gap);
 }
 
 .column {
@@ -52,22 +52,20 @@
     box-shadow: 0 4px 6px var(--shadow-color);
     text-align: center;
     flex: 1;
-    display: flex;          /* Transforma o card em um container flex */
-    flex-direction: column; /* Alinha os itens internos (título, gráfico) na vertical */
+    display: flex;         
+    flex-direction: column;
     justify-content: center;
 }
 
 .card-title {
-    display: block; /* Faz o span ocupar a largura toda */
+    display: block;
     width: 100%;
     text-align: center;
-    font-size: 1.1rem; /* Tamanho um pouco menor que o h2 */
-    font-weight: 500; /* Um negrito sutil */
-    color: #333;
-    margin-bottom: 0.8rem; /* Espaçamento inferior */
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.8rem;
     padding-bottom: 0.8rem;
-    border-bottom: 1px solid #eee; /* Linha divisória mais suave */
-    font-size: 20px;
+    border-bottom: 1px solid #eee;
 }
 
 .card--full-width {
@@ -75,19 +73,12 @@
 }
 
 .row-1 {
-    min-height: 350px; /* Usar min-height é mais flexível que height */
+    min-height: 350px;
 }
 
 .small-doughnut {
     max-width: 250px;
     margin: 0 auto;
-}
-
-.card > h2 {
-    padding-bottom: 1rem;
-    margin: -1rem -1rem 1rem -1rem; /* Ajusta para ocupar toda a largura e manter o padding do card */
-    background-color: var(--card-background-color);
-    border-bottom: 1px solid var(--border-color);
 }
 
 .table-wrapper {
@@ -115,7 +106,6 @@
     border-bottom: 1px solid var(--border-color);
 }
 
-/* Propriedades específicas para th */
 .contas-table th {
     font-weight: bold;
 }
@@ -137,13 +127,10 @@
 .chart-max-size-medium {
     max-height: 400px;
     max-width: 400px;
-    width: 100%; /* Faz com que ele ainda tente ser responsivo */
-    margin: 0 auto; /* Centraliza horizontalmente */
+    width: 100%;
+    margin: 0 auto;
 }
 
-/* Em Dashboard.css */
-
-/* Container para o gráfico e a legenda */
 .chart-wrapper {
     display: flex;
     flex-direction: column;
@@ -153,26 +140,23 @@
     width: 100%;
 }
 
-/* Garante que o container do gráfico não ocupe todo o espaço */
 .chart-wrapper .chart-container {
-    max-height: 250px; /* Ajuste o tamanho do gráfico se necessário */
+    max-height: 250px; 
     max-width: 250px;
     width: 100%;
-    margin-bottom: 1rem; /* Espaço entre o gráfico e a legenda */
+    margin-bottom: 1rem;
 }
 
-/* Estilos da lista da legenda */
 .custom-legend {
-    list-style: none; /* Remove os pontinhos da lista */
+    list-style: none; 
     padding: 0;
     margin: 0;
     display: flex;
-    flex-wrap: wrap; /* Permite que os itens quebrem a linha em telas pequenas */
+    flex-wrap: wrap; 
     justify-content: center;
-    gap: 1rem; /* Espaçamento entre os itens da legenda */
+    gap: 1rem; 
 }
 
-/* Estilos de cada item da legenda */
 .legend-item {
     display: flex;
     align-items: center;
@@ -180,16 +164,14 @@
     color: #555;
 }
 
-/* A "bolinha" colorida */
 .legend-color-dot {
     display: inline-block;
     width: 12px;
     height: 12px;
-    border-radius: 50%; /* Deixa a forma redonda */
+    border-radius: 50%; 
     margin-right: 8px;
 }
 
-/* Estilização da barra de rolagem usando variáveis */
 .table-wrapper::-webkit-scrollbar {
     width: 3px;
 }

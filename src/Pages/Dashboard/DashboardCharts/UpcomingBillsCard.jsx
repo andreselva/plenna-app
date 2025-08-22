@@ -1,5 +1,5 @@
 import React from 'react';
-import { CalendarClock } from 'lucide-react'; // Ícone perfeito para a tarefa
+import { CalendarClock } from 'lucide-react';
 import './UpcomingBillsCard.css';
 
 const UpcomingBillsCard = ({ billsData }) => {

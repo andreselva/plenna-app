@@ -4,7 +4,7 @@
     min-height: 160px;
     padding: 1.5rem;
     justify-content: flex-start;
-    align-items: flex-start; /* Alinha o conteúdo à esquerda */
+    align-items: flex-start;
     text-align: left;
 }
 

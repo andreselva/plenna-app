@@ -1,15 +1,12 @@
-/* Arquivo: SaldoCard.css - ESTILOS PADRONIZADOS */
-
 .saldo-card {
     max-width: 325px;
     min-height: 160px;
     padding: 1.5rem;
     justify-content: flex-start;
-    align-items: flex-start; /* Alinha tudo à esquerda */
+    align-items: flex-start;
     text-align: left;
 }
 
-/* Estilo para o cabeçalho, igual ao outro card */
 .saldo-header {
     display: flex;
     align-items: center;
@@ -28,11 +25,10 @@
     font-size: 1rem;
 }
 
-/* Corpo do card */
 .saldo-body {
     display: flex;
     flex-direction: column;
-    align-items: flex-start; /* Alinha o conteúdo do corpo à esquerda */
+    align-items: flex-start; 
     width: 100%;
     flex-grow: 1;
     justify-content: center;
@@ -49,10 +45,9 @@
     width: 100%;
     font-size: 0.9rem;
     color: #555;
-    margin-top: 0.5rem; /* Adiciona um espaço entre o saldo e os detalhes */
+    margin-top: 0.5rem; 
 }
 
-/* As classes de status (cores) permanecem as mesmas */
 .status-neutral { color: #34495e; }
 .status-critical { color: #c0392b; }
 .status-warning { color: #f39c12; }
