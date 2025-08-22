@@ -1,29 +1,20 @@
 import "./Dashboard.css";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Doughnut, Line, Bar } from "react-chartjs-2";
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { useDashboardData } from "../../Hooks/DashboardManager/DashboardManager";
-import { centerTextPlugin } from "./DashboardCharts/CenterTextPlugin";
-import { defaultSaldoData, createSaldoOptions } from "./DashboardCharts/SaldoChart";
 import { defaultGastosPorCategoriaData, gastosPorCategoriaOptions } from "./DashboardCharts/GastosPorCategoriaChart";
 import { defaultEvolucaoMensalData, evolucaoMensalOptions } from "./DashboardCharts/EvolucaoMensalChart";
 import { defaultFaturasPorCartaoData, faturasPorCartaoOptions } from "./DashboardCharts/FaturasPorCartaoChart";
 import { CustomDatePicker } from "../../Components/DatePicker/DatePicker";
 import { getStartAndEndOfMonth, getFormattedDateRange } from "../../Utils/DateUtils";
 import { DashboardSkeleton } from "./DashboardSkeleton";
-
-import {
-    Chart as ChartJS,
-    ArcElement,
-    Tooltip,
-    Legend,
-    CategoryScale,
-    LinearScale,
-    PointElement,
-    LineElement,
-    BarElement,
-    Filler
-} from "chart.js";
+import GastosDoughnutChart from "./DashboardCharts/GastosDoughnutChart";
+import {Chart as ChartJS, ArcElement, Tooltip, Legend, CategoryScale, LinearScale, PointElement, LineElement, BarElement, Filler} from "chart.js";
+import SaldoCard from "./DashboardCharts/SaldoCard";
+import TopCategoryCard from "./DashboardCharts/TopCategoryCard";
+import UpcomingBillsCard from "./DashboardCharts/UpcomingBillsCard";
+import HighestBillCard from "./DashboardCharts/HighestBillCard";
 
 ChartJS.register(
     ArcElement,
@@ -34,7 +25,6 @@ ChartJS.register(
     PointElement,
     LineElement,
     BarElement,
-    centerTextPlugin,
     ChartDataLabels,
     Filler
 );
@@ -49,20 +39,93 @@ const Dashboard = () => {
         return nextMonthDate;
     });
     const [selectedRange, setSelectedRange] = useState(null);
+        
+    const saldoData = data?.saldoData;
+    const gastosPorCategoriaData = data?.gastosPorCategoriaData || defaultGastosPorCategoriaData;
+    const contasVencimentoProximo = data?.contasVencimentoProximo || [];
+    const evolucaoMensalData = data?.evolucaoMensal || defaultEvolucaoMensalData;
+    const faturasPorCartaoData = data?.faturasPorCartao || defaultFaturasPorCartaoData;
+
+    const topCategory = useMemo(() => {
+        const gastosData = data?.gastosPorCategoriaData || defaultGastosPorCategoriaData;
+        const labels = gastosData.labels || [];
+        const dataValues = gastosData.datasets?.[0]?.data || [];
+
+        if (dataValues.length === 0) {
+            return { name: 'N/D', value: 0, percentage: 0 };
+        }
+
+        const totalExpenses = dataValues.reduce((sum, value) => sum + value, 0);
+        
+        let topCategory = { name: '', value: -1 };
+        dataValues.forEach((value, index) => {
+            if (value > topCategory.value) {
+                topCategory = { name: labels[index], value: value };
+            }
+        });
+
+        const percentage = totalExpenses > 0 ? ((topCategory.value / totalExpenses) * 100).toFixed(0) : 0;
+
+        return { ...topCategory, percentage };
+
+    }, [data]);
+
+    const upcomingBills = useMemo(() => {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        const sevenDaysFromNow = new Date(today);
+        sevenDaysFromNow.setDate(today.getDate() + 15);
+
+        const billsDueSoon = contasVencimentoProximo.filter(conta => {
+            const [year, month, day] = conta.vencimento.split('-').map(Number);
+            const dueDate = new Date(year, month - 1, day);
+            
+            return dueDate >= today && dueDate <= sevenDaysFromNow;
+        });
+
+        const totalValue = billsDueSoon.reduce((sum, conta) => {
+            const cleanedString = String(conta.valor).replace(/[^\d,]/g, '').replace(',', '.');
+            const numericValue = parseFloat(cleanedString);
+                return sum + (isNaN(numericValue) ? 0 : numericValue);
+        }, 0);
+        
+        return {
+            count: billsDueSoon.length,
+            total: totalValue
+        };
+    }, [contasVencimentoProximo]);
+
+    const highestCardBill = useMemo(() => {
+        const faturasData = data?.faturasPorCartao || defaultFaturasPorCartaoData;
+        const labels = faturasData.labels || [];
+        const dataValues = faturasData.datasets?.[0]?.data || [];
+
+        if (dataValues.length === 0) {
+            return { nome: 'Nenhuma fatura', valor: 0, vencimento: '-' };
+        }
+
+        let highestValue = -1;
+        let highestIndex = -1;
+        dataValues.forEach((value, index) => {
+            const numericValue = parseFloat(String(value).replace(',', '.'));
+            if (numericValue > highestValue) {
+                highestValue = numericValue;
+                highestIndex = index;
+            }
+        });
+
+        return {
+            nome: labels[highestIndex] || 'N/D',
+            valor: highestValue,
+            vencimento: '-'
+        };
+    }, [data]);
 
     if (loading) {
         return <DashboardSkeleton />
     }
     
-    const remainingBalance = data?.saldoRestante ?? 0;
-    const saldoOptions = createSaldoOptions(remainingBalance);
-    const saldoData = data?.saldoData || defaultSaldoData;
-    const gastosPorCategoriaData = data?.gastosPorCategoriaData || defaultGastosPorCategoriaData;
-    const contasVencimentoProximo = data?.contasVencimentoProximo || [];
-    const evolucaoMensalData = data?.evolucaoMensal || defaultEvolucaoMensalData;
-    const faturasPorCartaoData = data?.faturasPorCartao || defaultFaturasPorCartaoData;
-    
-
     const handleMonthChange = (month) => {
         setSelectedMonth(month);
         setSelectedRange(null);
@@ -87,36 +150,35 @@ const Dashboard = () => {
                     selectedMonth={selectedMonth}
                     selectedRange={selectedRange}
                 />
-                {loading && <div className="info-msg">Carregando dados...</div>}
                 <div className="row">
-                    <div className="card chart row-1">
-                        <h2>Saldo Atual</h2>
-                        <Doughnut
-                            data={saldoData}
-                            options={saldoOptions}
-                            className="small-doughnut"
+                    <SaldoCard saldoData={saldoData} />
+                    <TopCategoryCard categoryData={topCategory} />
+                    <UpcomingBillsCard billsData={upcomingBills} />
+                    <HighestBillCard billData={highestCardBill} />
+                </div>
+                <div className="row">
+                    <div className="card card--grow-2">
+                        <span className="card-title">Evolução Mensal</span>
+                        <Line
+                            data={evolucaoMensalData}
+                            options={evolucaoMensalOptions}
                         />
                     </div>
-
-                    <div className="card chart row-1">
-                        <h2>Gastos por Categoria</h2>
-                        <Bar
-                            data={gastosPorCategoriaData}
-                            options={gastosPorCategoriaOptions}
-                        />
-                    </div>
-
-                    <div className="card chart row-1">
-                        <h2>Faturas</h2>
-                        <Bar
-                            data={faturasPorCartaoData}
-                            options={faturasPorCartaoOptions}
-                        />
+                    <div className="column">
+                        <div className="card">
+                            <span className="card-title">Gastos por Categoria</span>
+                            <div className="card__content--grow chart-container chart-max-size-medium">
+                                <GastosDoughnutChart
+                                    data={gastosPorCategoriaData}
+                                    options={gastosPorCategoriaOptions}
+                                />
+                            </div>
+                        </div>
                     </div>
                 </div>
 
                 <div className="card table">
-                    <h2>Contas do mês</h2>
+                    <span className="card-title">Contas do mês</span>
                     <div className="table-wrapper">
                         {contasVencimentoProximo.length === 0 ? (
                             <div className="info-msg">Nenhuma conta a vencer.</div>
@@ -144,13 +206,7 @@ const Dashboard = () => {
                 </div>
 
                 <div className="row">
-                    <div className="card full-width">
-                        <h2>Evolução Mensal</h2>
-                        <Line
-                            data={evolucaoMensalData}
-                            options={evolucaoMensalOptions}
-                        />
-                    </div>
+                    
                 </div>
             </div>
         </div>

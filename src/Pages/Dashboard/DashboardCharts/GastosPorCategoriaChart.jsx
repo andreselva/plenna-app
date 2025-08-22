@@ -8,32 +8,28 @@ export const defaultGastosPorCategoriaData = {
 };
 
 export const gastosPorCategoriaOptions = {
+    cutout: '80%',
     plugins: {
         legend: {
             display: false
         },
-        datalabels: {
-            anchor: 'center',
-            align: 'center',
-            color: '#fff',
-            font: {
-                weight: 'bold',
-                size: 12
-            },
-        }
-    },
-    scales: {
-        y: {
-            beginAtZero: true,
-            grid: {
-                drawBorder: false,
-                color: 'rgba(0, 0, 0, 0.1)',
+        tooltip: {
+            backgroundColor: '#2c3e50',
+            titleFont: { size: 16 },
+            bodyFont: { size: 14 },
+            padding: 12,
+            cornerRadius: 8,
+            displayColors: false,
+            callbacks: {
+                label: function(context) {
+                    const value = context.parsed;
+                    if (value === null) return '';
+                    return ` ${context.label}: ${value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}`;
+                }
             }
         },
-        x: {
-            grid: {
-                display: false
-            }
+        datalabels: {
+            display: false, // Diz ao plugin para não mostrar nenhum rótulo
         }
-    }
+    },
 };

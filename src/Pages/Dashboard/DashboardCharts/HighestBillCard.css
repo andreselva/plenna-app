@@ -1,0 +1,60 @@
+/* Arquivo: HighestBillCard.css */
+
+.highest-bill-card {
+    max-width: 325px;
+    min-height: 160px;
+    padding: 1.5rem;
+    justify-content: flex-start;
+}
+
+/* Reutilizando o padrão de cabeçalho */
+.highest-bill-header {
+    display: flex;
+    align-items: flex-start;
+    width: 100%;
+    margin-bottom: 1.2rem;
+    color: #555;
+}
+
+.highest-bill-icon {
+    margin-right: 0.5rem;
+    color: #3498db; /* Azul para o ícone */
+}
+
+.highest-bill-title {
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+/* Reutilizando o padrão de corpo centralizado */
+.highest-bill-body {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    flex-grow: 1;
+    justify-content: center;
+}
+
+.bill-name {
+    font-size: 1.1rem;
+    color: #666;
+    font-weight: 500;
+    /* Garante que nomes grandes não quebrem o layout */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+}
+
+.bill-value {
+    font-size: 2.2rem;
+    font-weight: 600;
+    color: #34495e; /* Cinza escuro para o valor */
+    margin: 0.2rem 0;
+}
+
+.bill-due-date {
+    font-size: 0.9rem;
+    color: #888;
+}

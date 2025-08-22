@@ -1,0 +1,64 @@
+/* Arquivo: UpcomingBillsCard.css */
+
+.upcoming-bills-card {
+    max-width: 325px;
+    min-height: 160px;
+    padding: 1.5rem;
+    justify-content: flex-start;
+    align-items: flex-start;
+    text-align: left;
+}
+
+.upcoming-bills-header {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 1.2rem;
+    color: #555;
+}
+
+.upcoming-bills-icon {
+    margin-right: 0.5rem;
+    color: #f39c12; /* Cor de alerta (laranja) para o ícone */
+}
+
+.upcoming-bills-title {
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.upcoming-bills-body {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    flex-grow: 1;
+    justify-content: center;
+}
+
+.upcoming-bills-count {
+    font-size: 2.2rem;
+    font-weight: 600;
+    color: #333;
+    line-height: 1.1;
+}
+.upcoming-bills-count span {
+    color: #e67e22; /* Destaque laranja no número */
+}
+
+.upcoming-bills-total {
+    font-size: 0.9rem;
+    color: #666;
+    margin-top: 0.2rem;
+}
+
+.no-bills-message {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    flex-grow: 1;
+    width: 100%;
+    font-size: 1rem;
+    color: #888;
+}
