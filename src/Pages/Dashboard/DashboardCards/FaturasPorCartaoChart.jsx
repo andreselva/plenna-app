@@ -23,20 +23,14 @@ export const faturasPorCartaoOptions = {
                 weight: 'bold',
                 size: 12
             },
-        }
-    },
-    scales: {
-        x: {
-            beginAtZero: true,
-            grid: {
-                color: 'rgba(0, 0, 0, 0.1)',
-                drawBorder: false,
-            }
         },
-        y: {
-            grid: {
-                display: false
-            }
-        }
-    }
+        tooltip: {
+            backgroundColor: '#2c3e50',
+            titleFont: { size: 16 },
+            bodyFont: { size: 14 },
+            padding: 12,
+            cornerRadius: 8,
+            displayColors: false,
+        },
+    },
 };

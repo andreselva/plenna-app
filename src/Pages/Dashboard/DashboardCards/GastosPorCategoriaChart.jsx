@@ -20,13 +20,6 @@ export const gastosPorCategoriaOptions = {
             padding: 12,
             cornerRadius: 8,
             displayColors: false,
-            callbacks: {
-                label: function(context) {
-                    const value = context.parsed;
-                    if (value === null) return '';
-                    return ` ${context.label}: ${value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}`;
-                }
-            }
         },
         datalabels: {
             display: false,

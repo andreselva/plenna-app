@@ -20,7 +20,8 @@ const GastosDoughnutChart = ({ data, options, plugins }) => {
             <span 
               className="legend-color-dot" 
               style={{ backgroundColor: colors[index] }}
-            ></span>
+            >
+            </span>
             {label}
           </li>
         ))}

@@ -3,18 +3,18 @@ import { useState, useMemo } from "react";
 import { Doughnut, Line, Bar } from "react-chartjs-2";
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { useDashboardData } from "../../Hooks/DashboardManager/DashboardManager";
-import { defaultGastosPorCategoriaData, gastosPorCategoriaOptions } from "./DashboardCharts/GastosPorCategoriaChart";
-import { defaultEvolucaoMensalData, evolucaoMensalOptions } from "./DashboardCharts/EvolucaoMensalChart";
-import { defaultFaturasPorCartaoData, faturasPorCartaoOptions } from "./DashboardCharts/FaturasPorCartaoChart";
+import { defaultGastosPorCategoriaData, gastosPorCategoriaOptions } from "./DashboardCards/GastosPorCategoriaChart";
+import { defaultEvolucaoMensalData, evolucaoMensalOptions } from "./DashboardCards/EvolucaoMensalChart";
+import { defaultFaturasPorCartaoData, faturasPorCartaoOptions } from "./DashboardCards/FaturasPorCartaoChart";
 import { CustomDatePicker } from "../../Components/DatePicker/DatePicker";
 import { getStartAndEndOfMonth, getFormattedDateRange } from "../../Utils/DateUtils";
 import { DashboardSkeleton } from "./DashboardSkeleton";
-import GastosDoughnutChart from "./DashboardCharts/GastosDoughnutChart";
+import GastosDoughnutChart from "./DashboardCards/GastosDoughnutChart";
 import {Chart as ChartJS, ArcElement, Tooltip, Legend, CategoryScale, LinearScale, PointElement, LineElement, BarElement, Filler} from "chart.js";
-import SaldoCard from "./DashboardCharts/SaldoCard";
-import TopCategoryCard from "./DashboardCharts/TopCategoryCard";
-import UpcomingBillsCard from "./DashboardCharts/UpcomingBillsCard";
-import HighestBillCard from "./DashboardCharts/HighestBillCard";
+import SaldoCard from "./DashboardCards/SaldoCard";
+import TopCategoryCard from "./DashboardCards/TopCategoryCard";
+import UpcomingBillsCard from "./DashboardCards/UpcomingBillsCard";
+import HighestBillCard from "./DashboardCards/HighestBillCard";
 
 ChartJS.register(
     ArcElement,
@@ -45,6 +45,7 @@ const Dashboard = () => {
     const contasVencimentoProximo = data?.contasVencimentoProximo || [];
     const evolucaoMensalData = data?.evolucaoMensal || defaultEvolucaoMensalData;
     const faturasPorCartaoData = data?.faturasPorCartao || defaultFaturasPorCartaoData;
+    const maiorFatura = data?.maiorFatura;
 
     const topCategory = useMemo(() => {
         const gastosData = data?.gastosPorCategoriaData || defaultGastosPorCategoriaData;
@@ -96,32 +97,6 @@ const Dashboard = () => {
         };
     }, [contasVencimentoProximo]);
 
-    const highestCardBill = useMemo(() => {
-        const faturasData = data?.faturasPorCartao || defaultFaturasPorCartaoData;
-        const labels = faturasData.labels || [];
-        const dataValues = faturasData.datasets?.[0]?.data || [];
-
-        if (dataValues.length === 0) {
-            return { nome: 'Nenhuma fatura', valor: 0, vencimento: '-' };
-        }
-
-        let highestValue = -1;
-        let highestIndex = -1;
-        dataValues.forEach((value, index) => {
-            const numericValue = parseFloat(String(value).replace(',', '.'));
-            if (numericValue > highestValue) {
-                highestValue = numericValue;
-                highestIndex = index;
-            }
-        });
-
-        return {
-            nome: labels[highestIndex] || 'N/D',
-            valor: highestValue,
-            vencimento: '-'
-        };
-    }, [data]);
-
     if (loading) {
         return <DashboardSkeleton />
     }
@@ -154,10 +129,10 @@ const Dashboard = () => {
                     <SaldoCard saldoData={saldoData} />
                     <TopCategoryCard categoryData={topCategory} />
                     <UpcomingBillsCard billsData={upcomingBills} />
-                    <HighestBillCard billData={highestCardBill} />
+                    <HighestBillCard billData={maiorFatura} />
                 </div>
                 <div className="row">
-                    <div className="card card--grow-2">
+                    <div className="card">
                         <span className="card-title">Evolução Mensal</span>
                         <Line
                             data={evolucaoMensalData}
@@ -176,37 +151,42 @@ const Dashboard = () => {
                         </div>
                     </div>
                 </div>
-
-                <div className="card table">
-                    <span className="card-title">Contas do mês</span>
-                    <div className="table-wrapper">
-                        {contasVencimentoProximo.length === 0 ? (
-                            <div className="info-msg">Nenhuma conta a vencer.</div>
-                        ) : (
-                            <table className="contas-table">
-                                <thead>
-                                    <tr>
-                                        <th>Nome</th>
-                                        <th>Vencimento</th>
-                                        <th>Valor</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {contasVencimentoProximo.map((conta, index) => (
-                                        <tr key={index}>
-                                            <td>{conta.nome}</td>
-                                            <td>{conta.vencimento.split('-').reverse().join('/')}</td>
-                                            <td>{conta.valor}</td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        )}
-                    </div>
-                </div>
-
                 <div className="row">
-                    
+                    <div className="card">
+                        <span className="card-title">Faturas</span>
+                        <Bar
+                            data={faturasPorCartaoData}
+                            options={faturasPorCartaoOptions}
+                        />
+                    </div>
+                    <div className="card card--grow-2">
+                        <span className="card-title">Contas do mês</span>
+                        <div className="table-wrapper">
+                            {contasVencimentoProximo.length === 0 ? (
+                                <div className="info-msg">Nenhuma conta a vencer.</div>
+                            ) : (
+                                <table className="contas-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Nome</th>
+                                            <th>Vencimento</th>
+                                            <th>Valor</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {contasVencimentoProximo.map((conta, index) => (
+                                            <tr key={index}>
+                                                <td>{conta.nome}</td>
+                                                <td>{conta.vencimento.split('-').reverse().join('/')}</td>
+                                                <td>{conta.valor}</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            )}
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
