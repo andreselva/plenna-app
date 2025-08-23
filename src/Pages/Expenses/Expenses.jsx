@@ -1,13 +1,15 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { Filter as FilterIcon } from 'lucide-react';
 import ExpenseTable from "../../Tables/ExpenseTable/ExpenseTable";
 import { useExpenseHandler } from '../../Handlers/useExpenseHandler';
 import ModalExpenses from "../../Modals/ModalExpenses/ModalExpenses";
-import { BotaoGlobal } from '../../Components/Buttons/ButtonGlobal.tsx';
 import { CustomDatePicker } from '../../Components/DatePicker/DatePicker';
 import { getFormattedDateRange, getStartAndEndOfMonth } from '../../Utils/DateUtils';
 import { ReversePaymentModal } from '../../Modals/PaymentModal/ReversePaymentModal';
 import { PaymentModal } from '../../Modals/PaymentModal/PaymentModal';
 import globalStyles from '../../Styles/GlobalStyles.module.css';
+import SearchInput from '../../Components/Filters/SearchInput';
+import FilterDropdown from '../../Components/Filters/FilterDropdown';
 
 const Expenses = () => {
     const [formattedPeriod, setFormattedPeriod] = useState(() => getStartAndEndOfMonth());
@@ -22,14 +24,12 @@ const Expenses = () => {
     const handleMonthChange = (month) => {
         setSelectedMonth(month);
         setSelectedRange(null);
-
         const formattedMonthRange = getStartAndEndOfMonth(month);
         setFormattedPeriod(formattedMonthRange);
     };
 
     const handleDateRangeSelect = ({ startDate, endDate }) => {
         setSelectedRange({ startDate, endDate });
-
         const formattedRange = getFormattedDateRange(startDate, endDate);
         setFormattedPeriod(formattedRange);
     };
@@ -48,37 +48,132 @@ const Expenses = () => {
         setSelectedExpense(expense);
         setIsPaymentModalOpen(true);
     };
-
     const [isReverseModalOpen, setIsReverseModalOpen] = useState(false);
     const [selectedExpenseForReverse, setSelectedExpenseForReverse] = useState(null);
-
     const handleOpenReverseModal = (expense) => {
         setSelectedExpenseForReverse(expense);
         setIsReverseModalOpen(true);
     };
-
     const handleCloseReverseModal = () => {
         setIsReverseModalOpen(false);
     };
+
+    const [filteredExpenses, setFilteredExpenses] = useState(expenses);
+    const [searchQuery, setSearchQuery] = useState('');
+    const [activeFilters, setActiveFilters] = useState({});
+    const [isFilterOpen, setIsFilterOpen] = useState(false);
+
+    const filterIconRef = useRef(null);
+
+    const statusOptions = {pending: 'Pendente', paid: 'Paga', partial: 'Parcial', cancelled: 'Cancelada'};
+
+    const dropdownFilterConfig = [
+        {
+            name: 'status',
+            label: 'Filtrar por Status',
+            type: 'select',
+            placeholder: 'Todos os Status',
+            options: Object.keys(statusOptions).map(key => ({
+                value: key,
+                label: statusOptions[key]
+            }))
+        },
+        {
+            name: 'categoryId',
+            label: 'Filtrar por Categoria',
+            type: 'select',
+            placeholder: 'Todas as Categorias',
+            options: categories
+                    .filter((category) => category.type.toUpperCase() === 'DESPESA')
+                    .map(cat => ({ value: cat.id, label: cat.name }))
+        },
+        {
+            name: 'accountId',
+            label: 'Filtrar por cartão de crédito',
+            type: 'select',
+            placeholder: 'Todos os cartões',
+            options: accounts
+                    .map(account => ({value: account.id, label: account.name}))
+        }
+    ];
+
+    useEffect(() => {
+        let items = [...expenses];
+
+        if (searchQuery) {
+            const lowerCaseQuery = searchQuery.toLowerCase();
+            items = items.filter(expense => {
+                const expenseValueString = String(expense.value);
+                const expenseDueDateString = String(expense.invoiceDueDate.split('-').reverse().join('/'));
+                
+                return (
+                    expense.name.toLowerCase().includes(lowerCaseQuery) ||
+                    expenseValueString.toLowerCase().includes(lowerCaseQuery) ||
+                    expenseDueDateString.toLowerCase().includes(lowerCaseQuery)
+                );
+            }
+            );
+        }
+
+        if (activeFilters.status) {
+            items = items.filter(expense => expense.status === activeFilters.status);
+        }
+        
+        if (activeFilters.categoryId) {
+            items = items.filter(expense => expense.idCategory === Number(activeFilters.categoryId));
+        }
+
+        if (activeFilters.accountId) {
+            items = items.filter(expense => expense.idCreditCard  === Number(activeFilters.accountId))
+        }
+
+        setFilteredExpenses(items);
+    }, [expenses, searchQuery, activeFilters]);
 
     return (
         <div className={globalStyles.container}>
             <div className={globalStyles['container-content']}>
                 <div className={globalStyles['content-title']}>
                     <div className={globalStyles['content-title-items']}>
-                        <button className={globalStyles['title-items-button']} onClick={() => setIsModalOpen(true)} />
-                        <span className={globalStyles['title-items-span']}>Despesas</span>
+                        <div className={globalStyles['content-title-items-left']}>
+                            <button className={globalStyles['title-items-button']} onClick={() => setIsModalOpen(true)} />
+                            <span className={globalStyles['title-items-span']}>Despesas</span>
+                        </div>
+                        <div className={globalStyles['content-title-items-right']}>
+                            <button 
+                                ref={filterIconRef}
+                                className={`${globalStyles['icon-button']} ${Object.keys(activeFilters).length > 0 ? globalStyles['active'] : ''}`} 
+                                onClick={() => setIsFilterOpen(!isFilterOpen)}
+                            >
+                                <FilterIcon size={20} />
+                            </button>
+                            <SearchInput 
+                                placeholder="Procurar..."
+                                onSearchChange={setSearchQuery}
+                            />
+                            <CustomDatePicker
+                                onMonthChange={handleMonthChange}
+                                onDateRangeSelect={handleDateRangeSelect}
+                                selectedMonth={selectedMonth}
+                                selectedRange={selectedRange}
+                            />
+                        </div>
                     </div>
-                    <CustomDatePicker
-                        onMonthChange={handleMonthChange}
-                        onDateRangeSelect={handleDateRangeSelect}
-                        selectedMonth={selectedMonth}
-                        selectedRange={selectedRange}
-                    />
                 </div>
+
+                <FilterDropdown 
+                    isOpen={isFilterOpen}
+                    onClose={() => setIsFilterOpen(false)}
+                    anchorEl={filterIconRef.current}
+                    filterConfig={dropdownFilterConfig}
+                    onApplyFilters={setActiveFilters}
+                    onClearFilters={() => setActiveFilters({})}
+                    align="right"
+                />
+
                 <div className={globalStyles.card}>
                     <ExpenseTable
-                        expenses={expenses}
+                        expenses={filteredExpenses}
                         categories={categories}
                         creditCards={accounts}
                         onEdit={handleEditExpense}

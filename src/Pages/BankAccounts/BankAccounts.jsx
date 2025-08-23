@@ -33,8 +33,10 @@ export const BankAccounts = () => {
             <div className={globalStyles['container-content']}>
                 <div className={globalStyles['content-title']}>
                     <div className={globalStyles['content-title-items']}>
-                        <button className={globalStyles['title-items-button']} onClick={() => setIsModalOpen(true)} />
-                        <span className={globalStyles['title-items-span']}>Contas Bancárias</span>
+                        <div className={globalStyles['content-title-items-left']}>
+                            <button className={globalStyles['title-items-button']} onClick={() => setIsModalOpen(true)} />
+                            <span className={globalStyles['title-items-span']}>Contas Bancárias</span>
+                        </div>
                     </div>
                 </div>
 
