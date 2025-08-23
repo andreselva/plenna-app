@@ -1,6 +1,6 @@
 import './Sidebar.css';
 import { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../Auth/Context/AuthContext';
 import avatarUrl from '../../assets/avatar-padrao.svg';
 import { 
@@ -18,15 +18,17 @@ import {
 } from 'lucide-react';
 import { useBreakpoints } from '../../Hooks/useMediaQuery/useBreakpoints';
 
-const SidebarItem = ({ as: Component = Link, icon, text, ...props }) => {
+const SidebarItem = ({ as: Component = Link, icon, text, active, ...props }) => {
     return (
-        <Component className="Sidebar-item" {...props}>
+        <Component 
+            className={`Sidebar-item ${active ? "active" : ""}`} 
+            {...props}
+        >
             <div className='item-icon'>{icon}</div>
             <span className="sidebar-item-text">{text}</span>
         </Component>
     );
 };
-
 const navItems = [
     { icon: <LayoutDashboard />, text: 'Dashboard', to: '/dashboard' },
     { icon: <BriefcaseBusiness />, text: 'Categorias', to: '/categories' },
@@ -40,11 +42,10 @@ const navItems = [
 const Sidebar = () => {
     const [isCollapsed, setIsCollapsed] = useState(false);
     const [isMobileOpen, setIsMobileOpen] = useState(false);
-    
     const { logout } = useAuth();
     const navigate = useNavigate();
-
     const { isMobile } = useBreakpoints();
+    const location = useLocation();
 
     const handleLogout = () => {
         logout();
@@ -92,6 +93,7 @@ const Sidebar = () => {
                             icon={item.icon} 
                             text={item.text} 
                             to={item.to} 
+                            active={location.pathname.startsWith(item.to)}
                         />
                     ))}
                 </nav>
