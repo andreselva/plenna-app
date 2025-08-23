@@ -3,18 +3,19 @@ import { useState, useMemo } from "react";
 import { Doughnut, Line, Bar } from "react-chartjs-2";
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { useDashboardData } from "../../Hooks/DashboardManager/DashboardManager";
-import { defaultGastosPorCategoriaData, gastosPorCategoriaOptions } from "./DashboardCards/GastosPorCategoriaChart";
-import { defaultEvolucaoMensalData, evolucaoMensalOptions } from "./DashboardCards/EvolucaoMensalChart";
-import { defaultFaturasPorCartaoData, faturasPorCartaoOptions } from "./DashboardCards/FaturasPorCartaoChart";
+import { defaultGastosPorCategoriaData, gastosPorCategoriaOptions } from "./DashboardCards/GastosPorCategoria/GastosCategoriaChartOptions";
+import { defaultEvolucaoMensalData, evolucaoMensalOptions } from "./DashboardCards/EvolucaoMensal/EvolucaoMensalChartOptions";
+import { defaultFaturasPorCartaoData, faturasPorCartaoOptions } from "./DashboardCards/Faturas/FaturaChartOptions";
 import { CustomDatePicker } from "../../Components/DatePicker/DatePicker";
 import { getStartAndEndOfMonth, getFormattedDateRange } from "../../Utils/DateUtils";
 import { DashboardSkeleton } from "./DashboardSkeleton";
-import GastosDoughnutChart from "./DashboardCards/GastosDoughnutChart";
+import GastosDoughnutChart from "./DashboardCards/GastosPorCategoria/GastosDoughnutChart";
 import {Chart as ChartJS, ArcElement, Tooltip, Legend, CategoryScale, LinearScale, PointElement, LineElement, BarElement, Filler} from "chart.js";
-import SaldoCard from "./DashboardCards/SaldoCard";
-import TopCategoryCard from "./DashboardCards/TopCategoryCard";
-import UpcomingBillsCard from "./DashboardCards/UpcomingBillsCard";
-import HighestBillCard from "./DashboardCards/HighestBillCard";
+import SaldoCard from "./DashboardCards/Cards/SaldoCard";
+import TopCategoryCard from "./DashboardCards/Cards/TopCategoryCard";
+import UpcomingBillsCard from "./DashboardCards/Cards/UpcomingBillsCard";
+import HighestBillCard from "./DashboardCards/Cards/HighestBillCard";
+import FaturasChart from "./DashboardCards/Faturas/FaturaChart";
 
 ChartJS.register(
     ArcElement,
@@ -154,7 +155,7 @@ const Dashboard = () => {
                 <div className="row">
                     <div className="card">
                         <span className="card-title">Faturas</span>
-                        <Bar
+                        <FaturasChart
                             data={faturasPorCartaoData}
                             options={faturasPorCartaoOptions}
                         />
