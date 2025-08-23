@@ -44,7 +44,7 @@ const Sidebar = () => {
     const [isMobileOpen, setIsMobileOpen] = useState(false);
     const { logout } = useAuth();
     const navigate = useNavigate();
-    const { isMobile } = useBreakpoints();
+    const { isMobile, isTablet } = useBreakpoints();
     const location = useLocation();
 
     const handleLogout = () => {
@@ -53,26 +53,26 @@ const Sidebar = () => {
     };
 
     const toggleSidebar = () => {
-        if (isMobile) {
+        if (isMobile || isTablet) {
             setIsMobileOpen(!isMobileOpen);
         } else {
             setIsCollapsed(!isCollapsed);
         }
     };
 
-    const sidebarClasses = `Sidebar ${isMobile ? 'is-mobile' : 'is-desktop'} ${!isMobile && isCollapsed ? 'collapsed' : ''} ${isMobile && isMobileOpen ? 'open' : ''}`;
+    const sidebarClasses = `Sidebar ${isMobile || isTablet ? 'is-mobile' : 'is-desktop'} ${(!isMobile || !isTablet) && isCollapsed ? 'collapsed' : ''} ${(isMobile || isTablet) && isMobileOpen ? 'open' : ''}`;
 
     return (
         <>
             <div 
-                className={`sidebar-overlay ${isMobile && isMobileOpen ? 'active' : ''}`}
+                className={`sidebar-overlay ${(isMobile || isTablet) && isMobileOpen ? 'active' : ''}`}
                 onClick={toggleSidebar} 
             />
 
             <div className={sidebarClasses}>
                 <button className='sidebar-toggle-button' onClick={toggleSidebar}>
                     <span className='arrow'>
-                        {isMobile ? (
+                        {(isMobile || isTablet) ? (
                             isMobileOpen ? <X width={15}/> : null
                         ) : (
                             isCollapsed ? <ArrowRight width={15}/> : <ArrowLeft width={15}/>
@@ -105,9 +105,9 @@ const Sidebar = () => {
                         to="/settings" 
                     />
                     <SidebarItem 
-                        as="button"
                         icon={<LogOut />} 
                         text="Logout" 
+                        to="/login" 
                         onClick={handleLogout} 
                     />
                 </div>   

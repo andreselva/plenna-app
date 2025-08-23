@@ -10,6 +10,7 @@
     flex-direction: column;
     position: relative;
     transition: width 0.35s ease, min-width 0.35s ease, padding 0.35s ease;
+    z-index: 1000;
 }
 
 .Sidebar-nav {
