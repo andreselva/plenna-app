@@ -8,7 +8,6 @@ import { evolucaoMensalOptions } from "./DashboardCards/EvolucaoMensal/EvolucaoM
 import { defaultFaturasPorCartaoData, faturasPorCartaoOptions } from "./DashboardCards/Faturas/FaturaChartOptions";
 import { CustomDatePicker } from "../../Components/DatePicker/DatePicker";
 import { getStartAndEndOfMonth, getFormattedDateRange } from "../../Utils/DateUtils";
-import { DashboardSkeleton } from "./DashboardSkeleton";
 import GastosDoughnutChart from "./DashboardCards/GastosPorCategoria/GastosDoughnutChart";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend, CategoryScale, LinearScale, PointElement, LineElement, BarElement, Filler } from "chart.js";
 import SaldoCard from "./DashboardCards/Cards/SaldoCard";
@@ -17,6 +16,7 @@ import UpcomingBillsCard from "./DashboardCards/Cards/UpcomingBillsCard";
 import HighestBillCard from "./DashboardCards/Cards/HighestBillCard";
 import FaturasChart from "./DashboardCards/Faturas/FaturaChart";
 import { useBreakpoints } from "../../Hooks/useMediaQuery/useBreakpoints";
+import Loader from "../../Components/Loader/Loader";
 
 ChartJS.register(
     ArcElement,
@@ -93,7 +93,7 @@ const Dashboard = () => {
     }, [contasVencimentoProximo]);
 
     if (loading) {
-        return <DashboardSkeleton />;
+        return <Loader />;
     }
     
     const handleMonthChange = (month) => {
