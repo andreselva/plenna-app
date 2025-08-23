@@ -4,10 +4,11 @@ import { FlexibleTable } from '../../Components/FlexibleTable/FlexibleTable';
 import { ActionDropdown } from '../../Components/ActionDropdown/ActionDropdown';
 import { CategoryTableSkeleton } from './CategoryTableSkeleton';
 import { darkenHexColor } from '../../Utils/DarkenColor';
-// <-- MUDANÇA AQUI: Importe os ícones que você vai usar -->
 import { Pencil, Trash2 } from 'lucide-react';
+import { useBreakpoints } from '../../Hooks/useMediaQuery/useBreakpoints';
 
 const CategoryTable = ({ categories, onEdit, onDelete, loading, error }) => {
+    const { isMobile } = useBreakpoints();
     if (loading) {
         return <CategoryTableSkeleton />;
     }
@@ -26,14 +27,27 @@ const CategoryTable = ({ categories, onEdit, onDelete, loading, error }) => {
         {
             header: 'Nome da Categoria',
             style: { flex: '0 0 50%', display: 'flex', justifyContent: 'center'} ,
-            renderCell: (category) => (
-                <span className={globalStyles.statusBadge} style={{
-                    backgroundColor: `${category.color}33`,
-                    color: darkenHexColor(category.color, 30),
-                }}>
-                    {category.name}
-                </span>
-            )
+            renderCell: (category) => {
+                if (isMobile) {
+                    return (
+                        <span className={globalStyles.statusBadge} 
+                            style={{
+                                color: darkenHexColor(category.color, 30),
+                            }}>
+                            {category.name}
+                        </span>
+                    )
+                }
+
+                return (
+                    <span className={globalStyles.statusBadge} style={{
+                        backgroundColor: `${category.color}33`,
+                        color: darkenHexColor(category.color, 30),
+                    }}>
+                        {category.name}
+                    </span>
+                )
+            }
         },
         {
             header: 'Tipo',
@@ -41,7 +55,18 @@ const CategoryTable = ({ categories, onEdit, onDelete, loading, error }) => {
             renderCell: (category) => {
                 const isReceita = category.type.toUpperCase() === 'RECEITA';
                 const baseColor = isReceita ? RECEITA_COLOR : DESPESA_COLOR;
-                
+                if (isMobile) {
+                    return (
+                        <span
+                            style={{
+                                color: darkenHexColor(baseColor, 25)
+                            }}
+                        >
+                            {category.type}
+                        </span>
+                    )
+                } 
+
                 return (
                     <span className={globalStyles.statusBadge} 
                         style={{

@@ -9,7 +9,8 @@ export const useDashboardData = (periodo = {}) => {
         contasVencimentoProximo: [],
         evolucaoMensal: null,
         saldoRestante: 0,
-        faturasPorCartao: null
+        faturasPorCartao: null,
+        maiorFatura: null
     });
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -37,7 +38,8 @@ export const useDashboardData = (periodo = {}) => {
                     billsDue,
                     monthlyProgress,
                     remainingBalance,
-                    creditCardStatements
+                    creditCardStatements,
+                    highestBillCard
                 } = response.payload.dashboardData;
 
                 setData({
@@ -46,7 +48,8 @@ export const useDashboardData = (periodo = {}) => {
                     contasVencimentoProximo: billsDue,
                     evolucaoMensal: monthlyProgress,
                     saldoRestante: remainingBalance,
-                    faturasPorCartao: creditCardStatements
+                    faturasPorCartao: creditCardStatements,
+                    maiorFatura: highestBillCard
                 });
             } catch (err: any) {
                 setError(err.message);

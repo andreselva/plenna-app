@@ -6,6 +6,7 @@ import { PencilLine, Trash2Icon, FilePlus2, HandCoins, BanknoteXIcon } from 'luc
 import { ActionDropdown } from '../../Components/ActionDropdown/ActionDropdown';
 import InvoiceTableSkeleton from './InvoiceTableSkeleton';
 import { darkenHexColor } from '../../Utils/DarkenColor';
+import { useBreakpoints } from '../../Hooks/useMediaQuery/useBreakpoints';
 
 const STATUS_COLORS = {
     paid: '#28a745',
@@ -15,6 +16,8 @@ const STATUS_COLORS = {
 };
 
 const InvoiceTable = ({ invoices, onEdit, onDelete, setIsModalOpen, onOpenPaymentModal, onReversePayment, loading, error }) => {
+    const { isMobile } = useBreakpoints();
+
     const handleDelete = DeleteConfirmation(onDelete, {
         confirmTitle: 'Deseja realmente excluir?',
         confirmText: 'A exclusão é definitiva!',
@@ -83,9 +86,15 @@ const InvoiceTable = ({ invoices, onEdit, onDelete, setIsModalOpen, onOpenPaymen
                             <React.Fragment key={invoice.id}>
                                 <div className={globalStyles.tableRow} onClick={() => toggleInvoice(invoice.id)}>
                                     <div style={{ flex: '1 1 20%', justifyContent: 'center' }}>{invoice.name}</div>
-                                    <div style={{ flex: '1 1 15%', justifyContent: 'center' }}>Vencimento: {invoice.dueDate.split('-').reverse().join('/')}</div>
-                                    <div style={{ flex: '1 1 15%', justifyContent: 'center' }}>Fechamento: {invoice.closingDate.split('-').reverse().join('/')}</div>
-                                    <div style={{ flex: '1 1 10%', justifyContent: 'center' }}>Pago: {invoice.totalPaid.toFixed(2)}</div>
+                                    {!isMobile && (
+                                        <div style={{ flex: '1 1 15%', justifyContent: 'center' }}>Vencimento: {invoice.dueDate.split('-').reverse().join('/')}</div>
+                                    )}
+                                    {!isMobile && (
+                                        <div style={{ flex: '1 1 15%', justifyContent: 'center' }}>Fechamento: {invoice.closingDate.split('-').reverse().join('/')}</div>
+                                    )}
+                                    {!isMobile && (
+                                        <div style={{ flex: '1 1 10%', justifyContent: 'center' }}>Pago: {invoice.totalPaid.toFixed(2)}</div>
+                                    )}
                                     <div style={{ flex: '1 1 10%', justifyContent: 'center' }}>Total: {invoice.value.toFixed(2)}</div>
                                     <div style={{ flex: '1 1 15%', justifyContent: 'center' }}>
                                         <span className={globalStyles.statusBadge} style={{
@@ -101,7 +110,6 @@ const InvoiceTable = ({ invoices, onEdit, onDelete, setIsModalOpen, onOpenPaymen
                                     </div>
                                 </div>
 
-                                {/* Linha Expansível (lógica inalterada) */}
                                 <div className={globalStyles.expandableContainer} >
                                     <ExpandableRow isOpen={expandedInvoiceIds.has(invoice.id)}>
                                         <div className={globalStyles.scrollableTableWrapper}>

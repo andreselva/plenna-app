@@ -1,19 +1,33 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+:root {
+    --background-color-dash: #f4f4f4;
+    --card-background-color: #fff;
+    --border-color: #ddd;
+    --shadow-color: rgba(0, 0, 0, 0.1);
+    --hover-color: #f9f9f9;
+    --scrollbar-color: #888;
+    --scrollbar-hover-color: #8d8c8c;
+    --default-gap: 1.5rem;
+    --border-radius: 4px;
+}
+
 .Dashboard {
-    background-color: #f4f4f4;
+    background-color: var(--background-color-dash);
     min-width: 100%;
     display: flex;
     justify-content: center;
     margin: auto;
-    padding: 10px 0 10px 0;
+    padding: 10px 0;
+    font-family: 'Inter', sans-serif;
 }
 
 .Dashboard-content {
     width: 100%;
+    max-width: 1550px;
     display: flex;
     flex-direction: column;
-    gap: 1rem;
-    flex-wrap: wrap;
-    max-width: 1550px;
+    gap: var(--default-gap);
     margin: 10px 0 0 0;
 }
 
@@ -21,39 +35,50 @@
     display: flex;
     flex-wrap: wrap;
     width: 100%;
-    justify-content: space-between;
+    gap: var(--default-gap);
+}
+
+.column {
+    display: flex;
+    flex-direction: column;
+    gap: var(--default-gap);
+    flex: 0.6;
 }
 
 .card {
-    background-color: #fff;
-    border-radius: 12px;
+    background-color: var(--card-background-color);
+    border-radius: var(--border-radius);
     padding: 1.5rem;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 6px var(--shadow-color);
     text-align: center;
+    flex: 1;
+    display: flex;         
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.card-title {
+    display: block;
+    width: 100%;
+    text-align: center;
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.8rem;
+    padding-bottom: 0.8rem;
+    border-bottom: 1px solid #eee;
+}
+
+.card--full-width {
+    flex-basis: 100%;
 }
 
 .row-1 {
-    height: 350px;
-}
-
-.chart {
-    width: 28.7%;
+    min-height: 350px;
 }
 
 .small-doughnut {
-    max-width: 250px; /* Ajuste o tamanho conforme necessário */
-    margin: 0 auto; /* Centraliza o gráfico */
-}
-
-.full-width {
-    width: 100%;
-}
-
-.card.chart.table h2 {
-    padding: 1.5rem;
-    margin: 0;
-    background-color: #fff;
-    border-bottom: 1px solid #ddd;
+    max-width: 250px;
+    margin: 0 auto;
 }
 
 .table-wrapper {
@@ -70,48 +95,97 @@
 .contas-table thead {
     position: sticky;
     top: 0;
-    background-color: white;
+    background-color: var(--card-background-color);
     z-index: 1;
 }
 
 .contas-table th,
 .contas-table td {
-    border-bottom: 1px solid #ddd; /* Linha abaixo de cada linha */
-    text-align: center; /* Centraliza o texto */
+    padding: 12px;
+    text-align: center;
+    border-bottom: 1px solid var(--border-color);
 }
 
 .contas-table th {
-    padding: 12px;
-    text-align: center;
     font-weight: bold;
-    background-color: white;
-}
-
-.contas-table td {
-    padding: 12px;
-    text-align: center;
-    border-bottom: 1px solid #ddd;
 }
 
 .contas-table tbody tr:hover {
-    background-color: #f9f9f9; /* Destaque apenas para as linhas do corpo da tabela */
+    background-color: var(--hover-color);
 }
 
-/* Estilização da barra de rolagem */
+.card--grow-2 {
+    flex-grow: 2;
+}
+
+.chart-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.chart-max-size-medium {
+    max-height: 400px;
+    max-width: 400px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+.chart-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+}
+
+.chart-wrapper .chart-container {
+    max-height: 250px; 
+    max-width: 250px;
+    width: 100%;
+    margin-bottom: 1rem;
+}
+
+.custom-legend {
+    list-style: none; 
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap; 
+    justify-content: center;
+    gap: 1rem; 
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    color: #555;
+}
+
+.legend-color-dot {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%; 
+    margin-right: 8px;
+}
+
 .table-wrapper::-webkit-scrollbar {
     width: 3px;
 }
 
 .table-wrapper::-webkit-scrollbar-track {
-    background: #f1f1f1;
+    background: var(--background-color);
     border-radius: 4px;
 }
 
 .table-wrapper::-webkit-scrollbar-thumb {
-    background: #888;
+    background: var(--scrollbar-color);
     border-radius: 4px;
 }
 
 .table-wrapper::-webkit-scrollbar-thumb:hover {
-    background: #8d8c8c;
+    background: var(--scrollbar-hover-color);
 }
