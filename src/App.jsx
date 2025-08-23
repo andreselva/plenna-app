@@ -10,15 +10,16 @@ import Signin from './Pages/Signin/Signin';
 import PrivateRoute from './Auth/PrivateRoute';
 import Invoices from './Pages/Invoices/Invoices';
 import NotFound from './Pages/NotFound/NotFound';
+import { AuthProvider, useAuth } from './Auth/Context/AuthContext';
 
 const AppContent = () => {
     const location = useLocation();
+    const { isAuthenticated, isLoading } = useAuth();
+    const showSidebar = !isLoading && isAuthenticated;
 
     return (
         <div className="MainContent">
-            {/* Renderizar a Sidebar apenas se não for a rota de login */}
-            {location.pathname !== '/login' && location.pathname !== '/sitemap.xml' && <Sidebar />}
-
+            {showSidebar && <Sidebar />}
             <div className="Content">
                 <Routes>
                     <Route path="/" element={<Navigate to="/dashboard" />} />
