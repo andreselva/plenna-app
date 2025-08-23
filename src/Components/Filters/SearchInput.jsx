@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Search } from 'lucide-react';
 import './SearchInput.css';
+import { useBreakpoints } from '../../Hooks/useMediaQuery/useBreakpoints';
 
 /**
  * Componente de input de pesquisa com debouncing.
@@ -8,6 +9,7 @@ import './SearchInput.css';
  * @param {Function} onSearchChange - Função chamada com o termo da pesquisa após o debounce.
  */
 const SearchInput = ({ placeholder, onSearchChange }) => {
+    const { isMobile } = useBreakpoints();
     const [searchTerm, setSearchTerm] = useState('');
 
     // Efeito de Debounce: só chama onSearchChange 300ms após o utilizador parar de digitar
@@ -26,19 +28,21 @@ const SearchInput = ({ placeholder, onSearchChange }) => {
         setSearchTerm(event.target.value);
     };
 
-    return (
-        <div className="search-input-container">
-            <Search className="search-input-icon" size={18} />
-            <input
-                id="search-input"
-                type="text"
-                className="search-input"
-                placeholder={placeholder || 'Procurar...'}
-                value={searchTerm}
-                onChange={handleChange}
-            />
-        </div>
-    );
+    if (!isMobile) {
+        return (
+            <div className="search-input-container">
+                <Search className="search-input-icon" size={18} />
+                <input
+                    id="search-input"
+                    type="text"
+                    className="search-input"
+                    placeholder={placeholder || 'Procurar...'}
+                    value={searchTerm}
+                    onChange={handleChange}
+                />
+            </div>
+        );
+    }
 };
 
 export default SearchInput;

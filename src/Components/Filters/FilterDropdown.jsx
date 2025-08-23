@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './FilterDropdown.css';
+import { useBreakpoints } from '../../Hooks/useMediaQuery/useBreakpoints';
 
 /**
  * Dropdown genérico para opções de filtro avançadas.
@@ -12,6 +13,7 @@ import './FilterDropdown.css';
  */
 const FilterDropdown = ({ isOpen, onClose, anchorEl, filterConfig, onApplyFilters, onClearFilters, align = 'left' }) => {
     const [filters, setFilters] = useState({});
+    const { isMobile } = useBreakpoints();
 
     useEffect(() => {
         const handleKeyDown = (event) => {
@@ -26,7 +28,10 @@ const FilterDropdown = ({ isOpen, onClose, anchorEl, filterConfig, onApplyFilter
         style.top = anchorEl.offsetTop + anchorEl.offsetHeight + 10;
 
         if (align === 'right') {
-            style.left = anchorEl.offsetLeft - anchorEl.offsetWidth - 225;
+            if (!isMobile) {
+                style.left = anchorEl.offsetLeft - anchorEl.offsetWidth - 225;
+            }
+            style.left = anchorEl.offsetLeft - 210;
         } else {
             style.left = anchorEl.offsetLeft;
         }
