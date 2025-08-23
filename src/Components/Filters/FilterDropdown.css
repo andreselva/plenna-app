@@ -125,3 +125,9 @@
 .apply-button:hover {
     background-color: var(--cor-global-button-hover);
 }
+
+@media (max-width: 768px) {
+    .filter-popup {
+        width: 250px;
+    }
+}
