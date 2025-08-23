@@ -1,0 +1,127 @@
+.filter-overlay-transparent {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 199;
+}
+
+.filter-popup {
+    position: absolute;
+    background-color: #fff;
+    border-radius: 12px;
+    border: 1px solid #7748ce1c;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+    width: 300px;
+    z-index: 200;
+    animation: slide-down 0.3s ease-out;
+    display: flex;
+    flex-direction: column;
+}
+
+@keyframes slide-down {
+    from {
+        opacity: 0;
+        transform: scale(0.95) translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+.filter-body {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.filter-field label {
+    font-weight: 500;
+    margin-bottom: 5px;
+    font-size: 14px;
+    color: #333;
+}
+
+.filter-field select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+.filter-field select:focus {
+    outline: none;
+    border-color: var(--cor-global-button);
+    box-shadow: 0 0 0 3px var(--cor-global-button-hover);
+}
+
+.filter-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    padding: 0 16px 16px 16px;
+    border-top: 1px solid #e9ecef;
+    padding-top: 16px;
+    margin-top: 10px;
+}
+
+.filter-actions button {
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.filter-field select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    width: 100%;
+    padding: 10px 40px 10px 12px; 
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+    font-size: 14px;
+    color: #495057;
+    background-color: #fff;
+    cursor: pointer;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23868e96' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.filter-field select:focus {
+    outline: none;
+    border-color: var(--cor-global-button);
+    box-shadow: 0 0 0 3px var(--cor-global-button-hover);
+}
+
+.filter-field select:hover {
+    border-color: #adb5bd;
+}
+
+.clear-button {
+    background-color: transparent;
+    color: #495057;
+    border: 1px solid #ced4da;
+}
+
+.clear-button:hover {
+    background-color: #f1f3f5;
+}
+
+.apply-button {
+    background-color: var(--cor-global-button);
+    color: white;
+}
+
+.apply-button:hover {
+    background-color: var(--cor-global-button-hover);
+}
