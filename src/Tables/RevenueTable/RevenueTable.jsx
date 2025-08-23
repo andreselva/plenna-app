@@ -5,8 +5,11 @@ import DeleteConfirmation from '../../Hooks/DeleteConfirmation/DeleteConfirmatio
 import { RevenueTableSkeleton } from '../../Pages/Revenues/RevenueTableSkeleton';
 import globalStyles from '../../Styles/GlobalStyles.module.css';
 import { darkenHexColor } from '../../Utils/DarkenColor';
+import { useBreakpoints } from '../../Hooks/useMediaQuery/useBreakpoints';
 
 const RevenueTable = ({ revenues = [], categories = [], onEdit, onDelete, loading, error }) => {
+    const { isMobile } = useBreakpoints();
+
     if (loading) {
         return <RevenueTableSkeleton />;
     }
@@ -31,36 +34,45 @@ const RevenueTable = ({ revenues = [], categories = [], onEdit, onDelete, loadin
             accessor: 'value',
             style: { flex: '1 1 15%', display: 'flex', justifyContent: 'center' },
         },
-        {
-            header: 'Vencimento',
-            renderCell: (revenue) => (
-                revenue.invoiceDueDate ? revenue.invoiceDueDate.split('-').reverse().join('/') : '-'
-            ),
-            style: { flex: '1 1 15%', display: 'flex', justifyContent: 'center' },
-        },
-        {
-            header: 'Categoria',
-            renderCell: (revenue) => {
-                const category = categories.find(cat => cat.id === revenue.idCategory);
-                if (category && category.color) {
-                    return (
-                        <span className={globalStyles.statusBadge} style={{
-                            backgroundColor: `${category.color}33`,
-                            color: darkenHexColor(category.color, 25),
-                            padding: '4px 10px'
-                        }}>
-                            {category.name}
-                        </span>
-                    );
-                }
-                return category ? category.name : '-';
+        
+    ];
+
+    if (!isMobile) {
+        columns.push(
+            {
+                header: 'Categoria',
+                renderCell: (revenue) => {
+                    const category = categories.find(cat => cat.id === revenue.idCategory);
+                    if (category && category.color) {
+                        return (
+                            <span className={globalStyles.statusBadge} style={{
+                                backgroundColor: `${category.color}33`,
+                                color: darkenHexColor(category.color, 25),
+                                padding: '4px 10px'
+                            }}>
+                                {category.name}
+                            </span>
+                        );
+                    }
+                    return category ? category.name : '-';
+                },
+                style: { flex: '1 1 20%', display: 'flex', justifyContent: 'center' },
             },
-            style: { flex: '1 1 20%', display: 'flex', justifyContent: 'center' },
-        },
+            {
+                header: 'Vencimento',
+                renderCell: (revenue) => (
+                    revenue.invoiceDueDate ? revenue.invoiceDueDate.split('-').reverse().join('/') : '-'
+                ),
+                style: { flex: '1 1 15%', display: 'flex', justifyContent: 'center' },
+            }
+        )
+    }
+
+    columns.push(
         {
             header: 'Ações',
             renderCell: (revenue) => {
-                 let revenueActions = [
+                let revenueActions = [
                     {
                         icon: <Pencil size={14} />,
                         text: 'Editar',
@@ -80,8 +92,8 @@ const RevenueTable = ({ revenues = [], categories = [], onEdit, onDelete, loadin
                 );
             },
             style: { flex: '1 1 15%', display: 'flex', justifyContent: 'center' },
-        },
-    ];
+        }
+    )
 
     return (
         <FlexibleTable

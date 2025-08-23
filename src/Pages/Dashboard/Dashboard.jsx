@@ -5,7 +5,7 @@ import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { useDashboardData } from "../../Hooks/DashboardManager/DashboardManager";
 import { defaultGastosPorCategoriaData, gastosPorCategoriaOptions } from "./DashboardCards/GastosPorCategoria/GastosCategoriaChartOptions";
 import { evolucaoMensalOptions } from "./DashboardCards/EvolucaoMensal/EvolucaoMensalChartOptions";
-import { defaultFaturasPorCartaoData } from "./DashboardCards/Faturas/FaturaChartOptions";
+import { defaultFaturasPorCartaoData, faturasPorCartaoOptions } from "./DashboardCards/Faturas/FaturaChartOptions";
 import { CustomDatePicker } from "../../Components/DatePicker/DatePicker";
 import { getStartAndEndOfMonth, getFormattedDateRange } from "../../Utils/DateUtils";
 import { DashboardSkeleton } from "./DashboardSkeleton";
@@ -154,6 +154,7 @@ const Dashboard = () => {
                             <span className="card-title">Faturas</span>
                             <FaturasChart
                                 data={faturasPorCartaoData}
+                                options={faturasPorCartaoOptions}
                             />
                         </div>
                         <div className="card card--grow-2">
