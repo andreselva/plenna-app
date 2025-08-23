@@ -189,3 +189,9 @@
 .table-wrapper::-webkit-scrollbar-thumb:hover {
     background: var(--scrollbar-hover-color);
 }
+
+@media (max-width: 768px) {
+    .row {
+        justify-content: center;
+    }
+}
