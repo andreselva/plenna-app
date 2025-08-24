@@ -15,7 +15,7 @@ import { AuthProvider, useAuth } from './Auth/Context/AuthContext';
 const AppContent = () => {
     const location = useLocation();
     const { isAuthenticated, isLoading } = useAuth();
-    const showSidebar = !isLoading && isAuthenticated;
+    const showSidebar = !isLoading && isAuthenticated && location.pathname !== '/login' && location.pathname !== '/sitemap.xml';
 
     return (
         <div className="MainContent">
