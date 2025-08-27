@@ -1,12 +1,15 @@
+/* Rodar o comando abaixo para salvar no d.ts */
+/* npx tcm src --watch */
+
 :root {
     --cor-global-button: #7748ce;
     --cor-global-button-hover: #7748ce8f;
     --cor-content-title: #cfbffa17;
     --cor-header-table: #fdfcf9;
     --primary-color: #7748ce;
+    --card-r-bc: #ffffff;
 }
 
-/* Estilos globais para containers */
 .container {
     display: flex;
     justify-content: center;
@@ -84,6 +87,11 @@
 
 .title-items-span {
     font-size: 18px;
+    font-weight: 400;
+}
+
+.title-items-span-middle {
+    font-size: 17px;
     font-weight: 400;
 }
 
@@ -195,7 +203,6 @@
     fill: currentColor;
 }
 
-/* BotaoGlobal.module.css */
 .botao {
     font-size: 16px;
     color: white;
@@ -331,6 +338,65 @@
 
 .expensesTable tr:last-child td {
     border-bottom: none;
+}
+
+.card-reports {
+    border-radius: 10px;
+    width: 95rem;
+    height: 85vh;
+    overflow-y: auto;
+    position: relative;
+    min-height: 200px;
+    background-color: none;
+    overflow-x: hidden;
+    padding-top: 10px;
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    flex: 1;
+    flex-wrap: wrap;
+    gap: 40px
+}
+
+.card-r {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    background-color: var(--card-r-bc);
+    gap: 20px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    min-width: 300px;
+    min-height: 50vh;
+    padding: 20px;
+    border-radius: 5px;
+}
+
+.card-r-content {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    width: 100%;
+}
+
+.card-r-content ul {
+    font-size: 16px;
+    font-weight: 300;
+}
+
+.clickableItem {
+    display: block;
+    padding: 2px;
+    text-decoration: none;
+    color: inherit;
+    border-radius: 5px;
+}
+
+.clickableItem:hover {
+    background-color: var(--cor-global-button-hover);
 }
 
 @media (max-width: 1600px) {

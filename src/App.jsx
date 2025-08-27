@@ -11,6 +11,8 @@ import PrivateRoute from './Auth/PrivateRoute';
 import Invoices from './Pages/Invoices/Invoices';
 import NotFound from './Pages/NotFound/NotFound';
 import { AuthProvider, useAuth } from './Auth/Context/AuthContext';
+import Reports from './Pages/Reports/Reports';
+import FinancialSummary from './Pages/Reports/FinancialSummary';
 
 const AppContent = () => {
     const location = useLocation();
@@ -30,6 +32,8 @@ const AppContent = () => {
                     <Route path="/revenues" element={<PrivateRoute><Revenues /></PrivateRoute>} />
                     <Route path="/bank-accounts" element={<PrivateRoute><BankAccounts /></PrivateRoute>} />
                     <Route path="/invoices" element={<PrivateRoute><Invoices /></PrivateRoute>} />
+                    <Route path="/reports" element={<PrivateRoute><Reports /></PrivateRoute>} />
+                    <Route path="/reports/financial-summary" element={<PrivateRoute><FinancialSummary/></PrivateRoute>} />
                 <Route path="*" element={<NotFound />} />
                 </Routes>
             </div>

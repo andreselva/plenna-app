@@ -1,18 +1,41 @@
 declare const styles: {
-  [key: string]: string;  // Permite qualquer chave do tipo string
   readonly "actions": string;
+  readonly "active": string;
   readonly "botao": string;
   readonly "card": string;
   readonly "card-icon": string;
+  readonly "card-r": string;
+  readonly "card-r-content": string;
+  readonly "card-reports": string;
+  readonly "clickableItem": string;
   readonly "container": string;
   readonly "container-btn-card": string;
   readonly "container-content": string;
+  readonly "content-title": string;
+  readonly "content-title-items": string;
+  readonly "content-title-items-left": string;
+  readonly "content-title-items-right": string;
+  readonly "disabled": string;
+  readonly "expandableContainer": string;
+  readonly "expensesTable": string;
+  readonly "flexibleTable": string;
+  readonly "icon-button": string;
   readonly "icone": string;
+  readonly "nenhuma": string;
   readonly "primaria": string;
+  readonly "row": string;
+  readonly "roxo": string;
+  readonly "scrollableTableWrapper": string;
   readonly "secundaria": string;
   readonly "show-btn": string;
+  readonly "statusBadge": string;
+  readonly "tableBody": string;
+  readonly "tableHeader": string;
+  readonly "tableRow": string;
+  readonly "title-items-button": string;
+  readonly "title-items-span": string;
+  readonly "title-items-span-middle": string;
   readonly "vermelho": string;
-  readonly "nenhuma": string;
 };
 export = styles;
 
