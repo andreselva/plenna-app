@@ -1,0 +1,106 @@
+.summaryCards {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 20px;
+}
+
+.summaryCard {
+    flex: 1;
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.summaryCard span {
+    color: #666666;
+    font-size: 0.9rem;
+}
+
+.summaryCard h3 {
+    margin-top: 10px;
+    color: #333333;
+    font-weight: 600;
+}
+
+.chartSection {
+    padding: 0 20px;
+}
+
+.tableSection {
+    padding: 20px;
+}
+
+.financialTable {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.financialTable th,
+.financialTable td {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    text-align: center;
+}
+
+.financialTable th {
+    background-color: #f9f9f9;
+}
+
+.quickFilters {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.quickFilters select {
+    padding: 6px 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.analysisOptions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 20px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.analysisOptions label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9rem;
+}
+
+.aiSummary {
+    padding: 20px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.aiSummary h3 {
+    margin-bottom: 8px;
+}
+
+.generateButton {
+    margin-left: auto;
+    background-color: var(--cor-global-button);
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    padding: 12px 25px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.generateButton:hover {
+    background-color: var(--cor-global-button-hover);
+}
+
+input, select {
+    margin-bottom: 0;
+}
