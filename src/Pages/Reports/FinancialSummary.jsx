@@ -19,11 +19,13 @@ const FinancialSummary = () => {
   const [summaryText, setSummaryText] = useState('');
   const [showReport, setShowReport] = useState(false);
 
-  // Derivados (baseados nos dados já filtrados pelo back)
-  const resultData = incomeData.map((inc, i) => inc - (expenseData[i] ?? 0));
-  const totalIncome = incomeData.reduce((sum, v) => sum + (v || 0), 0);
-  const totalExpense = expenseData.reduce((sum, v) => sum + (v || 0), 0);
-  const netResult = totalIncome - totalExpense;
+  // Função de arredondamento para 2 casas
+  const roundTwo = (value) => Number((value ?? 0).toFixed(2));
+
+  const resultData = incomeData.map((inc, i) => roundTwo(inc - (expenseData[i] ?? 0)));
+  const totalIncome = roundTwo(incomeData.reduce((sum, v) => sum + (v || 0), 0));
+  const totalExpense = roundTwo(expenseData.reduce((sum, v) => sum + (v || 0), 0));
+  const netResult = roundTwo(totalIncome - totalExpense);
 
   const formatCurrency = (value) =>
     (value ?? 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
@@ -31,13 +33,28 @@ const FinancialSummary = () => {
   const data = {
     labels,
     datasets: [
-      { label: 'Receitas', data: incomeData, backgroundColor: 'rgba(119, 72, 206, 0.7)' },
-      { label: 'Despesas', data: expenseData, backgroundColor: 'rgba(255, 99, 132, 0.7)' },
-      { label: 'Resultado', data: resultData, backgroundColor: 'rgba(75, 192, 192, 0.7)' },
+      { label: 'Receitas', data: incomeData.map(roundTwo), backgroundColor: 'rgba(119, 72, 206, 0.7)' },
+      { label: 'Despesas', data: expenseData.map(roundTwo), backgroundColor: 'rgba(255, 99, 132, 0.7)' },
+      { label: 'Resultado', data: resultData.map(roundTwo), backgroundColor: 'rgba(75, 192, 192, 0.7)' },
     ],
   };
 
-  const options = { responsive: true, plugins: { legend: { position: 'top' } } };
+  const options = {
+    responsive: true,
+    plugins: {
+      legend: { position: 'top' },
+      tooltip: {
+        callbacks: {
+          label: function (context) {
+            return formatCurrency(Number((context.raw ?? 0).toFixed(2)));
+          }
+        }
+      },
+      datalabels: {
+        display: false
+      }
+    }
+  };
 
 
   const handleMonthsFilterChange = (e) => {
@@ -148,9 +165,9 @@ const FinancialSummary = () => {
                     {labels.map((month, index) => (
                       <tr key={month}>
                         <td>{month}</td>
-                        <td>{formatCurrency(incomeData[index] ?? 0)}</td>
-                        <td>{formatCurrency(expenseData[index] ?? 0)}</td>
-                        <td>{formatCurrency(resultData[index] ?? 0)}</td>
+                        <td>{formatCurrency(roundTwo(incomeData[index] ?? 0))}</td>
+                        <td>{formatCurrency(roundTwo(expenseData[index] ?? 0))}</td>
+                        <td>{formatCurrency(roundTwo(resultData[index] ?? 0))}</td>
                       </tr>
                     ))}
                   </tbody>
