@@ -16,5 +16,14 @@ export const UsersManager = () => {
         setLoading(false);
     }, []);
 
-    return { users, loading, error: null };
+    const addUser = (user) => {
+        const nextId = Math.max(0, ...users.map((u) => u.id)) + 1;
+        setUsers([...users, { ...user, id: nextId }]);
+    };
+
+    const updateUser = (user) => {
+        setUsers(users.map((u) => (u.id === user.id ? user : u)));
+    };
+
+    return { users, loading, error: null, addUser, updateUser };
 };
