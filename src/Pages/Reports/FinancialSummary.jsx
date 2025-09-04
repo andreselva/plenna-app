@@ -111,7 +111,6 @@ const FinancialSummary = () => {
                  <select id="typeAnalysis" value={typeAnalysis} onChange={handleTypeAnalysis}>
                    <option value="future">Análise futura</option>
                    <option value="past">Análise passada</option>
-                   <option value="future-and-past">Análise futura e passada</option>
                  </select>
               </div>
             )}
