@@ -1,5 +1,5 @@
 import './Sidebar.css';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../Auth/Context/AuthContext';
 import avatarUrl from '../../assets/avatar-padrao.svg';
@@ -18,6 +18,7 @@ import {
     X
 } from 'lucide-react';
 import { useBreakpoints } from '../../Hooks/useMediaQuery/useBreakpoints';
+import ModalSettings from '../../Modals/ModalSettings/ModalSettings';
 
 const SidebarItem = ({ as: Component = Link, icon, text, active, ...props }) => {
     return (
@@ -44,6 +45,7 @@ const navItems = [
 const Sidebar = () => {
     const [isCollapsed, setIsCollapsed] = useState(false);
     const [isMobileOpen, setIsMobileOpen] = useState(false);
+    const [isSettingsOpen, setIsSettingsOpen] = useState(false);
     const { logout } = useAuth();
     const navigate = useNavigate();
     const { isMobile, isTablet } = useBreakpoints();
@@ -101,19 +103,22 @@ const Sidebar = () => {
                 </nav>
 
                 <div className='Sidebar-footer'>
-                    <SidebarItem 
-                        icon={<Bolt />} 
-                        text="Configurações" 
-                        to="/settings" 
+                    <SidebarItem
+                        as="button"
+                        type="button"
+                        icon={<Bolt />}
+                        text="Configurações"
+                        onClick={() => setIsSettingsOpen(true)}
                     />
-                    <SidebarItem 
-                        icon={<LogOut />} 
-                        text="Logout" 
-                        to="/login" 
-                        onClick={handleLogout} 
+                    <SidebarItem
+                        icon={<LogOut />}
+                        text="Logout"
+                        to="/login"
+                        onClick={handleLogout}
                     />
-                </div>   
+                </div>
             </div>
+            <ModalSettings isOpen={isSettingsOpen} onClose={() => setIsSettingsOpen(false)} />
         </>
     );
 };
