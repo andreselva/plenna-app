@@ -1,32 +1,24 @@
-.settings-modal {
+.settings-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
     display: flex;
-    gap: 24px;
+    flex-direction: column;
+    gap: 8px;
 }
 
-.settings-sidebar {
-    width: 180px;
-    border-right: 1px solid #eee;
-    padding-right: 16px;
-}
-
-.settings-sidebar-item {
+.settings-item {
     width: 100%;
     padding: 8px 12px;
     background: none;
-    border: none;
+    border: 1px solid #eee;
     border-radius: 8px;
     text-align: left;
     cursor: pointer;
     color: #333;
 }
 
-.settings-sidebar-item:hover,
-.settings-sidebar-item.active {
+.settings-item:hover {
     background-color: var(--cor-global-button);
     color: #fff;
 }
-
-.settings-content {
-    flex: 1;
-}
-
