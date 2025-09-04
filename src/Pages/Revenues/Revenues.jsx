@@ -1,13 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
 import { Filter as FilterIcon } from 'lucide-react';
-
 import RevenueTable from "../../Tables/RevenueTable/RevenueTable";
 import ModalRevenues from "../../Modals/ModalRevenues/ModalRevenues";
 import { getFormattedDateRange, getStartAndEndOfMonth } from '../../Utils/DateUtils';
 import { CustomDatePicker } from '../../Components/DatePicker/DatePicker';
 import { useRevenueHandler } from '../../Handlers/useRevenuesHandler';
 import globalStyles from '../../Styles/GlobalStyles.module.css';
-
 import SearchInput from '../../Components/Filters/SearchInput';
 import FilterDropdown from '../../Components/Filters/FilterDropdown';
 

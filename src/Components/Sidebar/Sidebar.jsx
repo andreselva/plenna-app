@@ -11,6 +11,7 @@ import {
     Bolt, 
     BriefcaseBusiness, 
     CreditCard, 
+    FileSpreadsheet, 
     Landmark, 
     LayoutDashboard, 
     LogOut,
@@ -35,7 +36,8 @@ const navItems = [
     { icon: <BanknoteArrowDown />, text: 'Despesas', to: '/expenses' },
     { icon: <BanknoteArrowUp />, text: 'Receitas', to: '/revenues' },
     { icon: <Landmark />, text: 'Contas Bancárias', to: '/bank-accounts' },
-    { icon: <CreditCard />, text: 'Faturas', to: '/invoices' }
+    { icon: <CreditCard />, text: 'Faturas', to: '/invoices' },
+    { icon: <FileSpreadsheet />, text: 'Relatórios', to: '/reports' }
 ];
 
 
