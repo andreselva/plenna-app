@@ -2,6 +2,7 @@ import globalStyles from '../../Styles/GlobalStyles.module.css';
 import styles from './Users.module.css';
 import { UsersManager } from '../../Hooks/UsersManager/UsersManager';
 import { useAuth } from '../../Auth/Context/AuthContext';
+import avatarUrl from '../../assets/avatar-padrao.svg';
 
 const Users = () => {
     const { user: currentUser } = useAuth();
@@ -25,10 +26,17 @@ const Users = () => {
                     <div className={styles.usersGrid}>
                         {visibleUsers.map((user) => (
                             <div key={user.id} className={styles.userCard}>
-                                <h3>{user.name}</h3>
-                                <p>{user.email}</p>
-                                <p>{user.username}</p>
-                                <p>{user.role}</p>
+                                <img
+                                    src={avatarUrl}
+                                    alt={`Avatar de ${user.name}`}
+                                    className={styles.avatar}
+                                />
+                                <div>
+                                    <h3>{user.name}</h3>
+                                    <p>{user.email}</p>
+                                    <p>{user.username}</p>
+                                    <p>{user.role}</p>
+                                </div>
                             </div>
                         ))}
                     </div>
