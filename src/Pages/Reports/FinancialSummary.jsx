@@ -4,6 +4,7 @@ import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Tooltip, Lege
 import globalStyles from '../../Styles/GlobalStyles.module.css';
 import styles from './FinancialSummary.module.css';
 import useReportsManager from '../../Hooks/Reports/useReportsManager';
+import Loader from '../../Components/Loader/Loader';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend);
 
@@ -55,7 +56,6 @@ const FinancialSummary = () => {
       }
     }
   };
-
 
   const handleMonthsFilterChange = (e) => {
     setMonthsFilter(e.target.value);
@@ -121,9 +121,12 @@ const FinancialSummary = () => {
               disabled={loading}
               aria-busy={loading}
             >
-              {loading ? 'Gerando…' : 'Gerar relatório'}
+              {loading ? 'Gerando...' : 'Gerar relatório'}
             </button>
           </div>
+          {loading && (
+            <Loader />
+          )}
 
           {showReport && (
             <>

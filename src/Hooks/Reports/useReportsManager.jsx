@@ -1,5 +1,6 @@
 import { useState } from "react";
 import axiosInstance from "../../api/axiosInstance";
+import AlertToast from "../../Components/Alerts/AlertToast";
 
 const useReportsManager = () => {
     const endpoint = '/reports'
@@ -20,8 +21,9 @@ const useReportsManager = () => {
             if (response && status >= 200 && status <= 204) {
                 return {response: response.payload };
             }
-        } catch {
-
+        } catch (err) {
+            const errorMessage = err?.response?.data?.message || 'Erro ao gerar relatório.';
+            AlertToast({icon: 'error', title: errorMessage, timer: 4000});
         } finally {
             setLoading(false);
         }

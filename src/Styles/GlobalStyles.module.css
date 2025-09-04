@@ -395,10 +395,6 @@
     border-radius: 5px;
 }
 
-.clickableItem:hover {
-    background-color: var(--cor-global-button-hover);
-}
-
 @media (max-width: 1600px) {
   .card { width: 70rem; }
 }

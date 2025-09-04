@@ -1,7 +1,6 @@
 import { Link } from 'react-router-dom';
 import globalStyles from '../../Styles/GlobalStyles.module.css';
 
-//Mock dos dados
 const reportData = [
     { id: 1, title: 'Inteligência Artificial', items: [{ name: 'Resumo Financeiro', link: 'financial-summary'}] }, //'Receita Anual'
     // { id: 2, title: 'Relatórios Manuais', items: ['Fluxo de Caixa', 'Balanço Patrimonial'] },
