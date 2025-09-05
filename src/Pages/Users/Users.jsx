@@ -5,6 +5,7 @@ import { UsersManager } from '../../Hooks/UsersManager/UsersManager';
 import { useAuth } from '../../Auth/Context/AuthContext';
 import avatarUrl from '../../assets/avatar-padrao.svg';
 import { ModalUsers } from '../../Modals/ModalUsers/ModalUsers';
+import Loader from '../../Components/Loader/Loader';
 
 const Users = () => {
     const { user: currentUser } = useAuth();
@@ -53,28 +54,30 @@ const Users = () => {
                     </div>
                 </div>
                 {loading ? (
-                    <p>Carregando...</p>
+                   <Loader />
                 ) : (
-                    <div className={styles.usersGrid}>
-                        {visibleUsers.map((user) => (
-                            <div
-                                key={user.id}
-                                className={styles.userCard}
-                                onClick={() => handleEditUser(user)}
-                            >
-                                <img
-                                    src={avatarUrl}
-                                    alt={`Avatar de ${user.name}`}
-                                    className={styles.avatar}
-                                />
-                                <div>
-                                    <h3>{user.name}</h3>
-                                    <p>{user.email}</p>
-                                    <p>{user.username}</p>
-                                    <p>{user.role}</p>
+                    <div className={globalStyles['card-reports']}>
+                        <div className={styles.usersGrid}>
+                            {visibleUsers.map((user) => (
+                                <div
+                                    key={user.id}
+                                    className={styles.userCard}
+                                    onClick={() => handleEditUser(user)}
+                                >
+                                    <img
+                                        src={avatarUrl}
+                                        alt={`Avatar de ${user.name}`}
+                                        className={styles.avatar}
+                                    />
+                                    <div>
+                                        <h3>{user.name}</h3>
+                                        <p>{user.email}</p>
+                                        <p>{user.username}</p>
+                                        <p>{user.role}</p>
+                                    </div>
                                 </div>
-                            </div>
-                        ))}
+                            ))}
+                        </div>
                     </div>
                 )}
             </div>

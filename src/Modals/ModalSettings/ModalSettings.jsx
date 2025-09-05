@@ -22,6 +22,7 @@ const ModalSettings = ({ isOpen, onClose }) => {
             hideSubmitButton
             cancelButtonText="Fechar"
             width="400px"
+            height='300px'
         >
             <ul className="settings-list">
                 {settingsOptions.map((option) => (

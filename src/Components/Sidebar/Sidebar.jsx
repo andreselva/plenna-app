@@ -104,8 +104,6 @@ const Sidebar = () => {
 
                 <div className='Sidebar-footer'>
                     <SidebarItem
-                        as="button"
-                        type="button"
                         icon={<Bolt />}
                         text="Configurações"
                         onClick={() => setIsSettingsOpen(true)}

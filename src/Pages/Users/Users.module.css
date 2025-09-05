@@ -6,8 +6,7 @@
 }
 
 .userCard {
-    width: 300px;
-    height: 200px;
+    width: 257px;
     border: 1px solid #ccc;
     border-radius: 8px;
     padding: 16px;
@@ -17,6 +16,7 @@
     align-items: center;
     gap: 16px;
     cursor: pointer;
+    font-family: 'Roboto', sans-serif;
 }
 
 .avatar {
