@@ -1,9 +1,10 @@
 import { useNavigate } from 'react-router-dom';
 import GenericModal from '../../Components/GenericModal/GenericModal';
 import './ModalSettings.css';
+import { User } from 'lucide-react';
 
 const settingsOptions = [
-    { label: 'Usuários', path: '/users' }
+    { label: 'Usuários', path: '/users', icon: <User size={18} /> }
 ];
 
 const ModalSettings = ({ isOpen, onClose }) => {
@@ -32,7 +33,7 @@ const ModalSettings = ({ isOpen, onClose }) => {
                             className="settings-item"
                             onClick={() => handleNavigate(option.path)}
                         >
-                            {option.label}
+                            {option.icon}{option.label}
                         </button>
                     </li>
                 ))}

@@ -9,7 +9,7 @@ export const ModalUsers = ({
     setEditingUser
 }) => {
     const handleCancel = () => {
-        setNewUser({ name: '', email: '', username: '', role: 'user' });
+        setNewUser({ name: '', email: '', username: '', role: 'user', password: '' });
         setEditingUser(null);
         setIsModalOpen(false);
     };
@@ -25,11 +25,7 @@ export const ModalUsers = ({
                     onChange: (value) => setNewUser({ ...newUser, name: value }),
                     required: true,
                     size: 'full-width'
-                }
-            ]
-        },
-        {
-            fields: [
+                },
                 {
                     id: 'email',
                     label: 'E-mail',
@@ -51,6 +47,15 @@ export const ModalUsers = ({
                     onChange: (value) => setNewUser({ ...newUser, username: value }),
                     required: true,
                     size: 'full-width'
+                },
+                {
+                    id: 'password',
+                    label: 'Senha',
+                    type: 'password',
+                    value: newUser.password,
+                    onChange: (value) => setNewUser({...newUser, password: value}),
+                    required: true,
+                    size: 'full-width'
                 }
             ]
         },
@@ -65,8 +70,8 @@ export const ModalUsers = ({
                     required: true,
                     size: 'full-width',
                     options: [
-                        { value: 'admin', label: 'Admin' },
-                        { value: 'user', label: 'Usuário' }
+                        { value: 'admin', label: 'Administrador' },
+                        { value: 'normal-user', label: 'Usuário' }
                     ]
                 }
             ]

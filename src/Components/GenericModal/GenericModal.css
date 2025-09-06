@@ -36,6 +36,7 @@
     flex-direction: column;
     max-width: 90vw;
     max-height: 90vh;
+    font-family: 'Inter', sans-serif;
 }
 
 .modal-title {

@@ -42,6 +42,10 @@ const Users = () => {
         ? users
         : users.filter((u) => u.id === currentUser?.id);
 
+    if (loading) {
+        return <Loader />
+    }
+
     return (
         <div className={globalStyles.container}>
             <div className={globalStyles['container-content']}>
@@ -53,33 +57,29 @@ const Users = () => {
                         </div>
                     </div>
                 </div>
-                {loading ? (
-                   <Loader />
-                ) : (
-                    <div className={globalStyles['card-reports']}>
-                        <div className={styles.usersGrid}>
-                            {visibleUsers.map((user) => (
-                                <div
-                                    key={user.id}
-                                    className={styles.userCard}
-                                    onClick={() => handleEditUser(user)}
-                                >
-                                    <img
-                                        src={avatarUrl}
-                                        alt={`Avatar de ${user.name}`}
-                                        className={styles.avatar}
-                                    />
-                                    <div>
-                                        <h3>{user.name}</h3>
-                                        <p>{user.email}</p>
-                                        <p>{user.username}</p>
-                                        <p>{user.role}</p>
-                                    </div>
+                <div className={globalStyles['card-reports']}>
+                    <div className={styles.usersGrid}>
+                        {visibleUsers.map((user) => (
+                            <div
+                                key={user.id}
+                                className={styles.userCard}
+                                onClick={() => handleEditUser(user)}
+                            >
+                                <img
+                                    src={avatarUrl}
+                                    alt={`Avatar de ${user.name}`}
+                                    className={styles.avatar}
+                                />
+                                <div>
+                                    <h3>{user.name}</h3>
+                                    <p>{user.email}</p>
+                                    <p>{user.username}</p>
+                                    <p>{user.role === 'admin' ? 'Administrador' : 'Usuário'}</p>
                                 </div>
-                            ))}
-                        </div>
+                            </div>
+                        ))}
                     </div>
-                )}
+                </div>
             </div>
             {isModalOpen && (
                 <ModalUsers
