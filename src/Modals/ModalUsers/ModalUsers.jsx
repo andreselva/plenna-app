@@ -47,15 +47,6 @@ export const ModalUsers = ({
                     onChange: (value) => setNewUser({ ...newUser, username: value }),
                     required: true,
                     size: 'full-width'
-                },
-                {
-                    id: 'password',
-                    label: 'Senha',
-                    type: 'password',
-                    value: newUser.password,
-                    onChange: (value) => setNewUser({...newUser, password: value}),
-                    required: true,
-                    size: 'full-width'
                 }
             ]
         },

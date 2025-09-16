@@ -41,15 +41,21 @@ const navItems = [
     { icon: <FileSpreadsheet />, text: 'Relatórios', to: '/reports' }
 ];
 
-
 const Sidebar = () => {
     const [isCollapsed, setIsCollapsed] = useState(false);
     const [isMobileOpen, setIsMobileOpen] = useState(false);
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
-    const { logout } = useAuth();
+    const { user: currentUser, logout } = useAuth();
     const navigate = useNavigate();
     const { isMobile, isTablet } = useBreakpoints();
     const location = useLocation();
+
+    const defineName = (nameUser) => {
+        if (!nameUser) return 'Olá';
+        return `Olá, ${nameUser.trim().split(' ')[0]}`;
+    }
+    
+    const stringNameUser = currentUser.name ? defineName(currentUser.name) : '';
 
     const handleLogout = () => {
         logout();
@@ -87,6 +93,9 @@ const Sidebar = () => {
                 <div className="Sidebar-title">
                     <div className='profile-picture'>
                         <img src={avatarUrl} alt="Foto de perfil" />
+                    </div>
+                    <div className='profile-name'>
+                        {stringNameUser}
                     </div>
                 </div>
 
