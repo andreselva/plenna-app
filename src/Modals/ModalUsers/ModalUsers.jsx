@@ -1,4 +1,5 @@
 import GenericModal from '../../Components/GenericModal/GenericModal';
+import { Role } from '../../enum/roles.enum';
 
 export const ModalUsers = ({
     setIsModalOpen,
@@ -9,12 +10,12 @@ export const ModalUsers = ({
     setEditingUser
 }) => {
     const handleCancel = () => {
-        setNewUser({ name: '', email: '', username: '', role: 'user', password: '' });
+        setNewUser({ name: '', email: '', username: '', role: 'normal-user', password: '' });
         setEditingUser(null);
         setIsModalOpen(false);
     };
 
-    const formFields = [
+    let formFields = [
         {
             fields: [
                 {
@@ -37,7 +38,11 @@ export const ModalUsers = ({
                 }
             ]
         },
-        {
+    ];
+
+    if (!editingUser) {
+        formFields.push(
+            {
             fields: [
                 {
                     id: 'username',
@@ -45,6 +50,15 @@ export const ModalUsers = ({
                     type: 'text',
                     value: newUser.username,
                     onChange: (value) => setNewUser({ ...newUser, username: value }),
+                    required: true,
+                    size: 'full-width'
+                },
+                {
+                    id: 'password',
+                    label: 'Senha',
+                    type: 'password',
+                    value: newUser.password,
+                    onChange: (value) => setNewUser({...newUser, password: value}),
                     required: true,
                     size: 'full-width'
                 }
@@ -61,13 +75,45 @@ export const ModalUsers = ({
                     required: true,
                     size: 'full-width',
                     options: [
-                        { value: 'admin', label: 'Administrador' },
-                        { value: 'normal-user', label: 'Usuário' }
+                        { value: Role.NORMAL_USER, label: 'Usuário' },
+                        { value: Role.ADMIN, label: 'Administrador' },
                     ]
                 }
             ]
-        }
-    ];
+        });
+    } else {
+        formFields.push(
+            {
+                fields: [
+                    {
+                        id: 'username',
+                        label: 'Usuário',
+                        type: 'text',
+                        value: newUser.username,
+                        onChange: (value) => setNewUser({ ...newUser, username: value }),
+                        required: true,
+                        size: 'full-width'
+                    },
+                ]
+            },
+            {
+                fields: [
+                    {
+                        id: 'role',
+                        label: 'Cargo',
+                        type: 'select',
+                        value: newUser.role,
+                        onChange: (value) => setNewUser({ ...newUser, role: value }),
+                        required: true,
+                        size: 'full-width',
+                        options: [
+                            { value: 'admin', label: 'Administrador' },
+                            { value: 'normal-user', label: 'Usuário' }
+                        ]
+                    }
+                ]
+            });
+    }
 
     return (
         <GenericModal

@@ -46,9 +46,45 @@ export const UsersManager = () => {
         }
     };
 
-    const updateUser = (user) => {
-        setUsers(users.map((u) => (u.id === user.id ? user : u)));
+    const deleteUser = async (userId) => {
+        setLoading(true);
+        try {
+            const { data: response, status } = await axiosInstance.delete(`${endpoint}/users/${userId}`);
+
+            if (response && status >= 200 && status <= 204) {
+                setUsers(users.filter(user => user.id !== userId));
+                AlertToast({ icon: 'success', title: 'Usuário excluído com sucesso!'});
+                return;
+            }
+            console.error(response, status);
+            throw new Error(`Ocorreu um erro durante a exclusão do usuário. Verifique o console.`);
+        } catch (err) {
+            const errorMessage = err?.response?.data?.message;
+            AlertToast({ icon: 'error', title: errorMessage, timer: 4000})
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    const updateUser = async (user) => {
+        setLoading(true)
+        try {
+            const { data: response, status } = await axiosInstance.put(`${endpoint}/users`, user);
+            if (response && status >= 200 && status <= 204) {
+                AlertToast({ icon: 'success', title: 'Usuário alterado com sucesso!'});
+                setUsers(response.payload.users);
+                return;
+            }
+
+            console.error(response, status);
+            throw new Error(`Ocorreu um erro ao editar o usuário. Verifique o console.`);
+        } catch (err) {
+            const errorMessage = err?.response?.data?.message;
+            AlertToast({ icon: 'error', title: errorMessage });
+        } finally {
+            setLoading(false);
+        };
     };
 
-    return { users, loading, error: null, addUser, updateUser };
+    return { users, loading, error: null, addUser, updateUser, deleteUser };
 };

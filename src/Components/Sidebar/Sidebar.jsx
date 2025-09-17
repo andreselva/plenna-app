@@ -19,6 +19,7 @@ import {
 } from 'lucide-react';
 import { useBreakpoints } from '../../Hooks/useMediaQuery/useBreakpoints';
 import ModalSettings from '../../Modals/ModalSettings/ModalSettings';
+import { Role } from '../../enum/roles.enum';
 
 const SidebarItem = ({ as: Component = Link, icon, text, active, ...props }) => {
     return (
@@ -31,14 +32,15 @@ const SidebarItem = ({ as: Component = Link, icon, text, active, ...props }) => 
         </Component>
     );
 };
+
 const navItems = [
-    { icon: <LayoutDashboard />, text: 'Dashboard', to: '/dashboard' },
-    { icon: <BriefcaseBusiness />, text: 'Categorias', to: '/categories' },
-    { icon: <BanknoteArrowDown />, text: 'Despesas', to: '/expenses' },
-    { icon: <BanknoteArrowUp />, text: 'Receitas', to: '/revenues' },
-    { icon: <Landmark />, text: 'Contas Bancárias', to: '/bank-accounts' },
-    { icon: <CreditCard />, text: 'Faturas', to: '/invoices' },
-    { icon: <FileSpreadsheet />, text: 'Relatórios', to: '/reports' }
+    { icon: <LayoutDashboard />, text: 'Dashboard', to: '/dashboard', roles: [Role.ADMIN, Role.NORMAL_USER] },
+    { icon: <BriefcaseBusiness />, text: 'Categorias', to: '/categories', roles: [Role.ADMIN, Role.NORMAL_USER] },
+    { icon: <BanknoteArrowDown />, text: 'Despesas', to: '/expenses', roles: [Role.ADMIN, Role.NORMAL_USER] },
+    { icon: <BanknoteArrowUp />, text: 'Receitas', to: '/revenues', roles: [Role.ADMIN, Role.NORMAL_USER] },
+    { icon: <Landmark />, text: 'Contas Bancárias', to: '/bank-accounts', roles: [Role.ADMIN, Role.NORMAL_USER] },
+    { icon: <CreditCard />, text: 'Faturas', to: '/invoices', roles: [Role.ADMIN, Role.NORMAL_USER] },
+    { icon: <FileSpreadsheet />, text: 'Relatórios', to: '/reports', roles: [Role.ADMIN, Role.NORMAL_USER] }
 ];
 
 const Sidebar = () => {
@@ -100,7 +102,9 @@ const Sidebar = () => {
                 </div>
 
                 <nav className="Sidebar-nav">
-                    {navItems.map((item) => (
+                    {navItems.filter(
+                        item => item.roles.includes(currentUser.role)
+                    ).map((item) => (
                         <SidebarItem 
                             key={item.text} 
                             icon={item.icon} 
@@ -112,11 +116,11 @@ const Sidebar = () => {
                 </nav>
 
                 <div className='Sidebar-footer'>
-                    <SidebarItem
+                    {currentUser.role === Role.ADMIN && (<SidebarItem
                         icon={<Bolt />}
                         text="Configurações"
                         onClick={() => setIsSettingsOpen(true)}
-                    />
+                    />)}
                     <SidebarItem
                         icon={<LogOut />}
                         text="Logout"

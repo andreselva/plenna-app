@@ -7,16 +7,18 @@ import { useAuth } from '../../Auth/Context/AuthContext';
 import avatarUrl from '../../assets/avatar-padrao.svg';
 import { ModalUsers } from '../../Modals/ModalUsers/ModalUsers';
 import Loader from '../../Components/Loader/Loader';
-import { Pencil, Shield, Trash2 } from 'lucide-react'; // lucide icons
+import { Pencil, Shield, Trash2 } from 'lucide-react';
 import AlertToast from '../../Components/Alerts/AlertToast';
 import ModalPasswordReset from '../../Modals/ModalUsers/ModalPasswordReset';
+import AlertConfirm from '../../Components/Alerts/AlertConfirm';
+import { Role } from '../../enum/roles.enum';
 
 const Users = () => {
   const { user: currentUser } = useAuth();
   const { users, loading, addUser, updateUser, deleteUser } = UsersManager();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [newUser, setNewUser] = useState({ name: '', email: '', username: '', role: 'user' });
+  const [newUser, setNewUser] = useState({ name: '', email: '', username: '', role: Role.NORMAL_USER });
   const [editingUser, setEditingUser] = useState(null);
 
   const [showResetModal, setShowResetModal] = useState(false);
@@ -30,7 +32,7 @@ const Users = () => {
       addUser(newUser);
     }
     setIsModalOpen(false);
-    setNewUser({ name: '', email: '', username: '', role: 'user' });
+    setNewUser({ name: '', email: '', username: '', role: Role.NORMAL_USER });
   };
 
   const handleEditUser = (user) => {
@@ -41,20 +43,20 @@ const Users = () => {
 
   const handleOpenNewModal = () => {
     setEditingUser(null);
-    setNewUser({ name: '', email: '', username: '', role: 'user' });
+    setNewUser({ name: '', email: '', username: '', role: Role.NORMAL_USER });
     setIsModalOpen(true);
   };
 
   const handleOpenReset = (e, user) => {
-    e.stopPropagation(); // evita disparar onClick do card (edição)
+    e.stopPropagation();
     setSelectedUserForReset(user);
     setShowResetModal(true);
   };
 
   const handleDelete = async (e, user) => {
-    e.stopPropagation(); // evita abrir edição
-    const confirmed = window.confirm(`Excluir o usuário "${user.name}"? Esta ação não pode ser desfeita.`);
-    if (!confirmed) return;
+    e.stopPropagation();
+    const resultConfirm = await AlertConfirm({title: 'Excluir usuário', text: 'Essa ação é irreversível. Deseja continuar?', icon: 'warning', confirmButtonText: 'Sim, excluir.'});
+    if (!resultConfirm.isConfirmed) return;
     try {
       await deleteUser(user.id);
       AlertToast({ icon: 'success', title: 'Usuário excluído com sucesso!' });
