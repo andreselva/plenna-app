@@ -36,7 +36,7 @@ const ModalSubcategories = ({
       fields: [
         {
           id: 'type',
-          label: 'Tipo (herdado da categoria)',
+          label: 'Tipo',
           type: 'select',
           value: parentCategory?.type || 'Receita',
           options: [

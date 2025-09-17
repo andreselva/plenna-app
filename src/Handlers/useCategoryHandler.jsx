@@ -18,6 +18,9 @@ export const useCategoryHandler = () => {
   const [categoryColor, setCategoryColor] = useState('#000000');
   const [categoryKind, setCategoryKind] = useState(CategoryKind.CATEGORY);
 
+  const [sidebarCategory, setSidebarCategory] = useState(null);
+  const [isSubSidebarOpen, setIsSubSidebarOpen] = useState(false);
+
   const resetForm = () => {
     setNewCategory('');
     setCategoryType('Receita');
@@ -56,18 +59,21 @@ export const useCategoryHandler = () => {
     }
 
     if (editingCategory) {
-      updateCategory(editingCategory.id, {
+      const payloadUpdate = {
         name: newCategory,
         type: categoryType,
         description: categoryDescription,
         color: categoryColor,
-      });
+        kind: CategoryKind.CATEGORY,
+        parentId: 0,
+      };
+      updateCategory(editingCategory.id, payloadUpdate);
       resetForm();
       setIsModalOpen(false);
       return;
     }
 
-    const payload = {
+    const payloadCreate = {
       name: newCategory,
       type: categoryType,
       description: categoryDescription,
@@ -76,7 +82,7 @@ export const useCategoryHandler = () => {
       parentId: parentCategory?.id ? parentCategory.id : 0,
     };
 
-    addCategory(payload);
+    addCategory(payloadCreate);
     resetForm();
 
     if (isModalSubcategoryOpen) setIsModalSubcategoryOpen(false);
@@ -85,6 +91,24 @@ export const useCategoryHandler = () => {
 
   const handleDeleteCategory = async (id) => {
     await deleteCategory(id);
+  };
+
+  // Sidebar de subcategorias
+  const openSubSidebar = (category) => {
+    setSidebarCategory(category);
+    setIsSubSidebarOpen(true);
+  };
+  const closeSubSidebar = () => {
+    setIsSubSidebarOpen(false);
+    setSidebarCategory(null);
+  };
+
+  const handleUpdateSubcategory = async (id, payload) => {
+    return await updateCategory(id, payload);
+  };
+
+  const handleDeleteSubcategory = async (id) => {
+    return await deleteCategory(id);
   };
 
   return {
@@ -116,6 +140,17 @@ export const useCategoryHandler = () => {
     setCategoryDescription,
     categoryColor,
     setCategoryColor,
+    categoryKind,
     setCategoryKind,
+
+    // sidebar
+    openSubSidebar,
+    closeSubSidebar,
+    isSubSidebarOpen,
+    sidebarCategory,
+
+    // subcategory ops
+    handleUpdateSubcategory,
+    handleDeleteSubcategory,
   };
 };

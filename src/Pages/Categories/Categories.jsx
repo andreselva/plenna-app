@@ -7,6 +7,7 @@ import SearchInput from "../../Components/Filters/SearchInput";
 import FilterDropdown from "../../Components/Filters/FilterDropdown";
 import { FilterIcon } from "lucide-react";
 import ModalSubcategories from "../../Modals/ModalCategories/ModalSubcategories";
+import SubcategorySidebar from "../../Components/Sidebar/SubcategorySidebar";
 
 const Categories = () => {
     const { 
@@ -31,6 +32,12 @@ const Categories = () => {
         isModalSubcategoryOpen,
         setIsModalSubcategoryOpen,
         parentCategory,  
+        openSubSidebar,
+        closeSubSidebar,
+        isSubSidebarOpen,
+        sidebarCategory,
+        handleUpdateSubcategory,
+        handleDeleteSubcategory,
     } = useCategoryHandler();
 
     const [filteredCategories, setFilteredCategories] = useState(categories);
@@ -110,6 +117,7 @@ const Categories = () => {
                         onEdit={handleEditCategory}
                         onDelete={handleDeleteCategory}
                         onAddSubcategory={handleAddSubcategory}
+                        onViewSubcategories={openSubSidebar}
                         loading={loading}
                         error={error}
                     />
@@ -143,6 +151,15 @@ const Categories = () => {
                 parentCategory={parentCategory}
                 />
             )}
+
+            <SubcategorySidebar
+                isOpen={isSubSidebarOpen}
+                onClose={closeSubSidebar}
+                parentCategory={sidebarCategory}
+                onUpdateSubcategory={handleUpdateSubcategory}
+                onDeleteSubcategory={handleDeleteSubcategory}
+                loading={loading}
+            />
             
         </div>
     );

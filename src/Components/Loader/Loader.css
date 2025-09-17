@@ -1,37 +1,29 @@
 .loader-container {
   position: absolute;
-  
-  /* Faz o container ocupar todo o espaço do pai. 'inset: 0' é um atalho para top, right, bottom e left = 0. */
-  inset: 0; 
-  
-  background-color: rgba(255, 255, 255, 0.7); /* Fundo semi-transparente para focar no loader. */
-  
-  /* Usa flexbox para centrar o spinner dentro deste container. */
+  inset: 0;
+  background-color: rgba(255, 255, 255, 0.7);
   display: flex;
   justify-content: center;
   align-items: center;
-
-  z-index: 10; /* Garante que o loader fique por cima de outros elementos dentro do card. */
-  border-radius: inherit; /* Herda o border-radius do card-invoice, se houver. */
+  z-index: 10;
+  border-radius: inherit;
 }
 
-/* A animação do spinner continua exatamente a mesma.
-  Nenhuma alteração é necessária aqui.
-*/
+.loader-inline {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .spinner {
   border: 4px solid rgba(0, 0, 0, 0.1);
-  width: 36px;
-  height: 36px;
   border-radius: 50%;
-  border-left-color: rgb(126, 38, 177); /* Cor do spinner */
+  border-left-color: rgb(126, 38, 177);
   animation: spin 1s ease infinite;
 }
 
+/* Animação de rotação */
 @keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
