@@ -23,7 +23,7 @@ const CategoryTable = ({ categories, onEdit, onDelete, onAddSubcategory, onViewS
     const RECEITA_COLOR = '#28a745';
     const DESPESA_COLOR = '#dc3545';
 
-    const columns = [
+    let columns = [
         {
             header: 'Nome da Categoria',
             style: { flex: '0 0 50%', display: 'flex', justifyContent: 'center'} ,
@@ -80,17 +80,25 @@ const CategoryTable = ({ categories, onEdit, onDelete, onAddSubcategory, onViewS
                 );
             }
         },
-        {
-            header: 'Subcategorias',
-            style: { flex: '0 0 10%', display:'flex', justifyContent: 'center'},
-            renderCell: (category) => {
-                return (
-                    <span>
-                        {category.subcategories?.length ?? 0}
-                    </span>
-                );
-            }
-        },
+    ];
+
+    if (!isMobile) {
+        columns.push(
+            {
+                header: 'Subcategorias',
+                style: { flex: '0 0 10%', display:'flex', justifyContent: 'center'},
+                renderCell: (category) => {
+                    return (
+                        <span>
+                            {category.subcategories?.length ?? 0}
+                        </span>
+                    );
+                }
+            },
+        )
+    }
+
+    columns.push(
         {
             header: 'Ações',
             style: { flex: '0 0 20%', display:'flex', justifyContent: 'center'},
@@ -101,16 +109,15 @@ const CategoryTable = ({ categories, onEdit, onDelete, onAddSubcategory, onViewS
                     { icon: <Eye size={14} />, text: 'Visualizar subcategorias', handler: () => onViewSubcategories(category) },
                     { icon: <Trash2 size={14} />, text: 'Excluir', handler: () => handleDelete(category.id) }
                 ];
-
+    
                 return (
                     <ActionDropdown
                         actions={categoryActions}
                     />
                 )
-            }
-            
+            }   
         }
-    ];
+    );
 
     return (
         <FlexibleTable
