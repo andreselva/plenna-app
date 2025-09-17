@@ -1,95 +1,121 @@
 import { useState } from 'react';
 import { CategoryManager } from '../Hooks/CategoryManager/CategoryManager';
+import { CategoryKind } from '../enum/category-kind.enum';
+import SweetAlert from '../Components/Alerts/SweetAlert';
 
 export const useCategoryHandler = () => {
-    const { categories, addCategory, deleteCategory, updateCategory, loading, error } = CategoryManager();
+  const { categories, addCategory, deleteCategory, updateCategory, loading, error } = CategoryManager();
 
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [editingCategory, setEditingCategory] = useState(null);
-    const [newCategory, setNewCategory] = useState('');
-    const [categoryType, setCategoryType] = useState('Receita');
-    const [categoryDescription, setCategoryDescription] = useState('');
-    const [categoryColor, setCategoryColor] = useState('#000000');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalSubcategoryOpen, setIsModalSubcategoryOpen] = useState(false);
 
-    const resetForm = () => {
-        setNewCategory('');
-        setCategoryType('Receita');
-        setCategoryDescription('');
-        setCategoryColor('#000000');
-        setEditingCategory(null);
+  const [editingCategory, setEditingCategory] = useState(null);
+  const [parentCategory, setParentCategory] = useState(null);
+
+  const [newCategory, setNewCategory] = useState('');
+  const [categoryType, setCategoryType] = useState('Receita');
+  const [categoryDescription, setCategoryDescription] = useState('');
+  const [categoryColor, setCategoryColor] = useState('#000000');
+  const [categoryKind, setCategoryKind] = useState(CategoryKind.CATEGORY);
+
+  const resetForm = () => {
+    setNewCategory('');
+    setCategoryType('Receita');
+    setCategoryDescription('');
+    setCategoryColor('#000000');
+    setEditingCategory(null);
+    setCategoryKind(CategoryKind.CATEGORY);
+    setParentCategory(null);
+  };
+
+  const handleAddSubcategory = (category) => {
+    setParentCategory(category);
+    setCategoryKind(CategoryKind.SUBCATEGORY);
+    setNewCategory('');
+    setCategoryType(category.type);
+    setCategoryDescription('');
+    setCategoryColor('#000000');
+    setIsModalSubcategoryOpen(true);
+  };
+
+  const handleEditCategory = (category) => {
+    setEditingCategory(category);
+    setParentCategory(null);
+    setCategoryKind(CategoryKind.CATEGORY);
+    setNewCategory(category.name);
+    setCategoryType(category.type);
+    setCategoryDescription(category.description || '');
+    setCategoryColor(category.color || '#000000');
+    setIsModalOpen(true);
+  };
+
+  const handleSaveCategory = () => {
+    if (!newCategory || !newCategory.trim()) {
+      SweetAlert.error('O nome não pode ser vazio.');
+      return;
+    }
+
+    if (editingCategory) {
+      updateCategory(editingCategory.id, {
+        name: newCategory,
+        type: categoryType,
+        description: categoryDescription,
+        color: categoryColor,
+      });
+      resetForm();
+      setIsModalOpen(false);
+      return;
+    }
+
+    const payload = {
+      name: newCategory,
+      type: categoryType,
+      description: categoryDescription,
+      color: categoryColor,
+      kind: categoryKind,
+      parentId: parentCategory?.id ? parentCategory.id : 0,
     };
 
-    const handleAddCategory = () => {
-        if (!newCategory.trim()) {
-            alert('O nome da categoria não pode ser vazio.');
-            return;
-        }
+    addCategory(payload);
+    resetForm();
 
-        addCategory({
-            name: newCategory,
-            type: categoryType,
-            description: categoryDescription,
-            color: categoryColor,
-        });
+    if (isModalSubcategoryOpen) setIsModalSubcategoryOpen(false);
+    else setIsModalOpen(false);
+  };
 
-        resetForm();
-        setIsModalOpen(false);
-    };
+  const handleDeleteCategory = async (id) => {
+    await deleteCategory(id);
+  };
 
-    const handleEditCategory = (category) => {
-        setEditingCategory(category);
-        setNewCategory(category.name);
-        setCategoryType(category.type);
-        setCategoryDescription(category.description);
-        setCategoryColor(category.color);
-        setIsModalOpen(true);
-    };
+  return {
+    loading,
+    error,
+    categories,
 
-    const handleSaveCategory = () => {
-        if (!newCategory.trim()) {
-            alert('O nome da categoria não pode ser vazio.');
-            return;
-        }
+    // actions
+    handleSaveCategory,
+    handleEditCategory,
+    handleDeleteCategory,
+    handleAddSubcategory,
 
-        if (editingCategory) {
-            updateCategory(editingCategory.id, {
-                name: newCategory,
-                type: categoryType,
-                description: categoryDescription,
-                color: categoryColor,
-            });
-        } else {
-            handleAddCategory();
-            return;
-        }
+    // ui state
+    isModalOpen,
+    setIsModalOpen,
+    isModalSubcategoryOpen,
+    setIsModalSubcategoryOpen,
 
-        resetForm();
-        setIsModalOpen(false);
-    };
-
-    const handleDeleteCategory = async (id) => {
-        await deleteCategory(id);
-    };
-
-    return {
-        categories,
-        isModalOpen,
-        setIsModalOpen,
-        editingCategory,
-        setEditingCategory,
-        newCategory,
-        setNewCategory,
-        categoryType,
-        setCategoryType,
-        categoryDescription,
-        setCategoryDescription,
-        categoryColor,
-        setCategoryColor,
-        handleAddCategory,
-        handleEditCategory,
-        handleSaveCategory,
-        handleDeleteCategory,
-        loading,
-        error
-    };
+    // form state
+    editingCategory,
+    setEditingCategory,
+    parentCategory,
+    newCategory,
+    setNewCategory,
+    categoryType,
+    setCategoryType,
+    categoryDescription,
+    setCategoryDescription,
+    categoryColor,
+    setCategoryColor,
+    setCategoryKind,
+  };
 };

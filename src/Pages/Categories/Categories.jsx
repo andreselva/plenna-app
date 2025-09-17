@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import SearchInput from "../../Components/Filters/SearchInput";
 import FilterDropdown from "../../Components/Filters/FilterDropdown";
 import { FilterIcon } from "lucide-react";
+import ModalSubcategories from "../../Modals/ModalCategories/ModalSubcategories";
 
 const Categories = () => {
     const { 
@@ -23,8 +24,13 @@ const Categories = () => {
         handleEditCategory, 
         handleSaveCategory, 
         handleDeleteCategory,
+        handleAddSubcategory,
         loading,
-        error
+        error,
+        setCategoryKind,
+        isModalSubcategoryOpen,
+        setIsModalSubcategoryOpen,
+        parentCategory,  
     } = useCategoryHandler();
 
     const [filteredCategories, setFilteredCategories] = useState(categories);
@@ -103,6 +109,7 @@ const Categories = () => {
                         categories={filteredCategories}
                         onEdit={handleEditCategory}
                         onDelete={handleDeleteCategory}
+                        onAddSubcategory={handleAddSubcategory}
                         loading={loading}
                         error={error}
                     />
@@ -121,8 +128,22 @@ const Categories = () => {
                     setCategoryColor={setCategoryColor}
                     setEditingCategory={setEditingCategory}
                     editingCategory={editingCategory}
+                    setCategoryKind={setCategoryKind}
                 />
             )}
+
+            {isModalSubcategoryOpen && (
+                <ModalSubcategories
+                setIsModalOpen={setIsModalSubcategoryOpen}
+                onSubmit={handleSaveCategory}
+                newCategory={newCategory}
+                setNewCategory={setNewCategory}
+                categoryColor={categoryColor}
+                setCategoryColor={setCategoryColor}
+                parentCategory={parentCategory}
+                />
+            )}
+            
         </div>
     );
 };

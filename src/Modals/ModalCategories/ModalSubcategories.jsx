@@ -1,30 +1,19 @@
-import React, { useEffect } from 'react';
 import GenericModal from "../../Components/GenericModal/GenericModal";
-import { CategoryKind } from '../../enum/category-kind.enum';
+import { CategoryKind } from "../../enum/category-kind.enum";
 
-const ModalCategories = ({
+const ModalSubcategories = ({
   setIsModalOpen,
-  handleAddCategory,
+  onSubmit,
   newCategory,
   setNewCategory,
-  categoryType,
-  setCategoryType,
   categoryColor,
   setCategoryColor,
-  setEditingCategory,
-  editingCategory,
-  setCategoryKind,
+  parentCategory
 }) => {
-
-  setCategoryKind(CategoryKind.CATEGORY);
-
   const handleCancel = () => {
     setNewCategory('');
-    setCategoryType('Receita');
     setCategoryColor('#000000');
-    setCategoryKind(CategoryKind.CATEGORY);
     setIsModalOpen(false);
-    setEditingCategory(null);
   };
 
   const formFields = [
@@ -33,11 +22,11 @@ const ModalCategories = ({
       fields: [
         {
           id: 'name',
-          label: 'Nome da Categoria',
+          label: 'Nome da subcategoria',
           type: 'text',
           value: newCategory,
           onChange: setNewCategory,
-          placeholder: 'Nome da categoria',
+          placeholder: 'Nome da subcategoria',
           required: true,
           size: 'full-width',
         },
@@ -47,45 +36,50 @@ const ModalCategories = ({
       fields: [
         {
           id: 'type',
-          label: 'Tipo de Categoria',
+          label: 'Tipo (herdado da categoria)',
           type: 'select',
-          value: categoryType,
-          onChange: setCategoryType,
-          placeholder: 'Selecione o tipo',
-          required: true,
+          value: parentCategory?.type || 'Receita',
           options: [
             { value: 'Receita', label: 'Receita' },
             { value: 'Despesa', label: 'Despesa' },
           ],
+          disabled: true,
           size: 'half-width',
         },
         {
           id: 'color',
-          label: 'Cor da Categoria',
+          label: 'Cor da subcategoria',
           type: 'color',
           value: categoryColor,
           onChange: setCategoryColor,
           size: 'half-width',
         },
         {
-          id: 'categoryKind',
+          id: 'kind',
           type: 'hidden',
-          value: CategoryKind.CATEGORY,
+          value: CategoryKind.SUBCATEGORY,
+        },
+        {
+          id: 'parentId',
+          type: 'hidden',
+          value: parentCategory?.id ?? 0,
         },
       ],
     },
   ];
 
+  const parentName = parentCategory?.name;
+
   return (
     <GenericModal
       isOpen={true}
-      title={editingCategory ? 'Editar Categoria' : 'Cadastrar Categoria'}
+      title={parentName ? `Cadastrar subcategoria (${parentName})` : 'Cadastrar subcategoria'}
       formFields={formFields}
-      onSubmit={handleAddCategory}
+      onSubmit={onSubmit}
       onCancel={handleCancel}
-      submitButtonText={editingCategory ? 'Salvar' : 'Adicionar'}
+      submitButtonText="Adicionar"
     />
   );
 };
 
-export default ModalCategories;
+export default ModalSubcategories;

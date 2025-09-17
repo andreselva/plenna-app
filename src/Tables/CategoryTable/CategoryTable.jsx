@@ -7,7 +7,7 @@ import { darkenHexColor } from '../../Utils/DarkenColor';
 import { Pencil, Trash2 } from 'lucide-react';
 import { useBreakpoints } from '../../Hooks/useMediaQuery/useBreakpoints';
 
-const CategoryTable = ({ categories, onEdit, onDelete, loading, error }) => {
+const CategoryTable = ({ categories, onEdit, onDelete, onAddSubcategory, loading, error }) => {
     const { isMobile } = useBreakpoints();
     if (loading) {
         return <CategoryTableSkeleton />;
@@ -89,6 +89,11 @@ const CategoryTable = ({ categories, onEdit, onDelete, loading, error }) => {
                         icon: <Pencil size={14} />,
                         text: 'Editar',
                         handler: () => onEdit(category)
+                    },
+                    {
+                        icon: <Pencil size={14} />,
+                        text: 'Adicionar subcategoria',
+                        handler: () => onAddSubcategory(category)
                     },
                     {
                         icon: <Trash2 size={14} />,
