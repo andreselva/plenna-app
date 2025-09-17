@@ -10,8 +10,8 @@ import Loader from '../Loader/Loader';
 const RECEITA_COLOR = '#28a745';
 const DESPESA_COLOR = '#dc3545';
 
-const SUCCESS_FLASH_MS = 3000; 
-const FADE_MS = 600;           
+const SUCCESS_FLASH_MS = 500; 
+const FADE_MS = 300;           
 
 export default function SubcategorySidebar({
   isOpen,
