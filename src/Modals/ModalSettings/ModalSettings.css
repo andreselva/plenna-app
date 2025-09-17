@@ -1,0 +1,26 @@
+.settings-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.settings-item {
+    padding: 10px 14px;
+    background: none;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    cursor: pointer;
+    color: #333;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 2px;
+}
+
+.settings-item:hover {
+    background-color: var(--cor-global-button);
+    color: #fff;
+}

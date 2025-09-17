@@ -1,5 +1,5 @@
 import './Sidebar.css';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../Auth/Context/AuthContext';
 import avatarUrl from '../../assets/avatar-padrao.svg';
@@ -18,6 +18,8 @@ import {
     X
 } from 'lucide-react';
 import { useBreakpoints } from '../../Hooks/useMediaQuery/useBreakpoints';
+import ModalSettings from '../../Modals/ModalSettings/ModalSettings';
+import { Role } from '../../enum/roles.enum';
 
 const SidebarItem = ({ as: Component = Link, icon, text, active, ...props }) => {
     return (
@@ -30,24 +32,32 @@ const SidebarItem = ({ as: Component = Link, icon, text, active, ...props }) => 
         </Component>
     );
 };
-const navItems = [
-    { icon: <LayoutDashboard />, text: 'Dashboard', to: '/dashboard' },
-    { icon: <BriefcaseBusiness />, text: 'Categorias', to: '/categories' },
-    { icon: <BanknoteArrowDown />, text: 'Despesas', to: '/expenses' },
-    { icon: <BanknoteArrowUp />, text: 'Receitas', to: '/revenues' },
-    { icon: <Landmark />, text: 'Contas Bancárias', to: '/bank-accounts' },
-    { icon: <CreditCard />, text: 'Faturas', to: '/invoices' },
-    { icon: <FileSpreadsheet />, text: 'Relatórios', to: '/reports' }
-];
 
+const navItems = [
+    { icon: <LayoutDashboard />, text: 'Dashboard', to: '/dashboard', roles: [Role.ADMIN, Role.NORMAL_USER] },
+    { icon: <BriefcaseBusiness />, text: 'Categorias', to: '/categories', roles: [Role.ADMIN, Role.NORMAL_USER] },
+    { icon: <BanknoteArrowDown />, text: 'Despesas', to: '/expenses', roles: [Role.ADMIN, Role.NORMAL_USER] },
+    { icon: <BanknoteArrowUp />, text: 'Receitas', to: '/revenues', roles: [Role.ADMIN, Role.NORMAL_USER] },
+    { icon: <Landmark />, text: 'Contas Bancárias', to: '/bank-accounts', roles: [Role.ADMIN, Role.NORMAL_USER] },
+    { icon: <CreditCard />, text: 'Faturas', to: '/invoices', roles: [Role.ADMIN, Role.NORMAL_USER] },
+    { icon: <FileSpreadsheet />, text: 'Relatórios', to: '/reports', roles: [Role.ADMIN, Role.NORMAL_USER] }
+];
 
 const Sidebar = () => {
     const [isCollapsed, setIsCollapsed] = useState(false);
     const [isMobileOpen, setIsMobileOpen] = useState(false);
-    const { logout } = useAuth();
+    const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+    const { user: currentUser, logout } = useAuth();
     const navigate = useNavigate();
     const { isMobile, isTablet } = useBreakpoints();
     const location = useLocation();
+
+    const defineName = (nameUser) => {
+        if (!nameUser) return 'Olá';
+        return `Olá, ${nameUser.trim().split(' ')[0]}`;
+    }
+    
+    const stringNameUser = currentUser.name ? defineName(currentUser.name) : '';
 
     const handleLogout = () => {
         logout();
@@ -86,10 +96,15 @@ const Sidebar = () => {
                     <div className='profile-picture'>
                         <img src={avatarUrl} alt="Foto de perfil" />
                     </div>
+                    <div className='profile-name'>
+                        {stringNameUser}
+                    </div>
                 </div>
 
                 <nav className="Sidebar-nav">
-                    {navItems.map((item) => (
+                    {navItems.filter(
+                        item => item.roles.includes(currentUser.role)
+                    ).map((item) => (
                         <SidebarItem 
                             key={item.text} 
                             icon={item.icon} 
@@ -101,19 +116,20 @@ const Sidebar = () => {
                 </nav>
 
                 <div className='Sidebar-footer'>
-                    <SidebarItem 
-                        icon={<Bolt />} 
-                        text="Configurações" 
-                        to="/settings" 
+                    {currentUser.role === Role.ADMIN && (<SidebarItem
+                        icon={<Bolt />}
+                        text="Configurações"
+                        onClick={() => setIsSettingsOpen(true)}
+                    />)}
+                    <SidebarItem
+                        icon={<LogOut />}
+                        text="Logout"
+                        to="/login"
+                        onClick={handleLogout}
                     />
-                    <SidebarItem 
-                        icon={<LogOut />} 
-                        text="Logout" 
-                        to="/login" 
-                        onClick={handleLogout} 
-                    />
-                </div>   
+                </div>
             </div>
+            <ModalSettings isOpen={isSettingsOpen} onClose={() => setIsSettingsOpen(false)} />
         </>
     );
 };

@@ -36,6 +36,7 @@
     flex-direction: column;
     max-width: 90vw;
     max-height: 90vh;
+    font-family: 'Inter', sans-serif;
 }
 
 .modal-title {
@@ -98,8 +99,8 @@
 .form-group input:focus,
 .form-group select:focus {
     outline: none;
-    border-color: #007bff;
-    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(119, 72, 206, 0.25);
 }
 
 .modal-buttons {
@@ -121,12 +122,12 @@
 }
 
 .btn-primary {
-    background-color: #007bff;
+    background-color: var(--cor-global-button);
     color: white;
 }
 
 .btn-primary:hover {
-    background-color: #0056b3;
+    background-color: var(--cor-global-button-hover);
 }
 
 .btn-secondary {
@@ -155,7 +156,7 @@ textarea {
 input:focus,
 select:focus,
 textarea:focus {
-    border-color: #4CAF50;
+    border-color: var(--primary-color);
     outline: none;
 }
 

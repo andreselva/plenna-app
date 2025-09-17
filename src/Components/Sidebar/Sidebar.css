@@ -67,6 +67,7 @@
     padding-bottom: 15px;
     border-bottom: 1px solid #555;
     transition: justify-content 0.35s ease, border-color 0.35s ease;
+    gap: 10px;
 }
 
 .profile-picture {
@@ -81,6 +82,12 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
+}
+
+.profile-name {
+  opacity: 0.8;
+  width: auto;
+  transition: opacity 0.15s ease, width 0.25s ease;
 }
 
 .Sidebar-footer {   
@@ -161,6 +168,20 @@
 .Sidebar-item.active {
     background-color: #7748ce;
 }
+
+.Sidebar.collapsed .Sidebar-title {
+    gap: 0px;
+}
+
+.Sidebar.collapsed .profile-name {
+  opacity: 0;
+  width: 0;
+  margin: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  transition: opacity 0.15s ease, width 0.25s ease;
+}
+
 
 @media (max-width: 992px) {
     .sidebar-overlay {
