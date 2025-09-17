@@ -1,4 +1,3 @@
-// pages/Management/Users.jsx
 import { useState } from 'react';
 import globalStyles from '../../Styles/GlobalStyles.module.css';
 import styles from './Users.module.css';
