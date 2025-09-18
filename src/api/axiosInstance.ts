@@ -5,15 +5,15 @@ import axios, {
 import refreshInstance from "./refreshInstance";
 import { fetchUser } from "../Utils/AuthUtils";
 import { setUserGlobally } from "../Auth/Context/AuthState";
+import {
+  CSRF_COOKIE_NAME,
+  CSRF_HEADER_NAME,
+  ensureCsrfHeader,
+} from "./csrf";
 
 interface RetryableConfig extends InternalAxiosRequestConfig {
   _retry?: boolean;
 }
-
-const readCsrfFromCookie = (): string | null => {
-  const m = document.cookie.match(/(?:^|;\s*)csrf_token=([^;]*)/);
-  return m ? decodeURIComponent(m[1]) : null;
-};
 
 const mustSendCsrf = (config: InternalAxiosRequestConfig): boolean => {
   const method = (config.method || "get").toLowerCase();
@@ -26,17 +26,14 @@ const mustSendCsrf = (config: InternalAxiosRequestConfig): boolean => {
 const axiosInstance = axios.create({
   baseURL: import.meta.env.VITE_API_URL || "http://localhost:8001",
   withCredentials: true,
-  xsrfCookieName: "csrf_token",
-  xsrfHeaderName: "X-CSRF-Token",
+  xsrfCookieName: CSRF_COOKIE_NAME,
+  xsrfHeaderName: CSRF_HEADER_NAME,
 });
 
 axiosInstance.interceptors.request.use((config: RetryableConfig) => {
   if (mustSendCsrf(config)) {
     const headers = (config.headers = AxiosHeaders.from(config.headers));
-    if (!headers.has("X-CSRF-Token")) {
-      const token = readCsrfFromCookie();
-      if (token) headers.set("X-CSRF-Token", token);
-    }
+    ensureCsrfHeader(headers);
   }
   return config;
 });
