@@ -222,8 +222,8 @@
         z-index: 1001;
         opacity: 1 !important;
         pointer-events: auto !important;
-        right: -40px;
-        top: 70px;
+        right: -35px;
+        top: 15px;
     }
 
     .Sidebar.collapsed {
