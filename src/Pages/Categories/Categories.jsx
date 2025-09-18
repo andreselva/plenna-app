@@ -6,6 +6,8 @@ import { useEffect, useRef, useState } from "react";
 import SearchInput from "../../Components/Filters/SearchInput";
 import FilterDropdown from "../../Components/Filters/FilterDropdown";
 import { FilterIcon } from "lucide-react";
+import ModalSubcategories from "../../Modals/ModalCategories/ModalSubcategories";
+import SubcategorySidebar from "../../Components/Sidebar/SubcategorySidebar";
 
 const Categories = () => {
     const { 
@@ -23,8 +25,19 @@ const Categories = () => {
         handleEditCategory, 
         handleSaveCategory, 
         handleDeleteCategory,
+        handleAddSubcategory,
         loading,
-        error
+        error,
+        setCategoryKind,
+        isModalSubcategoryOpen,
+        setIsModalSubcategoryOpen,
+        parentCategory,  
+        openSubSidebar,
+        closeSubSidebar,
+        isSubSidebarOpen,
+        sidebarCategory,
+        handleUpdateSubcategory,
+        handleDeleteSubcategory,
     } = useCategoryHandler();
 
     const [filteredCategories, setFilteredCategories] = useState(categories);
@@ -103,6 +116,8 @@ const Categories = () => {
                         categories={filteredCategories}
                         onEdit={handleEditCategory}
                         onDelete={handleDeleteCategory}
+                        onAddSubcategory={handleAddSubcategory}
+                        onViewSubcategories={openSubSidebar}
                         loading={loading}
                         error={error}
                     />
@@ -121,8 +136,31 @@ const Categories = () => {
                     setCategoryColor={setCategoryColor}
                     setEditingCategory={setEditingCategory}
                     editingCategory={editingCategory}
+                    setCategoryKind={setCategoryKind}
                 />
             )}
+
+            {isModalSubcategoryOpen && (
+                <ModalSubcategories
+                setIsModalOpen={setIsModalSubcategoryOpen}
+                onSubmit={handleSaveCategory}
+                newCategory={newCategory}
+                setNewCategory={setNewCategory}
+                categoryColor={categoryColor}
+                setCategoryColor={setCategoryColor}
+                parentCategory={parentCategory}
+                />
+            )}
+
+            <SubcategorySidebar
+                isOpen={isSubSidebarOpen}
+                onClose={closeSubSidebar}
+                parentCategory={sidebarCategory}
+                onUpdateSubcategory={handleUpdateSubcategory}
+                onDeleteSubcategory={handleDeleteSubcategory}
+                loading={loading}
+            />
+            
         </div>
     );
 };

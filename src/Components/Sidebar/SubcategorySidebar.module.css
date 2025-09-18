@@ -1,0 +1,75 @@
+/* Overlay que cobre a tela e ancora o sidebar à direita */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.35);
+  display: flex;
+  justify-content: flex-end;
+  z-index: 2000;
+}
+
+/* Container do sidebar */
+.sidebar {
+  position: relative;
+  width: 550px;
+  max-width: 92vw;
+  height: 100vh;
+  background: #fff;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+  padding: 20px;
+  overflow: auto;
+}
+
+/* Header do sidebar */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.headerLeft {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.parentName {
+  margin: 0;
+  font-size: 16px;
+}
+
+/* Cabeçalho da lista */
+.listHeader {
+  display: flex;
+  font-weight: 600;
+  opacity: 0.85;
+  padding: 8px 4px;
+  border-bottom: 1px solid #eee;
+}
+
+/* Linha da subcategoria */
+.row {
+  display: flex;
+  align-items: center;
+  padding: 12px 4px;
+  border-bottom: 1px solid #f0f0f0;
+  background-color: transparent;
+  transition: background-color 600ms ease-in-out; /* FADE_MS */
+  will-change: background-color;
+}
+
+/* Destaque de sucesso (verde leve) */
+.rowHighlight {
+  background-color: rgba(40, 167, 69, 0.18); /* SUCCESS_FLASH_MS */
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

@@ -4,10 +4,10 @@ import { FlexibleTable } from '../../Components/FlexibleTable/FlexibleTable';
 import { ActionDropdown } from '../../Components/ActionDropdown/ActionDropdown';
 import { CategoryTableSkeleton } from './CategoryTableSkeleton';
 import { darkenHexColor } from '../../Utils/DarkenColor';
-import { Pencil, Trash2 } from 'lucide-react';
+import { Eye, Pencil, Trash2 } from 'lucide-react';
 import { useBreakpoints } from '../../Hooks/useMediaQuery/useBreakpoints';
 
-const CategoryTable = ({ categories, onEdit, onDelete, loading, error }) => {
+const CategoryTable = ({ categories, onEdit, onDelete, onAddSubcategory, onViewSubcategories, loading, error }) => {
     const { isMobile } = useBreakpoints();
     if (loading) {
         return <CategoryTableSkeleton />;
@@ -23,7 +23,7 @@ const CategoryTable = ({ categories, onEdit, onDelete, loading, error }) => {
     const RECEITA_COLOR = '#28a745';
     const DESPESA_COLOR = '#dc3545';
 
-    const columns = [
+    let columns = [
         {
             header: 'Nome da Categoria',
             style: { flex: '0 0 50%', display: 'flex', justifyContent: 'center'} ,
@@ -80,32 +80,44 @@ const CategoryTable = ({ categories, onEdit, onDelete, loading, error }) => {
                 );
             }
         },
+    ];
+
+    if (!isMobile) {
+        columns.push(
+            {
+                header: 'Subcategorias',
+                style: { flex: '0 0 10%', display:'flex', justifyContent: 'center'},
+                renderCell: (category) => {
+                    return (
+                        <span>
+                            {category.subcategories?.length ?? 0}
+                        </span>
+                    );
+                }
+            },
+        )
+    }
+
+    columns.push(
         {
             header: 'Ações',
-            style: { flex: '0 0 30%', display:'flex', justifyContent: 'center'},
+            style: { flex: '0 0 20%', display:'flex', justifyContent: 'center'},
             renderCell: (category) => {
                 let categoryActions = [
-                    {
-                        icon: <Pencil size={14} />,
-                        text: 'Editar',
-                        handler: () => onEdit(category)
-                    },
-                    {
-                        icon: <Trash2 size={14} />,
-                        text: 'Excluir',
-                        handler: () => handleDelete(category.id)
-                    }
+                    { icon: <Pencil size={14} />, text: 'Editar', handler: () => onEdit(category) },
+                    { icon: <Pencil size={14} />, text: 'Adicionar subcategoria', handler: () => onAddSubcategory(category) },
+                    { icon: <Eye size={14} />, text: 'Visualizar subcategorias', handler: () => onViewSubcategories(category) },
+                    { icon: <Trash2 size={14} />, text: 'Excluir', handler: () => handleDelete(category.id) }
                 ];
-
+    
                 return (
                     <ActionDropdown
                         actions={categoryActions}
                     />
                 )
-            }
-            
+            }   
         }
-    ];
+    );
 
     return (
         <FlexibleTable

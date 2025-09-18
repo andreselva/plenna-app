@@ -40,7 +40,7 @@ const Expenses = () => {
         handleDeleteExpense, accounts, selectedCard, setSelectedCard, installments, setInstallments, typeOfInstallment, setTypeOfInstallment,
         hasInstallments, setHasInstallments, hasSourceAccountId, setBooleanSourceAccountId, idExpense, setIdExpense, linkToInvoice, setLinkToInvoice,
         idInvoice, setIdInvoice, status, setStatus, optionsStatus, handleRegisterPayment, isPaymentModalOpen, setIsPaymentModalOpen, loading, error,
-        refetch
+        refetch, selectedSubcategory, setSelectedSubcategory
     } = useExpenseHandler(formattedPeriod);
 
     const [selectedExpense, setSelectedExpense] = useState(null);
@@ -199,6 +199,8 @@ const Expenses = () => {
                     categories={categories}
                     selectedCategory={selectedCategory}
                     setSelectedCategory={setSelectedCategory}
+                    selectedSubcategory={selectedSubcategory}
+                    setSelectedSubcategory={setSelectedSubcategory}
                     setEditingExpense={setEditingExpense}
                     creditCards={accounts}
                     selectedCard={selectedCard}

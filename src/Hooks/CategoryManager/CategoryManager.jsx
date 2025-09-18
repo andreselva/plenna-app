@@ -40,7 +40,7 @@ export const CategoryManager = () => {
         try {
             const { data: response, status } = await axiosInstance.post(endpoint, category);
             if (response && status >= 200 && status <= 204) {
-                setCategories((prev) => [...prev, response.payload.category]);
+                setCategories(response.payload.categories);
                 AlertToast({icon: 'success', title: 'Categoria criada com sucesso.'});
                 return;
             }
@@ -58,10 +58,10 @@ export const CategoryManager = () => {
         setLoading(true);
         try {
             const { data: response, status } = await axiosInstance.delete(`${endpoint}/${id}`);
-            if (response.payload.success && status >= 200 && status <= 204) {
-                setCategories((prev) => prev.filter((category) => category.id !== id));
+            if (response && status >= 200 && status <= 204) {
+                setCategories(response.payload.categories);
                 AlertToast({ icon: 'success', title: 'Categoria excluída com sucesso' });
-                return;
+                return true;
             }
             throw new Error(`Erro não identificado ao atualizar categoria.`)
         } catch (err) {
@@ -78,13 +78,9 @@ export const CategoryManager = () => {
             setLoading(true);
             const { data: response, status } = await axiosInstance.put(`${endpoint}/${id}`, updatedCategory);
             if (response && status >= 200 && status <= 204) {
-                setCategories((prev) =>
-                    prev.map((category) =>
-                        category.id === id ? { ...category, ...response.payload.category } : category
-                    )
-                );
+                setCategories(response.payload.categories);
                 AlertToast({ icon: 'success', title: `Categoria atualizada com sucesso.` });
-                return;
+                return true;
             }
             throw new Error(`Erro não identificado ao atualizar categoria.`)
         } catch (err) {
