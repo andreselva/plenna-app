@@ -6,6 +6,7 @@ import { optionsStatus } from '../Types/status.options';
 
 export const useExpenseForm = ({ addExpense, updateExpense, deleteExpense, registerPayment, categories, accounts }) => {
     const [selectedCategory, setSelectedCategory] = useState('');
+    const [selectedSubcategory, setSelectedSubcategory] = useState('');
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingExpense, setEditingExpense] = useState('');
     const [newExpense, setNewExpense] = useState('');
@@ -45,6 +46,7 @@ export const useExpenseForm = ({ addExpense, updateExpense, deleteExpense, regis
         setSelectedCard('');
         setSourceAccountId('');
         setIdExpense(0);
+        setSelectedSubcategory('');
     };
 
     const handleAddExpense = () => {
@@ -59,6 +61,7 @@ export const useExpenseForm = ({ addExpense, updateExpense, deleteExpense, regis
             value: Number(expenseValue),
             invoiceDueDate: expenseInvoiceDueDate,
             idCategory: selectedCategory === '' ? 0 : Number(selectedCategory),
+            idSubcategory: selectedSubcategory === '' ? 0 : Number(selectedSubcategory),
             idCreditCard: selectedCard === '' ? 0 : Number(selectedCard),
             installments: installments === '' ? 0 : Number(installments),
             typeOfInstallment: typeOfInstallment,
@@ -79,6 +82,7 @@ export const useExpenseForm = ({ addExpense, updateExpense, deleteExpense, regis
         setExpenseValue(expense.value);
         setExpenseInvoiceDueDate(expense.invoiceDueDate);
         setSelectedCategory(expense.idCategory);
+        setSelectedSubcategory(expense.idSubcategory)
         setSelectedCard(expense.idCreditCard);
         setInstallments(expense.installments);
         setTypeOfInstallment(expense.typeOfInstallment);
@@ -120,7 +124,8 @@ export const useExpenseForm = ({ addExpense, updateExpense, deleteExpense, regis
             sourceAccountId: Number(sourceAccountId) ?? 0,
             linkToInvoice: linkToInvoice,
             idInvoice: Number(idInvoice) ?? 0,
-            status: status
+            status: status,
+            idSubcategory: Number(selectedSubcategory) ?? 0
         };
 
         let updateInstallmentsFlag = updateInstallments;
@@ -174,6 +179,11 @@ export const useExpenseForm = ({ addExpense, updateExpense, deleteExpense, regis
     }
 
     return {
-        categories, accounts, newExpense, setNewExpense, expenseDescription, setExpenseDescription, expenseValue, setExpenseValue, expenseInvoiceDueDate, setExpenseInvoiceDueDate, selectedCategory, setSelectedCategory, isModalOpen, setIsModalOpen, isModalCardOpen, setIsModalCardOpen, editingExpense, setEditingExpense, handleAddExpense, handleEditExpense, handleSaveExpense, handleDeleteExpense, handleAddCard, selectedCard, setSelectedCard, installments, setInstallments, typeOfInstallment, setTypeOfInstallment, hasInstallments, setHasInstallments, hasSourceAccountId, setBooleanSourceAccountId, idExpense, setIdExpense, linkToInvoice, setLinkToInvoice, idInvoice, setIdInvoice, status, setStatus, optionsStatus, handleRegisterPayment, isPaymentModalOpen, setIsPaymentModalOpen, paymentDate, setPaymentDate
+        categories, accounts, newExpense, setNewExpense, expenseDescription, setExpenseDescription, expenseValue, setExpenseValue, expenseInvoiceDueDate, 
+        setExpenseInvoiceDueDate, selectedCategory, setSelectedCategory, isModalOpen, setIsModalOpen, isModalCardOpen, setIsModalCardOpen, editingExpense, 
+        setEditingExpense, handleAddExpense, handleEditExpense, handleSaveExpense, handleDeleteExpense, handleAddCard, selectedCard, setSelectedCard, 
+        installments, setInstallments, typeOfInstallment, setTypeOfInstallment, hasInstallments, setHasInstallments, hasSourceAccountId, 
+        setBooleanSourceAccountId, idExpense, setIdExpense, linkToInvoice, setLinkToInvoice, idInvoice, setIdInvoice, status, setStatus, optionsStatus, 
+        handleRegisterPayment, isPaymentModalOpen, setIsPaymentModalOpen, paymentDate, setPaymentDate, selectedSubcategory, setSelectedSubcategory
     };
 };

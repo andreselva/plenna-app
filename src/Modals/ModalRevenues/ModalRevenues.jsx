@@ -183,7 +183,7 @@ const ModalRevenues = ({
     return (
         <GenericModal
             isOpen={true}
-            title={idRevenue > 0 ? "Editar Receita" : "Cadastrar Receita"}
+            title={idRevenue > 0 ? "Editar receita" : "Cadastrar receita"}
             formFields={formFields}
             onSubmit={handleAddRevenue}
             onCancel={handleCancel}

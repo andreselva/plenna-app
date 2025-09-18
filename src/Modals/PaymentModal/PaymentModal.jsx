@@ -28,7 +28,7 @@ export const PaymentModal = ({
 
     const handleSubmit = async () => {
         const result = await AlertConfirm({
-            title: 'Registrar Pagamento',
+            title: 'Registrar pagamento',
             text: `Você está pagando R$ ${amountValue} dessa ${typeLabel.toLowerCase()}. Você confirma o pagamento?`,
             icon: 'warning',
             confirmButtonText: 'Pagar',
@@ -60,21 +60,21 @@ export const PaymentModal = ({
                     disabled: true
                 },
                 {
-                    label: "Valor Total (R$)",
+                    label: "Valor total (R$)",
                     name: "totalValue",
                     value: payableItem.value.toFixed(2),
                     readOnly: true,
                     disabled: true
                 },
                 {
-                    label: "Valor já Pago (R$)",
+                    label: "Valor já pago (R$)",
                     name: "totalPaid",
                     value: newTotalPaid.toFixed(2),
                     readOnly: true,
                     disabled: true
                 },
                 {
-                    label: "Valor Restante (R$)",
+                    label: "Valor restante (R$)",
                     name: "remainingToPay",
                     value: remainingToPay.toFixed(2),
                     readOnly: true,
@@ -86,7 +86,7 @@ export const PaymentModal = ({
             title: 'Pagamento',
             fields: [
                 {
-                    label: "Valor do Pagamento",
+                    label: "Valor do pagamento",
                     name: "amount",
                     value: amountValue,
                     onChange: setAmountValue,
@@ -94,7 +94,7 @@ export const PaymentModal = ({
                     required: true,
                 },
                 {
-                    label: "Data do Pagamento",
+                    label: "Data do pagamento",
                     name: "date",
                     value: paymentDate,
                     onChange: setPaymentDate,
@@ -113,7 +113,7 @@ export const PaymentModal = ({
             formFields={formFields}
             onSubmit={handleSubmit}
             onCancel={handleCancel}
-            submitButtonText="Registrar Pagamento"
+            submitButtonText="Registrar pagamento"
             width="700px"
             height="auto"
         />

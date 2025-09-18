@@ -79,7 +79,7 @@ const ModalCategories = ({
   return (
     <GenericModal
       isOpen={true}
-      title={editingCategory ? 'Editar Categoria' : 'Cadastrar Categoria'}
+      title={editingCategory ? 'Editar categoria' : 'Cadastrar categoria'}
       formFields={formFields}
       onSubmit={handleAddCategory}
       onCancel={handleCancel}
