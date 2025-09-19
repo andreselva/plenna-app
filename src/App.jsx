@@ -10,10 +10,11 @@ import Signin from './Pages/Signin/Signin';
 import PrivateRoute from './Auth/PrivateRoute';
 import Invoices from './Pages/Invoices/Invoices';
 import NotFound from './Pages/NotFound/NotFound';
-import { AuthProvider, useAuth } from './Auth/Context/AuthContext';
+import { useAuth } from './Auth/Context/AuthContext';
 import Reports from './Pages/Reports/Reports';
 import FinancialSummary from './Pages/Reports/FinancialSummary';
 import Users from './Pages/Users/Users';
+import Appointments from './Pages/Appointments/Appointments';
 
 const AppContent = () => {
     const location = useLocation();
@@ -36,6 +37,7 @@ const AppContent = () => {
                     <Route path="/users" element={<PrivateRoute><Users /></PrivateRoute>} />
                     <Route path="/reports" element={<PrivateRoute><Reports /></PrivateRoute>} />
                     <Route path="/reports/financial-summary" element={<PrivateRoute><FinancialSummary/></PrivateRoute>} />
+                    <Route path="/appointments" element={<PrivateRoute><Appointments/></PrivateRoute>} />
                 <Route path="*" element={<NotFound />} />
                 </Routes>
             </div>
