@@ -113,7 +113,6 @@ const useAppointmentsManager = () => {
       const payload = {
         isActive,
         config: buildConfig(recurrence, tz),
-        recurrence,
       };
 
       const { data: response, status } = await axiosInstance.put(

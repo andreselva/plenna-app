@@ -85,6 +85,12 @@ const Appointments = () => {
     setRecurrence((prev) => ({ ...prev, [appointment.id]: rec }));
 
     if (appointment.isActive) {
+      const resultConfirm = await AlertConfirm({
+        title: 'Alterar recorrência',
+        text: 'Deseja realmente alterar a recorrência do agendamento?',
+        confirmButtonText: 'Sim, alterar',
+        cancelButtonText: 'Não alterar' 
+      })
       const ok = await updateAppointmentRecurrence({
         id: appointment.id,
         recurrence: rec,
