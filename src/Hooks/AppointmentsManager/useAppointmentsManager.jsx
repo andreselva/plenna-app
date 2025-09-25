@@ -80,6 +80,8 @@ const useAppointmentsManager = () => {
       const payload = {
         isActive,
         config: buildConfig(recurrence, tz),
+        recurrence: recurrence,
+        timezone: tz
       };
 
       const { data: response, status } = await axiosInstance.put(
@@ -113,6 +115,8 @@ const useAppointmentsManager = () => {
       const payload = {
         isActive,
         config: buildConfig(recurrence, tz),
+        recurrence: recurrence,
+        timezone: tz
       };
 
       const { data: response, status } = await axiosInstance.put(
