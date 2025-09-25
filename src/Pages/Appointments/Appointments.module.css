@@ -1,0 +1,259 @@
+:root {
+  --actions-w: 56px;
+  --actions-pad: 8px;
+  --actions-gap: 10px;
+  --icon-size: 32px;
+}
+
+/* GRID */
+.AppointmentsGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+/* WRAPPER (corrigido: sempre use o mesmo nome) */
+.appointmentsCardWrapper {
+  position: relative;
+  min-width: 450px;
+  height: 150px;
+}
+
+/* RAIL DE AÇÕES */
+.cardActions {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: var(--actions-w);
+  height: 100%;
+  background: var(--card-r-bc);
+  border-left: 1px solid #ddd;
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
+  box-shadow: -2px 0 8px rgba(0,0,0,0.06);
+
+  padding: var(--actions-pad);
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--actions-gap);
+
+  transform: translateX(100%);
+  opacity: 0;
+  pointer-events: none;
+  transition: transform 0.18s ease-out, opacity 0.18s ease-out;
+  z-index: 2;
+}
+
+.cardActions::before {
+  content: "";
+  position: absolute;
+  left: -12px;
+  top: 0;
+  width: 12px;
+  height: 100%;
+  pointer-events: none;
+  background: linear-gradient(to left, rgba(0,0,0,0.06), rgba(0,0,0,0));
+  border-top-left-radius: 8px;
+  border-bottom-left-radius: 8px;
+  z-index: -1;
+}
+
+/* HOVER/FOCUS DO WRAPPER (corrigido o seletor) */
+.appointmentsCardWrapper:hover .cardActions,
+.appointmentsCardWrapper:focus-within .cardActions {
+  transform: translateX(0);
+  opacity: 1;
+  pointer-events: all;
+}
+
+/* CARD */
+.appointmentCard {
+  position: absolute;
+  inset: 0;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 16px;
+  background-color: var(--card-r-bc);
+  box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  cursor: pointer;
+  font-family: 'Roboto', sans-serif;
+  z-index: 1;
+
+  text-align: left;
+}
+
+.appointmentCard h3 {
+  margin-top: 0;
+  margin-bottom: 6px;
+  font-size: 1.05rem;
+  line-height: 1.1;
+}
+
+.description {
+  margin: 0 0 8px 0;
+  font-size: 0.9rem;
+  opacity: 0.85;
+}
+
+/* BUBBLE DO ÍCONE */
+.iconBubble {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  border: 1px solid #e7e7e7;
+  background: #fff;
+  flex: 0 0 auto;
+}
+
+/* COLUNA DE TEXTO/CONTROLES */
+.cardInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+/* LINHA DE CONTROLES */
+.controlsRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: auto;
+}
+
+/* STATUS CHIP */
+.statusChip {
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: 999px;
+  border: 1px solid #e6e6e6;
+  background: #fff;
+  line-height: 1;
+}
+
+.statusChip[data-active="true"] {
+  border-color: #dcdcff;
+  background: #f7f7ff;
+}
+
+/* RECORRÊNCIA */
+.recurrenceGroup {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.recurrenceLabel {
+  font-size: 12px;
+  opacity: 0.8;
+}
+
+.recurrenceSelect {
+  border: 1px solid #e1e1e1;
+  border-radius: 8px;
+  padding: 6px 8px;
+  background: #fff;
+  font-size: 12px;
+}
+
+/* TOGGLE */
+.toggle {
+  position: relative;
+  width: 42px;
+  height: 24px;
+  display: inline-block;
+}
+
+.toggle input {
+  display: none;
+}
+
+.slider {
+  position: absolute;
+  inset: 0;
+  background: #ddd;
+  border-radius: 999px;
+  transition: background 0.15s ease;
+}
+
+.slider::after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 18px;
+  height: 18px;
+  background: #fff;
+  border-radius: 50%;
+  transition: transform 0.15s ease;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.12);
+}
+
+.toggle input:checked + .slider {
+  background: #6b6bf0;
+}
+
+.toggle input:checked + .slider::after {
+  transform: translateX(18px);
+}
+
+/* BOTÕES DA RAIL */
+.iconButton {
+  width: var(--icon-size);
+  height: var(--icon-size);
+  border-radius: 10px;
+  border: 1px solid #e6e6e6;
+  background: white;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: transform 0.12s ease-out, background 0.12s ease-out, border-color 0.12s ease-out;
+}
+
+.iconButton:hover {
+  transform: translateY(-1px);
+  background: #f7f7ff;
+  border-color: #dcdcff;
+}
+
+.iconButton:active {
+  transform: translateY(0);
+}
+
+.iconButton svg {
+  display: block;
+}
+
+.iconButton:focus-visible {
+  outline: 2px solid #6b6bf0;
+  outline-offset: 2px;
+}
+
+.danger {
+  border-color: #ffe1e1;
+}
+.danger:hover {
+  background: #fff5f5;
+  border-color: #ffcdcd;
+}
+
+/* MOBILE: deixa a rail sempre visível */
+@media (hover: none) and (pointer: coarse) {
+  .cardActions {
+    transform: translateX(0);
+    opacity: 1;
+    pointer-events: all;
+    --actions-pad: 10px;
+    --icon-size: 34px;  
+  }
+}

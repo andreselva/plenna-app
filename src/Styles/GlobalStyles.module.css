@@ -341,19 +341,7 @@
     border-bottom: none;
 }
 
-.card-reports {
-    border-radius: 10px;
-    width: 95rem;
-    height: 85vh;
-    overflow-y: auto;
-    position: relative;
-    min-height: 200px;
-    background-color: none;
-    overflow-x: hidden;
-    padding-top: 10px;
-}
-
-.card-users {
+.card-reports, .card-users, .card-appointments {
     border-radius: 10px;
     width: 95rem;
     height: 85vh;

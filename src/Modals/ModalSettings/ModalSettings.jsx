@@ -1,10 +1,11 @@
 import { useNavigate } from 'react-router-dom';
 import GenericModal from '../../Components/GenericModal/GenericModal';
 import './ModalSettings.css';
-import { User } from 'lucide-react';
+import { AlarmClock, User } from 'lucide-react';
 
 const settingsOptions = [
-    { label: 'Usuários', path: '/users', icon: <User size={18} /> }
+    { label: 'Usuários', path: '/users', icon: <User size={18} /> },
+    { label: 'Agendamentos', path: '/appointments', icon: <AlarmClock size={18} />}
 ];
 
 const ModalSettings = ({ isOpen, onClose }) => {
