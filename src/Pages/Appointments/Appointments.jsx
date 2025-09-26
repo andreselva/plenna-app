@@ -5,6 +5,7 @@ import useAppointmentsManager from '../../Hooks/AppointmentsManager/useAppointme
 import AlertConfirm from '../../Components/Alerts/AlertConfirm';
 import AlertToast from '../../Components/Alerts/AlertToast';
 import { Recurrence } from '../../enum/recurrence.enum';
+import Loader from '../../Components/Loader/Loader';
 
 const RECURRENCE_OPTIONS = [
   { value: Recurrence.EVERY_15_MIN, label: 'A cada 15 minutos' },
@@ -119,6 +120,9 @@ const Appointments = () => {
         </div>
 
         <div className={globalStyles['card-appointments']}>
+          {loading && (
+            <Loader />
+          )}
           <div className={styles.AppointmentsGrid}>
             {(appointments ?? []).map((appointment) => {
               const isEnabled = Boolean(appointment.isActive);
@@ -193,12 +197,6 @@ const Appointments = () => {
               );
             })}
           </div>
-
-          {loading && (
-            <div className={styles.loadingOverlay}>
-              <span>Carregando…</span>
-            </div>
-          )}
         </div>
       </div>
     </div>
