@@ -33,16 +33,6 @@ const SidebarItem = ({ as: Component = Link, icon, text, active, ...props }) => 
   );
 };
 
-const SIDEBAR_MODULE_NAMES = new Set([
-  'dashboards',
-  'categories',
-  'expenses',
-  'revenues',
-  'bankAccounts',
-  'invoices',
-  'reports',
-]);
-
 const moduleUi = {
   dashboards: { label: 'Dashboard', icon: <LayoutDashboard /> },
   categories: { label: 'Categorias', icon: <BriefcaseBusiness /> },
@@ -59,18 +49,16 @@ function buildNavItemsFromTree(modulesTree = []) {
   const items = [];
 
   const walk = (node) => {
-    const isAllowedInSidebar = SIDEBAR_MODULE_NAMES.has(node?.name);
-
-    if (isAllowedInSidebar && node?.location) {
+    const isAllowedInSidebar = node.showInSidebar;
+    if (isAllowedInSidebar && node?.route) {
       const meta = moduleUi[node.name] || {};
       items.push({
-        key: node.id,
-        to: node.location,
+        key: node.key,
+        to: node.route,
         text: meta.label || node.description || node.name,
         icon: meta.icon || <FileSpreadsheet />,
       });
     }
-
     (node?.childrenModules || []).forEach(walk);
   };
 
@@ -132,10 +120,10 @@ const Sidebar = () => {
       try {
         setIsLoadingModules(true);
 
-        const { data: response } = await axiosInstance.get('/client-modules/navigation');
+        const { data: response } = await axiosInstance.get('/client-modules');
 
         if (cancelled) return;
-        setModulesTree(response?.payload?.modules ?? []);
+        setModulesTree(response?.payload?.modules.items ?? []);
       } catch {
         if (cancelled) return;
         setModulesTree([]);
