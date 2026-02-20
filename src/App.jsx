@@ -30,7 +30,6 @@ const AppContent = () => {
                 <Routes>
                     <Route path="/" element={<Navigate to="/dashboard" />} />
                     <Route path="/login" element={<Signin />} />
-
                     <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
                     <Route path="/categories" element={<PrivateRoute><Categories /></PrivateRoute>} />
                     <Route path="/expenses" element={<PrivateRoute><Expenses /></PrivateRoute>} />

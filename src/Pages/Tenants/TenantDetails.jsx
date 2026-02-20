@@ -21,9 +21,6 @@ function getSubRef(sub) {
   return sub?.id ?? sub?.name;
 }
 
-// ─── ModuleBlock fora do TenantDetails ───────────────────────────────────────
-// Definir dentro do componente pai faz o React recriar o tipo a cada render,
-// desmontando/remontando o DOM e quebrando o ExpandableRow e os checkboxes.
 const ModuleBlock = ({
   mod,
   openMap,
@@ -116,7 +113,6 @@ const ModuleBlock = ({
     </div>
   );
 };
-// ─────────────────────────────────────────────────────────────────────────────
 
 const EMPTY_FORM = {
   clientName: '',
@@ -162,7 +158,6 @@ const TenantDetails = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [form, setForm] = useState(EMPTY_FORM);
 
-  // ── Carrega os dados do tenant ─────────────────────────────────────────────
   useEffect(() => {
     const run = async () => {
       setLoading(true);
@@ -180,13 +175,11 @@ const TenantDetails = () => {
     run();
   }, [clientId]);
 
-  // ── Sincroniza o formulário quando o tenant chega ──────────────────────────
   useEffect(() => {
     if (!tenant) return;
     setForm(tenantToForm(tenant));
   }, [tenant]);
 
-  // ── Inicializa checkedMap a partir dos módulos ─────────────────────────────
   useEffect(() => {
     if (!modulesPayload || modulesPayload.length === 0) return;
 
@@ -209,10 +202,9 @@ const TenantDetails = () => {
     }
 
     setCheckedMap(next);
-    setOpenMap({}); // nenhuma seção abre automaticamente
+    setOpenMap({});
   }, [modulesPayload]);
 
-  // ── Campos de leitura da aba Cadastro ──────────────────────────────────────
   const tenantFields = useMemo(() => {
     if (!tenant) return [];
     return [
@@ -235,7 +227,6 @@ const TenantDetails = () => {
     ].filter((f) => f.value !== undefined);
   }, [tenant]);
 
-  // ── Handlers de módulos ────────────────────────────────────────────────────
   const toggleOpen = (moduleRef) => {
     setOpenMap((prev) => ({ ...prev, [moduleRef]: !prev[moduleRef] }));
   };
@@ -277,7 +268,6 @@ const TenantDetails = () => {
     });
   };
 
-  // ── Handlers do formulário de edição ──────────────────────────────────────
   const onChangeField = (key) => (e) => {
     setForm((prev) => ({ ...prev, [key]: e.target.value }));
   };
@@ -307,7 +297,6 @@ const TenantDetails = () => {
 
     console.log('Tenant update payload:', payload);
 
-    // TODO: plugar endpoint de update (ex: PATCH /saas/tenants/:id)
     AlertToast({
       icon: 'info',
       title: 'Payload pronto. Falta plugar endpoint de update.',
@@ -317,7 +306,6 @@ const TenantDetails = () => {
     setIsEditing(false);
   };
 
-  // ── Render ─────────────────────────────────────────────────────────────────
   if (loading) return <Loader />;
 
   return (
@@ -327,7 +315,7 @@ const TenantDetails = () => {
           <div className={globalStyles['content-title-items']}>
             <div className={globalStyles['content-title-items-left']}>
               <span className={globalStyles['title-items-span']}>
-                Tenant: {tenant?.clientName || tenant?.id}
+                Cliente: {tenant?.clientName || tenant?.id}
               </span>
             </div>
             <div className={globalStyles['content-title-items-right']}>
@@ -507,7 +495,6 @@ const TenantDetails = () => {
             </>
           )}
 
-          {/* ── Aba Módulos ── */}
           {activeTab === Tabs.MODULES && (
             <div className={styles.tableWrapper}>
               {(modulesPayload || []).length === 0 ? (
