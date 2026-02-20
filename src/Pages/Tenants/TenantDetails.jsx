@@ -1,10 +1,10 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import globalStyles from '../../Styles/GlobalStyles.module.css';
 import styles from './TenantDetails.module.css';
 import Loader from '../../Components/Loader/Loader';
 import AlertToast from '../../Components/Alerts/AlertToast';
-import { fetchTenantDetails } from '../../Hooks/TenantsManager/TenantsManager';
+import { fetchTenantDetails, editTenantsModules, editTenant } from '../../Hooks/TenantsManager/TenantsManager';
 import ExpandableRow from '../../Components/ExpansableRow/ExpansableRow';
 import { ChevronDown, ChevronRight } from 'lucide-react';
 
@@ -208,48 +208,63 @@ const TenantDetails = () => {
     originalCheckedMapRef.current = { ...next };
   }, [modulesPayload]);
 
-  function parsePermissionKey(key) {
-  // m::123
-  // s::123::456
-  const parts = key.split("::");
-  const kind = parts[0];
+function buildModulesDiffPayload(currentMap, modulesPayload) {
+    const originalMap = originalCheckedMapRef.current || {};
+    const enabled = [];
+    const disabled = [];
 
-  if (kind === "m") {
-    return { moduleId: parts[1] };
-  }
+    if (!modulesPayload) return { enabled, disabled };
 
-  if (kind === "s") {
-    return { moduleId: parts[1], submoduleId: parts[2] };
-  }
+    for (const mod of modulesPayload) {
+      const parentId = Number(getModuleRef(mod));
+      const submodules = mod.submodules || [];
 
-  return null;
-}
+      if (submodules.length === 0) {
+        const key = `m::${parentId}`;
+        const prev = !!originalMap[key];
+        const now = !!currentMap[key];
 
-function buildModulesDiffPayload(currentMap) {
-  const originalMap = originalCheckedMapRef.current || {};
+        if (now && !prev) {
+          enabled.push({ moduleId: parentId });
+        } else if (!now && prev) {
+          disabled.push({ moduleId: parentId });
+        }
+      } else {
+        let prevActiveCount = 0;
+        let nowActiveCount = 0;
 
-  const enabled = [];
-  const disabled = [];
+        submodules.forEach((s) => {
+          const subId = Number(getSubRef(s));
+          const key = `s::${parentId}::${subId}`;
+          if (originalMap[key]) prevActiveCount++;
+          if (currentMap[key]) nowActiveCount++;
+        });
 
-  const keys = new Set([...Object.keys(originalMap), ...Object.keys(currentMap)]);
+        if (nowActiveCount === 0 && prevActiveCount > 0) {
+          disabled.push({ moduleId: parentId, hasSubmodules: true });
+        } else {
+          if (prevActiveCount === 0 && nowActiveCount > 0) {
+            enabled.push({ moduleId: parentId });
+          }
 
-  for (const key of keys) {
-    const prev = !!originalMap[key];
-    const now = !!currentMap[key];
+          submodules.forEach((s) => {
+            const subId = Number(getSubRef(s));
+            const key = `s::${parentId}::${subId}`;
+            const prev = !!originalMap[key];
+            const now = !!currentMap[key];
 
-    if (now && !prev) {
-      const item = parsePermissionKey(key);
-      if (item) enabled.push(item);
+            if (now && !prev) {
+              enabled.push({ moduleId: subId });
+            } else if (!now && prev) {
+              disabled.push({ moduleId: subId });
+            }
+          });
+        }
+      }
     }
 
-    if (!now && prev) {
-      const item = parsePermissionKey(key);
-      if (item) disabled.push(item);
-    }
+    return { enabled, disabled };
   }
-
-  return { enabled, disabled };
-}
 
   const toggleOpen = (moduleRef) => {
     setOpenMap((prev) => ({ ...prev, [moduleRef]: !prev[moduleRef] }));
@@ -317,37 +332,41 @@ function buildModulesDiffPayload(currentMap) {
       zipCode: form.zipCode,
       status: form.status,
       trialEndsAt: form.trialEndsAt || null,
+      id: Number(clientId)
     };
 
-    console.log('Tenant update payload:', payload);
-
-    AlertToast({
-      icon: 'info',
-      title: 'Payload pronto. Falta plugar endpoint de update.',
-      timer: 3500,
-    });
-
-    setIsEditing(false);
+    setLoading(true);
+    const res = await editTenant(payload);
+    if (res === true) {
+      setTenant(payload);
+      setIsEditing(false);
+      AlertToast({
+        icon: 'success',
+        title: 'Cliente salvo com sucesso.',
+        timer: 3500,
+      });
+    }
+    setLoading(false);
   };
 
   const onClickSaveModules = async () => {
-    const diffPayload = buildModulesDiffPayload(checkedMap);
-
+    const diffPayload = buildModulesDiffPayload(checkedMap, modulesPayload);
     if (diffPayload.enabled.length === 0 && diffPayload.disabled.length === 0) {
       AlertToast({ icon: 'info', title: 'Nenhuma alteração de módulos.', timer: 2500 });
       return;
     }
-
-    console.log('Modules diff payload:', diffPayload);
-
-    AlertToast({
-      icon: 'info',
-      title: 'Payload pronto. Falta plugar endpoint de update de módulos.',
-      timer: 3500,
-    });
-
-    // quando o back responder OK, atualizar o snapshot:
-    // originalCheckedMapRef.current = { ...checkedMap };
+    
+    setLoading(true);
+    const res = await editTenantsModules(clientId, diffPayload);
+    if (res === true) {
+      originalCheckedMapRef.current = { ...checkedMap };
+      AlertToast({
+        icon: 'success',
+        title: 'Módulos salvos com sucesso!',
+        timer: 3500
+      })
+    }
+    setLoading(false);
   };
 
   if (loading) return <Loader />;
@@ -391,7 +410,6 @@ function buildModulesDiffPayload(currentMap) {
             </div>
           </div>
 
-          {/* ── Aba Cadastro ── */}
           {activeTab === Tabs.REGISTER && (
             <>
               <div className={styles.headerRow}>

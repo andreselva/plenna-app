@@ -49,3 +49,30 @@ export const fetchTenantDetails = async (clientId) => {
   }
   throw new Error('Falha ao carregar detalhes do tenant.');
 };
+
+export const editTenantsModules = async (clientId, modulesDiff) => {
+  const safeModulesDiff = {
+    enabled: Array.isArray(modulesDiff?.enabled) ? modulesDiff.enabled : [],
+    disabled: Array.isArray(modulesDiff?.disabled) ? modulesDiff.disabled : [],
+  };
+
+  const res = await axiosInstance.patch(
+    `${endpoint}/modules/edit/${clientId}`,
+    safeModulesDiff
+  );
+
+  if (res.status >= 200 && res.status < 300) {
+    return true;
+  }
+
+  throw new Error('Falha ao editar módulos do tenant.');
+};
+
+export const editTenant = async (tenant) => {
+  const res = await axiosInstance.patch(`${endpoint}/edit`, tenant);
+
+  if (res.status >= 200 && res.status <= 204) {
+    return true;
+  }
+  throw new Error('Falha ao editar as informações do cliente.');
+}
