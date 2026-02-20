@@ -15,6 +15,8 @@ import Reports from './Pages/Reports/Reports';
 import FinancialSummary from './Pages/Reports/FinancialSummary';
 import Users from './Pages/Users/Users';
 import Appointments from './Pages/Appointments/Appointments';
+import Tenants from './Pages/Tenants/Tenants';
+import TenantDetails from './Pages/Tenants/TenantDetails';
 
 const AppContent = () => {
     const location = useLocation();
@@ -38,7 +40,9 @@ const AppContent = () => {
                     <Route path="/reports" element={<PrivateRoute><Reports /></PrivateRoute>} />
                     <Route path="/reports/financial-summary" element={<PrivateRoute><FinancialSummary/></PrivateRoute>} />
                     <Route path="/appointments" element={<PrivateRoute><Appointments/></PrivateRoute>} />
-                <Route path="*" element={<NotFound />} />
+                    <Route path="/tenants" element={<PrivateRoute><Tenants /></PrivateRoute>} />
+                    <Route path="/tenants/:clientId" element={<PrivateRoute><TenantDetails /></PrivateRoute>} />
+                    <Route path="*" element={<NotFound />} />
                 </Routes>
             </div>
         </div>

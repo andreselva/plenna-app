@@ -43,6 +43,7 @@ const moduleUi = {
   reports: { label: 'Relatórios', icon: <FileSpreadsheet /> },
   users: { label: 'Usuários', icon: <Users /> },
   appointments: { label: 'Agendamentos', icon: <Calendar /> },
+  tenants: { label: 'Tenants', icon: <Users /> },
 };
 
 function buildNavItemsFromTree(modulesTree = []) {

@@ -8,6 +8,7 @@ import Loader from '../../Components/Loader/Loader';
 import AlertToast from '../../Components/Alerts/AlertToast';
 import SigninImageJPG from '../../assets/icons/signin.jpg';
 import { LogInIcon } from 'lucide-react';
+import { Role } from '../../enum/roles.enum';
 
 export default function Signin() {
   const [isLogin, setIsLogin] = useState(true);
@@ -53,7 +54,11 @@ export default function Signin() {
     try {
       const res = await axiosInstance.post(endpoint, payload);
       login(res.data.payload.user);
-      navigate('/dashboard');
+      if (res.data.payload.user.role === Role.SUPER_ADMIN) {
+        navigate('/tenants');
+      } else {
+        navigate('/dashboard');
+      }
     } catch (err) {
       console.error(err);
       AlertToast({icon: 'error', title: 'Erro. Verifique seus dados.'});
