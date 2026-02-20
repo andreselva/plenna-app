@@ -180,6 +180,8 @@ const TenantDetails = () => {
     setForm(tenantToForm(tenant));
   }, [tenant]);
 
+  const originalCheckedMapRef = useRef({});
+
   useEffect(() => {
     if (!modulesPayload || modulesPayload.length === 0) return;
 
@@ -203,29 +205,51 @@ const TenantDetails = () => {
 
     setCheckedMap(next);
     setOpenMap({});
+    originalCheckedMapRef.current = { ...next };
   }, [modulesPayload]);
 
-  const tenantFields = useMemo(() => {
-    if (!tenant) return [];
-    return [
-      { label: 'ID', value: tenant.id },
-      { label: 'Nome', value: tenant.clientName },
-      { label: 'E-mail', value: tenant.clientEmail },
-      { label: 'Documento', value: tenant.document },
-      { label: 'Endereço', value: tenant.address },
-      { label: 'Número', value: tenant.number },
-      { label: 'Complemento', value: tenant.complement },
-      { label: 'Bairro', value: tenant.neighborhood },
-      { label: 'Cidade', value: tenant.city },
-      { label: 'Estado', value: tenant.state },
-      { label: 'CEP', value: tenant.zipCode },
-      { label: 'Status', value: tenant.status },
-      {
-        label: 'Trial até',
-        value: tenant.trialEndsAt ? new Date(tenant.trialEndsAt).toLocaleString() : '',
-      },
-    ].filter((f) => f.value !== undefined);
-  }, [tenant]);
+  function parsePermissionKey(key) {
+  // m::123
+  // s::123::456
+  const parts = key.split("::");
+  const kind = parts[0];
+
+  if (kind === "m") {
+    return { moduleId: parts[1] };
+  }
+
+  if (kind === "s") {
+    return { moduleId: parts[1], submoduleId: parts[2] };
+  }
+
+  return null;
+}
+
+function buildModulesDiffPayload(currentMap) {
+  const originalMap = originalCheckedMapRef.current || {};
+
+  const enabled = [];
+  const disabled = [];
+
+  const keys = new Set([...Object.keys(originalMap), ...Object.keys(currentMap)]);
+
+  for (const key of keys) {
+    const prev = !!originalMap[key];
+    const now = !!currentMap[key];
+
+    if (now && !prev) {
+      const item = parsePermissionKey(key);
+      if (item) enabled.push(item);
+    }
+
+    if (!now && prev) {
+      const item = parsePermissionKey(key);
+      if (item) disabled.push(item);
+    }
+  }
+
+  return { enabled, disabled };
+}
 
   const toggleOpen = (moduleRef) => {
     setOpenMap((prev) => ({ ...prev, [moduleRef]: !prev[moduleRef] }));
@@ -304,6 +328,26 @@ const TenantDetails = () => {
     });
 
     setIsEditing(false);
+  };
+
+  const onClickSaveModules = async () => {
+    const diffPayload = buildModulesDiffPayload(checkedMap);
+
+    if (diffPayload.enabled.length === 0 && diffPayload.disabled.length === 0) {
+      AlertToast({ icon: 'info', title: 'Nenhuma alteração de módulos.', timer: 2500 });
+      return;
+    }
+
+    console.log('Modules diff payload:', diffPayload);
+
+    AlertToast({
+      icon: 'info',
+      title: 'Payload pronto. Falta plugar endpoint de update de módulos.',
+      timer: 3500,
+    });
+
+    // quando o back responder OK, atualizar o snapshot:
+    // originalCheckedMapRef.current = { ...checkedMap };
   };
 
   if (loading) return <Loader />;
@@ -496,11 +540,18 @@ const TenantDetails = () => {
           )}
 
           {activeTab === Tabs.MODULES && (
-            <div className={styles.tableWrapper}>
-              {(modulesPayload || []).length === 0 ? (
-                <div style={{ padding: 12 }}>Nenhum módulo retornado para este tenant.</div>
-              ) : (
-                (modulesPayload || []).map((mod) => (
+            <>
+              <div className={styles.headerRow}>
+                <div className={styles.sectionTitle}>Módulos liberados</div>
+                <div className={styles.actionButtons}>
+                  <button type="button" className={styles.primaryBtn} onClick={onClickSaveModules}>
+                    Salvar módulos
+                  </button>
+                </div>
+              </div>
+
+              <div className={styles.modulesGrid}>
+                {modulesPayload.map((mod) => (
                   <ModuleBlock
                     key={getModuleRef(mod)}
                     mod={mod}
@@ -511,9 +562,9 @@ const TenantDetails = () => {
                     onToggleSubmodule={toggleSubmodule}
                     getModuleCheckState={getModuleCheckState}
                   />
-                ))
-              )}
-            </div>
+                ))}
+              </div>
+            </>
           )}
         </div>
       </div>

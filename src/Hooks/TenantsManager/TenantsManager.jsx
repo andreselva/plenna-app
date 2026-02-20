@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import axiosInstance from '../../api/axiosInstance';
 import AlertToast from '../../Components/Alerts/AlertToast';
 
-// Back pronto: endpoints do Admin Console
 const endpoint = '/saas/tenants';
 
 export const TenantsManager = () => {
