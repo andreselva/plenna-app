@@ -41,26 +41,20 @@ export default function ResetPassword() {
       return;
     }
 
-    try {
-      const success = await resetPassword(token, newPassword);
+    const success = await resetPassword(token, newPassword);
 
-      if (success) {
-        setDone(true);
-        AlertToast({
-          icon: 'success',
-          title: 'Senha alterada com sucesso.'
-        });
-      } else {
-        AlertToast({
-          icon: 'error',
-          title: 'Token inválido ou expirado.'
-        });
-      }
-      AlertToast({ icon: 'success', title: 'Senha alterada com sucesso.' });
-    } catch (err) {
-      console.error(err);
-      AlertToast({ icon: 'error', title: 'Token inválido ou expirado. Solicite um novo link.' });
-    } 
+    if (success) {
+      setDone(true);
+      AlertToast({
+        icon: 'success',
+        title: 'Senha alterada com sucesso.'
+      });
+    } else {
+      AlertToast({
+        icon: 'error',
+        title: 'Token inválido ou expirado.'
+      });
+    }
   };
 
   return (

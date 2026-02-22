@@ -19,26 +19,20 @@ export default function ForgotPassword() {
       AlertToast({ icon: 'error', title: 'Informe seu e-mail.' });
       return;
     }
+    const success = await requestReset(email);
 
-    try {
-        const success = await requestReset(email);
-
-        if (success) {
-            setSent(true);
-            AlertToast({
-            icon: 'success',
-            title: 'Se o e-mail estiver cadastrado, enviaremos as instruções.'
-            });
-        } else {
-            AlertToast({
-            icon: 'error',
-            title: 'Não foi possível enviar agora.'
-            });
-        }
-    } catch (err) {
-      console.error(err);
-      AlertToast({ icon: 'error', title: 'Não foi possível enviar agora. Tente novamente.' });
-    } 
+    if (success) {
+        setSent(true);
+        AlertToast({
+        icon: 'success',
+        title: 'Se o e-mail estiver cadastrado, enviaremos as instruções.'
+        });
+    } else {
+        AlertToast({
+        icon: 'error',
+        title: 'Não foi possível enviar agora.'
+        });
+    }
   };
 
   return (
