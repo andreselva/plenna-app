@@ -6,6 +6,40 @@ import Loader from '../../Components/Loader/Loader';
 import AlertToast from '../../Components/Alerts/AlertToast';
 import SigninImageJPG from '../../assets/icons/signin.jpg';
 import useResetPassword from '../../Hooks/ResetPasswordManager/useResetPassword';
+import { CheckCircle2, Shield, XCircle } from 'lucide-react';
+
+function getPasswordState(password) {
+  const pwd = (password ?? '').normalize?.('NFKC') ?? String(password ?? '');
+  const len = pwd.length;
+  const hasLower = /[a-z]/.test(pwd);
+  const hasUpper = /[A-Z]/.test(pwd);
+  const hasDigit = /\d/.test(pwd);
+  const hasSymbol = /[^A-Za-z0-9]/.test(pwd);
+  const categories = [hasLower, hasUpper, hasDigit, hasSymbol].filter(Boolean).length;
+  const minLenOk = len >= 8;
+  const longPassphrase = len >= 16;
+  const complexityOk = longPassphrase ? true : categories >= 3;
+  const lengthScore = Math.min(60, Math.round((Math.min(len, 24) / 24) * 60));
+  const categoryScore = categories * 10;
+  const bonus = longPassphrase ? 10 : 0;
+  const score = Math.min(100, lengthScore + categoryScore + bonus);
+  const label = score >= 80 ? 'Forte' : score >= 55 ? 'Boa' : score >= 35 ? 'Ok' : 'Fraca';
+  const overallOk = minLenOk && complexityOk && len <= 128;
+
+  return {
+    len,
+    score,
+    label,
+    overallOk,
+    minLenOk,
+    longPassphrase,
+    complexityOk,
+    hasLower,
+    hasUpper,
+    hasDigit,
+    hasSymbol,
+  };
+}
 
 function useQuery() {
   const { search } = useLocation();
@@ -21,7 +55,11 @@ export default function ResetPassword() {
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [done, setDone] = useState(false);
+  const [passwordTouched, setPasswordTouched] = useState(false);
   const {loading, resetPassword } = useResetPassword();
+
+  const pwdState = useMemo(() => getPasswordState(newPassword), [newPassword]);
+  const confirmOk = newPassword.length > 0 && newPassword === confirmPassword;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -31,8 +69,9 @@ export default function ResetPassword() {
       return;
     }
 
-    if (!newPassword || newPassword.length < 8) {
-      AlertToast({ icon: 'error', title: 'A senha deve ter pelo menos 8 caracteres.' });
+    if (!pwdState.overallOk) {
+      setPasswordTouched(true);
+      AlertToast({ icon: 'error', title: 'Sua senha ainda não atende aos requisitos.' });
       return;
     }
 
@@ -40,21 +79,8 @@ export default function ResetPassword() {
       AlertToast({ icon: 'error', title: 'As senhas não conferem.' });
       return;
     }
-
-    const success = await resetPassword(token, newPassword);
-
-    if (success) {
-      setDone(true);
-      AlertToast({
-        icon: 'success',
-        title: 'Senha alterada com sucesso.'
-      });
-    } else {
-      AlertToast({
-        icon: 'error',
-        title: 'Token inválido ou expirado.'
-      });
-    }
+    const ok = await resetPassword(token, newPassword);
+    if (ok !== false) setDone(true);
   };
 
   return (
@@ -111,9 +137,60 @@ export default function ResetPassword() {
                   name="newPassword"
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
+                  onBlur={() => setPasswordTouched(true)}
                   required
                 />
               </div>
+
+              {(passwordTouched || newPassword.length > 0) && (
+                <div className="pwd-card" aria-live="polite">
+                  <div className="pwd-header">
+                    <div className="pwd-title">
+                      <Shield className="pwd-icon" />
+                      Força da senha: <strong>{pwdState.label}</strong>
+                    </div>
+                    <div className="pwd-meta">{pwdState.len} caracteres</div>
+                  </div>
+
+                  <div
+                    className="pwd-meter"
+                    role="progressbar"
+                    aria-valuenow={pwdState.score}
+                    aria-valuemin={0}
+                    aria-valuemax={100}
+                  >
+                    <div className="pwd-meter-bar" style={{ width: `${pwdState.score}%` }} />
+                  </div>
+
+                  <ul className="pwd-rules">
+                    <li className={pwdState.minLenOk ? 'ok' : 'bad'}>
+                      {pwdState.minLenOk ? <CheckCircle2 size={16} /> : <XCircle size={16} />}
+                      Pelo menos <strong>8</strong> caracteres
+                    </li>
+                    <li className={pwdState.complexityOk ? 'ok' : 'bad'}>
+                      {pwdState.complexityOk ? <CheckCircle2 size={16} /> : <XCircle size={16} />}
+                      Ter <strong>3 de 4</strong> (minúscula, maiúscula, número, símbolo)
+                      <span className="pwd-hint"> — ou <strong>16+</strong> caracteres</span>
+                    </li>
+                    <li className={pwdState.hasLower ? 'ok' : 'neutral'}>
+                      {pwdState.hasLower ? <CheckCircle2 size={16} /> : <XCircle size={16} />}
+                      Minúscula (a-z)
+                    </li>
+                    <li className={pwdState.hasUpper ? 'ok' : 'neutral'}>
+                      {pwdState.hasUpper ? <CheckCircle2 size={16} /> : <XCircle size={16} />}
+                      Maiúscula (A-Z)
+                    </li>
+                    <li className={pwdState.hasDigit ? 'ok' : 'neutral'}>
+                      {pwdState.hasDigit ? <CheckCircle2 size={16} /> : <XCircle size={16} />}
+                      Número (0-9)
+                    </li>
+                    <li className={pwdState.hasSymbol ? 'ok' : 'neutral'}>
+                      {pwdState.hasSymbol ? <CheckCircle2 size={16} /> : <XCircle size={16} />}
+                      Símbolo / espaço
+                    </li>
+                  </ul>
+                </div>
+              )}
 
               <div className="input-group">
                 <label htmlFor="confirmPassword">Confirmar nova senha</label>
@@ -125,9 +202,20 @@ export default function ResetPassword() {
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   required
                 />
+                {confirmPassword.length > 0 && !confirmOk && (
+                  <div className="field-hint bad">As senhas não conferem.</div>
+                )}
+                {confirmOk && (
+                  <div className="field-hint ok">Senhas conferem ✅</div>
+                )}
               </div>
 
-              <BotaoGlobal cor="roxo" width="100%" height="45px">
+              <BotaoGlobal
+                cor="roxo"
+                width="100%"
+                height="45px"
+                disabled={loading || !pwdState.overallOk || !confirmOk}
+              >
                 Alterar senha
               </BotaoGlobal>
 

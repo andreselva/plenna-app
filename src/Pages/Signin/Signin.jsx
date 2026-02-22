@@ -1,5 +1,5 @@
 import './Signin.css';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useAuth } from '../../Auth/Context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { BotaoGlobal } from '../../Components/Buttons/ButtonGlobal';
@@ -7,12 +7,47 @@ import axiosInstance from '../../api/axiosInstance';
 import Loader from '../../Components/Loader/Loader';
 import AlertToast from '../../Components/Alerts/AlertToast';
 import SigninImageJPG from '../../assets/icons/signin.jpg';
-import { LogInIcon } from 'lucide-react';
+import { CheckCircle2, LogInIcon, Shield, XCircle } from 'lucide-react';
 import { Role } from '../../enum/roles.enum';
+
+function getPasswordState(password) {
+  const pwd = (password ?? '').normalize?.('NFKC') ?? String(password ?? '');
+  const len = pwd.length;
+  const hasLower = /[a-z]/.test(pwd);
+  const hasUpper = /[A-Z]/.test(pwd);
+  const hasDigit = /\d/.test(pwd);
+  const hasSymbol = /[^A-Za-z0-9]/.test(pwd);
+  const categories = [hasLower, hasUpper, hasDigit, hasSymbol].filter(Boolean).length;
+  const minLenOk = len >= 8;
+  const longPassphrase = len >= 16;
+  const complexityOk = longPassphrase ? true : categories >= 3;
+  const lengthScore = Math.min(60, Math.round((Math.min(len, 24) / 24) * 60));
+  const categoryScore = categories * 10; // 0..40
+  const bonus = longPassphrase ? 10 : 0;
+  const score = Math.min(100, lengthScore + categoryScore + bonus);
+  const label = score >= 80 ? 'Forte' : score >= 55 ? 'Boa' : score >= 35 ? 'Ok' : 'Fraca';
+  const overallOk = minLenOk && complexityOk && len <= 128;
+
+  return {
+    len,
+    score,
+    label,
+    overallOk,
+    minLenOk,
+    longPassphrase,
+    complexityOk,
+    hasLower,
+    hasUpper,
+    hasDigit,
+    hasSymbol,
+    categories,
+  };
+}
 
 export default function Signin() {
   const [isLogin, setIsLogin] = useState(true);
   const [loading, setLoading] = useState(false);
+  const [passwordTouched, setPasswordTouched] = useState(false);
 
   const initialState = {
     name: '',
@@ -33,9 +68,12 @@ export default function Signin() {
   const { login } = useAuth();
   const navigate = useNavigate();
 
+  const pwdState = useMemo(() => getPasswordState(formData.password), [formData.password]);
+
   const toggleMode = () => {
     setIsLogin(prev => !prev);
     setFormData(initialState);
+    setPasswordTouched(false);
   };
 
   const handleChange = e => {
@@ -45,6 +83,15 @@ export default function Signin() {
   const handleSubmit = async e => {
     e.preventDefault();
     if (loading) return;
+
+    if (!isLogin && !pwdState.overallOk) {
+      setPasswordTouched(true);
+      AlertToast({
+        icon: 'error',
+        title: 'Sua senha ainda não atende aos requisitos.'
+      });
+      return;
+    }
 
     const endpoint = isLogin ? '/auth/login' : '/management/register-user';
 
@@ -250,16 +297,67 @@ export default function Signin() {
                 name="password"
                 value={formData.password}
                 onChange={handleChange}
+                onBlur={() => setPasswordTouched(true)}
                 required
               />
             </div>
+
+            {!isLogin && (passwordTouched || formData.password.length > 0) && (
+              <div className="pwd-card" aria-live="polite">
+                <div className="pwd-header">
+                  <div className="pwd-title">
+                    <Shield className="pwd-icon" />
+                    Força da senha: <strong>{pwdState.label}</strong>
+                  </div>
+                  <div className="pwd-meta">{pwdState.len} caracteres</div>
+                </div>
+
+                <div
+                  className="pwd-meter"
+                  role="progressbar"
+                  aria-valuenow={pwdState.score}
+                  aria-valuemin={0}
+                  aria-valuemax={100}
+                >
+                  <div className="pwd-meter-bar" style={{ width: `${pwdState.score}%` }} />
+                </div>
+
+                <ul className="pwd-rules">
+                  <li className={pwdState.minLenOk ? 'ok' : 'bad'}>
+                    {pwdState.minLenOk ? <CheckCircle2 size={16} /> : <XCircle size={16} />}
+                    Pelo menos <strong>8</strong> caracteres
+                  </li>
+                  <li className={pwdState.complexityOk ? 'ok' : 'bad'}>
+                    {pwdState.complexityOk ? <CheckCircle2 size={16} /> : <XCircle size={16} />}
+                    Ter <strong>3 de 4</strong> (minúscula, maiúscula, número, símbolo)
+                    <span className="pwd-hint"> — ou <strong>16+</strong> caracteres</span>
+                  </li>
+                  <li className={pwdState.hasLower ? 'ok' : 'neutral'}>
+                    {pwdState.hasLower ? <CheckCircle2 size={16} /> : <XCircle size={16} />}
+                    Minúscula (a-z)
+                  </li>
+                  <li className={pwdState.hasUpper ? 'ok' : 'neutral'}>
+                    {pwdState.hasUpper ? <CheckCircle2 size={16} /> : <XCircle size={16} />}
+                    Maiúscula (A-Z)
+                  </li>
+                  <li className={pwdState.hasDigit ? 'ok' : 'neutral'}>
+                    {pwdState.hasDigit ? <CheckCircle2 size={16} /> : <XCircle size={16} />}
+                    Número (0-9)
+                  </li>
+                  <li className={pwdState.hasSymbol ? 'ok' : 'neutral'}>
+                    {pwdState.hasSymbol ? <CheckCircle2 size={16} /> : <XCircle size={16} />}
+                    Símbolo / espaço
+                  </li>
+                </ul>
+              </div>
+            )}
 
             <BotaoGlobal
               cor="roxo"
               width="100%"
               height="45px"
               type="submit"
-              disabled={loading}
+              disabled={loading || (!isLogin && !pwdState.overallOk)}
             >
               {isLogin
                 ? <div className="log-in">Entrar <LogInIcon className="w-4 h-4" /></div>

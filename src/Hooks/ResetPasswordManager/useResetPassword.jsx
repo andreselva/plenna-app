@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import axiosInstance from '../../api/axiosInstance';
+import AlertToast from '../../Components/Alerts/AlertToast';
 
 export default function useResetPassword() {
   const [loading, setLoading] = useState(false);
@@ -38,9 +39,17 @@ export default function useResetPassword() {
         newPassword,
       });
 
+      AlertToast({
+        icon: 'success',
+        title: `Senha redefinida com sucesso.`
+      });
       return true;
     } catch (error) {
-      console.error('Erro ao redefinir senha:', error);
+      console.error('Erro ao redefinir senha:', error.response.data.message);
+      AlertToast({
+        icon: 'error',
+        title: `Erro ao redefinir senha: ${error.response.data.message}`
+      });
       return false;
     } finally {
       setLoading(false);
