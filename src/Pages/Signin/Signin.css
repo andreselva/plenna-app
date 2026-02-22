@@ -99,6 +99,91 @@
   opacity: 1;
 }
 
+/* Password strength UI */
+.pwd-card {
+  margin: 10px 0 18px 0;
+  border: 1px solid #e5e7eb;
+  background: #f9fafb;
+  border-radius: 10px;
+  padding: 12px 12px 10px 12px;
+  text-align: left;
+}
+
+.pwd-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.pwd-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.95rem;
+  color: #374151;
+}
+
+.pwd-icon {
+  width: 18px;
+  height: 18px;
+  opacity: 0.9;
+}
+
+.pwd-meta {
+  font-size: 0.85rem;
+  color: #6b7280;
+  white-space: nowrap;
+}
+
+.pwd-meter {
+  height: 8px;
+  background: #e5e7eb;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.pwd-meter-bar {
+  height: 100%;
+  background: #7748cecb;
+  border-radius: 999px;
+  transition: width 180ms ease;
+}
+
+.pwd-rules {
+  list-style: none;
+  padding: 10px 0 0 0;
+  margin: 0;
+  display: grid;
+  gap: 6px;
+}
+
+.pwd-rules li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+  color: #4b5563;
+}
+
+.pwd-rules li.ok {
+  color: #065f46;
+}
+
+.pwd-rules li.bad {
+  color: #991b1b;
+}
+
+.pwd-rules li.neutral {
+  color: #6b7280;
+}
+
+.pwd-hint {
+  color: #6b7280;
+  margin-left: 4px;
+}
+
 @media (max-width: 950px) {
   .image-section {
     display: none;
