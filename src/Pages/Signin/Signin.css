@@ -89,6 +89,16 @@
   padding-bottom: 40px;
 }
 
+.forgot-link {
+  margin-top: 10px;
+  font-size: 0.9rem;
+  opacity: 0.85;
+}
+
+.forgot-link:hover {
+  opacity: 1;
+}
+
 @media (max-width: 950px) {
   .image-section {
     display: none;

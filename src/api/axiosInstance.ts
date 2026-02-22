@@ -59,7 +59,9 @@ axiosInstance.interceptors.response.use(
 
     const originalRequest = error.config as RetryableConfig;
     const currentPath = window.location.pathname;
-    const isOnLoginPage = currentPath === "/login";
+
+    const PUBLIC_ROUTES = ["/login", "/forgot-password", "/reset-password"];
+    const isOnPublicRoute = PUBLIC_ROUTES.some((p) => currentPath.startsWith(p));
 
     if (originalRequest.url?.includes("/auth/refresh")) {
       return Promise.reject(error);
@@ -69,7 +71,7 @@ axiosInstance.interceptors.response.use(
       error.response &&
       error.response.status === 401 &&
       !originalRequest._retry &&
-      !isOnLoginPage
+      !isOnPublicRoute
     ) {
       if (isRefreshing) {
         return new Promise((resolve, reject) => {
@@ -96,7 +98,7 @@ axiosInstance.interceptors.response.use(
         return axiosInstance(originalRequest);
       } catch (err) {
         processQueue(err, null);
-        window.location.href = "/login";
+        if (!isOnPublicRoute) window.location.href = "/login";
         return Promise.reject(err);
       } finally {
         isRefreshing = false;

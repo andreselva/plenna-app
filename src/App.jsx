@@ -17,11 +17,19 @@ import Users from './Pages/Users/Users';
 import Appointments from './Pages/Appointments/Appointments';
 import Tenants from './Pages/Tenants/Tenants';
 import TenantDetails from './Pages/Tenants/TenantDetails';
+import ForgotPassword from './Pages/ForgotPassword/ForgotPassword';
+import ResetPassword from './Pages/ResetPassword/ResetPassword';
 
 const AppContent = () => {
     const location = useLocation();
     const { isAuthenticated, isLoading } = useAuth();
-    const showSidebar = !isLoading && isAuthenticated && location.pathname !== '/login' && location.pathname !== '/sitemap.xml';
+    const isPublicAuthRoute =
+        location.pathname === '/login' ||
+        location.pathname === '/forgot-password' ||
+        location.pathname === '/reset-password' ||
+        location.pathname === '/sitemap.xml';
+
+    const showSidebar = !isLoading && isAuthenticated && !isPublicAuthRoute;
 
     return (
         <div className="MainContent">
@@ -30,6 +38,8 @@ const AppContent = () => {
                 <Routes>
                     <Route path="/" element={<Navigate to="/dashboard" />} />
                     <Route path="/login" element={<Signin />} />
+                    <Route path="/forgot-password" element={<ForgotPassword />} />
+                    <Route path="/reset-password" element={<ResetPassword />} />
                     <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
                     <Route path="/categories" element={<PrivateRoute><Categories /></PrivateRoute>} />
                     <Route path="/expenses" element={<PrivateRoute><Expenses /></PrivateRoute>} />
