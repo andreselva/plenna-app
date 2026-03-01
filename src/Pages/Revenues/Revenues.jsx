@@ -82,6 +82,13 @@ const Revenues = () => {
         setFilteredRevenues(items);
     }, [revenues, searchQuery, activeFilters]);
 
+    const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
+    const [selectedRevenue, setSelectedRevenue] = useState(null);
+    
+    const handleOpenPaymentModal = (revenue) => {
+        setSelectedRevenue(revenue);
+        setIsPaymentModalOpen(true);
+    };
 
     return (
         <div className={globalStyles.container}>
