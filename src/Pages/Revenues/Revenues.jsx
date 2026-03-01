@@ -8,6 +8,9 @@ import { useRevenueHandler } from '../../Handlers/useRevenuesHandler';
 import globalStyles from '../../Styles/GlobalStyles.module.css';
 import SearchInput from '../../Components/Filters/SearchInput';
 import FilterDropdown from '../../Components/Filters/FilterDropdown';
+import { PaymentModal } from '../../Modals/PaymentModal/PaymentModal';
+import { PayableType } from '../../enum/payable-type.enum';
+import { usePaymentManager } from '../../Hooks/PaymentManager/usePaymentManager';
 
 const Revenues = () => {
     const [formattedPeriod, setFormattedPeriod] = useState(() => getStartAndEndOfMonth());
@@ -31,6 +34,8 @@ const Revenues = () => {
         const formattedRange = getFormattedDateRange(startDate, endDate);
         setFormattedPeriod(formattedRange);
     };
+
+    const { registerPayment } = usePaymentManager();
 
     const {
         revenues, categories, selectedCategory, setSelectedCategory, isModalOpen, setIsModalOpen, setEditingRevenue,
@@ -90,6 +95,10 @@ const Revenues = () => {
         setIsPaymentModalOpen(true);
     };
 
+    const handleRegisterPayment = (paymentData) => {
+        registerPayment(paymentData);
+    }
+
     return (
         <div className={globalStyles.container}>
             <div className={globalStyles['container-content']}>
@@ -139,9 +148,19 @@ const Revenues = () => {
                         onDelete={handleDeleteRevenue}
                         loading={loading}
                         error={error}
+                        handleOpenPaymentModal={handleOpenPaymentModal}
                     />
                 </div>
             </div>
+
+            {isPaymentModalOpen && selectedRevenue && (
+                <PaymentModal
+                    payableItem={selectedRevenue}
+                    payableType={PayableType.REVENUE}
+                    setIsModalPaymentOpen={setIsPaymentModalOpen}
+                    handlePayment={handleRegisterPayment}
+                />
+            )}
 
             {isModalOpen && (
                 <ModalRevenues
