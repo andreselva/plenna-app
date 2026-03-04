@@ -13,6 +13,7 @@ const STATUS_COLORS = {
     partial: '#ffc107',
     pending: '#dc3545',
     cancelled: '#6c757d',
+    reversed: '#eb9a29',
     default: '#6c757d'
 };
 
@@ -86,7 +87,8 @@ const ExpenseTable = ({ expenses = [], categories = [], creditCards = [], onEdit
                         pending: 'Pendente',
                         paid: 'Paga',
                         partial: 'Parcial',
-                        cancelled: 'Cancelada'
+                        cancelled: 'Cancelada',
+                        reversed: 'Estornada'
                     };
                     const baseColor = STATUS_COLORS[expense.status] || STATUS_COLORS.default;
                     return (

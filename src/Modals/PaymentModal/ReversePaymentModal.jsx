@@ -31,7 +31,7 @@ export const ReversePaymentModal = ({ isOpen, onClose, entityType, entityData, r
         }
     }, [isOpen, fetchPayments]);
 
-    const handleReversePayment = async (paymentId) => {
+    const handleReversePayment = async (payment) => {
         const result = await AlertConfirm({
             title: 'Estornar Pagamento',
             text: 'Esta ação não pode ser desfeita. Deseja continuar com o estorno do pagamento?',
@@ -43,9 +43,11 @@ export const ReversePaymentModal = ({ isOpen, onClose, entityType, entityData, r
         if (!result.isConfirmed) return;
         
         const reversePaymentData = {
-            paymentId,
-            entityType,
-            entityId: entityData.id,
+            accountId: entityData.idCreditCard,
+            amount: Number(payment.value),
+            referenceId: payment.id,
+            referenceType: entityType,
+            entityId: entityData.id
         }
         const reverseResult = await reversePayment(reversePaymentData);
         if (reverseResult && reverseResult.isSuccess) {
@@ -87,13 +89,19 @@ export const ReversePaymentModal = ({ isOpen, onClose, entityType, entityData, r
                                         {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(payment.value)}
                                     </strong>
                                 </div>
-                                <button
-                                    className="reverse-payment-button"
-                                    onClick={() => handleReversePayment(payment.id)}
-                                    title="Estornar este pagamento"
-                                >
-                                    <BanknoteXIcon size={25} />
-                                </button>
+                                {payment.value < 0 ? (
+                                    <span className="reversed-badge">Estorno</span>
+                                ) : payment.reversed?.length > 0 ? (
+                                    <span className="reversed-done-badge">Estornado</span>
+                                ) : (
+                                    <button
+                                        className="reverse-payment-button"
+                                        onClick={() => handleReversePayment(payment)}
+                                        title="Estornar este pagamento"
+                                    >
+                                        <BanknoteXIcon size={25} />
+                                    </button>
+                                )}
                             </li>
                         ))}
                     </ul>
