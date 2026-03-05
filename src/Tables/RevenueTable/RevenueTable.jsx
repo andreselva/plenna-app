@@ -6,6 +6,7 @@ import { RevenueTableSkeleton } from '../../Pages/Revenues/RevenueTableSkeleton'
 import globalStyles from '../../Styles/GlobalStyles.module.css';
 import { darkenHexColor } from '../../Utils/DarkenColor';
 import { useBreakpoints } from '../../Hooks/useMediaQuery/useBreakpoints';
+import { STATUS_COLORS } from '../../Types/status.color';
 
 const RevenueTable = ({ revenues = [], categories = [], onEdit, onDelete, loading, error, handleOpenPaymentModal }) => {
     const { isMobile } = useBreakpoints();
@@ -64,7 +65,30 @@ const RevenueTable = ({ revenues = [], categories = [], onEdit, onDelete, loadin
                     revenue.invoiceDueDate ? revenue.invoiceDueDate.split('-').reverse().join('/') : '-'
                 ),
                 style: { flex: '1 1 15%', display: 'flex', justifyContent: 'center' },
-            }
+            },
+            {
+                header: 'Status',
+                renderCell: (revenue) => {
+                    const statusMap = {
+                        pending: 'Pendente',
+                        paid: 'Paga',
+                        partial: 'Parcial',
+                        cancelled: 'Cancelada',
+                        reversed: 'Estornada'
+                    };
+                    const baseColor = STATUS_COLORS[revenue.status] || STATUS_COLORS.default;
+                    return (
+                        <span className={globalStyles.statusBadge} style={{
+                            backgroundColor: `${baseColor}33`,
+                            color: darkenHexColor(baseColor, 25),
+                            padding: '4px 10px'
+                        }}>
+                            {statusMap[revenue.status] || '-'}
+                        </span>
+                    );
+                },
+                style: { flex: '1 1 15%', display: 'flex', justifyContent: 'center' },
+            },
         )
     }
 

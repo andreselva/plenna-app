@@ -8,10 +8,10 @@ import Loader from '../../Components/Loader/Loader';
 
 
 const entityConfig = {
-    expense: { title: 'Estornar Pagamentos da Despesa' },
-    income: { title: 'Estornar Pagamentos da Receita' },
-    invoice: { title: 'Estornar Pagamentos da Fatura' },
-    default: { title: 'Estornar Pagamentos' },
+    expense: { title: 'Estornar pagamentos da despesa' },
+    income: { title: 'Estornar pagamentos da receita' },
+    invoice: { title: 'Estornar pagamentos da fatura' },
+    default: { title: 'Estornar pagamentos' },
 };
 
 export const ReversePaymentModal = ({ isOpen, onClose, entityType, entityData, refetch = () => {}}) => {
@@ -33,7 +33,7 @@ export const ReversePaymentModal = ({ isOpen, onClose, entityType, entityData, r
 
     const handleReversePayment = async (payment) => {
         const result = await AlertConfirm({
-            title: 'Estornar Pagamento',
+            title: 'Estornar pagamento',
             text: 'Esta ação não pode ser desfeita. Deseja continuar com o estorno do pagamento?',
             icon: 'warning',
             confirmButtonText: 'Estornar',
@@ -45,7 +45,7 @@ export const ReversePaymentModal = ({ isOpen, onClose, entityType, entityData, r
         const reversePaymentData = {
             accountId: entityData.idCreditCard,
             amount: Number(payment.value),
-            referenceId: payment.id,
+            paymentId: payment.id,
             referenceType: entityType,
             entityId: entityData.id
         }

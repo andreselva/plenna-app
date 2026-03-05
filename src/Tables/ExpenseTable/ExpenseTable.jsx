@@ -5,17 +5,8 @@ import DeleteConfirmation from "../../Hooks/DeleteConfirmation/DeleteConfirmatio
 import globalStyles from '../../Styles/GlobalStyles.module.css';
 import { darkenHexColor } from "../../Utils/DarkenColor";
 import { ExpenseTableSkeleton } from "./ExpenseTableSkeleton";
-import { useMediaQuery } from "../../Hooks/useMediaQuery/useMediaQuery";
 import { useBreakpoints } from "../../Hooks/useMediaQuery/useBreakpoints";
-
-const STATUS_COLORS = {
-    paid: '#28a745',
-    partial: '#ffc107',
-    pending: '#dc3545',
-    cancelled: '#6c757d',
-    reversed: '#eb9a29',
-    default: '#6c757d'
-};
+import { STATUS_COLORS } from "../../Types/status.color";
 
 const ExpenseTable = ({ expenses = [], categories = [], creditCards = [], onEdit, onDelete, onPayment, onReversePayment, loading, error }) => {
     const { isMobile, isTablet } = useBreakpoints();
@@ -120,7 +111,7 @@ const ExpenseTable = ({ expenses = [], categories = [], creditCards = [], onEdit
                 }
 
                 if (!expense.idInvoice && (expense.status === 'paid' || expense.status === 'partial')) {
-                    expenseActions.push({ icon: <BanknoteXIcon size={14}/>, label: 'Estornar pagamento', 
+                    expenseActions.push({ icon: <BanknoteXIcon size={14}/>, label: 'Gerenciar pagamentos', 
                         handler: () => onReversePayment(expense)
                     })
                 }
