@@ -8,9 +8,7 @@ import Loader from '../../Components/Loader/Loader';
 
 
 const entityConfig = {
-    expense: { title: 'Estornar pagamentos da despesa' },
-    income: { title: 'Estornar pagamentos da receita' },
-    invoice: { title: 'Estornar pagamentos da fatura' },
+    revenue: { title: 'Estornar recebimentos' },
     default: { title: 'Estornar pagamentos' },
 };
 
@@ -43,7 +41,7 @@ export const ReversePaymentModal = ({ isOpen, onClose, entityType, entityData, r
         if (!result.isConfirmed) return;
         
         const reversePaymentData = {
-            accountId: entityData.idCreditCard,
+            accountId: entityData.idCreditCard ?? 0,
             amount: Number(payment.value),
             paymentId: payment.id,
             referenceType: entityType,

@@ -1,4 +1,4 @@
-import { Pencil, Trash2, HandCoins } from 'lucide-react';
+import { Pencil, Trash2, HandCoins, BanknoteXIcon } from 'lucide-react';
 import { ActionDropdown } from '../../Components/ActionDropdown/ActionDropdown';
 import { FlexibleTable } from '../../Components/FlexibleTable/FlexibleTable';
 import DeleteConfirmation from '../../Hooks/DeleteConfirmation/DeleteConfirmation';
@@ -8,7 +8,7 @@ import { darkenHexColor } from '../../Utils/DarkenColor';
 import { useBreakpoints } from '../../Hooks/useMediaQuery/useBreakpoints';
 import { STATUS_COLORS } from '../../Types/status.color';
 
-const RevenueTable = ({ revenues = [], categories = [], onEdit, onDelete, loading, error, handleOpenPaymentModal }) => {
+const RevenueTable = ({ revenues = [], categories = [], onEdit, onDelete, loading, error, handleOpenPaymentModal, onReversePayment }) => {
     const { isMobile } = useBreakpoints();
 
     if (loading) {
@@ -113,6 +113,11 @@ const RevenueTable = ({ revenues = [], categories = [], onEdit, onDelete, loadin
                     revenueActions.push({ icon: <HandCoins size={14}/>, label: 'Registrar recebimento', handler: () => handleOpenPaymentModal(revenue) })
                 }
 
+                if (!revenue.idInvoice && (revenue.status === 'paid' || revenue.status === 'partial')) {
+                    revenueActions.push({ icon: <BanknoteXIcon size={14}/>, label: 'Gerenciar recebimentos', 
+                        handler: () => onReversePayment(revenue)
+                    })
+                }
                 return (
                     <ActionDropdown
                         actions={revenueActions}

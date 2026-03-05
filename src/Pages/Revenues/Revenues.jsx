@@ -11,6 +11,7 @@ import FilterDropdown from '../../Components/Filters/FilterDropdown';
 import { PaymentModal } from '../../Modals/PaymentModal/PaymentModal';
 import { PayableType } from '../../enum/payable-type.enum';
 import { usePaymentManager } from '../../Hooks/PaymentManager/usePaymentManager';
+import { ReversePaymentModal } from '../../Modals/PaymentModal/ReversePaymentModal';
 
 const Revenues = () => {
     const [formattedPeriod, setFormattedPeriod] = useState(() => getStartAndEndOfMonth());
@@ -99,6 +100,17 @@ const Revenues = () => {
         registerPayment(paymentData);
     }
 
+    const [isReverseModalOpen, setIsReverseModalOpen] = useState(false);
+    const [selectedRevenueForReverse, setSelectedRevenueForReverse] = useState(null);
+    const handleOpenReverseModal = (revenue) => {
+        setSelectedRevenueForReverse(revenue);
+        setIsReverseModalOpen(true);
+    };
+
+    const handleCloseReverseModal = () => {
+        setIsReverseModalOpen(false);
+    };
+
     return (
         <div className={globalStyles.container}>
             <div className={globalStyles['container-content']}>
@@ -149,6 +161,7 @@ const Revenues = () => {
                         loading={loading}
                         error={error}
                         handleOpenPaymentModal={handleOpenPaymentModal}
+                        onReversePayment={handleOpenReverseModal}
                     />
                 </div>
             </div>
@@ -159,6 +172,15 @@ const Revenues = () => {
                     payableType={PayableType.REVENUE}
                     setIsModalPaymentOpen={setIsPaymentModalOpen}
                     handlePayment={handleRegisterPayment}
+                />
+            )}
+
+            {isReverseModalOpen && (
+                <ReversePaymentModal
+                    isOpen={isReverseModalOpen}
+                    onClose={handleCloseReverseModal}
+                    entityType="revenue"
+                    entityData={selectedRevenueForReverse}
                 />
             )}
 

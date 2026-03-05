@@ -57,7 +57,7 @@ export const PaymentModal = ({
         if (!result.isConfirmed) return;
 
         const paymentData = {
-            accountId: payableItem.idCreditCard,
+            accountId: payableItem.idCreditCard ?? 0,
             payableId: Number(payableItem.id),
             value: Number(amountValue),
             paymentDate: paymentDate,
