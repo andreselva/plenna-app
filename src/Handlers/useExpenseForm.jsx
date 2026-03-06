@@ -175,7 +175,7 @@ export const useExpenseForm = ({ addExpense, updateExpense, deleteExpense, regis
     }
 
     const handleRegisterPayment = (paymentData) => {
-        registerPayment(paymentData);
+        return registerPayment(paymentData);
     }
 
     return {

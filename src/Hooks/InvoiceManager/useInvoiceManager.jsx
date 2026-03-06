@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import axiosInstance from "../../api/axiosInstance";
 import AlertToast from "../../Components/Alerts/AlertToast";
 import { Operations } from "../../enum/operations.enum";
@@ -8,33 +8,33 @@ export const useInvoiceManager = (periodo) => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
-    useEffect(() => {
-        const fetchInvoices = async () => {
-            setLoading(true);
-            setError(null);
-            try {
-                const { data: response, status } = await axiosInstance.get("/invoices", {
-                    headers: {
-                        'X-Periodo': JSON.stringify(periodo)
-                    }
-                });
-
-                if (response && status >= 200 && status <= 204) {
-                    setInvoices(response.payload.invoices || []);
-                    return;
+    const fetchInvoices = useCallback(async () => {
+        setLoading(true);
+        setError(null);
+        try {
+            const { data: response, status } = await axiosInstance.get("/invoices", {
+                headers: {
+                    'X-Periodo': JSON.stringify(periodo)
                 }
-                
-                throw new Error('Ocorreu um erro ao buscar as faturas!');
-            } catch (err) {
-                const errorMessage = defineErrorMessage(err, Operations.BUSCAR);
-                AlertToast({icon: 'error', title: errorMessage});
-                setError(errorMessage);
-                setInvoices([]);
-            } finally {
-                setLoading(false);
-            }
-        };
+            });
 
+            if (response && status >= 200 && status <= 204) {
+                setInvoices(response.payload.invoices || []);
+                return;
+            }
+            
+            throw new Error('Ocorreu um erro ao buscar as faturas!');
+        } catch (err) {
+            const errorMessage = defineErrorMessage(err, Operations.BUSCAR);
+            AlertToast({icon: 'error', title: errorMessage});
+            setError(errorMessage);
+            setInvoices([]);
+        } finally {
+            setLoading(false);
+        }
+    }, [periodo]);
+
+    useEffect(() => {
         if (periodo && (typeof periodo === 'object' && Object.keys(periodo).length > 0)
             || (typeof periodo === 'string' && periodo.trim() !== '')) {
             fetchInvoices();
@@ -43,7 +43,7 @@ export const useInvoiceManager = (periodo) => {
             setLoading(false);
             setError(null);
         }
-    }, [periodo]);
+    }, [fetchInvoices]);
 
     const generateInvoices = async (infosAccount) => {
         setLoading(true);
@@ -70,5 +70,5 @@ export const useInvoiceManager = (periodo) => {
         return `Ocorreu um erro ao ${operation} despesa.` ;
     }
 
-    return { invoices, generateInvoices, loading, error };
+    return { invoices, generateInvoices, loading, error, refetch: fetchInvoices };
 };

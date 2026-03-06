@@ -43,7 +43,7 @@ const Revenues = () => {
         newRevenue, setNewRevenue, revenueValue, setRevenueValue, revenueInvoiceDueDate, setRevenueInvoiceDueDate,
         handleEditRevenue, handleSaveRevenue, handleDeleteRevenue, typeOfInstallment, setTypeOfInstallment,
         installments, setInstallments, hasInstallments, setHasInstallments, hasSourceAccountId,
-        setBooleanSourceAccountId, idRevenue, setIdRevenue, loading, error
+        setBooleanSourceAccountId, idRevenue, setIdRevenue, loading, error, refetch
     } = useRevenueHandler(formattedPeriod);
 
     const [filteredRevenues, setFilteredRevenues] = useState(revenues);
@@ -97,7 +97,7 @@ const Revenues = () => {
     };
 
     const handleRegisterPayment = (paymentData) => {
-        registerPayment(paymentData);
+        return registerPayment(paymentData);
     }
 
     const [isReverseModalOpen, setIsReverseModalOpen] = useState(false);
@@ -172,6 +172,7 @@ const Revenues = () => {
                     payableType={PayableType.REVENUE}
                     setIsModalPaymentOpen={setIsPaymentModalOpen}
                     handlePayment={handleRegisterPayment}
+                    refetch={refetch}
                 />
             )}
 
@@ -181,6 +182,7 @@ const Revenues = () => {
                     onClose={handleCloseReverseModal}
                     entityType="revenue"
                     entityData={selectedRevenueForReverse}
+                    refetch={refetch}
                 />
             )}
 

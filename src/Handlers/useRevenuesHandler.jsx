@@ -6,7 +6,7 @@ import SweetAlert from '../Components/Alerts/SweetAlert';
 import AlertConfirm from '../Components/Alerts/AlertConfirm';
 
 export const useRevenueHandler = (periodo) => {
-    const {revenues, addRevenue, deleteRevenue, updateRevenue, loading, error} = RevenuesManager(periodo);
+    const {revenues, addRevenue, deleteRevenue, updateRevenue, loading, error, refetch} = RevenuesManager(periodo);
     const {categories} = CategoryManager();
 
     const [selectedCategory, setSelectedCategory] = useState();
@@ -179,6 +179,7 @@ export const useRevenueHandler = (periodo) => {
         idRevenue,
         setIdRevenue,
         loading,
-        error
+        error,
+        refetch
     };
 };

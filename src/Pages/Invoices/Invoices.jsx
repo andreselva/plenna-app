@@ -59,7 +59,8 @@ const Invoices = () => {
         invoices,
         handlePayment,
         loading,
-        error
+        error,
+        refetch
     } = useInvoiceHandler(formattedPeriod);
 
     const fnExpenses = useExpenseHandler(formattedPeriod);
@@ -135,6 +136,7 @@ const Invoices = () => {
                     payableType="invoice"
                     setIsModalPaymentOpen={setPaymentModalOpen}
                     handlePayment={handlePayment}
+                    refetch={refetch}
                 />
             )}
 
@@ -144,6 +146,7 @@ const Invoices = () => {
                     onClose={handleCloseReverseModal}
                     entityType="invoice"
                     entityData={selectedInvoiceForReserve}
+                    refetch={refetch}
                 />
             )}
         </div>
