@@ -1,93 +1,120 @@
 import GenericModal from '../../Components/GenericModal/GenericModal';
 
-export const ModalBankAccounts = ({
-    setIsModalOpen,
-    handleAddAccount,
-    setNewAccount,
-    newAccount,
-    setEditingAccount,
-    editingAccount,
-    generateInvoice,
-    setGerenateInvoice,
-    dueDate,
-    setDueDate,
-    closingDate,
-    setClosingDate
-}) => {
-    const handleCancel = () => {
-        setNewAccount('');
-        setEditingAccount(null);
-        setIsModalOpen(false);
-        setGerenateInvoice(false);
-    };
+const BANK_ACCOUNT_TYPES = [
+  { value: 'CHECKING', label: 'Conta corrente' },
+  { value: 'SAVINGS', label: 'Poupança' },
+  { value: 'DIGITAL_WALLET', label: 'Carteira digital' },
+  { value: 'INVESTMENT', label: 'Investimento' },
+];
 
-    let formFields = [
+export const ModalBankAccounts = ({
+  setIsModalOpen,
+  handleAddAccount,
+  setEditingAccount,
+  editingAccount,
+  formData,
+  setField,
+  resetForm,
+}) => {
+  const handleCancel = () => {
+    resetForm();
+    setEditingAccount(null);
+    setIsModalOpen(false);
+  };
+
+  const formFields = [
+    {
+      title: 'Geral',
+      fields: [
         {
-            title: 'Geral',
-            fields: [
-                {
-                    id: 'nameAccount',
-                    label: 'Nome',
-                    type: 'text',
-                    value: newAccount,
-                    onChange: (value) => setNewAccount(value),
-                    placeholder: 'Ex: Sicredi, Bradesco...',
-                    required: true,
-                    size: 'full-width',
-                }
-            ]
+          id: 'nameAccount',
+          label: 'Nome',
+          type: 'text',
+          value: formData.name,
+          onChange: (value) => setField('name', value),
+          placeholder: 'Ex: Sicredi, Nubank PJ...',
+          required: true,
+          size: 'half-width-large',
         },
         {
-            fields: [
-                {
-                    id: 'isInstallment',
-                    label: 'Gerar fatura?',
-                    type: 'toggle',
-                    value: generateInvoice,
-                    onChange: (value) => setGerenateInvoice(value),
-                    required: false,
-                    size: 'half-width-medium',
-                    disabled: false,
-                },
-            ]
-        }
-    ];
+          id: 'type',
+          label: 'Tipo',
+          type: 'select',
+          value: formData.type,
+          onChange: (value) => setField('type', value),
+          options: BANK_ACCOUNT_TYPES,
+          required: true,
+          size: 'half-width-medium',
+        },
+      ],
+    },
+    {
+      title: 'Dados bancários',
+      fields: [
+        {
+          id: 'bankCode',
+          label: 'Código do banco',
+          type: 'number',
+          value: formData.bankCode,
+          onChange: (value) => setField('bankCode', value),
+          placeholder: 'Ex: 748',
+          size: 'half-width-middle-medium',
+        },
+        {
+          id: 'agency',
+          label: 'Agência',
+          type: 'text',
+          value: formData.agency,
+          onChange: (value) => setField('agency', value),
+          placeholder: 'Ex: 0123',
+          size: 'half-width-middle-medium',
+        },
+        {
+          id: 'accountNumber',
+          label: 'Número da conta',
+          type: 'text',
+          value: formData.accountNumber,
+          onChange: (value) => setField('accountNumber', value),
+          placeholder: 'Ex: 12345-6',
+          size: 'half-width-large',
+        },
+      ],
+    },
+    {
+      title: 'Saldo e status',
+      fields: [
+        {
+          id: 'initialBalance',
+          label: 'Saldo inicial',
+          type: 'number',
+          value: formData.initialBalance,
+          onChange: (value) => setField('initialBalance', value),
+          placeholder: '0,00',
+          step: '0.01',
+          required: true,
+          size: 'half-width-middle-medium',
+        },
+        {
+          id: 'isActive',
+          label: 'Conta ativa?',
+          type: 'toggle',
+          value: formData.isActive,
+          onChange: (value) => setField('isActive', value),
+          size: 'half-width-medium',
+        },
+      ],
+    },
+  ];
 
-    if (generateInvoice) {
-        formFields.push({
-            title: 'Configurações da fatura',
-            fields: [
-                {
-                    id: 'dueDate',
-                    label: 'Dia de vencimento da fatura',
-                    type: 'text',
-                    value: dueDate,
-                    onChange: setDueDate,
-                    required: true,
-                    size: 'half-width-middle-medium'
-                },
-                {
-                    id: 'closingDate',
-                    label: 'Dia de fechamento da fatura',
-                    type: 'text',
-                    value: closingDate,
-                    onChange: setClosingDate,
-                    required: true,
-                    size: 'half-width-middle-medium'
-                }
-            ]
-        });
-    }
-
-    return (
-        <GenericModal
-            isOpen={true}
-            title={editingAccount ? 'Editar conta' : 'Cadastrar conta'}
-            formFields={formFields}
-            onSubmit={handleAddAccount}
-            onCancel={handleCancel}
-            submitButtonText={editingAccount ? 'Salvar' : 'Adicionar'}
-            width="600px"
-        />
-    );
+  return (
+    <GenericModal
+      isOpen={true}
+      title={editingAccount ? 'Editar conta bancária' : 'Cadastrar conta bancária'}
+      formFields={formFields}
+      onSubmit={handleAddAccount}
+      onCancel={handleCancel}
+      submitButtonText={editingAccount ? 'Salvar' : 'Adicionar'}
+      width="760px"
+    />
+  );
 };

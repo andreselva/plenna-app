@@ -37,7 +37,7 @@ const Expenses = () => {
     const {
         expenses, categories, newExpense, setNewExpense, expenseValue, setExpenseValue, expenseInvoiceDueDate, setExpenseInvoiceDueDate,
         selectedCategory, setSelectedCategory, isModalOpen, setIsModalOpen, setEditingExpense, handleEditExpense, handleSaveExpense,
-        handleDeleteExpense, accounts, selectedCard, setSelectedCard, installments, setInstallments, typeOfInstallment, setTypeOfInstallment,
+        handleDeleteExpense, creditCards, selectedCard, setSelectedCard, installments, setInstallments, typeOfInstallment, setTypeOfInstallment,
         hasInstallments, setHasInstallments, hasSourceAccountId, setBooleanSourceAccountId, idExpense, setIdExpense, linkToInvoice, setLinkToInvoice,
         idInvoice, setIdInvoice, status, setStatus, optionsStatus, handleRegisterPayment, isPaymentModalOpen, setIsPaymentModalOpen, loading, error,
         refetch, selectedSubcategory, setSelectedSubcategory
@@ -92,8 +92,8 @@ const Expenses = () => {
             label: 'Filtrar por cartão de crédito',
             type: 'select',
             placeholder: 'Todos os cartões',
-            options: accounts
-                    .map(account => ({value: account.id, label: account.name}))
+            options: creditCards
+                    .map(creditCard => ({value: creditCard.id, label: creditCard.name}))
         }
     ];
 

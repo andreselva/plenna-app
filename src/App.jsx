@@ -6,6 +6,7 @@ import Dashboard from "./Pages/Dashboard/Dashboard";
 import Expenses from "./Pages/Expenses/Expenses";
 import Revenues from "./Pages/Revenues/Revenues";
 import { BankAccounts } from './Pages/BankAccounts/BankAccounts';
+import { CreditCards } from './Pages/CreditCards/CreditCards';
 import Signin from './Pages/Signin/Signin';
 import PrivateRoute from './Auth/PrivateRoute';
 import Invoices from './Pages/Invoices/Invoices';
@@ -45,6 +46,7 @@ const AppContent = () => {
                     <Route path="/expenses" element={<PrivateRoute><Expenses /></PrivateRoute>} />
                     <Route path="/revenues" element={<PrivateRoute><Revenues /></PrivateRoute>} />
                     <Route path="/bank-accounts" element={<PrivateRoute><BankAccounts /></PrivateRoute>} />
+                    <Route path="/credit-cards" element={<PrivateRoute><CreditCards /></PrivateRoute>} />
                     <Route path="/invoices" element={<PrivateRoute><Invoices /></PrivateRoute>} />
                     <Route path="/users" element={<PrivateRoute><Users /></PrivateRoute>} />
                     <Route path="/reports" element={<PrivateRoute><Reports /></PrivateRoute>} />
