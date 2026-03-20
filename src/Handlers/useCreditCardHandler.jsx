@@ -2,7 +2,14 @@ import { useState } from 'react';
 import { useCreditCards } from '../Hooks/CreditCardsManager/useCreditCards';
 
 export const useCreditCardHandler = () => {
-  const { accounts, addCreditCard, updateCreditCard, deleteCreditCard, loading, error } = useCreditCards();
+  const {
+    creditCards,
+    addCreditCard,
+    updateCreditCard,
+    deleteCreditCard,
+    loading,
+    error,
+  } = useCreditCards();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingAccount, setEditingAccount] = useState(null);
   const [newAccount, setNewAccount] = useState('');
@@ -71,7 +78,7 @@ export const useCreditCardHandler = () => {
   };
 
   return {
-    accounts,
+    creditCards,
     newAccount,
     setNewAccount,
     isModalOpen,

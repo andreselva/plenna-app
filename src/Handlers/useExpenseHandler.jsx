@@ -18,11 +18,13 @@ export const useExpenseHandler = (periodo) => {
         deleteExpense,
         registerPayment,
         categories,
+        accounts,
         creditCards,
     });
 
     return {
         expenses,
+        creditCards,
         ...formLogic,
         loading,
         error,

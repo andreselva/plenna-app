@@ -1,7 +1,5 @@
 import { useState } from 'react';
 import { CategoryManager } from '../../Hooks/CategoryManager/CategoryManager';
-import { useBankAccounts } from '../../Hooks/BankAccountsManager/useBankAccounts';
-import { useExpenseHandler } from '../../Handlers/useExpenseHandler';
 import { useInvoiceHandler } from '../../Handlers/useInvoiceHandler';
 import { getFormattedDateRange, getStartAndEndOfMonth } from '../../Utils/DateUtils';
 import { CustomDatePicker } from '../../Components/DatePicker/DatePicker';
@@ -10,6 +8,7 @@ import { ReversePaymentModal } from '../../Modals/PaymentModal/ReversePaymentMod
 import ModalExpenses from '../../Modals/ModalExpenses/ModalExpenses';
 import InvoiceTable from '../../Tables/InvoiceTable/InvoiceTable';
 import globalStyles from '../../Styles/GlobalStyles.module.css';
+import { useExpenseHandler } from '../../Handlers/useExpenseHandler';
 
 const Invoices = () => {
     const [selectedInvoice, setSelectedInvoice] = useState(null);
@@ -21,7 +20,6 @@ const Invoices = () => {
 
     const [formattedPeriod, setFormattedPeriod] = useState(() => getStartAndEndOfMonth());
     const { categories } = CategoryManager();
-    const { accounts } = useBankAccounts();
     const [selectedMonth, setSelectedMonth] = useState(() => {
         const now = new Date();
         const nextMonthDate = new Date(now);
@@ -107,7 +105,7 @@ const Invoices = () => {
                     selectedCategory={fnExpenses.selectedCategory}
                     setSelectedCategory={fnExpenses.setSelectedCategory}
                     setEditingExpense={fnExpenses.setEditingExpense}
-                    creditCards={accounts}
+                    creditCards={fnExpenses.creditCards}
                     selectedCard={fnExpenses.selectedCard}
                     setSelectedCard={fnExpenses.setSelectedCard}
                     installments={fnExpenses.installments}
@@ -127,6 +125,9 @@ const Invoices = () => {
                     status={fnExpenses.status}
                     setStatus={fnExpenses.setStatus}
                     optionsStatus={fnExpenses.optionsStatus}
+                    accounts={fnExpenses.accounts}
+                    selectedSubcategory={fnExpenses.selectedSubcategory}
+                    setSelectedSubcategory={fnExpenses.setSelectedSubcategory}
                 />
             )}
 

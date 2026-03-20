@@ -35,7 +35,7 @@ const Expenses = () => {
     };
 
     const {
-        expenses, categories, newExpense, setNewExpense, expenseValue, setExpenseValue, expenseInvoiceDueDate, setExpenseInvoiceDueDate,
+        expenses, categories, accounts, newExpense, setNewExpense, expenseValue, setExpenseValue, expenseInvoiceDueDate, setExpenseInvoiceDueDate,
         selectedCategory, setSelectedCategory, isModalOpen, setIsModalOpen, setEditingExpense, handleEditExpense, handleSaveExpense,
         handleDeleteExpense, creditCards, selectedCard, setSelectedCard, installments, setInstallments, typeOfInstallment, setTypeOfInstallment,
         hasInstallments, setHasInstallments, hasSourceAccountId, setBooleanSourceAccountId, idExpense, setIdExpense, linkToInvoice, setLinkToInvoice,
@@ -124,7 +124,7 @@ const Expenses = () => {
         }
 
         if (activeFilters.accountId) {
-            items = items.filter(expense => expense.idCreditCard  === Number(activeFilters.accountId))
+            items = items.filter(expense => Number(expense.idCreditCard) === Number(activeFilters.accountId));
         }
 
         setFilteredExpenses(items);
@@ -175,7 +175,7 @@ const Expenses = () => {
                     <ExpenseTable
                         expenses={filteredExpenses}
                         categories={categories}
-                        creditCards={accounts}
+                        creditCards={creditCards}
                         onEdit={handleEditExpense}
                         onDelete={handleDeleteExpense}
                         onPayment={handleOpenPaymentModal}
@@ -202,7 +202,7 @@ const Expenses = () => {
                     selectedSubcategory={selectedSubcategory}
                     setSelectedSubcategory={setSelectedSubcategory}
                     setEditingExpense={setEditingExpense}
-                    creditCards={accounts}
+                    creditCards={creditCards}
                     selectedCard={selectedCard}
                     setSelectedCard={setSelectedCard}
                     installments={installments}
@@ -222,10 +222,11 @@ const Expenses = () => {
                     status={status}
                     setStatus={setStatus}
                     optionsStatus={optionsStatus}
+                    accounts={accounts}
                 />
             )}
 
-            {isPaymentModalOpen && selectedExpense && (
+            {isPaymentModalOpen && (
                 <PaymentModal
                     payableItem={selectedExpense}
                     payableType="expense"

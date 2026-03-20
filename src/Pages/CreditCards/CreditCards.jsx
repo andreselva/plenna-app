@@ -6,7 +6,7 @@ import globalStyles from '../../Styles/GlobalStyles.module.css';
 
 export const CreditCards = () => {
   const {
-    accounts,
+    creditCards,
     newAccount,
     setNewAccount,
     isModalOpen,
@@ -42,7 +42,7 @@ export const CreditCards = () => {
 
         <div className={globalStyles.card}>
           <CreditCardsTable
-            accounts={accounts}
+            creditCards={creditCards}
             onEdit={handleEditAccount}
             onDelete={handleDeleteAccount}
             generateInvoices={handleGenerateInvoices}

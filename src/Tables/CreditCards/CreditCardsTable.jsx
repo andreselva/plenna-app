@@ -11,7 +11,7 @@ const INVOICE_STATUS_COLORS = {
   false: '#6c757d',
 };
 
-export const CreditCardsTable = ({ accounts, onEdit, onDelete, generateInvoices, loading }) => {
+export const CreditCardsTable = ({ creditCards, onEdit, onDelete, generateInvoices, loading }) => {
   if (loading) {
     return <BankAccountsTableSkeleton />;
   }
@@ -96,5 +96,5 @@ export const CreditCardsTable = ({ accounts, onEdit, onDelete, generateInvoices,
     },
   ];
 
-  return <FlexibleTable columns={columns} data={accounts} noDataMessage="Nenhum cartão cadastrado" />;
+  return <FlexibleTable columns={columns} data={creditCards} noDataMessage="Nenhum cartão cadastrado" />;
 };

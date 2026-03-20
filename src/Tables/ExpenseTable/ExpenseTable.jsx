@@ -66,7 +66,9 @@ const ExpenseTable = ({ expenses = [], categories = [], creditCards = [], onEdit
             {
                 header: 'Cartão de crédito',
                 renderCell: (expense) => {
-                    const creditCard = creditCards.find(cc => cc.id === expense.idCreditCard) || {};
+                    const creditCard = creditCards.find(
+                        cc => Number(cc.id) === Number(expense.idCreditCard)
+                    ) || {};
                     return creditCard.name || '-';
                 },
                 style: { flex: '1 1 15%', display: 'flex', justifyContent: 'center' },
