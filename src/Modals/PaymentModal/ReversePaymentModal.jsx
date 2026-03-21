@@ -5,6 +5,7 @@ import { BanknoteXIcon } from 'lucide-react';
 import GenericModal from '../../Components/GenericModal/GenericModal';
 import AlertConfirm from '../../Components/Alerts/AlertConfirm';
 import Loader from '../../Components/Loader/Loader';
+import { formatDateToPtBr } from '../../Utils/DateUtils';
 
 const entityConfig = {
     revenue: { title: 'Estornar recebimentos' },
@@ -38,9 +39,9 @@ export const ReversePaymentModal = ({ isOpen, onClose, entityType, entityData, r
         });
 
         if (!result.isConfirmed) return;
-        
+
         const reversePaymentData = {
-            accountId: entityData.idBankAccount ?? 0,
+            accountId: payment.accountId ?? entityData.idBankAccount ?? 0,
             amount: Number(payment.value),
             paymentId: payment.id,
             referenceType: entityType,
@@ -81,7 +82,7 @@ export const ReversePaymentModal = ({ isOpen, onClose, entityType, entityData, r
                             <li key={payment.id} className="payment-item">
                                 <div className="payment-info">
                                     <span className="payment-date">
-                                        {new Date(payment.payment_date).toLocaleDateString('pt-BR')}
+                                        {formatDateToPtBr(payment.payment_date)}
                                     </span>
                                     <strong className="payment-value">
                                         {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(payment.value)}

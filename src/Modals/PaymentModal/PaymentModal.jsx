@@ -1,7 +1,8 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import GenericModal from "../../Components/GenericModal/GenericModal";
 import AlertConfirm from "../../Components/Alerts/AlertConfirm";
 import { PayableType } from "../../enum/payable-type.enum";
+import { getLocalISODate } from "../../Utils/DateUtils";
 
 export const PaymentModal = ({
     payableItem,
@@ -12,19 +13,14 @@ export const PaymentModal = ({
     refetch = () => {}
 }) => {
     const [amountValue, setAmountValue] = useState('');
-    const [paymentDate, setPaymentDate] = useState(() => new Date().toISOString().split('T')[0]);
+    const [paymentDate, setPaymentDate] = useState(getLocalISODate());
     const [selectedBankAccount, setSelectedBankAccount] = useState('');
 
     useEffect(() => {
         setAmountValue('');
-        setPaymentDate(new Date().toISOString().split('T')[0]);
+        setPaymentDate(getLocalISODate());
         setSelectedBankAccount(payableItem?.idBankAccount ? String(payableItem.idBankAccount) : '');
     }, [payableItem]);
-
-    const selectedAccountLabel = useMemo(() => {
-        const account = accounts.find(acc => String(acc.id) === String(selectedBankAccount));
-        return account?.name || '-';
-    }, [accounts, selectedBankAccount]);
 
     if (!payableItem) {
         return null;
@@ -160,7 +156,7 @@ export const PaymentModal = ({
                     onChange: setPaymentDate,
                     type: "date",
                     required: true,
-                    defaultValue: new Date().toISOString().split('T')[0],
+                    defaultValue: getLocalISODate(),
                 }
             ]
         }
