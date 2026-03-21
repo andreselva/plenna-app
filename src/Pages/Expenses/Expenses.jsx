@@ -40,7 +40,7 @@ const Expenses = () => {
         handleDeleteExpense, creditCards, selectedCard, setSelectedCard, installments, setInstallments, typeOfInstallment, setTypeOfInstallment,
         hasInstallments, setHasInstallments, hasSourceAccountId, setBooleanSourceAccountId, idExpense, setIdExpense, linkToInvoice, setLinkToInvoice,
         idInvoice, setIdInvoice, status, setStatus, optionsStatus, handleRegisterPayment, isPaymentModalOpen, setIsPaymentModalOpen, loading, error,
-        refetch, selectedSubcategory, setSelectedSubcategory
+        refetch, selectedSubcategory, setSelectedSubcategory, selectedBankAccount, setSelectedBankAccount
     } = useExpenseHandler(formattedPeriod);
 
     const [selectedExpense, setSelectedExpense] = useState(null);
@@ -48,6 +48,7 @@ const Expenses = () => {
         setSelectedExpense(expense);
         setIsPaymentModalOpen(true);
     };
+
     const [isReverseModalOpen, setIsReverseModalOpen] = useState(false);
     const [selectedExpenseForReverse, setSelectedExpenseForReverse] = useState(null);
     const handleOpenReverseModal = (expense) => {
@@ -65,7 +66,7 @@ const Expenses = () => {
 
     const filterIconRef = useRef(null);
 
-    const statusOptions = {pending: 'Pendente', paid: 'Paga', partial: 'Parcial', cancelled: 'Cancelada'};
+    const statusOptions = { pending: 'Pendente', paid: 'Paga', partial: 'Parcial', cancelled: 'Cancelada' };
 
     const dropdownFilterConfig = [
         {
@@ -84,16 +85,15 @@ const Expenses = () => {
             type: 'select',
             placeholder: 'Todas as Categorias',
             options: categories
-                    .filter((category) => category.type.toUpperCase() === 'DESPESA')
-                    .map(cat => ({ value: cat.id, label: cat.name }))
+                .filter((category) => category.type.toUpperCase() === 'DESPESA')
+                .map(cat => ({ value: cat.id, label: cat.name }))
         },
         {
             name: 'accountId',
             label: 'Filtrar por cartão de crédito',
             type: 'select',
             placeholder: 'Todos os cartões',
-            options: creditCards
-                    .map(creditCard => ({value: creditCard.id, label: creditCard.name}))
+            options: creditCards.map(creditCard => ({ value: creditCard.id, label: creditCard.name }))
         }
     ];
 
@@ -105,20 +105,19 @@ const Expenses = () => {
             items = items.filter(expense => {
                 const expenseValueString = String(expense.value);
                 const expenseDueDateString = String(expense.invoiceDueDate.split('-').reverse().join('/'));
-                
+
                 return (
                     expense.name.toLowerCase().includes(lowerCaseQuery) ||
                     expenseValueString.toLowerCase().includes(lowerCaseQuery) ||
                     expenseDueDateString.toLowerCase().includes(lowerCaseQuery)
                 );
-            }
-            );
+            });
         }
 
         if (activeFilters.status) {
             items = items.filter(expense => expense.status === activeFilters.status);
         }
-        
+
         if (activeFilters.categoryId) {
             items = items.filter(expense => expense.idCategory === Number(activeFilters.categoryId));
         }
@@ -140,14 +139,14 @@ const Expenses = () => {
                             <span className={globalStyles['title-items-span']}>Despesas</span>
                         </div>
                         <div className={globalStyles['content-title-items-right']}>
-                            <button 
+                            <button
                                 ref={filterIconRef}
-                                className={`${globalStyles['icon-button']} ${Object.keys(activeFilters).length > 0 ? globalStyles['active'] : ''}`} 
+                                className={`${globalStyles['icon-button']} ${Object.keys(activeFilters).length > 0 ? globalStyles['active'] : ''}`}
                                 onClick={() => setIsFilterOpen(!isFilterOpen)}
                             >
                                 <FilterIcon size={20} />
                             </button>
-                            <SearchInput 
+                            <SearchInput
                                 placeholder="Procurar..."
                                 onSearchChange={setSearchQuery}
                             />
@@ -161,7 +160,7 @@ const Expenses = () => {
                     </div>
                 </div>
 
-                <FilterDropdown 
+                <FilterDropdown
                     isOpen={isFilterOpen}
                     onClose={() => setIsFilterOpen(false)}
                     anchorEl={filterIconRef.current}
@@ -176,6 +175,7 @@ const Expenses = () => {
                         expenses={filteredExpenses}
                         categories={categories}
                         creditCards={creditCards}
+                        accounts={accounts}
                         onEdit={handleEditExpense}
                         onDelete={handleDeleteExpense}
                         onPayment={handleOpenPaymentModal}
@@ -203,8 +203,11 @@ const Expenses = () => {
                     setSelectedSubcategory={setSelectedSubcategory}
                     setEditingExpense={setEditingExpense}
                     creditCards={creditCards}
+                    accounts={accounts}
                     selectedCard={selectedCard}
                     setSelectedCard={setSelectedCard}
+                    selectedBankAccount={selectedBankAccount}
+                    setSelectedBankAccount={setSelectedBankAccount}
                     installments={installments}
                     setInstallments={setInstallments}
                     typeOfInstallment={typeOfInstallment}
@@ -222,7 +225,6 @@ const Expenses = () => {
                     status={status}
                     setStatus={setStatus}
                     optionsStatus={optionsStatus}
-                    accounts={accounts}
                 />
             )}
 
@@ -230,6 +232,7 @@ const Expenses = () => {
                 <PaymentModal
                     payableItem={selectedExpense}
                     payableType="expense"
+                    accounts={accounts}
                     setIsModalPaymentOpen={setIsPaymentModalOpen}
                     handlePayment={handleRegisterPayment}
                     refetch={refetch}

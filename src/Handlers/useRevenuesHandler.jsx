@@ -1,13 +1,15 @@
-import {useState} from 'react';
+import { useState } from 'react';
 import { RevenuesManager } from '../Hooks/RevenuesManager/RevenuesManager';
 import { CategoryManager } from '../Hooks/CategoryManager/CategoryManager';
 import { validateDate } from '../Utils/DateUtils';
 import SweetAlert from '../Components/Alerts/SweetAlert';
 import AlertConfirm from '../Components/Alerts/AlertConfirm';
+import { useBankAccounts } from '../Hooks/BankAccountsManager/useBankAccounts';
 
 export const useRevenueHandler = (periodo) => {
-    const {revenues, addRevenue, deleteRevenue, updateRevenue, loading, error, refetch} = RevenuesManager(periodo);
-    const {categories} = CategoryManager();
+    const { revenues, addRevenue, deleteRevenue, updateRevenue, loading, error, refetch } = RevenuesManager(periodo);
+    const { categories } = CategoryManager();
+    const { accounts } = useBankAccounts();
 
     const [selectedCategory, setSelectedCategory] = useState();
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -21,9 +23,9 @@ export const useRevenueHandler = (periodo) => {
     const [hasInstallments, setHasInstallments] = useState(false);
     const [hasSourceAccountId, setBooleanSourceAccountId] = useState(false);
     const [sourceAccountId, setSourceAccountId] = useState('');
+    const [selectedBankAccount, setSelectedBankAccount] = useState('');
     const [idRevenue, setIdRevenue] = useState(0);
     const updateInstallments = false;
-
 
     const handleAddRevenue = () => {
         if (!newRevenue.trim()) {
@@ -37,9 +39,11 @@ export const useRevenueHandler = (periodo) => {
             value: Number(revenueValue),
             invoiceDueDate: revenueInvoiceDueDate,
             idCategory: Number(selectedCategory),
+            idBankAccount: Number(selectedBankAccount) || 0,
             installments: Number(installments),
             typeOfInstallments: typeOfInstallment,
-            hasInstallments: hasInstallments
+            hasInstallments: hasInstallments,
+            status: 'pending'
         });
 
         resetForm();
@@ -58,6 +62,7 @@ export const useRevenueHandler = (periodo) => {
         setHasInstallments(revenue.hasInstallments);
         setBooleanSourceAccountId(revenue.sourceAccountId > 0);
         setSourceAccountId(revenue.sourceAccountId);
+        setSelectedBankAccount(revenue.idBankAccount ?? '');
         setIsModalOpen(true);
     };
 
@@ -68,7 +73,7 @@ export const useRevenueHandler = (periodo) => {
         }
 
         if (!validateDate(revenueInvoiceDueDate)) {
-            SweetAlert.error("Data inválida!");
+            SweetAlert.error('Data inválida!');
             return;
         }
 
@@ -84,10 +89,12 @@ export const useRevenueHandler = (periodo) => {
             value: Number(revenueValue),
             invoiceDueDate: revenueInvoiceDueDate,
             idCategory: Number(selectedCategory),
+            idBankAccount: Number(selectedBankAccount) || 0,
             installments: Number(installments),
             typeOfInstallments: typeOfInstallment,
             hasInstallments: hasInstallments,
-            sourceAccountId: Number(sourceAccountId)
+            sourceAccountId: Number(sourceAccountId) || 0,
+            status: editingRevenue.status ?? 'pending'
         };
 
         let updateInstallmentsFlag = updateInstallments;
@@ -120,17 +127,16 @@ export const useRevenueHandler = (periodo) => {
                 icon: 'warning',
                 confirmButtonText: 'Sim, excluir',
                 cancelButtonText: 'Não'
-            })
+            });
 
             if (result.isConfirmed) {
                 deleteRevenue(revenue.id, true, revenue.sourceAccountId);
             } else {
-                deleteRevenue(revenue.id)
+                deleteRevenue(revenue.id);
             }
         } else {
             deleteRevenue(revenue.id);
         }
-
     };
 
     const resetForm = () => {
@@ -144,12 +150,16 @@ export const useRevenueHandler = (periodo) => {
         setTypeOfInstallment('U');
         setHasInstallments(false);
         setBooleanSourceAccountId(false);
+        setSourceAccountId('');
+        setSelectedBankAccount('');
         setIsModalOpen(false);
+        setIdRevenue(0);
     };
 
     return {
         revenues,
         categories,
+        accounts,
         selectedCategory,
         setSelectedCategory,
         isModalOpen,
@@ -176,6 +186,8 @@ export const useRevenueHandler = (periodo) => {
         setHasInstallments,
         hasSourceAccountId,
         setBooleanSourceAccountId,
+        selectedBankAccount,
+        setSelectedBankAccount,
         idRevenue,
         setIdRevenue,
         loading,

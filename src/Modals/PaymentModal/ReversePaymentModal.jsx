@@ -6,13 +6,12 @@ import GenericModal from '../../Components/GenericModal/GenericModal';
 import AlertConfirm from '../../Components/Alerts/AlertConfirm';
 import Loader from '../../Components/Loader/Loader';
 
-
 const entityConfig = {
     revenue: { title: 'Estornar recebimentos' },
     default: { title: 'Estornar pagamentos' },
 };
 
-export const ReversePaymentModal = ({ isOpen, onClose, entityType, entityData, refetch = () => {}}) => {
+export const ReversePaymentModal = ({ isOpen, onClose, entityType, entityData, refetch = () => {} }) => {
     const [payments, setPayments] = useState([]);
     const { loading, getPaymentsByEntity, reversePayment } = usePaymentManager();
 
@@ -41,12 +40,13 @@ export const ReversePaymentModal = ({ isOpen, onClose, entityType, entityData, r
         if (!result.isConfirmed) return;
         
         const reversePaymentData = {
-            accountId: entityData.idCreditCard ?? 0,
+            accountId: entityData.idBankAccount ?? 0,
             amount: Number(payment.value),
             paymentId: payment.id,
             referenceType: entityType,
             entityId: entityData.id
-        }
+        };
+
         const reverseResult = await reversePayment(reversePaymentData);
         if (reverseResult && reverseResult.isSuccess) {
             fetchPayments();

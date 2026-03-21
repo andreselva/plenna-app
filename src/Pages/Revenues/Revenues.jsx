@@ -43,7 +43,7 @@ const Revenues = () => {
         newRevenue, setNewRevenue, revenueValue, setRevenueValue, revenueInvoiceDueDate, setRevenueInvoiceDueDate,
         handleEditRevenue, handleSaveRevenue, handleDeleteRevenue, typeOfInstallment, setTypeOfInstallment,
         installments, setInstallments, hasInstallments, setHasInstallments, hasSourceAccountId,
-        setBooleanSourceAccountId, idRevenue, setIdRevenue, loading, error, refetch
+        setBooleanSourceAccountId, idRevenue, setIdRevenue, loading, error, refetch, accounts, selectedBankAccount, setSelectedBankAccount
     } = useRevenueHandler(formattedPeriod);
 
     const [filteredRevenues, setFilteredRevenues] = useState(revenues);
@@ -59,8 +59,8 @@ const Revenues = () => {
             type: 'select',
             placeholder: 'Todas as Categorias',
             options: categories
-                        .filter(category => category.type.toUpperCase() === 'RECEITA')
-                        .map(cat => ({ value: cat.id, label: cat.name }))
+                .filter(category => category.type.toUpperCase() === 'RECEITA')
+                .map(cat => ({ value: cat.id, label: cat.name }))
         }
     ];
 
@@ -71,7 +71,7 @@ const Revenues = () => {
             const lowerCaseQuery = searchQuery.toLowerCase();
             items = items.filter(revenue => {
                 const revenueValueAsString = String(revenue.value);
-                const revenueDueString = String(revenue.invoiceDueDate.split('-').reverse().join('/'))
+                const revenueDueString = String(revenue.invoiceDueDate.split('-').reverse().join('/'));
 
                 return (
                     revenue.name.toLowerCase().includes(lowerCaseQuery) ||
@@ -80,7 +80,7 @@ const Revenues = () => {
                 );
             });
         }
-        
+
         if (activeFilters.categoryId) {
             items = items.filter(revenue => revenue.idCategory === Number(activeFilters.categoryId));
         }
@@ -90,7 +90,7 @@ const Revenues = () => {
 
     const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
     const [selectedRevenue, setSelectedRevenue] = useState(null);
-    
+
     const handleOpenPaymentModal = (revenue) => {
         setSelectedRevenue(revenue);
         setIsPaymentModalOpen(true);
@@ -98,7 +98,7 @@ const Revenues = () => {
 
     const handleRegisterPayment = (paymentData) => {
         return registerPayment(paymentData);
-    }
+    };
 
     const [isReverseModalOpen, setIsReverseModalOpen] = useState(false);
     const [selectedRevenueForReverse, setSelectedRevenueForReverse] = useState(null);
@@ -121,14 +121,14 @@ const Revenues = () => {
                             <span className={globalStyles['title-items-span']}>Receitas</span>
                         </div>
                         <div className={globalStyles['content-title-items-right']}>
-                            <button 
+                            <button
                                 ref={filterIconRef}
-                                className={`${globalStyles['icon-button']} ${Object.keys(activeFilters).length > 0 ? globalStyles['active'] : ''}`} 
+                                className={`${globalStyles['icon-button']} ${Object.keys(activeFilters).length > 0 ? globalStyles['active'] : ''}`}
                                 onClick={() => setIsFilterOpen(!isFilterOpen)}
                             >
                                 <FilterIcon size={20} />
                             </button>
-                            <SearchInput 
+                            <SearchInput
                                 placeholder="Procurar..."
                                 onSearchChange={setSearchQuery}
                             />
@@ -142,7 +142,7 @@ const Revenues = () => {
                     </div>
                 </div>
 
-                <FilterDropdown 
+                <FilterDropdown
                     isOpen={isFilterOpen}
                     onClose={() => setIsFilterOpen(false)}
                     anchorEl={filterIconRef.current}
@@ -156,6 +156,7 @@ const Revenues = () => {
                     <RevenueTable
                         revenues={filteredRevenues}
                         categories={categories}
+                        accounts={accounts}
                         onEdit={handleEditRevenue}
                         onDelete={handleDeleteRevenue}
                         loading={loading}
@@ -170,6 +171,7 @@ const Revenues = () => {
                 <PaymentModal
                     payableItem={selectedRevenue}
                     payableType={PayableType.REVENUE}
+                    accounts={accounts}
                     setIsModalPaymentOpen={setIsPaymentModalOpen}
                     handlePayment={handleRegisterPayment}
                     refetch={refetch}
@@ -197,6 +199,7 @@ const Revenues = () => {
                     revenueInvoiceDueDate={revenueInvoiceDueDate}
                     setRevenueInvoiceDueDate={setRevenueInvoiceDueDate}
                     categories={categories}
+                    accounts={accounts}
                     selectedCategory={selectedCategory}
                     setSelectedCategory={setSelectedCategory}
                     setEditingRevenue={setEditingRevenue}
@@ -210,6 +213,8 @@ const Revenues = () => {
                     setBooleanSourceAccountId={setBooleanSourceAccountId}
                     idRevenue={idRevenue}
                     setIdRevenue={setIdRevenue}
+                    selectedBankAccount={selectedBankAccount}
+                    setSelectedBankAccount={setSelectedBankAccount}
                 />
             )}
         </div>

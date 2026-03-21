@@ -15,6 +15,7 @@ export const useExpenseForm = ({ addExpense, updateExpense, deleteExpense, regis
     const [expenseInvoiceDueDate, setExpenseInvoiceDueDate] = useState('');
     const [isModalCardOpen, setIsModalCardOpen] = useState(false);
     const [selectedCard, setSelectedCard] = useState('');
+    const [selectedBankAccount, setSelectedBankAccount] = useState('');
     const [installments, setInstallments] = useState('');
     const [typeOfInstallment, setTypeOfInstallment] = useState('U');
     const [hasInstallments, setHasInstallments] = useState(false);
@@ -44,6 +45,7 @@ export const useExpenseForm = ({ addExpense, updateExpense, deleteExpense, regis
         setIdInvoice('');
         setStatus('pending');
         setSelectedCard('');
+        setSelectedBankAccount('');
         setSourceAccountId('');
         setIdExpense(0);
         setSelectedSubcategory('');
@@ -63,6 +65,7 @@ export const useExpenseForm = ({ addExpense, updateExpense, deleteExpense, regis
             idCategory: selectedCategory === '' ? 0 : Number(selectedCategory),
             idSubcategory: selectedSubcategory === '' ? 0 : Number(selectedSubcategory),
             idCreditCard: selectedCard === '' ? 0 : Number(selectedCard),
+            idBankAccount: selectedBankAccount === '' ? 0 : Number(selectedBankAccount),
             installments: installments === '' ? 0 : Number(installments),
             typeOfInstallment: typeOfInstallment,
             hasInstallments: hasInstallments,
@@ -82,8 +85,9 @@ export const useExpenseForm = ({ addExpense, updateExpense, deleteExpense, regis
         setExpenseValue(expense.value);
         setExpenseInvoiceDueDate(expense.invoiceDueDate);
         setSelectedCategory(expense.idCategory);
-        setSelectedSubcategory(expense.idSubcategory)
+        setSelectedSubcategory(expense.idSubcategory);
         setSelectedCard(expense.idCreditCard);
+        setSelectedBankAccount(expense.idBankAccount ?? '');
         setInstallments(expense.installments);
         setTypeOfInstallment(expense.typeOfInstallment);
         setHasInstallments(expense.hasInstallments);
@@ -91,7 +95,7 @@ export const useExpenseForm = ({ addExpense, updateExpense, deleteExpense, regis
         setSourceAccountId(expense.sourceAccountId);
         setLinkToInvoice(expense.linkToInvoice);
         setIdInvoice(expense.idInvoice);
-        setStatus(expense.status)
+        setStatus(expense.status);
         setIsModalOpen(true);
     };
 
@@ -102,7 +106,7 @@ export const useExpenseForm = ({ addExpense, updateExpense, deleteExpense, regis
         }
 
         if (!validateDate(expenseInvoiceDueDate)) {
-            SweetAlert.error("Data inválida!");
+            SweetAlert.error('Data inválida!');
             return;
         }
 
@@ -117,15 +121,16 @@ export const useExpenseForm = ({ addExpense, updateExpense, deleteExpense, regis
             value: Number(expenseValue),
             invoiceDueDate: expenseInvoiceDueDate,
             idCategory: Number(selectedCategory),
-            idCreditCard: Number(selectedCard),
+            idCreditCard: Number(selectedCard) || 0,
+            idBankAccount: Number(selectedBankAccount) || 0,
             installments: Number(installments),
             typeOfInstallment: typeOfInstallment,
             hasInstallments: hasInstallments,
-            sourceAccountId: Number(sourceAccountId) ?? 0,
+            sourceAccountId: Number(sourceAccountId) || 0,
             linkToInvoice: linkToInvoice,
-            idInvoice: Number(idInvoice) ?? 0,
+            idInvoice: Number(idInvoice) || 0,
             status: status,
-            idSubcategory: Number(selectedSubcategory) ?? 0
+            idSubcategory: Number(selectedSubcategory) || 0
         };
 
         let updateInstallmentsFlag = updateInstallments;
@@ -172,18 +177,63 @@ export const useExpenseForm = ({ addExpense, updateExpense, deleteExpense, regis
 
     const handleAddCard = () => {
         setIsModalCardOpen(true);
-    }
+    };
 
     const handleRegisterPayment = (paymentData) => {
         return registerPayment(paymentData);
-    }
+    };
 
     return {
-        categories, accounts, newExpense, setNewExpense, expenseDescription, setExpenseDescription, expenseValue, setExpenseValue, expenseInvoiceDueDate, 
-        setExpenseInvoiceDueDate, selectedCategory, setSelectedCategory, isModalOpen, setIsModalOpen, isModalCardOpen, setIsModalCardOpen, editingExpense, 
-        setEditingExpense, handleAddExpense, handleEditExpense, handleSaveExpense, handleDeleteExpense, handleAddCard, selectedCard, setSelectedCard, 
-        installments, setInstallments, typeOfInstallment, setTypeOfInstallment, hasInstallments, setHasInstallments, hasSourceAccountId, 
-        setBooleanSourceAccountId, idExpense, setIdExpense, linkToInvoice, setLinkToInvoice, idInvoice, setIdInvoice, status, setStatus, optionsStatus, 
-        handleRegisterPayment, isPaymentModalOpen, setIsPaymentModalOpen, paymentDate, setPaymentDate, selectedSubcategory, setSelectedSubcategory
+        categories,
+        accounts,
+        newExpense,
+        setNewExpense,
+        expenseDescription,
+        setExpenseDescription,
+        expenseValue,
+        setExpenseValue,
+        expenseInvoiceDueDate,
+        setExpenseInvoiceDueDate,
+        selectedCategory,
+        setSelectedCategory,
+        isModalOpen,
+        setIsModalOpen,
+        isModalCardOpen,
+        setIsModalCardOpen,
+        editingExpense,
+        setEditingExpense,
+        handleAddExpense,
+        handleEditExpense,
+        handleSaveExpense,
+        handleDeleteExpense,
+        handleAddCard,
+        selectedCard,
+        setSelectedCard,
+        selectedBankAccount,
+        setSelectedBankAccount,
+        installments,
+        setInstallments,
+        typeOfInstallment,
+        setTypeOfInstallment,
+        hasInstallments,
+        setHasInstallments,
+        hasSourceAccountId,
+        setBooleanSourceAccountId,
+        idExpense,
+        setIdExpense,
+        linkToInvoice,
+        setLinkToInvoice,
+        idInvoice,
+        setIdInvoice,
+        status,
+        setStatus,
+        optionsStatus,
+        handleRegisterPayment,
+        isPaymentModalOpen,
+        setIsPaymentModalOpen,
+        paymentDate,
+        setPaymentDate,
+        selectedSubcategory,
+        setSelectedSubcategory
     };
 };

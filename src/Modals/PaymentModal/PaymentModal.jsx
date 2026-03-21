@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import GenericModal from "../../Components/GenericModal/GenericModal";
 import AlertConfirm from "../../Components/Alerts/AlertConfirm";
 import { PayableType } from "../../enum/payable-type.enum";
@@ -6,12 +6,25 @@ import { PayableType } from "../../enum/payable-type.enum";
 export const PaymentModal = ({
     payableItem,
     payableType,
+    accounts = [],
     setIsModalPaymentOpen,
     handlePayment,
     refetch = () => {}
 }) => {
     const [amountValue, setAmountValue] = useState('');
     const [paymentDate, setPaymentDate] = useState(() => new Date().toISOString().split('T')[0]);
+    const [selectedBankAccount, setSelectedBankAccount] = useState('');
+
+    useEffect(() => {
+        setAmountValue('');
+        setPaymentDate(new Date().toISOString().split('T')[0]);
+        setSelectedBankAccount(payableItem?.idBankAccount ? String(payableItem.idBankAccount) : '');
+    }, [payableItem]);
+
+    const selectedAccountLabel = useMemo(() => {
+        const account = accounts.find(acc => String(acc.id) === String(selectedBankAccount));
+        return account?.name || '-';
+    }, [accounts, selectedBankAccount]);
 
     if (!payableItem) {
         return null;
@@ -27,27 +40,35 @@ export const PaymentModal = ({
         [PayableType.REVENUE]: `Registrar recebimento: ${payableItem.name}`,
         [PayableType.EXPENSE]: `Pagar despesa: ${payableItem.name}`,
         [PayableType.INVOICE]: `Pagar fatura: ${payableItem.name}`
-    }
+    };
 
     const paymentStringConfirm = {
         [PayableType.REVENUE]: `Você está registrando o recebimento de R$ ${amountValue} dessa receita. Você confirma o recebimento?`,
         [PayableType.EXPENSE]: `Você está pagando R$ ${amountValue} dessa despesa. Você confirma o pagamento?`,
         [PayableType.INVOICE]: `Você está pagando R$ ${amountValue} dessa fatura. Você confirma o pagamento?`
-    }
+    };
 
     const typeLabel = payableTypes[payableType] ?? 'Desconhecido';
 
     const paymentAmount = parseFloat(amountValue) || 0;
-    const newTotalPaid = (payableItem.totalPaid ?? 0) + paymentAmount;
-    const remainingToPay = (payableItem.value ?? 0) - newTotalPaid;
+    const currentTotalPaid = Number(payableItem.totalPaid ?? 0);
+    const previewTotalPaid = currentTotalPaid + paymentAmount;
+    const remainingToPay = Number(payableItem.value ?? 0) - previewTotalPaid;
 
     const handleCancel = () => {
         setIsModalPaymentOpen(false);
-    }
+    };
 
     const handleSubmit = async () => {
+        if (!selectedBankAccount) {
+            alert('Selecione uma conta bancária para continuar.');
+            return;
+        }
+
         const result = await AlertConfirm({
-            title: payableType === PayableType.EXPENSE || payableType === PayableType.INVOICE ? 'Registrar pagamento' : 'Registrar recebimento',
+            title: payableType === PayableType.REVENUE || payableType === 'revenue'
+                ? 'Registrar recebimento'
+                : 'Registrar pagamento',
             text: paymentStringConfirm[payableType],
             icon: 'warning',
             confirmButtonText: 'Sim',
@@ -57,16 +78,17 @@ export const PaymentModal = ({
         if (!result.isConfirmed) return;
 
         const paymentData = {
-            accountId: payableItem.idCreditCard ?? 0,
+            accountId: Number(selectedBankAccount),
             payableId: Number(payableItem.id),
             value: Number(amountValue),
             paymentDate: paymentDate,
             payableType: payableType
-        }
+        };
+
         await handlePayment(paymentData);
         setIsModalPaymentOpen(false);
         refetch();
-    }
+    };
 
     const formFields = [
         {
@@ -82,23 +104,41 @@ export const PaymentModal = ({
                 {
                     label: "Valor total (R$)",
                     name: "totalValue",
-                    value: Number(payableItem.value).toFixed(2),
+                    value: Number(payableItem.value ?? 0).toFixed(2),
                     readOnly: true,
                     disabled: true
                 },
                 {
                     label: "Valor já pago (R$)",
                     name: "totalPaid",
-                    value: newTotalPaid.toFixed(2) ?? 0,
+                    value: currentTotalPaid.toFixed(2),
                     readOnly: true,
                     disabled: true
                 },
                 {
                     label: "Valor restante (R$)",
                     name: "remainingToPay",
-                    value: remainingToPay.toFixed(2) ?? 0,
+                    value: Math.max(remainingToPay, 0).toFixed(2),
                     readOnly: true,
                     disabled: true
+                }
+            ]
+        },
+        {
+            title: 'Conta bancária',
+            fields: [
+                {
+                    label: 'Conta selecionada',
+                    name: 'bankAccount',
+                    type: 'select',
+                    value: selectedBankAccount,
+                    onChange: setSelectedBankAccount,
+                    placeholder: 'Selecione a conta bancária',
+                    required: true,
+                    options: accounts.map(account => ({
+                        value: String(account.id),
+                        label: account.name
+                    }))
                 }
             ]
         },
@@ -121,7 +161,7 @@ export const PaymentModal = ({
                     type: "date",
                     required: true,
                     defaultValue: new Date().toISOString().split('T')[0],
-                },
+                }
             ]
         }
     ];
@@ -133,9 +173,13 @@ export const PaymentModal = ({
             formFields={formFields}
             onSubmit={handleSubmit}
             onCancel={handleCancel}
-            submitButtonText="Registrar pagamento"
+            submitButtonText={
+                payableType === PayableType.REVENUE || payableType === 'revenue'
+                    ? "Registrar recebimento"
+                    : "Registrar pagamento"
+            }
             width="700px"
             height="auto"
         />
     );
-}
+};

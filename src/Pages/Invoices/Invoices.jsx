@@ -106,8 +106,11 @@ const Invoices = () => {
                     setSelectedCategory={fnExpenses.setSelectedCategory}
                     setEditingExpense={fnExpenses.setEditingExpense}
                     creditCards={fnExpenses.creditCards}
+                    accounts={fnExpenses.accounts}
                     selectedCard={fnExpenses.selectedCard}
                     setSelectedCard={fnExpenses.setSelectedCard}
+                    selectedBankAccount={fnExpenses.selectedBankAccount}
+                    setSelectedBankAccount={fnExpenses.setSelectedBankAccount}
                     installments={fnExpenses.installments}
                     setInstallments={fnExpenses.setInstallments}
                     typeOfInstallment={fnExpenses.typeOfInstallment}
@@ -125,7 +128,6 @@ const Invoices = () => {
                     status={fnExpenses.status}
                     setStatus={fnExpenses.setStatus}
                     optionsStatus={fnExpenses.optionsStatus}
-                    accounts={fnExpenses.accounts}
                     selectedSubcategory={fnExpenses.selectedSubcategory}
                     setSelectedSubcategory={fnExpenses.setSelectedSubcategory}
                 />
@@ -135,6 +137,7 @@ const Invoices = () => {
                 <PaymentModal
                     payableItem={selectedInvoice}
                     payableType="invoice"
+                    accounts={fnExpenses.accounts}
                     setIsModalPaymentOpen={setPaymentModalOpen}
                     handlePayment={handlePayment}
                     refetch={refetch}
@@ -151,7 +154,6 @@ const Invoices = () => {
                 />
             )}
         </div>
-
     );
 };
 
