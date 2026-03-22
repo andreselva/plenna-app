@@ -64,7 +64,7 @@ export const appRoutes = [
     path: '/expenses',
     element: <Expenses />,
     meta: {
-      label: 'Despesas',
+      label: 'Contas a pagar',
       icon: <BanknoteArrowDown />,
       placements: ['sidebar'],
       accessPath: '/expenses',
@@ -74,7 +74,7 @@ export const appRoutes = [
     path: '/revenues',
     element: <Revenues />,
     meta: {
-      label: 'Receitas',
+      label: 'Contas a receber',
       icon: <BanknoteArrowUp />,
       placements: ['sidebar'],
       accessPath: '/revenues',
