@@ -5,6 +5,7 @@ const BANK_ACCOUNT_TYPES = [
   { value: 'SAVINGS', label: 'Poupança' },
   { value: 'DIGITAL_WALLET', label: 'Carteira digital' },
   { value: 'INVESTMENT', label: 'Investimento' },
+  { value: 'PHYSICAL_WALLET', label: 'Carteira física' },
 ];
 
 export const ModalBankAccounts = ({

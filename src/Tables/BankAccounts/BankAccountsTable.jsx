@@ -11,6 +11,7 @@ const TYPE_LABELS = {
   SAVINGS: 'Poupança',
   DIGITAL_WALLET: 'Carteira digital',
   INVESTMENT: 'Investimento',
+  PHYSICAL_WALLET: 'Carteira física'
 };
 
 const ACTIVE_STATUS_COLORS = {
