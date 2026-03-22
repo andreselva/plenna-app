@@ -64,7 +64,7 @@ export const useBankAccounts = () => {
   const deleteBankAccount = async (id) => {
     setLoading(true);
     try {
-      const { data: response, status } = await axiosInstance.delete(`${apiUrl}/${id}`);
+      const { data: response, status } = await axiosInstance.put(`${apiUrl}/${id}`);
       if (response && status >= 200 && status <= 204) {
         setBankAccounts((prev) => prev.filter((account) => account.id !== id));
         AlertToast({ icon: 'success', title: 'Conta bancária excluída com sucesso.' });
