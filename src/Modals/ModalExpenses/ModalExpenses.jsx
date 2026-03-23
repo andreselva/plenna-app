@@ -21,8 +21,11 @@ const ModalExpenses = ({
   setSelectedSubcategory,
   setEditingExpense,
   creditCards,
+  accounts,
   selectedCard,
   setSelectedCard,
+  selectedBankAccount,
+  setSelectedBankAccount,
   installments,
   setInstallments,
   typeOfInstallment,
@@ -46,6 +49,7 @@ const ModalExpenses = ({
     setSelectedCategory('');
     setSelectedSubcategory && setSelectedSubcategory('');
     setSelectedCard('');
+    setSelectedBankAccount('');
     setEditingExpense('');
     setIsModalOpen(false);
     setInstallments('');
@@ -64,7 +68,7 @@ const ModalExpenses = ({
   const [loadingModal, setLoadingModal] = useState(false);
 
   const selectedCategoryObj = useMemo(
-    () => categories.find(c => String(c.id) === String(selectedCategory)),
+    () => categories.find((c) => String(c.id) === String(selectedCategory)),
     [categories, selectedCategory]
   );
 
@@ -77,7 +81,7 @@ const ModalExpenses = ({
       setSelectedSubcategory('');
       return;
     }
-    const exists = subcategories.some(sc => String(sc.id) === String(selectedSubcategory));
+    const exists = subcategories.some((sc) => String(sc.id) === String(selectedSubcategory));
     if (!exists) {
       setSelectedSubcategory('');
     }
@@ -114,7 +118,7 @@ const ModalExpenses = ({
           setIdInvoice(String(idInvoice));
         }
       } catch (error) {
-        console.error("Erro ao buscar faturas relacionadas:", error);
+        console.error('Erro ao buscar faturas relacionadas:', error);
         setInvoices([]);
       } finally {
         setLoadingModal(false);
@@ -131,7 +135,7 @@ const ModalExpenses = ({
 
   useEffect(() => {
     if (idInvoice && invoices.length > 0) {
-      const selectedInvoice = invoices.find(invoice => String(invoice.id) === String(idInvoice));
+      const selectedInvoice = invoices.find((invoice) => String(invoice.id) === String(idInvoice));
       if (selectedInvoice) {
         setExpenseInvoiceDueDate(selectedInvoice.dueDate);
       }
@@ -196,11 +200,26 @@ const ModalExpenses = ({
             if (setSelectedSubcategory) setSelectedSubcategory('');
           },
           placeholder: 'Selecione uma categoria',
-          _required: true,
+          required: true,
           options: categories
             .filter((category) => String(category.type).toUpperCase() === 'DESPESA')
             .map((category) => ({ value: String(category.id), label: category.name })),
           size: 'half-width-large',
+        },
+      ],
+    },
+    {
+      fields: [
+        {
+          id: 'bankAccount',
+          label: 'Conta bancária',
+          type: 'select',
+          value: selectedBankAccount,
+          onChange: setSelectedBankAccount,
+          placeholder: 'Selecione a conta',
+          required: false,
+          options: accounts.map((account) => ({ value: String(account.id), label: account.name })),
+          size: 'full-width',
         },
       ],
     },
@@ -217,10 +236,10 @@ const ModalExpenses = ({
           onChange: setSelectedSubcategory,
           placeholder: 'Selecione a subcategoria',
           required: false,
-          options: subcategories.map(sc => ({ value: String(sc.id), label: sc.name })),
+          options: subcategories.map((sc) => ({ value: String(sc.id), label: sc.name })),
           size: 'half-width-large',
         },
-      ]
+      ],
     });
   }
 
@@ -238,10 +257,10 @@ const ModalExpenses = ({
           options: [
             { value: 'U', label: 'Única' },
             { value: 'P', label: 'Parcelada' },
-            { value: 'F', label: 'Fixa' }
+            { value: 'F', label: 'Fixa' },
           ],
           size: 'half-width-large',
-          disabled: hasSourceAccountId || idExpense > 0
+          disabled: hasSourceAccountId || idExpense > 0,
         },
         {
           id: 'parcelas',
@@ -252,7 +271,7 @@ const ModalExpenses = ({
           placeholder: 0,
           required: typeOfInstallment === 'P',
           size: 'half-width-small',
-          disabled: typeOfInstallment !== 'P' || hasSourceAccountId || idExpense > 0
+          disabled: typeOfInstallment !== 'P' || hasSourceAccountId || idExpense > 0,
         },
       ],
     },
@@ -270,7 +289,7 @@ const ModalExpenses = ({
           ),
           type: 'toggle',
           value: typeOfInstallment === 'F' || (typeOfInstallment === 'P' && parseInt(installments) > 0),
-          onChange: () => { },
+          onChange: () => {},
           required: false,
           size: 'half-width-medium',
           disabled: true,
@@ -280,15 +299,14 @@ const ModalExpenses = ({
           label: (
             <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
               Faz parte de parcelamento
-              <Tooltip
-                text="Esta conta faz parte de um parcelamento gerado a partir de outra conta. Não é possível editar o tipo de parcelamento e a quantidade de parcelas.">
+              <Tooltip text="Esta conta faz parte de um parcelamento gerado a partir de outra conta. Não é possível editar o tipo de parcelamento e a quantidade de parcelas.">
                 <HelpCircle size={15} strokeWidth={1} style={{ cursor: 'help' }} />
               </Tooltip>
             </span>
           ),
           type: 'toggle',
           value: hasSourceAccountId,
-          onChange: () => { },
+          onChange: () => {},
           required: false,
           size: 'half-width-large',
           disabled: true,
@@ -296,19 +314,19 @@ const ModalExpenses = ({
       ],
     },
     {
-      title: "Fatura",
+      title: 'Fatura',
       fields: [
         {
-          id: "linkToInvoice",
-          label: "Vincular a fatura?",
+          id: 'linkToInvoice',
+          label: 'Vincular a fatura?',
           type: 'toggle',
           value: linkToInvoice,
           onChange: (value) => setLinkToInvoice(value),
           required: false,
           size: 'half-width-small',
-          disabled: false
-        }
-      ]
+          disabled: false,
+        },
+      ],
     }
   );
 
@@ -326,7 +344,7 @@ const ModalExpenses = ({
           options: creditCards
             .filter((account) => account.generateInvoice === true)
             .map((account) => ({ value: String(account.id), label: account.name })),
-          size: 'half-width-middle-medium'
+          size: 'half-width-middle-medium',
         },
         {
           id: 'invoices',
@@ -334,23 +352,23 @@ const ModalExpenses = ({
           type: 'select',
           value: idInvoice,
           onChange: (value) => setIdInvoice(value),
-          placeholder: !selectedCard ? 'Selecione um cartão' : (invoices.length === 0 ? 'Nenhuma fatura encontrada' : 'Selecione a fatura'),
+          placeholder: !selectedCard ? 'Selecione um cartão' : invoices.length === 0 ? 'Nenhuma fatura encontrada' : 'Selecione a fatura',
           required: true,
           options: invoices.map((invoice) => ({
             value: String(invoice.id),
-            label: invoice.name
+            label: invoice.name,
           })),
           disabled: !selectedCard || invoices.length === 0,
-          size: 'half-width-large'
-        }
-      ]
+          size: 'half-width-large',
+        },
+      ],
     });
   }
 
   return (
     <GenericModal
       isOpen={true}
-      title={idExpense > 0 ? "Editar despesa" : "Cadastrar despesa"}
+      title={idExpense > 0 ? 'Editar despesa' : 'Cadastrar despesa'}
       formFields={formFields}
       onSubmit={handleAddExpense}
       onCancel={handleCancel}

@@ -24,13 +24,17 @@ const ModalRevenues = ({
     setInstallments,
     setHasInstallments,
     hasSourceAccountId,
-    setBooleanSourceAccountId
+    setBooleanSourceAccountId,
+    accounts,
+    selectedBankAccount,
+    setSelectedBankAccount
 }) => {
     const handleCancel = () => {
         setNewRevenue('');
         setRevenueValue('');
         setRevenueInvoiceDueDate('');
         setSelectedCategory('');
+        setSelectedBankAccount('');
         setEditingRevenue('');
         setIsModalOpen(false);
         setInstallments('');
@@ -63,7 +67,7 @@ const ModalRevenues = ({
                     onChange: setNewRevenue,
                     placeholder: 'Ex: Salário, Freelancer...',
                     required: true,
-                    size: 'full-width', // Define o tamanho do input
+                    size: 'full-width',
                 },
                 {
                     id: 'invoiceDueDate',
@@ -72,7 +76,7 @@ const ModalRevenues = ({
                     value: revenueInvoiceDueDate,
                     onChange: setRevenueInvoiceDueDate,
                     required: true,
-                    size: 'half-width', // Define o tamanho do input
+                    size: 'half-width',
                 },
             ],
         },
@@ -87,7 +91,7 @@ const ModalRevenues = ({
                     placeholder: '0,00',
                     step: '0.01',
                     required: true,
-                    size: 'half-width', // Define o tamanho do input
+                    size: 'half-width',
                 },
                 {
                     id: 'category',
@@ -100,9 +104,24 @@ const ModalRevenues = ({
                     options: categories
                         .filter((category) => category.type.toUpperCase() === 'RECEITA')
                         .map((category) => ({ value: category.id, label: category.name })),
-                    size: 'half-width-large', // Define o tamanho do input
+                    size: 'half-width-large',
                 },
             ],
+        },
+        {
+            fields: [
+                {
+                    id: 'bankAccount',
+                    label: 'Conta bancária',
+                    type: 'select',
+                    value: selectedBankAccount,
+                    onChange: setSelectedBankAccount,
+                    placeholder: 'Selecione a conta',
+                    required: false,
+                    options: accounts.map((account) => ({ value: account.id, label: account.name })),
+                    size: 'full-width'
+                }
+            ]
         },
         {
             title: 'Parcelamento',
@@ -150,8 +169,7 @@ const ModalRevenues = ({
                     ),
                     type: 'toggle',
                     value: typeOfInstallment === 'F' || (typeOfInstallment === 'P' && parseInt(installments) > 0),
-                    onChange: () => {
-                    },
+                    onChange: () => {},
                     required: false,
                     size: 'half-width-medium',
                     disabled: true,
@@ -169,13 +187,11 @@ const ModalRevenues = ({
                     ),
                     type: 'toggle',
                     value: hasSourceAccountId,
-                    onChange: () => {
-                    },
+                    onChange: () => {},
                     required: false,
                     size: 'half-width-large',
                     disabled: true,
                 },
-
             ],
         },
     ];
@@ -183,7 +199,7 @@ const ModalRevenues = ({
     return (
         <GenericModal
             isOpen={true}
-            title={idRevenue > 0 ? "Editar receita" : "Cadastrar receita"}
+            title={idRevenue > 0 ? 'Editar receita' : 'Cadastrar receita'}
             formFields={formFields}
             onSubmit={handleAddRevenue}
             onCancel={handleCancel}

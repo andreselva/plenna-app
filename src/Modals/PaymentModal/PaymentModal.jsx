@@ -1,52 +1,90 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import GenericModal from "../../Components/GenericModal/GenericModal";
 import AlertConfirm from "../../Components/Alerts/AlertConfirm";
+import { PayableType } from "../../enum/payable-type.enum";
+import { getLocalISODate } from "../../Utils/DateUtils";
 
 export const PaymentModal = ({
     payableItem,
     payableType,
+    accounts = [],
     setIsModalPaymentOpen,
     handlePayment,
     refetch = () => {}
 }) => {
     const [amountValue, setAmountValue] = useState('');
-    const [paymentDate, setPaymentDate] = useState(() => new Date().toISOString().split('T')[0]);
+    const [paymentDate, setPaymentDate] = useState(getLocalISODate());
+    const [selectedBankAccount, setSelectedBankAccount] = useState('');
+
+    useEffect(() => {
+        setAmountValue('');
+        setPaymentDate(getLocalISODate());
+        setSelectedBankAccount(payableItem?.idBankAccount ? String(payableItem.idBankAccount) : '');
+    }, [payableItem]);
 
     if (!payableItem) {
         return null;
     }
 
-    const typeLabel = payableType === 'invoice' ? 'Fatura' : 'Despesa';
+    const payableTypes = {
+        [PayableType.REVENUE]: 'Receita',
+        [PayableType.EXPENSE]: 'Despesa',
+        [PayableType.INVOICE]: 'Fatura'
+    };
+
+    const paymentStrings = {
+        [PayableType.REVENUE]: `Registrar recebimento: ${payableItem.name}`,
+        [PayableType.EXPENSE]: `Pagar despesa: ${payableItem.name}`,
+        [PayableType.INVOICE]: `Pagar fatura: ${payableItem.name}`
+    };
+
+    const paymentStringConfirm = {
+        [PayableType.REVENUE]: `Você está registrando o recebimento de R$ ${amountValue} dessa receita. Você confirma o recebimento?`,
+        [PayableType.EXPENSE]: `Você está pagando R$ ${amountValue} dessa despesa. Você confirma o pagamento?`,
+        [PayableType.INVOICE]: `Você está pagando R$ ${amountValue} dessa fatura. Você confirma o pagamento?`
+    };
+
+    const typeLabel = payableTypes[payableType] ?? 'Desconhecido';
 
     const paymentAmount = parseFloat(amountValue) || 0;
-    const newTotalPaid = payableItem.totalPaid + paymentAmount;
-    const remainingToPay = payableItem.value - newTotalPaid;
+    const currentTotalPaid = Number(payableItem.totalPaid ?? 0);
+    const previewTotalPaid = currentTotalPaid + paymentAmount;
+    const remainingToPay = Number(payableItem.value ?? 0) - previewTotalPaid;
 
     const handleCancel = () => {
         setIsModalPaymentOpen(false);
-    }
+    };
 
     const handleSubmit = async () => {
+        if (!selectedBankAccount) {
+            alert('Selecione uma conta bancária para continuar.');
+            return;
+        }
+
         const result = await AlertConfirm({
-            title: 'Registrar pagamento',
-            text: `Você está pagando R$ ${amountValue} dessa ${typeLabel.toLowerCase()}. Você confirma o pagamento?`,
+            title: payableType === PayableType.REVENUE || payableType === 'revenue'
+                ? 'Registrar recebimento'
+                : 'Registrar pagamento',
+            text: paymentStringConfirm[payableType],
             icon: 'warning',
-            confirmButtonText: 'Pagar',
+            confirmButtonText: 'Sim',
             cancelButtonText: 'Não'
         });
 
         if (!result.isConfirmed) return;
 
         const paymentData = {
+            accountId: Number(selectedBankAccount),
             payableId: Number(payableItem.id),
             value: Number(amountValue),
             paymentDate: paymentDate,
             payableType: payableType
-        }
+        };
+
         await handlePayment(paymentData);
         setIsModalPaymentOpen(false);
         refetch();
-    }
+    };
 
     const formFields = [
         {
@@ -62,23 +100,41 @@ export const PaymentModal = ({
                 {
                     label: "Valor total (R$)",
                     name: "totalValue",
-                    value: payableItem.value.toFixed(2),
+                    value: Number(payableItem.value ?? 0).toFixed(2),
                     readOnly: true,
                     disabled: true
                 },
                 {
                     label: "Valor já pago (R$)",
                     name: "totalPaid",
-                    value: newTotalPaid.toFixed(2),
+                    value: currentTotalPaid.toFixed(2),
                     readOnly: true,
                     disabled: true
                 },
                 {
                     label: "Valor restante (R$)",
                     name: "remainingToPay",
-                    value: remainingToPay.toFixed(2),
+                    value: Math.max(remainingToPay, 0).toFixed(2),
                     readOnly: true,
                     disabled: true
+                }
+            ]
+        },
+        {
+            title: 'Conta bancária',
+            fields: [
+                {
+                    label: 'Conta selecionada',
+                    name: 'bankAccount',
+                    type: 'select',
+                    value: selectedBankAccount,
+                    onChange: setSelectedBankAccount,
+                    placeholder: 'Selecione a conta bancária',
+                    required: true,
+                    options: accounts.map(account => ({
+                        value: String(account.id),
+                        label: account.name
+                    }))
                 }
             ]
         },
@@ -100,8 +156,8 @@ export const PaymentModal = ({
                     onChange: setPaymentDate,
                     type: "date",
                     required: true,
-                    defaultValue: new Date().toISOString().split('T')[0],
-                },
+                    defaultValue: getLocalISODate(),
+                }
             ]
         }
     ];
@@ -109,13 +165,17 @@ export const PaymentModal = ({
     return (
         <GenericModal
             isOpen={true}
-            title={`Pagar ${typeLabel}: ${payableItem.name}`}
+            title={paymentStrings[payableType]}
             formFields={formFields}
             onSubmit={handleSubmit}
             onCancel={handleCancel}
-            submitButtonText="Registrar pagamento"
+            submitButtonText={
+                payableType === PayableType.REVENUE || payableType === 'revenue'
+                    ? "Registrar recebimento"
+                    : "Registrar pagamento"
+            }
             width="700px"
             height="auto"
         />
     );
-}
+};

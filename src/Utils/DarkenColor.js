@@ -1,4 +1,8 @@
 export const darkenHexColor = (hex, percent) => {
+    if (!hex || !percent) {
+        return;
+    }
+
     let color = hex.startsWith('#') ? hex.slice(1) : hex;
 
     // Converte para decimal

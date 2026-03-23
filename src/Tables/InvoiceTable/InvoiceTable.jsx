@@ -7,13 +7,7 @@ import { ActionDropdown } from '../../Components/ActionDropdown/ActionDropdown';
 import InvoiceTableSkeleton from './InvoiceTableSkeleton';
 import { darkenHexColor } from '../../Utils/DarkenColor';
 import { useBreakpoints } from '../../Hooks/useMediaQuery/useBreakpoints';
-
-const STATUS_COLORS = {
-    paid: '#28a745',
-    parcial: '#ffc107',
-    pending: '#dc3545',
-    default: '#6c757d'
-};
+import { STATUS_COLORS } from '../../Types/status.color';
 
 const InvoiceTable = ({ invoices, onEdit, onDelete, setIsModalOpen, onOpenPaymentModal, onReversePayment, loading, error }) => {
     const { isMobile } = useBreakpoints();
@@ -43,9 +37,10 @@ const InvoiceTable = ({ invoices, onEdit, onDelete, setIsModalOpen, onOpenPaymen
 
     const getStatusText = (status) => {
         const statusMap = {
-            parcial: 'Pagamento parcial',
+            partial: 'Parcial',
             paid: 'Paga',
-            pending: 'Pendente'
+            pending: 'Pendente',
+            reversed: 'Estornado'
         };
         return statusMap[status] || 'N/A';
     };
@@ -72,10 +67,10 @@ const InvoiceTable = ({ invoices, onEdit, onDelete, setIsModalOpen, onOpenPaymen
                                 handler: () => onOpenPaymentModal(invoice),
                             });
                         }
-                        if (['paid', 'parcial'].includes(invoice.status.toLowerCase())) {
+                        if (['paid', 'partial'].includes(invoice.status.toLowerCase())) {
                             invoiceActions.push({
                                 icon: <BanknoteXIcon size={14} />,
-                                text: 'Estornar Pagamento',
+                                text: 'Gerenciar pagamentos',
                                 handler: () => onReversePayment(invoice)
                             });
                         }
@@ -133,13 +128,13 @@ const InvoiceTable = ({ invoices, onEdit, onDelete, setIsModalOpen, onOpenPaymen
                                                                     <div className={globalStyles.actions}>
                                                                         <button
                                                                             onClick={() => { onEdit(expense) }}
-                                                                            disabled={['paid', 'parcial'].includes(invoice.status.toLowerCase())}
+                                                                            disabled={['paid', 'partial'].includes(invoice.status.toLowerCase())}
                                                                         >
                                                                             <PencilLine width='15px' height='15px' />
                                                                         </button>
                                                                         <button
                                                                             onClick={() => { handleDelete(expense) }}
-                                                                            disabled={['paid', 'parcial'].includes(invoice.status.toLowerCase())}
+                                                                            disabled={['paid', 'partial'].includes(invoice.status.toLowerCase())}
                                                                         >
                                                                             <Trash2Icon width='15px' height='15px' />
                                                                         </button>

@@ -1,40 +1,41 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import axiosInstance from "../../api/axiosInstance";
 import AlertToast from "../../Components/Alerts/AlertToast";
 import { Operations } from "../../enum/operations.enum";
+import SweetAlert from "../../Components/Alerts/SweetAlert";
 
 export const RevenuesManager = (periodo) => {
     const [revenues, setRevenues] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    useEffect(() => {
-        const fetchRevenues = async () => {
-            setLoading(true);
-            try {
-                const { data: response, status } = await axiosInstance.get("/revenues", {
-                    headers: {
-                        'X-Periodo': JSON.stringify(periodo)
-                    }
-                });
-
-                if (response && status >= 200 && status <= 204) {
-                    setRevenues(response.payload.revenues);
-                    return;
+    const fetchRevenues = useCallback(async () => {
+        setLoading(true);
+        try {
+            const { data: response, status } = await axiosInstance.get("/revenues", {
+                headers: {
+                    'X-Periodo': JSON.stringify(periodo)
                 }
+            });
 
-                throw new Error(`Ocorreu um erro ao buscar as receitas.`);
-            } catch (err) {
-                const errorMessage = defineErrorMessage(err, Operations.BUSCAR);
-                AlertToast({icon: 'error', title: errorMessage});
-                setError(err?.response?.data?.message || "Erro ao buscar as receitas!");
-            } finally {
-                setLoading(false);
+            if (response && status >= 200 && status <= 204) {
+                setRevenues(response.payload.revenues);
+                return;
             }
-        };
 
-        fetchRevenues();
+            throw new Error(`Ocorreu um erro ao buscar as receitas.`);
+        } catch (err) {
+            const errorMessage = defineErrorMessage(err, Operations.BUSCAR);
+            SweetAlert.error(errorMessage);
+            setError(err?.response?.data?.message || "Erro ao buscar as receitas!");
+        } finally {
+            setLoading(false);
+        }
     }, [periodo]);
+
+    useEffect(() => {
+        fetchRevenues();
+    }, [fetchRevenues]);
 
     const addRevenue = async (revenue) => {
         setLoading(true);
@@ -54,7 +55,7 @@ export const RevenuesManager = (periodo) => {
             throw new Error(`Ocorreu um erro ao cadastrar a receita.`);
         } catch (err) {
             const errorMessage = defineErrorMessage(err, Operations.CREATE);
-            AlertToast({icon: 'error', title: errorMessage});
+            SweetAlert.error(errorMessage);
             setError(errorMessage);
         } finally {
             setLoading(false);
@@ -83,7 +84,7 @@ export const RevenuesManager = (periodo) => {
             throw new Error('Ocorreu um erro ao excluir a despesa!');
         } catch (err) {
             const errorMessage = defineErrorMessage(err, Operations.DELETE);
-            AlertToast({icon: 'error', title: errorMessage})
+            SweetAlert.error(errorMessage);
             setError(errorMessage);
         } finally {
             setLoading(false);
@@ -108,7 +109,7 @@ export const RevenuesManager = (periodo) => {
             throw new Error('Ocorreu um erro ao atualizar a(s) receita(s).');
         } catch (err) {
             const errorMessage = defineErrorMessage(err, Operations.UPDATE);
-            AlertToast({icon: 'error', title: errorMessage});
+            SweetAlert.error(errorMessage);
             setError(errorMessage);
         } finally {
             setLoading(false);
@@ -117,11 +118,11 @@ export const RevenuesManager = (periodo) => {
 
     const defineErrorMessage = (err, operation) => {
         if (err?.response?.data?.message) {
-            return `Ocorreu um erro ao ${operation} a receita: ${err.response.data.message}.`;
+            return `${err.response.data.message}`;
         }
 
         return `Ocorreu um erro ao ${operation} a receita.` ;
     }
 
-    return { revenues, addRevenue, deleteRevenue, updateRevenue, loading, error };
+    return { revenues, addRevenue, deleteRevenue, updateRevenue, loading, error, refetch: fetchRevenues };
 };

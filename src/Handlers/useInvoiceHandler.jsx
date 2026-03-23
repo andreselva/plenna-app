@@ -10,7 +10,8 @@ export const useInvoiceHandler = (periodo) => {
         invoices,
         generateInvoices,
         loading: managerLoading,
-        error: managerError
+        error: managerError,
+        refetch
     } = useInvoiceManager(periodo);
 
     const {
@@ -28,7 +29,7 @@ export const useInvoiceHandler = (periodo) => {
     } = usePaymentManager();
 
     const handlePayment = useCallback(async (paymentData) => {
-        registerPayment(paymentData);
+        return registerPayment(paymentData);
     }, [registerPayment]);
 
     const handleSearchRelatedInvoices = useCallback(async (idBankAccount) => {
@@ -43,6 +44,7 @@ export const useInvoiceHandler = (periodo) => {
         isPaymentModalOpen,
         setPaymentModalOpen,
         loading: managerLoading || relatedLoading,
-        error: managerError || relatedError
+        error: managerError || relatedError,
+        refetch
     };
 };

@@ -48,3 +48,28 @@ export const validateDate = (date) => {
     }
     return true;
 };
+
+export const formatDateToPtBr = (dateValue) => {
+    if (!dateValue) return '-';
+
+    if (typeof dateValue === 'string') {
+        const dateOnly = dateValue.includes('T') ? dateValue.split('T')[0] : dateValue.split(' ')[0];
+
+        if (/^\d{4}-\d{2}-\d{2}$/.test(dateOnly)) {
+            const [year, month, day] = dateOnly.split('-');
+            return `${day}/${month}/${year}`;
+        }
+    }
+
+    const fallbackDate = new Date(dateValue);
+    if (Number.isNaN(fallbackDate.getTime())) return '-';
+    return fallbackDate.toLocaleDateString('pt-BR');
+};
+
+export const getLocalISODate = () => {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+};

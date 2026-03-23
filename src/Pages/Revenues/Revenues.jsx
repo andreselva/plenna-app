@@ -8,6 +8,10 @@ import { useRevenueHandler } from '../../Handlers/useRevenuesHandler';
 import globalStyles from '../../Styles/GlobalStyles.module.css';
 import SearchInput from '../../Components/Filters/SearchInput';
 import FilterDropdown from '../../Components/Filters/FilterDropdown';
+import { PaymentModal } from '../../Modals/PaymentModal/PaymentModal';
+import { PayableType } from '../../enum/payable-type.enum';
+import { usePaymentManager } from '../../Hooks/PaymentManager/usePaymentManager';
+import { ReversePaymentModal } from '../../Modals/PaymentModal/ReversePaymentModal';
 
 const Revenues = () => {
     const [formattedPeriod, setFormattedPeriod] = useState(() => getStartAndEndOfMonth());
@@ -32,12 +36,14 @@ const Revenues = () => {
         setFormattedPeriod(formattedRange);
     };
 
+    const { registerPayment } = usePaymentManager();
+
     const {
         revenues, categories, selectedCategory, setSelectedCategory, isModalOpen, setIsModalOpen, setEditingRevenue,
         newRevenue, setNewRevenue, revenueValue, setRevenueValue, revenueInvoiceDueDate, setRevenueInvoiceDueDate,
         handleEditRevenue, handleSaveRevenue, handleDeleteRevenue, typeOfInstallment, setTypeOfInstallment,
         installments, setInstallments, hasInstallments, setHasInstallments, hasSourceAccountId,
-        setBooleanSourceAccountId, idRevenue, setIdRevenue, loading, error
+        setBooleanSourceAccountId, idRevenue, setIdRevenue, loading, error, refetch, accounts, selectedBankAccount, setSelectedBankAccount
     } = useRevenueHandler(formattedPeriod);
 
     const [filteredRevenues, setFilteredRevenues] = useState(revenues);
@@ -53,8 +59,8 @@ const Revenues = () => {
             type: 'select',
             placeholder: 'Todas as Categorias',
             options: categories
-                        .filter(category => category.type.toUpperCase() === 'RECEITA')
-                        .map(cat => ({ value: cat.id, label: cat.name }))
+                .filter(category => category.type.toUpperCase() === 'RECEITA')
+                .map(cat => ({ value: cat.id, label: cat.name }))
         }
     ];
 
@@ -65,7 +71,7 @@ const Revenues = () => {
             const lowerCaseQuery = searchQuery.toLowerCase();
             items = items.filter(revenue => {
                 const revenueValueAsString = String(revenue.value);
-                const revenueDueString = String(revenue.invoiceDueDate.split('-').reverse().join('/'))
+                const revenueDueString = String(revenue.invoiceDueDate.split('-').reverse().join('/'));
 
                 return (
                     revenue.name.toLowerCase().includes(lowerCaseQuery) ||
@@ -74,7 +80,7 @@ const Revenues = () => {
                 );
             });
         }
-        
+
         if (activeFilters.categoryId) {
             items = items.filter(revenue => revenue.idCategory === Number(activeFilters.categoryId));
         }
@@ -82,6 +88,28 @@ const Revenues = () => {
         setFilteredRevenues(items);
     }, [revenues, searchQuery, activeFilters]);
 
+    const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
+    const [selectedRevenue, setSelectedRevenue] = useState(null);
+
+    const handleOpenPaymentModal = (revenue) => {
+        setSelectedRevenue(revenue);
+        setIsPaymentModalOpen(true);
+    };
+
+    const handleRegisterPayment = (paymentData) => {
+        return registerPayment(paymentData);
+    };
+
+    const [isReverseModalOpen, setIsReverseModalOpen] = useState(false);
+    const [selectedRevenueForReverse, setSelectedRevenueForReverse] = useState(null);
+    const handleOpenReverseModal = (revenue) => {
+        setSelectedRevenueForReverse(revenue);
+        setIsReverseModalOpen(true);
+    };
+
+    const handleCloseReverseModal = () => {
+        setIsReverseModalOpen(false);
+    };
 
     return (
         <div className={globalStyles.container}>
@@ -93,14 +121,14 @@ const Revenues = () => {
                             <span className={globalStyles['title-items-span']}>Receitas</span>
                         </div>
                         <div className={globalStyles['content-title-items-right']}>
-                            <button 
+                            <button
                                 ref={filterIconRef}
-                                className={`${globalStyles['icon-button']} ${Object.keys(activeFilters).length > 0 ? globalStyles['active'] : ''}`} 
+                                className={`${globalStyles['icon-button']} ${Object.keys(activeFilters).length > 0 ? globalStyles['active'] : ''}`}
                                 onClick={() => setIsFilterOpen(!isFilterOpen)}
                             >
                                 <FilterIcon size={20} />
                             </button>
-                            <SearchInput 
+                            <SearchInput
                                 placeholder="Procurar..."
                                 onSearchChange={setSearchQuery}
                             />
@@ -114,7 +142,7 @@ const Revenues = () => {
                     </div>
                 </div>
 
-                <FilterDropdown 
+                <FilterDropdown
                     isOpen={isFilterOpen}
                     onClose={() => setIsFilterOpen(false)}
                     anchorEl={filterIconRef.current}
@@ -128,13 +156,37 @@ const Revenues = () => {
                     <RevenueTable
                         revenues={filteredRevenues}
                         categories={categories}
+                        accounts={accounts}
                         onEdit={handleEditRevenue}
                         onDelete={handleDeleteRevenue}
                         loading={loading}
                         error={error}
+                        handleOpenPaymentModal={handleOpenPaymentModal}
+                        onReversePayment={handleOpenReverseModal}
                     />
                 </div>
             </div>
+
+            {isPaymentModalOpen && selectedRevenue && (
+                <PaymentModal
+                    payableItem={selectedRevenue}
+                    payableType={PayableType.REVENUE}
+                    accounts={accounts}
+                    setIsModalPaymentOpen={setIsPaymentModalOpen}
+                    handlePayment={handleRegisterPayment}
+                    refetch={refetch}
+                />
+            )}
+
+            {isReverseModalOpen && (
+                <ReversePaymentModal
+                    isOpen={isReverseModalOpen}
+                    onClose={handleCloseReverseModal}
+                    entityType="revenue"
+                    entityData={selectedRevenueForReverse}
+                    refetch={refetch}
+                />
+            )}
 
             {isModalOpen && (
                 <ModalRevenues
@@ -147,6 +199,7 @@ const Revenues = () => {
                     revenueInvoiceDueDate={revenueInvoiceDueDate}
                     setRevenueInvoiceDueDate={setRevenueInvoiceDueDate}
                     categories={categories}
+                    accounts={accounts}
                     selectedCategory={selectedCategory}
                     setSelectedCategory={setSelectedCategory}
                     setEditingRevenue={setEditingRevenue}
@@ -160,6 +213,8 @@ const Revenues = () => {
                     setBooleanSourceAccountId={setBooleanSourceAccountId}
                     idRevenue={idRevenue}
                     setIdRevenue={setIdRevenue}
+                    selectedBankAccount={selectedBankAccount}
+                    setSelectedBankAccount={setSelectedBankAccount}
                 />
             )}
         </div>

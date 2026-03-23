@@ -1,7 +1,5 @@
 import { useState } from 'react';
 import { CategoryManager } from '../../Hooks/CategoryManager/CategoryManager';
-import { useBankAccounts } from '../../Hooks/BankAccountsManager/useBankAccounts';
-import { useExpenseHandler } from '../../Handlers/useExpenseHandler';
 import { useInvoiceHandler } from '../../Handlers/useInvoiceHandler';
 import { getFormattedDateRange, getStartAndEndOfMonth } from '../../Utils/DateUtils';
 import { CustomDatePicker } from '../../Components/DatePicker/DatePicker';
@@ -10,6 +8,7 @@ import { ReversePaymentModal } from '../../Modals/PaymentModal/ReversePaymentMod
 import ModalExpenses from '../../Modals/ModalExpenses/ModalExpenses';
 import InvoiceTable from '../../Tables/InvoiceTable/InvoiceTable';
 import globalStyles from '../../Styles/GlobalStyles.module.css';
+import { useExpenseHandler } from '../../Handlers/useExpenseHandler';
 
 const Invoices = () => {
     const [selectedInvoice, setSelectedInvoice] = useState(null);
@@ -21,7 +20,6 @@ const Invoices = () => {
 
     const [formattedPeriod, setFormattedPeriod] = useState(() => getStartAndEndOfMonth());
     const { categories } = CategoryManager();
-    const { accounts } = useBankAccounts();
     const [selectedMonth, setSelectedMonth] = useState(() => {
         const now = new Date();
         const nextMonthDate = new Date(now);
@@ -59,7 +57,8 @@ const Invoices = () => {
         invoices,
         handlePayment,
         loading,
-        error
+        error,
+        refetch
     } = useInvoiceHandler(formattedPeriod);
 
     const fnExpenses = useExpenseHandler(formattedPeriod);
@@ -106,9 +105,12 @@ const Invoices = () => {
                     selectedCategory={fnExpenses.selectedCategory}
                     setSelectedCategory={fnExpenses.setSelectedCategory}
                     setEditingExpense={fnExpenses.setEditingExpense}
-                    creditCards={accounts}
+                    creditCards={fnExpenses.creditCards}
+                    accounts={fnExpenses.accounts}
                     selectedCard={fnExpenses.selectedCard}
                     setSelectedCard={fnExpenses.setSelectedCard}
+                    selectedBankAccount={fnExpenses.selectedBankAccount}
+                    setSelectedBankAccount={fnExpenses.setSelectedBankAccount}
                     installments={fnExpenses.installments}
                     setInstallments={fnExpenses.setInstallments}
                     typeOfInstallment={fnExpenses.typeOfInstallment}
@@ -126,6 +128,8 @@ const Invoices = () => {
                     status={fnExpenses.status}
                     setStatus={fnExpenses.setStatus}
                     optionsStatus={fnExpenses.optionsStatus}
+                    selectedSubcategory={fnExpenses.selectedSubcategory}
+                    setSelectedSubcategory={fnExpenses.setSelectedSubcategory}
                 />
             )}
 
@@ -133,8 +137,10 @@ const Invoices = () => {
                 <PaymentModal
                     payableItem={selectedInvoice}
                     payableType="invoice"
+                    accounts={fnExpenses.accounts}
                     setIsModalPaymentOpen={setPaymentModalOpen}
                     handlePayment={handlePayment}
+                    refetch={refetch}
                 />
             )}
 
@@ -144,10 +150,10 @@ const Invoices = () => {
                     onClose={handleCloseReverseModal}
                     entityType="invoice"
                     entityData={selectedInvoiceForReserve}
+                    refetch={refetch}
                 />
             )}
         </div>
-
     );
 };
 

@@ -5,16 +5,14 @@ import { BanknoteXIcon } from 'lucide-react';
 import GenericModal from '../../Components/GenericModal/GenericModal';
 import AlertConfirm from '../../Components/Alerts/AlertConfirm';
 import Loader from '../../Components/Loader/Loader';
-
+import { formatDateToPtBr } from '../../Utils/DateUtils';
 
 const entityConfig = {
-    expense: { title: 'Estornar Pagamentos da Despesa' },
-    income: { title: 'Estornar Pagamentos da Receita' },
-    invoice: { title: 'Estornar Pagamentos da Fatura' },
-    default: { title: 'Estornar Pagamentos' },
+    revenue: { title: 'Estornar recebimentos' },
+    default: { title: 'Estornar pagamentos' },
 };
 
-export const ReversePaymentModal = ({ isOpen, onClose, entityType, entityData, refetch = () => {}}) => {
+export const ReversePaymentModal = ({ isOpen, onClose, entityType, entityData, refetch = () => {} }) => {
     const [payments, setPayments] = useState([]);
     const { loading, getPaymentsByEntity, reversePayment } = usePaymentManager();
 
@@ -31,9 +29,9 @@ export const ReversePaymentModal = ({ isOpen, onClose, entityType, entityData, r
         }
     }, [isOpen, fetchPayments]);
 
-    const handleReversePayment = async (paymentId) => {
+    const handleReversePayment = async (payment) => {
         const result = await AlertConfirm({
-            title: 'Estornar Pagamento',
+            title: 'Estornar pagamento',
             text: 'Esta ação não pode ser desfeita. Deseja continuar com o estorno do pagamento?',
             icon: 'warning',
             confirmButtonText: 'Estornar',
@@ -41,12 +39,15 @@ export const ReversePaymentModal = ({ isOpen, onClose, entityType, entityData, r
         });
 
         if (!result.isConfirmed) return;
-        
+
         const reversePaymentData = {
-            paymentId,
-            entityType,
-            entityId: entityData.id,
-        }
+            accountId: payment.accountId ?? entityData.idBankAccount ?? 0,
+            amount: Number(payment.value),
+            paymentId: payment.id,
+            referenceType: entityType,
+            entityId: entityData.id
+        };
+
         const reverseResult = await reversePayment(reversePaymentData);
         if (reverseResult && reverseResult.isSuccess) {
             fetchPayments();
@@ -81,19 +82,25 @@ export const ReversePaymentModal = ({ isOpen, onClose, entityType, entityData, r
                             <li key={payment.id} className="payment-item">
                                 <div className="payment-info">
                                     <span className="payment-date">
-                                        {new Date(payment.payment_date).toLocaleDateString('pt-BR')}
+                                        {formatDateToPtBr(payment.payment_date)}
                                     </span>
                                     <strong className="payment-value">
                                         {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(payment.value)}
                                     </strong>
                                 </div>
-                                <button
-                                    className="reverse-payment-button"
-                                    onClick={() => handleReversePayment(payment.id)}
-                                    title="Estornar este pagamento"
-                                >
-                                    <BanknoteXIcon size={25} />
-                                </button>
+                                {payment.value < 0 ? (
+                                    <span className="reversed-badge">Estorno</span>
+                                ) : payment.reversed?.length > 0 ? (
+                                    <span className="reversed-done-badge">Estornado</span>
+                                ) : (
+                                    <button
+                                        className="reverse-payment-button"
+                                        onClick={() => handleReversePayment(payment)}
+                                        title="Estornar este pagamento"
+                                    >
+                                        <BanknoteXIcon size={25} />
+                                    </button>
+                                )}
                             </li>
                         ))}
                     </ul>

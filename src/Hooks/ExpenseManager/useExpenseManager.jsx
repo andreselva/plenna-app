@@ -3,6 +3,7 @@ import { useExpensesList } from "./useExpensesList";
 import axiosInstance from "../../api/axiosInstance";
 import AlertToast from "../../Components/Alerts/AlertToast";
 import { Operations } from "../../enum/operations.enum";
+import SweetAlert from "../../Components/Alerts/SweetAlert";
 
 const endpoint = "/expenses";
 
@@ -26,7 +27,7 @@ export const useExpenseManager = (periodo) => {
             throw new Error('Ocorreu um erro ao criar a despesa.');
         } catch (err) {
             const errorMessage = defineErrorMessage(err, Operations.CREATE);
-            AlertToast({icon: 'error', title: errorMessage});
+            SweetAlert.error(errorMessage);
             setError(errorMessage);
         }
     };
@@ -50,7 +51,7 @@ export const useExpenseManager = (periodo) => {
             throw new Error('Ocorreu um erro durante a exclusão da despesa.');
         } catch (err) {
             const errorMessage = defineErrorMessage(err, Operations.DELETE);
-            AlertToast({icon: 'error', title: errorMessage});
+            SweetAlert.error(errorMessage);
             setError(errorMessage);
         }
     };
@@ -70,7 +71,7 @@ export const useExpenseManager = (periodo) => {
             throw new Error('Ocorreu um erro ao atualizar a despesa.');
         } catch (err) {
             const errorMessage = defineErrorMessage(err, Operations.UPDATE);
-            AlertToast({icon: 'error', title: errorMessage});
+            SweetAlert.error(errorMessage);
             setError(errorMessage);
         }
     };
@@ -90,14 +91,14 @@ export const useExpenseManager = (periodo) => {
             throw new Error('Ocorreu um erro ao registrar o pagamento.');
         } catch (err) {
             const errorMessage = defineErrorMessage(err, 'registrar o pagamento da');
-            AlertToast({icon: 'error', title: errorMessage});
+            SweetAlert.error(errorMessage);
             setError(errorMessage);
         }
     }
 
     const defineErrorMessage = (err, operation) => {
         if (err?.response?.data?.message) {
-            return `Ocorreu um erro ao ${operation} despesa: ${err.response.data.message}.`;
+            return `${err.response.data.message}`;
         }
         return `Ocorreu um erro ao ${operation} despesa.` ;
     }

@@ -3,7 +3,13 @@
     padding: 0;
     margin: 0;
     display: flex;
-    gap: 8px;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: flex-start;
+}
+
+.settings-list li {
+    flex: 0 0 auto;
 }
 
 .settings-item {
@@ -14,9 +20,17 @@
     cursor: pointer;
     color: #333;
     font-size: 14px;
-    display: flex;
+    display: inline-flex;
     align-items: center;
-    gap: 2px;
+    justify-content: center;
+    gap: 8px;
+    white-space: nowrap;
+    line-height: 1;
+    min-height: 42px;
+}
+
+.settings-item svg {
+    flex-shrink: 0;
 }
 
 .settings-item:hover {

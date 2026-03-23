@@ -1,85 +1,101 @@
 import { useState } from 'react';
 import { useBankAccounts } from '../Hooks/BankAccountsManager/useBankAccounts';
 
+const EMPTY_BANK_ACCOUNT = {
+  name: '',
+  type: 'CHECKING',
+  bankCode: '',
+  agency: '',
+  accountNumber: '',
+  initialBalance: '',
+  isActive: true,
+};
+
 export const useBankAccountHandler = () => {
-    const { accounts, addBankAccount, updateBankAccount, deleteBankAccount, loading, error } = useBankAccounts();
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [editingAccount, setEditingAccount] = useState(null);
-    const [newAccount, setNewAccount] = useState('');
-    const [generateInvoice, setGenerateInvoice] = useState(false);
-    const [dueDate, setDueDate] = useState('');
-    const [closingDate, setClosingDate] = useState('');
+  const { accounts, addBankAccount, updateBankAccount, deleteBankAccount, loading, error } = useBankAccounts();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingAccount, setEditingAccount] = useState(null);
+  const [formData, setFormData] = useState(EMPTY_BANK_ACCOUNT);
 
-    const handleAddAccount = () => {
-        if (!newAccount.trim()) {
-            alert('O nome da despesa não pode ser vazio.');
-            return;
-        }
+  const setField = (field, value) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
+  };
 
-        addBankAccount({
-            name: newAccount,
-            generateInvoice: generateInvoice,
-            dueDate: dueDate,
-            closingDate: closingDate
-        });
+  const resetForm = () => {
+    setEditingAccount(null);
+    setFormData(EMPTY_BANK_ACCOUNT);
+  };
 
-        setNewAccount('');
-        setIsModalOpen(false);
-    };
+  const normalizePayload = () => ({
+    name: formData.name.trim(),
+    type: formData.type,
+    bankCode: formData.bankCode === '' ? undefined : Number(formData.bankCode),
+    agency: formData.agency?.trim() || undefined,
+    accountNumber: formData.accountNumber?.trim() || undefined,
+    initialBalance: formData.initialBalance === '' ? 0 : Number(formData.initialBalance),
+    isActive: !!formData.isActive,
+  });
 
-    const handleEditAccount = (account) => {
-        setEditingAccount(account);
-        setNewAccount(account.name);
-        setGenerateInvoice(account.generateInvoice);
-        setDueDate(account.dueDate);
-        setClosingDate(account.closingDate);
-        setIsModalOpen(true);
-    };
+  const validate = () => {
+    if (!formData.name.trim()) {
+      alert('O nome da conta bancária não pode ser vazio.');
+      return false;
+    }
 
-    const handleSaveAccount = () => {
-        if (!newAccount.trim()) {
-            alert('O nome da despesa não pode ser vazio.');
-            return;
-        }
+    if (formData.initialBalance === '' || Number.isNaN(Number(formData.initialBalance))) {
+      alert('Informe um saldo inicial válido.');
+      return false;
+    }
 
-        if (editingAccount) {
-            updateBankAccount(editingAccount.id, {
-                name: newAccount,
-                generateInvoice: generateInvoice,
-                dueDate: dueDate,
-                closingDate: closingDate,
-            });
-        } else {
-            handleAddAccount();
-        }
+    return true;
+  };
 
-        setEditingAccount(null);
-        setNewAccount('');
-        setIsModalOpen(false);
-    };
+  const handleEditAccount = (account) => {
+    setEditingAccount(account);
+    setFormData({
+      name: account.name || '',
+      type: account.type || 'CHECKING',
+      bankCode: account.bankCode ?? '',
+      agency: account.agency || '',
+      accountNumber: account.accountNumber || '',
+      initialBalance: account.initialBalance ?? 0,
+      isActive: account.isActive ?? true,
+    });
+    setIsModalOpen(true);
+  };
 
-    const handleDeleteAccount = (id) => {
-        deleteBankAccount(id);
-    };
+  const handleSaveAccount = async () => {
+    if (!validate()) return;
 
-    return {
-        accounts,
-        newAccount,
-        setNewAccount,
-        isModalOpen,
-        setIsModalOpen,
-        editingAccount,
-        setEditingAccount,
-        handleEditAccount,
-        handleDeleteAccount,
-        handleSaveAccount,
-        generateInvoice,
-        setGenerateInvoice,
-        dueDate,
-        setDueDate,
-        closingDate,
-        setClosingDate,
-        loading,
-        error
-    };
+    const payload = normalizePayload();
+
+    if (editingAccount) {
+      await updateBankAccount(editingAccount.id, payload);
+    } else {
+      await addBankAccount(payload);
+    }
+
+    resetForm();
+    setIsModalOpen(false);
+  };
+
+  const handleDeleteAccount = async (id) => {
+    await deleteBankAccount(id);
+  };
+
+  return {
+    accounts,
+    formData,
+    setField,
+    isModalOpen,
+    setIsModalOpen,
+    editingAccount,
+    setEditingAccount,
+    handleEditAccount,
+    handleDeleteAccount,
+    handleSaveAccount,
+    resetForm,
+    loading,
+    error,
+  };
 };

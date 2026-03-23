@@ -1,46 +1,50 @@
 import { useNavigate } from 'react-router-dom';
 import GenericModal from '../../Components/GenericModal/GenericModal';
 import './ModalSettings.css';
-import { AlarmClock, User } from 'lucide-react';
-
-const settingsOptions = [
-    { label: 'Usuários', path: '/users', icon: <User size={18} /> },
-    { label: 'Agendamentos', path: '/appointments', icon: <AlarmClock size={18} />}
-];
+import useModulesTree from '../../Hooks/useModulesTree/useModulesTree';
+import { getSettingsRoutes } from '../../routes/routeAccess';
 
 const ModalSettings = ({ isOpen, onClose }) => {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
+  const { modulesTree } = useModulesTree();
 
-    const handleNavigate = (path) => {
-        navigate(path);
-        onClose();
-    };
+  const settingsOptions = getSettingsRoutes(modulesTree).map((route) => ({
+    label: route.meta?.label,
+    path: route.path,
+    icon: route.meta?.icon,
+  }));
 
-    return (
-        <GenericModal
-            isOpen={isOpen}
-            title="Configurações"
-            onCancel={onClose}
-            hideSubmitButton
-            cancelButtonText="Fechar"
-            width="400px"
-            height='300px'
-        >
-            <ul className="settings-list">
-                {settingsOptions.map((option) => (
-                    <li key={option.path}>
-                        <button
-                            type="button"
-                            className="settings-item"
-                            onClick={() => handleNavigate(option.path)}
-                        >
-                            {option.icon}{option.label}
-                        </button>
-                    </li>
-                ))}
-            </ul>
-        </GenericModal>
-    );
+  const handleNavigate = (path) => {
+    navigate(path);
+    onClose();
+  };
+
+  return (
+    <GenericModal
+      isOpen={isOpen}
+      title="Configurações"
+      onCancel={onClose}
+      hideSubmitButton
+      cancelButtonText="Fechar"
+      width="auto"
+      height="400px"
+    >
+      <ul className="settings-list">
+        {settingsOptions.map((option) => (
+          <li key={option.path}>
+            <button
+              type="button"
+              className="settings-item"
+              onClick={() => handleNavigate(option.path)}
+            >
+              {option.icon}
+              {option.label}
+            </button>
+          </li>
+        ))}
+      </ul>
+    </GenericModal>
+  );
 };
 
 export default ModalSettings;
