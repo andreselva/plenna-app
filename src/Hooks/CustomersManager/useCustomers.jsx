@@ -49,7 +49,7 @@ export const useCustomers = () => {
     setLoading(true);
 
     try {
-      const { data: response, status } = await axiosInstance.post(apiUrl, customer);
+      const { data: response, status } = await axiosInstance.post(`${apiUrl}/create`, customer);
 
       if (response && status >= 200 && status <= 204) {
         const created = response.payload?.customer ?? response.payload ?? response;
@@ -77,7 +77,7 @@ export const useCustomers = () => {
     setLoading(true);
 
     try {
-      const { data: response, status } = await axiosInstance.put(`${apiUrl}/${id}`, customer);
+      const { data: response, status } = await axiosInstance.put(`${apiUrl}/update/${id}`, customer);
 
       if (response && status >= 200 && status <= 204) {
         const updated = response.payload?.customer ?? response.payload ?? response;
