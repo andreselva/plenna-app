@@ -1,32 +1,17 @@
-import { useBillingRuleHandler } from '../../Handlers/useBillingRuleHandler';
-import { ModalBillingRules } from '../../Modals/ModalBillingRules/ModalBillingRules';
 import globalStyles from '../../Styles/GlobalStyles.module.css';
-import { BillingRulesTable } from '../../Tables/BillingRules/BillingRulesTable';
+import { useBillingRulesInline } from '../../Hooks/BillingRulesManager/useBillingRulesInline';
+import { BillingRulesInlineTable } from '../../Tables/BillingRules/BillingRulesInlineTable';
 
 const BillingRules = () => {
   const {
-    billingRules,
-    paymentMethods,
-    gateways,
-    formData,
-    setField,
-    isModalOpen,
-    setIsModalOpen,
-    editingBillingRule,
-    setEditingBillingRule,
-    handleEditBillingRule,
-    handleDeleteBillingRule,
-    handleSaveBillingRule,
-    resetForm,
+    rows,
+    gatewayOptions,
     loading,
-    supportDataLoading,
+    savingCode,
     error,
-  } = useBillingRuleHandler();
-
-  const handleOpenModal = () => {
-    resetForm();
-    setIsModalOpen(true);
-  };
+    handleGatewayChange,
+    saveBillingRule,
+  } = useBillingRulesInline();
 
   return (
     <div className={globalStyles.container}>
@@ -34,41 +19,25 @@ const BillingRules = () => {
         <div className={globalStyles['content-title']}>
           <div className={globalStyles['content-title-items']}>
             <div className={globalStyles['content-title-items-left']}>
-              <button
-                className={globalStyles['title-items-button']}
-                onClick={handleOpenModal}
-              />
-              <span className={globalStyles['title-items-span']}>Regras de cobrança</span>
+              <span className={globalStyles['title-items-span']}>
+                Regras de cobrança
+              </span>
             </div>
           </div>
         </div>
 
         <div className={globalStyles.card}>
-          <BillingRulesTable
-            billingRules={billingRules}
-            paymentMethods={paymentMethods}
-            gateways={gateways}
-            onEdit={handleEditBillingRule}
-            onDelete={handleDeleteBillingRule}
-            loading={loading || supportDataLoading}
+          <BillingRulesInlineTable
+            rows={rows}
+            gatewayOptions={gatewayOptions}
+            loading={loading}
+            savingCode={savingCode}
+            onGatewayChange={handleGatewayChange}
+            onSave={saveBillingRule}
             error={error}
           />
         </div>
       </div>
-
-      {isModalOpen && (
-        <ModalBillingRules
-          setIsModalOpen={setIsModalOpen}
-          handleSaveBillingRule={handleSaveBillingRule}
-          setEditingBillingRule={setEditingBillingRule}
-          editingBillingRule={editingBillingRule}
-          formData={formData}
-          setField={setField}
-          resetForm={resetForm}
-          paymentMethods={paymentMethods}
-          gateways={gateways}
-        />
-      )}
     </div>
   );
 };

@@ -1,5 +1,5 @@
 export const gatewayFormSchemas = {
-  PAGARME: {
+  PAGAR_ME: {
     sections: [
       {
         title: 'Dados da integração',
