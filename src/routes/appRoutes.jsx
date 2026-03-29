@@ -1,4 +1,18 @@
-import { AlarmClock, BanknoteArrowDown, BanknoteArrowUp, BriefcaseBusiness, CreditCard, FileSpreadsheet, Landmark, LayoutDashboard, Users } from 'lucide-react';
+import {
+  AlarmClock,
+  BanknoteArrowDown,
+  BanknoteArrowUp,
+  BriefcaseBusiness,
+  CreditCard,
+  FileSpreadsheet,
+  HandCoins,
+  Landmark,
+  LayoutDashboard,
+  Users,
+  PlugZap,
+  Wallet,
+  GitBranchPlus
+} from 'lucide-react';
 
 import Categories from '../Pages/Categories/Categories';
 import Dashboard from '../Pages/Dashboard/Dashboard';
@@ -17,6 +31,11 @@ import Tenants from '../Pages/Tenants/Tenants';
 import TenantDetails from '../Pages/Tenants/TenantDetails';
 import ForgotPassword from '../Pages/ForgotPassword/ForgotPassword';
 import ResetPassword from '../Pages/ResetPassword/ResetPassword';
+import Charges from '../Pages/Charges/Charges';
+import Customers from '../Pages/Customers/Customers';
+import Gateways from '../Pages/Gateways/Gateways';
+import PaymentMethods from '../Pages/PaymentMethods/PaymentMethods';
+import BillingRules from '../Pages/BillingRules/BillingRules';
 
 export const appRoutes = [
   {
@@ -55,7 +74,7 @@ export const appRoutes = [
     element: <Categories />,
     meta: {
       label: 'Categorias',
-      icon: <BriefcaseBusiness size={18}/>,
+      icon: <BriefcaseBusiness size={18} />,
       placements: ['settings'],
       accessPath: '/categories',
     },
@@ -81,6 +100,16 @@ export const appRoutes = [
     },
   },
   {
+    path: '/charges',
+    element: <Charges />,
+    meta: {
+      label: 'Cobranças',
+      icon: <HandCoins />,
+      placements: ['sidebar'],
+      accessPath: '/charges',
+    },
+  },
+  {
     path: '/bank-accounts',
     element: <BankAccounts />,
     meta: {
@@ -95,7 +124,7 @@ export const appRoutes = [
     element: <CreditCards />,
     meta: {
       label: 'Cartões de crédito',
-      icon: <CreditCard size={18}/>,
+      icon: <CreditCard size={18} />,
       placements: ['settings'],
       accessPath: '/credit-cards',
     },
@@ -159,6 +188,46 @@ export const appRoutes = [
     element: <TenantDetails />,
     meta: {
       accessPath: '/tenants',
+    },
+  },
+  {
+    path: '/customers',
+    element: <Customers />,
+    meta: {
+      label: 'Clientes',
+      icon: <Users />,
+      placements: ['sidebar'],
+      accessPath: '/customers',
+    },
+  },
+  {
+    path: '/gateways',
+    element: <Gateways />,
+    meta: {
+      label: 'Gateways',
+      icon: <PlugZap />,
+      placements: ['settings'],
+      accessPath: '/gateways',
+    },
+  },
+  {
+    path: '/payment-methods',
+    element: <PaymentMethods />,
+    meta: {
+      label: 'Formas de pagamento',
+      icon: <Wallet />,
+      placements: ['settings'],
+      accessPath: '/payment-methods',
+    },
+  },
+  {
+    path: '/billing-rules',
+    element: <BillingRules />,
+    meta: {
+      label: 'Regras de cobrança',
+      icon: <GitBranchPlus />,
+      placements: ['settings'],
+      accessPath: '/billing-rules',
     },
   },
   {
