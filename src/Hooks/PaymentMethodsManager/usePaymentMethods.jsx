@@ -2,33 +2,17 @@ import { useEffect, useRef, useState } from 'react';
 import Swal from 'sweetalert2';
 import axiosInstance from '../../api/axiosInstance';
 import AlertToast from '../../Components/Alerts/AlertToast';
-import { SEFAZ_PAYMENT_METHODS } from '../../Configs/paymentMethods.constants';
 import { Operations } from '../../enum/operations.enum';
 
 const apiUrl = '/payment-methods';
 
-const mergeWithDefaultMethods = (apiItems = []) => {
-  const apiMap = new Map();
-
-  apiItems.forEach((item) => {
-    const code = String(item.code || '').padStart(2, '0');
-    apiMap.set(code, {
-      ...item,
-      code,
-      isActive: item.isActive ?? item.active ?? false,
-    });
-  });
-
-  return SEFAZ_PAYMENT_METHODS.map((method) => {
-    const existing = apiMap.get(method.code);
-
-    return {
-      id: existing?.id ?? method.code,
-      code: method.code,
-      name: existing?.name ?? method.name,
-      isActive: existing?.isActive ?? false,
-    };
-  });
+const normalizePaymentMethods = (items = []) => {
+  return items.map((item) => ({
+    id: item.id ?? item.code,
+    code: String(item.code ?? '').padStart(2, '0'),
+    name: item.name,
+    isActive: item.isActive ?? item.active ?? false,
+  }));
 };
 
 export const usePaymentMethods = () => {
@@ -55,7 +39,7 @@ export const usePaymentMethods = () => {
             response ??
             [];
 
-          const normalized = mergeWithDefaultMethods(
+          const normalized = normalizePaymentMethods(
             Array.isArray(payload) ? payload : []
           );
 
@@ -65,8 +49,7 @@ export const usePaymentMethods = () => {
 
         throw new Error('Um erro ocorreu ao buscar as formas de pagamento.');
       } catch (err) {
-        const normalized = mergeWithDefaultMethods([]);
-        setPaymentMethods(normalized);
+        setPaymentMethods([]);
 
         const errorMessage = defineErrorMessage(err, Operations.BUSCAR);
         setError(errorMessage);
@@ -100,8 +83,6 @@ export const usePaymentMethods = () => {
 
     try {
       const payload = {
-        code: paymentMethod.code,
-        name: paymentMethod.name,
         isActive: nextStatus,
       };
 
@@ -111,10 +92,26 @@ export const usePaymentMethods = () => {
       );
 
       if (response && status >= 200 && status <= 204) {
+        const returnedPaymentMethod =
+          response.payload?.paymentMethod ??
+          response.payload ??
+          response;
+
+        const normalizedReturnedPaymentMethod = returnedPaymentMethod
+          ? normalizePaymentMethods([returnedPaymentMethod])[0]
+          : {
+              ...paymentMethod,
+              isActive: nextStatus,
+            };
+
         setPaymentMethods((prev) =>
           prev.map((item) =>
             item.code === paymentMethod.code
-              ? { ...item, isActive: nextStatus }
+              ? {
+                  ...item,
+                  ...normalizedReturnedPaymentMethod,
+                  isActive: normalizedReturnedPaymentMethod.isActive ?? nextStatus,
+                }
               : item
           )
         );

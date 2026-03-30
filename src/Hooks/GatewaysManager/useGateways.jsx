@@ -4,26 +4,7 @@ import AlertToast from '../../Components/Alerts/AlertToast';
 import { Operations } from '../../enum/operations.enum';
 
 const apiUrl = '/gateways';
-
-const normalizeGatewaysList = (items = []) => {
-  return items.map((item) => ({
-    id: item.id,
-    name: item.name,
-    gateway: item.gateway,
-    icon: item.icon,
-    isActive: item.isActive ?? item.active ?? false,
-    config: item.config ?? {},
-  }));
-};
-
-const normalizeGatewayOptions = (items = []) => {
-  return items.map((item) => ({
-    value: String(item.id),
-    label: item.name,
-    gateway: item.gateway,
-    icon: item.icon,
-  }));
-};
+const gatewayOptionsUrl = '/gateways/available';
 
 export const useGateways = () => {
   const [gateways, setGateways] = useState([]);
@@ -42,23 +23,25 @@ export const useGateways = () => {
       setOptionsLoading(true);
 
       try {
-        const { data, status } = await axiosInstance.get(apiUrl);
+        const [gatewaysResponse, optionsResponse] = await Promise.all([
+          axiosInstance.get(apiUrl),
+          axiosInstance.get(gatewayOptionsUrl),
+        ]);
 
-        if (data && status >= 200 && status <= 204) {
-          const payload =
-            data?.payload?.gateways ??
-            data?.payload ??
-            data ??
-            [];
+        const gatewaysPayload =
+          gatewaysResponse.data?.payload?.gateways ??
+          gatewaysResponse.data?.payload ??
+          gatewaysResponse.data ??
+          [];
 
-          const normalized = normalizeGatewaysList(Array.isArray(payload) ? payload : []);
+        const optionsPayload =
+          optionsResponse.data?.payload?.gateways ??
+          optionsResponse.data?.payload ??
+          optionsResponse.data ??
+          [];
 
-          setGateways(normalized);
-          setGatewayOptions(normalizeGatewayOptions(normalized));
-          return;
-        }
-
-        throw new Error('Ocorreu um erro ao buscar os gateways.');
+        setGateways(Array.isArray(gatewaysPayload) ? gatewaysPayload : []);
+        setGatewayOptions(normalizeGatewayOptions(Array.isArray(optionsPayload) ? optionsPayload : []));
       } catch (err) {
         const errorMessage = defineErrorMessage(err, Operations.BUSCAR);
         AlertToast({ icon: 'error', title: errorMessage });
@@ -82,18 +65,7 @@ export const useGateways = () => {
         const created = response.payload?.gateway ?? response.payload ?? response;
 
         if (created?.id) {
-          const normalizedCreated = normalizeGatewaysList([created])[0];
-
-          setGateways((prev) => [...prev, normalizedCreated]);
-          setGatewayOptions((prev) => [
-            ...prev,
-            {
-              value: String(normalizedCreated.id),
-              label: normalizedCreated.name,
-              gateway: normalizedCreated.gateway,
-              icon: normalizedCreated.icon,
-            },
-          ]);
+          setGateways((prev) => [...prev, created]);
         }
 
         AlertToast({ icon: 'success', title: 'Gateway cadastrado com sucesso.' });
@@ -121,23 +93,8 @@ export const useGateways = () => {
         const updated = response.payload?.gateway ?? response.payload ?? response;
 
         if (updated?.id) {
-          const normalizedUpdated = normalizeGatewaysList([updated])[0];
-
           setGateways((prev) =>
-            prev.map((item) => (item.id === id ? normalizedUpdated : item))
-          );
-
-          setGatewayOptions((prev) =>
-            prev.map((item) =>
-              String(item.value) === String(normalizedUpdated.id)
-                ? {
-                    value: String(normalizedUpdated.id),
-                    label: normalizedUpdated.name,
-                    gateway: normalizedUpdated.gateway,
-                    icon: normalizedUpdated.icon,
-                  }
-                : item
-            )
+            prev.map((item) => (item.id === id ? updated : item))
           );
         }
 
@@ -164,8 +121,6 @@ export const useGateways = () => {
 
       if (response && status >= 200 && status <= 204) {
         setGateways((prev) => prev.filter((gateway) => gateway.id !== id));
-        setGatewayOptions((prev) => prev.filter((option) => String(option.value) !== String(id)));
-
         AlertToast({ icon: 'success', title: 'Gateway excluído com sucesso.' });
         return true;
       }
@@ -197,7 +152,7 @@ export const useGateways = () => {
       const errorMessage = defineCustomErrorMessage(err, 'testar integração');
       AlertToast({ icon: 'error', title: errorMessage });
       setError(errorMessage);
-      return false;
+      return false;c
     } finally {
       setLoading(false);
     }
@@ -217,6 +172,13 @@ export const useGateways = () => {
     }
 
     return `Ocorreu um erro ao ${operation}.`;
+  };
+
+  const normalizeGatewayOptions = (items = []) => {
+    return items.map((item) => ({
+      value: item.gateway,
+      label: item.name,
+    }));
   };
 
   return {
