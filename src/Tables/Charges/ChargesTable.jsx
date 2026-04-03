@@ -1,11 +1,10 @@
 import { Ban, History, RefreshCcw } from "lucide-react";
 import { ActionDropdown } from "../../Components/ActionDropdown/ActionDropdown";
 import { FlexibleTable } from "../../Components/FlexibleTable/FlexibleTable";
-import globalStyles from "../../Styles/GlobalStyles.module.css";
 import { BankAccountsTableSkeleton } from "../BankAccounts/BankAccountsTableSkeleton";
 
 const GATEWAY_LABELS = {
-  PAGARME: "Pagar.me",
+  PAGAR_ME: "Pagar.me",
   APPMAX: "Appmax",
   ASAAS: "Asaas",
   MERCADO_PAGO: "Mercado Pago",
@@ -42,7 +41,7 @@ export const ChargesTable = ({
   const columns = [
     {
       header: "Título da cobrança",
-      accessor: "name",
+      accessor: "title",
       style: { flex: "1 1 35%", display: "flex", justifyContent: "center" },
     },
     {

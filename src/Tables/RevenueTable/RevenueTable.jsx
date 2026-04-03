@@ -1,4 +1,4 @@
-import { BanknoteXIcon, HandCoins, Pencil, Trash2 } from 'lucide-react';
+import { BanknoteXIcon, HandCoins, Pencil, ReceiptText, Trash2 } from 'lucide-react';
 import { ActionDropdown } from '../../Components/ActionDropdown/ActionDropdown';
 import { FlexibleTable } from '../../Components/FlexibleTable/FlexibleTable';
 import DeleteConfirmation from '../../Hooks/DeleteConfirmation/DeleteConfirmation';
@@ -8,7 +8,19 @@ import { useBreakpoints } from '../../Hooks/useMediaQuery/useBreakpoints';
 import { STATUS_COLORS } from '../../Types/status.color';
 import { RevenueTableSkeleton } from '../../Pages/Revenues/RevenueTableSkeleton';
 
-const RevenueTable = ({ revenues = [], categories = [], accounts = [], onEdit, onDelete, loading, handleOpenPaymentModal, onReversePayment }) => {
+const RevenueTable = ({
+    revenues = [],
+    categories = [],
+    accounts = [],
+    customers = [],
+    paymentMethods = [],
+    onEdit,
+    onDelete,
+    loading,
+    handleOpenPaymentModal,
+    onReversePayment,
+    onGenerateCharge
+}) => {
     const { isMobile } = useBreakpoints();
 
     if (loading) {
@@ -58,6 +70,22 @@ const RevenueTable = ({ revenues = [], categories = [], accounts = [], onEdit, o
                         );
                     }
                     return category ? category.name : '-';
+                },
+                style: { flex: '1 1 20%', display: 'flex', justifyContent: 'center' },
+            },
+            {
+                header: 'Cliente',
+                renderCell: (revenue) => {
+                    const customer = customers.find((item) => Number(item.id) === Number(revenue.idCustomer ?? revenue.customerId)) || {};
+                    return customer.name || revenue.customerName || '-';
+                },
+                style: { flex: '1 1 20%', display: 'flex', justifyContent: 'center' },
+            },
+            {
+                header: 'Forma de pagamento',
+                renderCell: (revenue) => {
+                    const paymentMethod = paymentMethods.find((item) => Number(item.id) === Number(revenue.idPaymentMethod ?? revenue.paymentMethodId)) || {};
+                    return paymentMethod.name || revenue.paymentMethodName || '-';
                 },
                 style: { flex: '1 1 20%', display: 'flex', justifyContent: 'center' },
             },
@@ -127,12 +155,20 @@ const RevenueTable = ({ revenues = [], categories = [], accounts = [], onEdit, o
                 revenueActions.push({ icon: <BanknoteXIcon size={14} />, label: 'Gerenciar recebimentos', handler: () => onReversePayment(revenue) });
             }
 
+            if (!revenue.idCharge && revenue.status === 'pending') {
+                revenueActions.push({
+                    icon: <ReceiptText size={14} />,
+                    text: 'Gerar cobrança',
+                    handler: () => onGenerateCharge(revenue)
+                });
+            }
+
             return <ActionDropdown actions={revenueActions} />;
         },
         style: { flex: '1 1 15%', display: 'flex', justifyContent: 'center' },
     });
 
-    return <FlexibleTable columns={columns} data={revenues} noDataMessage="Nenhuma receita cadastrada" />;
+    return <FlexibleTable columns={columns} data={revenues} noDataMessage="Nenhuma conta a receber cadastrada" />;
 };
 
 export default RevenueTable;

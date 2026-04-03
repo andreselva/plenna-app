@@ -27,7 +27,14 @@ const ModalRevenues = ({
     setBooleanSourceAccountId,
     accounts,
     selectedBankAccount,
-    setSelectedBankAccount
+    setSelectedBankAccount,
+    customers,
+    selectedCustomer,
+    setSelectedCustomer,
+    paymentMethods,
+    selectedPaymentMethod,
+    setSelectedPaymentMethod,
+    loading = false
 }) => {
     const handleCancel = () => {
         setNewRevenue('');
@@ -35,6 +42,8 @@ const ModalRevenues = ({
         setRevenueInvoiceDueDate('');
         setSelectedCategory('');
         setSelectedBankAccount('');
+        setSelectedCustomer('');
+        setSelectedPaymentMethod('');
         setEditingRevenue('');
         setIsModalOpen(false);
         setInstallments('');
@@ -124,6 +133,35 @@ const ModalRevenues = ({
             ]
         },
         {
+            title: 'Vínculos',
+            fields: [
+                {
+                    id: 'customer',
+                    label: 'Cliente',
+                    type: 'select',
+                    value: selectedCustomer,
+                    onChange: setSelectedCustomer,
+                    placeholder: 'Selecione',
+                    required: false,
+                    options: customers.map((customer) => ({ value: customer.id, label: customer.name })),
+                    size: 'half-width-large'
+                },
+                {
+                    id: 'paymentMethod',
+                    label: 'Forma de pagamento',
+                    type: 'select',
+                    value: selectedPaymentMethod,
+                    onChange: setSelectedPaymentMethod,
+                    placeholder: 'Selecione',
+                    required: false,
+                    options: paymentMethods
+                        .filter((paymentMethod) => paymentMethod.isActive)
+                        .map((paymentMethod) => ({ value: paymentMethod.id, label: paymentMethod.name })),
+                    size: 'half-width-medium'
+                }
+            ]
+        },
+        {
             title: 'Parcelamento',
             fields: [
                 {
@@ -204,8 +242,9 @@ const ModalRevenues = ({
             onSubmit={handleAddRevenue}
             onCancel={handleCancel}
             submitButtonText="Salvar"
-            width="500px"
+            width="auto"
             height="auto"
+            loading={loading}
         />
     );
 };

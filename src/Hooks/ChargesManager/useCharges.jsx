@@ -153,6 +153,29 @@ export const useCharges = () => {
     return `Ocorreu um erro ao ${action} cobrança.`;
   };
 
+  const generateCharge = async (chargeData) => {
+    setLoading(true);
+
+    try {
+      const { data: response, status } = await axiosInstance.post(`${apiUrl}/create`, chargeData);
+
+      if (response && status >= 200 && status <= 204) {
+        AlertToast({ icon: "success", title: "Cobrança gerada com sucesso." });
+        await refreshCharges();
+        return true;
+      }
+
+      throw new Error("Ocorreu um erro ao gerar a cobrança.");
+    } catch (err) {
+      const errorMessage = defineActionErrorMessage(err, "gerar");
+      AlertToast({ icon: "error", title: errorMessage });
+      setError(errorMessage);
+      return false;
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return {
     charges,
     loading,
@@ -161,5 +184,6 @@ export const useCharges = () => {
     cancelCharge,
     getChargeHistory,
     refreshCharges,
+    generateCharge,
   };
 };
