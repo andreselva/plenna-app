@@ -35,7 +35,7 @@ const FinancialSummary = () => {
     labels,
     datasets: [
       { label: 'Contas a receber', data: incomeData.map(roundTwo), backgroundColor: 'rgba(119, 72, 206, 0.7)' },
-      { label: 'Despesas', data: expenseData.map(roundTwo), backgroundColor: 'rgba(255, 99, 132, 0.7)' },
+      { label: 'Contas a pagar', data: expenseData.map(roundTwo), backgroundColor: 'rgba(255, 99, 132, 0.7)' },
       { label: 'Resultado', data: resultData.map(roundTwo), backgroundColor: 'rgba(75, 192, 192, 0.7)' },
     ],
   };
@@ -140,7 +140,7 @@ const FinancialSummary = () => {
                   <h3>{formatCurrency(totalIncome)}</h3>
                 </div>
                 <div className={styles.summaryCard}>
-                  <span>Despesas</span>
+                  <span>Contas a pagar</span>
                   <h3>{formatCurrency(totalExpense)}</h3>
                 </div>
                 <div className={styles.summaryCard}>
@@ -159,7 +159,7 @@ const FinancialSummary = () => {
                     <tr>
                       <th>Mês</th>
                       <th>Contas a receber</th>
-                      <th>Despesas</th>
+                      <th>Contas a pagar</th>
                       <th>Resultado</th>
                     </tr>
                   </thead>
