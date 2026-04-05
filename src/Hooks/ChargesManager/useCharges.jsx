@@ -98,13 +98,13 @@ export const useCharges = () => {
       const { data: response, status } = await axiosInstance.get(`${apiUrl}/${id}/history`);
 
       if (response && status >= 200 && status <= 204) {
-        const history =
-          response.payload?.history ??
-          response.payload ??
-          response ??
-          [];
+        const payload = response.payload ?? response ?? {};
+        const history = payload?.history ?? payload;
 
-        return Array.isArray(history) ? history : [];
+        return {
+          charge: payload?.charge ?? null,
+          history: Array.isArray(history) ? history : [],
+        };
       }
 
       throw new Error("Ocorreu um erro ao buscar o histórico da cobrança.");
@@ -112,7 +112,10 @@ export const useCharges = () => {
       const errorMessage = defineActionErrorMessage(err, "buscar o histórico de");
       AlertToast({ icon: "error", title: errorMessage });
       setError(errorMessage);
-      return [];
+      return {
+        charge: null,
+        history: [],
+      };
     } finally {
       setLoading(false);
     }

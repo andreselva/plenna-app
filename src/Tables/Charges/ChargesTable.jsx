@@ -50,26 +50,10 @@ export const ChargesTable = ({
       renderCell: (charge) => defineGatewayLabel(charge.gateway),
     },
     {
-      header: "Ícone",
+      header: "Valor",
+      accessor: "amount",
       style: { flex: "1 1 20%", display: "flex", justifyContent: "center" },
-      renderCell: (charge) => {
-        const iconUrl = defineIconUrl(charge.icon);
-
-        if (!iconUrl) return "-";
-
-        return (
-          <img
-            src={iconUrl}
-            alt={charge.name || "Ícone da cobrança"}
-            style={{
-              width: "28px",
-              height: "28px",
-              objectFit: "contain",
-              borderRadius: "4px",
-            }}
-          />
-        );
-      },
+      renderCell: (charge) => "R$ " + (charge.amount ?? 0).toLocaleString("pt-BR", { minimumFractionDigits: 2 }),
     },
     {
       header: "Ações",

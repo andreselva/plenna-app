@@ -1,9 +1,12 @@
 import AlertToast from "../../Components/Alerts/AlertToast";
 import globalStyles from "../../Styles/GlobalStyles.module.css";
 import { useCharges } from "../../Hooks/ChargesManager/useCharges";
+import { useState } from "react";
+import { ModalChargeHistory } from "../../Modals/ModalChargeHistory/ModalChargeHistory";
 import { ChargesTable } from "../../Tables/Charges/ChargesTable";
 
 const Charges = () => {
+  const [selectedChargeHistory, setSelectedChargeHistory] = useState(null);
   const {
     charges,
     loading,
@@ -22,9 +25,10 @@ const Charges = () => {
   };
 
   const handleViewHistory = async (charge) => {
-    const history = await getChargeHistory(charge.id);
+    const chargeHistoryData = await getChargeHistory(charge.id);
+    const history = chargeHistoryData?.history ?? [];
 
-    if (!history || history.length === 0) {
+    if (!chargeHistoryData?.charge && history.length === 0) {
       AlertToast({
         icon: "info",
         title: "Nenhum histórico encontrado para esta cobrança.",
@@ -32,14 +36,9 @@ const Charges = () => {
       return;
     }
 
-    console.log("Histórico da cobrança:", {
-      charge,
+    setSelectedChargeHistory({
+      charge: chargeHistoryData?.charge ?? charge,
       history,
-    });
-
-    AlertToast({
-      icon: "info",
-      title: "Histórico carregado. Verifique o console por enquanto.",
     });
   };
 
@@ -65,6 +64,13 @@ const Charges = () => {
           />
         </div>
       </div>
+
+      <ModalChargeHistory
+        isOpen={!!selectedChargeHistory}
+        onClose={() => setSelectedChargeHistory(null)}
+        charge={selectedChargeHistory?.charge}
+        history={selectedChargeHistory?.history ?? []}
+      />
     </div>
   );
 };
