@@ -136,7 +136,7 @@ const Expenses = () => {
                     <div className={globalStyles['content-title-items']}>
                         <div className={globalStyles['content-title-items-left']}>
                             <button className={globalStyles['title-items-button']} onClick={() => setIsModalOpen(true)} />
-                            <span className={globalStyles['title-items-span']}>Despesas</span>
+                            <span className={globalStyles['title-items-span']}>Contas a pagar</span>
                         </div>
                         <div className={globalStyles['content-title-items-right']}>
                             <button

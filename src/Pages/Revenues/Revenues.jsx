@@ -12,6 +12,10 @@ import { PaymentModal } from '../../Modals/PaymentModal/PaymentModal';
 import { PayableType } from '../../enum/payable-type.enum';
 import { usePaymentManager } from '../../Hooks/PaymentManager/usePaymentManager';
 import { ReversePaymentModal } from '../../Modals/PaymentModal/ReversePaymentModal';
+import { useCharges } from '../../Hooks/ChargesManager/useCharges';
+import AlertConfirm from '../../Components/Alerts/AlertConfirm';
+import { ChargeEntityTypeEnum } from '../../enum/charge-entity-type.enum';
+import AlertToast from '../../Components/Alerts/AlertToast';
 
 const Revenues = () => {
     const [formattedPeriod, setFormattedPeriod] = useState(() => getStartAndEndOfMonth());
@@ -37,13 +41,15 @@ const Revenues = () => {
     };
 
     const { registerPayment } = usePaymentManager();
+    const { generateCharge } = useCharges();
 
     const {
         revenues, categories, selectedCategory, setSelectedCategory, isModalOpen, setIsModalOpen, setEditingRevenue,
         newRevenue, setNewRevenue, revenueValue, setRevenueValue, revenueInvoiceDueDate, setRevenueInvoiceDueDate,
         handleEditRevenue, handleSaveRevenue, handleDeleteRevenue, typeOfInstallment, setTypeOfInstallment,
         installments, setInstallments, hasInstallments, setHasInstallments, hasSourceAccountId,
-        setBooleanSourceAccountId, idRevenue, setIdRevenue, loading, error, refetch, accounts, selectedBankAccount, setSelectedBankAccount
+        setBooleanSourceAccountId, idRevenue, setIdRevenue, loading, error, refetch, accounts, selectedBankAccount, setSelectedBankAccount,
+        customers, selectedCustomer, setSelectedCustomer, paymentMethods, selectedPaymentMethod, setSelectedPaymentMethod
     } = useRevenueHandler(formattedPeriod);
 
     const [filteredRevenues, setFilteredRevenues] = useState(revenues);
@@ -111,6 +117,43 @@ const Revenues = () => {
         setIsReverseModalOpen(false);
     };
 
+    const handleGenerateCharge = async (revenue) => {
+        if (!revenue.idCustomer && !revenue.customerId) {
+            AlertToast({
+                icon: 'warning',
+                title: 'Vincule um cliente à conta a receber antes de gerar a cobrança.'
+            });
+            return;
+        }
+
+        if (!revenue.idPaymentMethod && !revenue.paymentMethodId) {
+            AlertToast({
+                icon: 'warning',
+                title: 'Vincule uma forma de pagamento à conta a receber antes de gerar a cobrança.'
+            });
+            return;
+        }
+
+        const result = await AlertConfirm({
+            title: 'Conta a receber parcelada',
+            text: 'Deseja gerar uma cobrança para esta conta a receber?',
+            icon: 'warning',
+            confirmButtonText: 'Sim, gerar',
+            cancelButtonText: 'Não'
+        }); 
+
+        if (result.isConfirmed) {
+            const payload = { 
+                entityId: revenue.id,
+                type: ChargeEntityTypeEnum.REVENUE
+            };
+            const success = await generateCharge(payload);
+            if (success) {
+                refetch();
+            }
+        }
+    };
+
     return (
         <div className={globalStyles.container}>
             <div className={globalStyles['container-content']}>
@@ -118,7 +161,7 @@ const Revenues = () => {
                     <div className={globalStyles['content-title-items']}>
                         <div className={globalStyles['content-title-items-left']}>
                             <button className={globalStyles['title-items-button']} onClick={() => setIsModalOpen(true)} />
-                            <span className={globalStyles['title-items-span']}>Receitas</span>
+                            <span className={globalStyles['title-items-span']}>Contas a receber</span>
                         </div>
                         <div className={globalStyles['content-title-items-right']}>
                             <button
@@ -157,12 +200,15 @@ const Revenues = () => {
                         revenues={filteredRevenues}
                         categories={categories}
                         accounts={accounts}
+                        customers={customers}
+                        paymentMethods={paymentMethods}
                         onEdit={handleEditRevenue}
                         onDelete={handleDeleteRevenue}
                         loading={loading}
                         error={error}
                         handleOpenPaymentModal={handleOpenPaymentModal}
                         onReversePayment={handleOpenReverseModal}
+                        onGenerateCharge={handleGenerateCharge}
                     />
                 </div>
             </div>
@@ -200,6 +246,8 @@ const Revenues = () => {
                     setRevenueInvoiceDueDate={setRevenueInvoiceDueDate}
                     categories={categories}
                     accounts={accounts}
+                    customers={customers}
+                    paymentMethods={paymentMethods}
                     selectedCategory={selectedCategory}
                     setSelectedCategory={setSelectedCategory}
                     setEditingRevenue={setEditingRevenue}
@@ -215,6 +263,11 @@ const Revenues = () => {
                     setIdRevenue={setIdRevenue}
                     selectedBankAccount={selectedBankAccount}
                     setSelectedBankAccount={setSelectedBankAccount}
+                    selectedCustomer={selectedCustomer}
+                    setSelectedCustomer={setSelectedCustomer}
+                    selectedPaymentMethod={selectedPaymentMethod}
+                    setSelectedPaymentMethod={setSelectedPaymentMethod}
+                    loading={loading}
                 />
             )}
         </div>

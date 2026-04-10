@@ -25,46 +25,41 @@ const ExpenseTable = ({ expenses = [], categories = [], creditCards = [], accoun
     });
 
     const columns = [
-        { header: 'Descrição', accessor: 'name', style: { flex: '1 1 25%', display: 'flex', justifyContent: 'center' } },
-        { header: 'Valor', accessor: 'value', style: { flex: '1 1 5%', display: 'flex', justifyContent: 'center' } }
+        { header: 'Descrição', accessor: 'name', style: { flex: '1 1 20%', display: 'flex', justifyContent: 'center' } },
     ];
 
     if (!isMobile) {
         columns.push(
-            {
-                header: 'Vencimento',
-                renderCell: (expense) => (expense.invoiceDueDate ? expense.invoiceDueDate.split('-').reverse().join('/') : '-'),
-                style: { flex: '1 1 10%', display: 'flex', justifyContent: 'center' },
-            },
-            {
-                header: 'Categoria',
-                renderCell: (expense) => {
-                    const category = categories.find((c) => c.id === expense.idCategory);
-                    if (category && category.color) {
-                        return (
-                            <span
-                                className={globalStyles.statusBadge}
-                                style={{
-                                    backgroundColor: `${category.color}33`,
-                                    color: darkenHexColor(category.color, 25),
-                                    padding: '4px 10px'
-                                }}
-                            >
-                                {category.name}
-                            </span>
-                        );
-                    }
-                    return category ? category.name : '-';
-                },
-                style: { flex: '1 1 15%', display: 'flex', justifyContent: 'center' },
-            },
+           
+            // {
+            //     header: 'Categoria',
+            //     renderCell: (expense) => {
+            //         const category = categories.find((c) => c.id === expense.idCategory);
+            //         if (category && category.color) {
+            //             return (
+            //                 <span
+            //                     className={globalStyles.statusBadge}
+            //                     style={{
+            //                         backgroundColor: `${category.color}33`,
+            //                         color: darkenHexColor(category.color, 25),
+            //                         padding: '4px 10px'
+            //                     }}
+            //                 >
+            //                     {category.name}
+            //                 </span>
+            //             );
+            //         }
+            //         return category ? category.name : '-';
+            //     },
+            //     style: { flex: '1 1 15%', display: 'flex', justifyContent: 'center' },
+            // },
             {
                 header: 'Conta bancária',
                 renderCell: (expense) => {
                     const bankAccount = accounts.find((account) => Number(account.id) === Number(expense.idBankAccount)) || {};
                     return bankAccount.name || '-';
                 },
-                style: { flex: '1 1 15%', display: 'flex', justifyContent: 'center' },
+                style: { flex: '1 1 10%', display: 'flex', justifyContent: 'center' },
             }
         );
     }
@@ -78,6 +73,17 @@ const ExpenseTable = ({ expenses = [], categories = [], creditCards = [], accoun
                     return creditCard.name || '-';
                 },
                 style: { flex: '1 1 15%', display: 'flex', justifyContent: 'center' },
+            },
+            { 
+                header: 'Valor', 
+                accessor: 'value', 
+                style: { flex: '1 1 10%', display: 'flex', justifyContent: 'center' },
+                renderCell: (expense) => "R$ " + (expense.value ?? 0).toLocaleString("pt-BR", { minimumFractionDigits: 2 }),
+            },
+            {
+                header: 'Vencimento',
+                renderCell: (expense) => (expense.invoiceDueDate ? expense.invoiceDueDate.split('-').reverse().join('/') : '-'),
+                style: { flex: '1 1 10%', display: 'flex', justifyContent: 'center' },
             },
             {
                 header: 'Status',
@@ -103,7 +109,7 @@ const ExpenseTable = ({ expenses = [], categories = [], creditCards = [], accoun
                         </span>
                     );
                 },
-                style: { flex: '1 1 15%', display: 'flex', justifyContent: 'center' },
+                style: { flex: '1 1 10%', display: 'flex', justifyContent: 'center' },
             }
         );
     }

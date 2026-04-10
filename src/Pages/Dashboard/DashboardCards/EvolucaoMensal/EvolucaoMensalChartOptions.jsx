@@ -4,7 +4,7 @@ export const defaultEvolucaoMensalData = {
     labels: meses,
     datasets: [
         {
-            label: "Receitas",
+            label: "Contas a receber",
             data: Array(12).fill(0),
             fill: true,
             backgroundColor: 'rgba(76, 175, 80, 0.1)',
@@ -14,7 +14,7 @@ export const defaultEvolucaoMensalData = {
             pointHoverRadius: 6,
         },
         {
-            label: "Despesas",
+            label: "Contas a pagar",
             data: Array(12).fill(0),
             fill: true,
             backgroundColor: 'rgba(244, 67, 54, 0.1)',

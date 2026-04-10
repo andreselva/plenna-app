@@ -5,11 +5,15 @@ import { validateDate } from '../Utils/DateUtils';
 import SweetAlert from '../Components/Alerts/SweetAlert';
 import AlertConfirm from '../Components/Alerts/AlertConfirm';
 import { useBankAccounts } from '../Hooks/BankAccountsManager/useBankAccounts';
+import { useCustomers } from '../Hooks/CustomersManager/useCustomers';
+import { usePaymentMethods } from '../Hooks/PaymentMethodsManager/usePaymentMethods';
 
 export const useRevenueHandler = (periodo) => {
     const { revenues, addRevenue, deleteRevenue, updateRevenue, loading, error, refetch } = RevenuesManager(periodo);
     const { categories } = CategoryManager();
     const { accounts } = useBankAccounts();
+    const { customers, loading: customersLoading } = useCustomers();
+    const { paymentMethods, loading: paymentMethodsLoading } = usePaymentMethods();
 
     const [selectedCategory, setSelectedCategory] = useState();
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -24,12 +28,14 @@ export const useRevenueHandler = (periodo) => {
     const [hasSourceAccountId, setBooleanSourceAccountId] = useState(false);
     const [sourceAccountId, setSourceAccountId] = useState('');
     const [selectedBankAccount, setSelectedBankAccount] = useState('');
+    const [selectedCustomer, setSelectedCustomer] = useState('');
+    const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('');
     const [idRevenue, setIdRevenue] = useState(0);
     const updateInstallments = false;
 
     const handleAddRevenue = () => {
         if (!newRevenue.trim()) {
-            alert('O nome da receita não pode ser vazio.');
+            alert('O nome da conta não pode ser vazio.');
             return;
         }
 
@@ -40,6 +46,8 @@ export const useRevenueHandler = (periodo) => {
             invoiceDueDate: revenueInvoiceDueDate,
             idCategory: Number(selectedCategory),
             idBankAccount: Number(selectedBankAccount) || 0,
+            customerId: Number(selectedCustomer) || 0,
+            paymentMethodId: Number(selectedPaymentMethod) || 0,
             installments: Number(installments),
             typeOfInstallments: typeOfInstallment,
             hasInstallments: hasInstallments,
@@ -62,13 +70,15 @@ export const useRevenueHandler = (periodo) => {
         setHasInstallments(revenue.hasInstallments);
         setBooleanSourceAccountId(revenue.sourceAccountId > 0);
         setSourceAccountId(revenue.sourceAccountId);
-        setSelectedBankAccount(revenue.idBankAccount ?? '');
+        setSelectedBankAccount(revenue.idBankAccount ? String(revenue.idBankAccount) : '');
+        setSelectedCustomer(revenue.idCustomer || revenue.customerId ? String(revenue.idCustomer ?? revenue.customerId) : '');
+        setSelectedPaymentMethod(revenue.idPaymentMethod || revenue.paymentMethodId ? String(revenue.idPaymentMethod ?? revenue.paymentMethodId) : '');
         setIsModalOpen(true);
     };
 
     const handleSaveRevenue = async () => {
         if (!newRevenue.trim()) {
-            alert('O nome da receita não pode ser vazio.');
+            alert('O nome da conta não pode ser vazio.');
             return;
         }
 
@@ -90,6 +100,8 @@ export const useRevenueHandler = (periodo) => {
             invoiceDueDate: revenueInvoiceDueDate,
             idCategory: Number(selectedCategory),
             idBankAccount: Number(selectedBankAccount) || 0,
+            customerId: Number(selectedCustomer) || 0,
+            paymentMethodId: Number(selectedPaymentMethod) || 0,
             installments: Number(installments),
             typeOfInstallments: typeOfInstallment,
             hasInstallments: hasInstallments,
@@ -101,8 +113,8 @@ export const useRevenueHandler = (periodo) => {
 
         if (hasInstallments) {
             const result = await AlertConfirm({
-                title: 'Receita parcelada',
-                text: 'Esta receita possui parcelas. Deseja aplicar as alterações a todas as parcelas subsequentes?',
+                title: 'Conta parcelada',
+                text: 'Esta conta possui parcelas. Deseja aplicar as alterações a todas as parcelas subsequentes?',
                 icon: 'warning',
                 confirmButtonText: 'Sim, alterar',
                 cancelButtonText: 'Não'
@@ -122,8 +134,8 @@ export const useRevenueHandler = (periodo) => {
     const handleDeleteRevenue = async (revenue) => {
         if (revenue.hasInstallments) {
             const result = await AlertConfirm({
-                title: 'Receita parcelada!',
-                text: 'Esta receita possui parcelas. Deseja excluir todas as parcelas?',
+                title: 'Conta parcelada!',
+                text: 'Esta conta possui parcelas. Deseja excluir todas as parcelas?',
                 icon: 'warning',
                 confirmButtonText: 'Sim, excluir',
                 cancelButtonText: 'Não'
@@ -143,7 +155,7 @@ export const useRevenueHandler = (periodo) => {
         setEditingRevenue('');
         setNewRevenue('');
         setRevenueDescription('');
-        setRevenueValue('0');
+        setRevenueValue('');
         setRevenueInvoiceDueDate('');
         setSelectedCategory('');
         setInstallments('');
@@ -152,6 +164,8 @@ export const useRevenueHandler = (periodo) => {
         setBooleanSourceAccountId(false);
         setSourceAccountId('');
         setSelectedBankAccount('');
+        setSelectedCustomer('');
+        setSelectedPaymentMethod('');
         setIsModalOpen(false);
         setIdRevenue(0);
     };
@@ -160,6 +174,8 @@ export const useRevenueHandler = (periodo) => {
         revenues,
         categories,
         accounts,
+        customers,
+        paymentMethods,
         selectedCategory,
         setSelectedCategory,
         isModalOpen,
@@ -188,9 +204,13 @@ export const useRevenueHandler = (periodo) => {
         setBooleanSourceAccountId,
         selectedBankAccount,
         setSelectedBankAccount,
+        selectedCustomer,
+        setSelectedCustomer,
+        selectedPaymentMethod,
+        setSelectedPaymentMethod,
         idRevenue,
         setIdRevenue,
-        loading,
+        loading: loading || customersLoading || paymentMethodsLoading,
         error,
         refetch
     };

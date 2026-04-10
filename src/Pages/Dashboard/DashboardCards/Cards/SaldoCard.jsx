@@ -33,8 +33,8 @@ const SaldoCard = ({ saldoData }) => {
                     {formatCurrency(finalBalance)}
                 </div>
                 <div className="saldo-details">
-                    <span>Receitas: {formatCurrency(revenues)}</span>
-                    <span>Despesas: {formatCurrency(expenses)}</span>
+                    <span>Contas a receber: {formatCurrency(revenues)}</span>
+                    <span>Contas a pagar: {formatCurrency(expenses)}</span>
                 </div>
             </div>
         </div>

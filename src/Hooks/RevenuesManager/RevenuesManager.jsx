@@ -23,11 +23,11 @@ export const RevenuesManager = (periodo) => {
                 return;
             }
 
-            throw new Error(`Ocorreu um erro ao buscar as receitas.`);
+            throw new Error(`Ocorreu um erro ao buscar as contas a receber.`);
         } catch (err) {
             const errorMessage = defineErrorMessage(err, Operations.BUSCAR);
             SweetAlert.error(errorMessage);
-            setError(err?.response?.data?.message || "Erro ao buscar as receitas!");
+            setError(err?.response?.data?.message || "Erro ao buscar as contas a receber!");
         } finally {
             setLoading(false);
         }
@@ -49,10 +49,10 @@ export const RevenuesManager = (periodo) => {
 
             if (response && status >= 200 && status <= 204) {
                 setRevenues(response.payload.revenues);
-                AlertToast({icon: 'success', title: 'Receita cadastrada com sucesso!'});
+                AlertToast({icon: 'success', title: 'Conta a receber cadastrada com sucesso!'});
                 return;
             }
-            throw new Error(`Ocorreu um erro ao cadastrar a receita.`);
+            throw new Error(`Ocorreu um erro ao cadastrar a conta a receber.`);
         } catch (err) {
             const errorMessage = defineErrorMessage(err, Operations.CREATE);
             SweetAlert.error(errorMessage);

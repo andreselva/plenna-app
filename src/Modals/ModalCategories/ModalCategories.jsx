@@ -54,8 +54,8 @@ const ModalCategories = ({
           placeholder: 'Selecione o tipo',
           required: true,
           options: [
-            { value: 'Receita', label: 'Receita' },
-            { value: 'Despesa', label: 'Despesa' },
+            { value: 'Receita', label: 'Conta a receber' },
+            { value: 'Despesa', label: 'Conta a pagar' },
           ],
           size: 'half-width',
         },

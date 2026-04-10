@@ -16,7 +16,8 @@ const GenericModal = ({
   width = '500px',
   height = 'auto',
   loading = false,
-  extraPayload = {}
+  extraPayload = {},
+  extraActionButton = null,
 }) => {
   if (!isOpen) return null;
 
@@ -39,6 +40,12 @@ const GenericModal = ({
 
   const handleSubmitClick = () => {
     if (onSubmit) onSubmit(buildPayload());
+  };
+
+  const handleExtraActionClick = () => {
+    if (extraActionButton?.onClick) {
+      extraActionButton.onClick(buildPayload());
+    }
   };
 
   return (
@@ -146,6 +153,19 @@ const GenericModal = ({
               {submitButtonText}
             </button>
           )}
+
+          {extraActionButton?.visible !== false && extraActionButton?.text && (
+            <button
+              type="button"
+              className="btn-primary"
+              onClick={handleExtraActionClick}
+              disabled={extraActionButton?.disabled}
+              style={extraActionButton?.style}
+            >
+              {extraActionButton.text}
+            </button>
+          )}
+
           <button type="button" onClick={onCancel} className="btn-secondary">
             {cancelButtonText}
           </button>
