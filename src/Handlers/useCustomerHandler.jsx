@@ -149,11 +149,16 @@ export const useCustomerHandler = () => {
     if (!validate()) return;
 
     const payload = normalizePayload();
+    let savedCustomer = null;
 
     if (editingCustomer) {
-      await updateCustomer(editingCustomer.id, payload);
+      savedCustomer = await updateCustomer(editingCustomer.id, payload);
     } else {
-      await addCustomer(payload);
+      savedCustomer = await addCustomer(payload);
+    }
+
+    if (!savedCustomer) {
+      return;
     }
 
     resetForm();
