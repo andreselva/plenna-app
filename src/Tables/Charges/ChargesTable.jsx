@@ -123,7 +123,9 @@ export const ChargesTable = ({
               handler: () => onPaid(charge.id)
             }
           );
-        } else if (charge.status === 'PROCESSING') {
+        } 
+        
+        if (charge.status === 'PROCESSING') {
           chargesActions.push(
             {
               icon: <CirclePause size={14} />,
@@ -131,7 +133,9 @@ export const ChargesTable = ({
               handler: () => onAwaitingPayment(charge.id)
             }
           )
-        } else if (charge.status === 'DRAFT') {
+        } 
+        
+        if (charge.status === 'DRAFT') {
           chargesActions.push(
             {
               icon: <LoaderCircle size={14} />,
@@ -144,7 +148,9 @@ export const ChargesTable = ({
             //   handler: () => onReprocess(charge.id),
             // },
           )
-        } else if (['PROCESSING', 'AWAITING_PAYMENT', 'DRAFT'].includes(charge.status)) {
+        } 
+        
+        if (['PROCESSING', 'AWAITING_PAYMENT', 'DRAFT'].includes(charge.status)) {
           chargesActions.push(
             {
               icon: <Ban size={14} />,
