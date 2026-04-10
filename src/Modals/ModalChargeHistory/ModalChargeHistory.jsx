@@ -3,13 +3,13 @@ import { formatDateToPtBr } from '../../Utils/DateUtils';
 import './ModalChargeHistory.css';
 
 const STATUS_LABELS = {
+  DRAFT: 'Rascunho',
   PROCESSING: 'Processando',
-  PENDING: 'Pendente',
+  AWAITING_PAYMENT: 'Aguardando pagamento',
   PAID: 'Paga',
-  FAILED: 'Falhou',
-  CANCELED: 'Cancelada',
+  FAILED: 'Com erro',
   CANCELLED: 'Cancelada',
-  EXPIRED: 'Expirada',
+  EXPIRED: 'Expirada'
 };
 
 const GATEWAY_LABELS = {

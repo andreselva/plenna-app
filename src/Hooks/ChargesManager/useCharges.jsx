@@ -179,6 +179,72 @@ export const useCharges = () => {
     }
   };
 
+  const markAsPaid = async (chargeId) => {
+    setLoading(true);
+
+    try {
+      const {data: response, status } = await axiosInstance.put(`${apiUrl}/${chargeId}/pay`);
+      if (response && status >= 200 && status <= 204) {
+        AlertToast({ icon: "success", title: "Pagamento registrado." });
+        await refreshCharges();
+        return true;
+      }
+
+      throw new Error("Erro.");
+    } catch (err) {
+      const errorMessage = defineActionErrorMessage(err, "pagar");
+      AlertToast({ icon: "error", title: errorMessage });
+      setError(errorMessage);
+      return false;
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  const markAsProcessing = async (chargeId) => {
+    setLoading(true);
+
+    try {
+      const {data: response, status } = await axiosInstance.put(`${apiUrl}/${chargeId}/processing`);
+      if (response && status >= 200 && status <= 204) {
+        AlertToast({ icon: "success", title: "Cobrança alterada para: PROCESSANDO." });
+        await refreshCharges();
+        return true;
+      }
+
+      throw new Error("Erro.");
+    } catch (err) {
+      const errorMessage = defineActionErrorMessage(err, "alterar status da");
+      AlertToast({ icon: "error", title: errorMessage });
+      setError(errorMessage);
+      return false;
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  const markAsAwaitingPayment = async (chargeId) => {
+    setLoading(true);
+
+    try {
+      const {data: response, status } = await axiosInstance.put(`${apiUrl}/${chargeId}/awaiting-payment`);
+      if (response && status >= 200 && status <= 204) {
+        AlertToast({ icon: "success", title: "Cobrança alterada para: AGUARDANDO PAGAMENTO." });
+        await refreshCharges();
+        return true;
+      }
+
+      throw new Error("Erro.");
+    } catch (err) {
+      const errorMessage = defineActionErrorMessage(err, "alterar status da");
+      AlertToast({ icon: "error", title: errorMessage });
+      setError(errorMessage);
+      return false;
+    } finally {
+      setLoading(false);
+    }
+  }
+
   return {
     charges,
     loading,
@@ -188,5 +254,8 @@ export const useCharges = () => {
     getChargeHistory,
     refreshCharges,
     generateCharge,
+    markAsPaid,
+    markAsProcessing,
+    markAsAwaitingPayment
   };
 };

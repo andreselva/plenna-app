@@ -1,7 +1,9 @@
-import { Ban, History, RefreshCcw } from "lucide-react";
+import { Ban, History, RefreshCcw, CircleDollarSign, LoaderCircle, CirclePause } from "lucide-react";
 import { ActionDropdown } from "../../Components/ActionDropdown/ActionDropdown";
 import { FlexibleTable } from "../../Components/FlexibleTable/FlexibleTable";
 import { BankAccountsTableSkeleton } from "../BankAccounts/BankAccountsTableSkeleton";
+import globalStyles from '../../Styles/GlobalStyles.module.css';
+import { darkenHexColor } from "../../Utils/DarkenColor";
 
 const GATEWAY_LABELS = {
   PAGAR_ME: "Pagar.me",
@@ -10,6 +12,16 @@ const GATEWAY_LABELS = {
   MERCADO_PAGO: "Mercado Pago",
   STRIPE: "Stripe",
 };
+
+const STATUS = {
+  DRAFT: 'Rascunho',
+  PROCESSING: 'Processando',
+  AWAITING_PAYMENT: 'Aguardando pagamento',
+  PAID: 'Paga',
+  FAILED: 'Com erro',
+  CANCELLED: 'Cancelada',
+  EXPIRED: 'Expirada'
+}
 
 const defineGatewayLabel = (gateway) => {
   if (!gateway) return "-";
@@ -32,6 +44,9 @@ export const ChargesTable = ({
   onReprocess,
   onCancel,
   onViewHistory,
+  onPaid,
+  onAwaitingPayment,
+  onProcessing,
   loading,
 }) => {
   if (loading) {
@@ -56,29 +71,89 @@ export const ChargesTable = ({
       renderCell: (charge) => "R$ " + (charge.amount ?? 0).toLocaleString("pt-BR", { minimumFractionDigits: 2 }),
     },
     {
+      header: "Status",
+      acessor: "status",
+      style: { flex: "1 1 15%", display: "flex", justifyContent: "center" },
+      renderCell: (charge) => {
+
+
+          const STATUS_COLOR = {
+            DRAFT: '#000000',
+            PROCESSING: '#b45309',
+            AWAITING_PAYMENT: '#008080',
+            PAID: '#008000',
+            FAILED: '#FF0000',
+            CANCELLED: '#808080',
+            EXPIRED: '#800000'
+          }
+
+          const baseColor = STATUS_COLOR[charge.status]
+
+          return (
+            <span
+              className={globalStyles.statusBadge}
+              style={{
+                backgroundColor: `${baseColor}25`,
+                color: darkenHexColor(baseColor, 25),
+                padding: '4px 10px'
+              }}
+            >
+               {STATUS[charge.status] || '-'}
+            </span>
+          )
+      }
+    },
+    {
       header: "Ações",
       style: { flex: "1 1 25%", display: "flex", justifyContent: "center" },
-      renderCell: (charge) => (
-        <ActionDropdown
-          actions={[
+      renderCell: (charge) => {
+        let chargesActions = [
+          {
+            icon: <History size={14} />,
+            text: "Visualizar histórico",
+            handler: () => onViewHistory(charge),
+          },
+          {
+            icon: <Ban size={14} />,
+            text: "Cancelar cobrança",
+            handler: () => onCancel(charge.id),
+          },
+        ]
+
+        if (charge.status === 'AWAITING_PAYMENT') {
+          chargesActions.push(
+            {
+              icon: <CircleDollarSign size={14} />,
+              text: "Registrar recebimento",
+              handler: () => onPaid(charge.id)
+            }
+          );
+        } else if (charge.status === 'PROCESSING') {
+          chargesActions.push(
+            {
+              icon: <CirclePause size={14} />,
+              text: "Alterar para aguardando pagamento",
+              handler: () => onAwaitingPayment(charge.id)
+            }
+          )
+        } else if (charge.status === 'DRAFT') {
+          chargesActions.push(
+            {
+              icon: <LoaderCircle size={14} />,
+              text: "Alterar para processando",
+              handler: () => onProcessing(charge.id)
+            },
             {
               icon: <RefreshCcw size={14} />,
               text: "Reprocessar cobrança",
               handler: () => onReprocess(charge.id),
             },
-            {
-              icon: <Ban size={14} />,
-              text: "Cancelar cobrança",
-              handler: () => onCancel(charge.id),
-            },
-            {
-              icon: <History size={14} />,
-              text: "Visualizar histórico",
-              handler: () => onViewHistory(charge),
-            },
-          ]}
-        />
-      ),
+          )
+        }
+  
+
+        return <ActionDropdown actions={chargesActions} />
+      }
     },
   ];
 
