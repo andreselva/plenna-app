@@ -113,11 +113,11 @@ export const ChargesTable = ({
             text: "Visualizar histórico",
             handler: () => onViewHistory(charge),
           },
-          {
-            icon: <Ban size={14} />,
-            text: "Cancelar cobrança",
-            handler: () => onCancel(charge.id),
-          },
+          // {
+          //   icon: <Ban size={14} />,
+          //   text: "Cancelar cobrança",
+          //   handler: () => onCancel(charge.id),
+          // },
         ]
 
         if (charge.status === 'AWAITING_PAYMENT') {
@@ -143,11 +143,11 @@ export const ChargesTable = ({
               text: "Alterar para processando",
               handler: () => onProcessing(charge.id)
             },
-            {
-              icon: <RefreshCcw size={14} />,
-              text: "Reprocessar cobrança",
-              handler: () => onReprocess(charge.id),
-            },
+            // {
+            //   icon: <RefreshCcw size={14} />,
+            //   text: "Reprocessar cobrança",
+            //   handler: () => onReprocess(charge.id),
+            // },
           )
         }
   
