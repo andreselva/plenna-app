@@ -10,10 +10,10 @@ import { RevenueTableSkeleton } from '../../Pages/Revenues/RevenueTableSkeleton'
 
 const RevenueTable = ({
     revenues = [],
-    categories = [],
+    // categories = [],
     accounts = [],
     customers = [],
-    paymentMethods = [],
+    // paymentMethods = [],
     onEdit,
     onDelete,
     loading,
