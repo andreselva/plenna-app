@@ -200,16 +200,16 @@ export const appRoutes = [
       accessPath: '/customers',
     },
   },
-  {
-    path: '/gateways',
-    element: <Gateways />,
-    meta: {
-      label: 'Gateways',
-      icon: <PlugZap />,
-      placements: ['settings'],
-      accessPath: '/gateways',
-    },
-  },
+  // {
+  //   path: '/gateways',
+  //   element: <Gateways />,
+  //   meta: {
+  //     label: 'Gateways',
+  //     icon: <PlugZap />,
+  //     placements: ['settings'],
+  //     accessPath: '/gateways',
+  //   },
+  // },
   {
     path: '/payment-methods',
     element: <PaymentMethods />,
@@ -220,16 +220,16 @@ export const appRoutes = [
       accessPath: '/payment-methods',
     },
   },
-  {
-    path: '/billing-rules',
-    element: <BillingRules />,
-    meta: {
-      label: 'Regras de cobrança',
-      icon: <GitBranchPlus />,
-      placements: ['settings'],
-      accessPath: '/billing-rules',
-    },
-  },
+  // {
+  //   path: '/billing-rules',
+  //   element: <BillingRules />,
+  //   meta: {
+  //     label: 'Regras de cobrança',
+  //     icon: <GitBranchPlus />,
+  //     placements: ['settings'],
+  //     accessPath: '/billing-rules',
+  //   },
+  // },
   {
     path: '*',
     element: <NotFound />,

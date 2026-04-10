@@ -59,11 +59,11 @@ export const ChargesTable = ({
       accessor: "title",
       style: { flex: "1 1 35%", display: "flex", justifyContent: "center" },
     },
-    {
-      header: "Gateway",
-      style: { flex: "1 1 20%", display: "flex", justifyContent: "center" },
-      renderCell: (charge) => defineGatewayLabel(charge.gateway),
-    },
+    // {
+    //   header: "Gateway",
+    //   style: { flex: "1 1 20%", display: "flex", justifyContent: "center" },
+    //   renderCell: (charge) => defineGatewayLabel(charge.gateway),
+    // },
     {
       header: "Valor",
       accessor: "amount",

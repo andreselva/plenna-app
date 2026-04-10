@@ -93,10 +93,10 @@ export const ModalChargeHistory = ({ isOpen, onClose, charge, history = [] }) =>
             <span className="charge-history-label">Valor da cobranca</span>
             <strong>{formatCurrency(charge.amount)}</strong>
           </div>
-          <div className="charge-history-summary-card">
+          {/* <div className="charge-history-summary-card">
             <span className="charge-history-label">Gateway</span>
             <strong>{defineGatewayLabel(charge.gateway)}</strong>
-          </div>
+          </div> */}
           <div className="charge-history-summary-card">
             <span className="charge-history-label">Tipo de entidade</span>
             <strong>{defineEntityTypeLabel(charge.entityType)}</strong>
