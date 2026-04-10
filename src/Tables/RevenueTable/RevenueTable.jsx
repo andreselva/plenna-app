@@ -7,6 +7,8 @@ import { darkenHexColor } from '../../Utils/DarkenColor';
 import { useBreakpoints } from '../../Hooks/useMediaQuery/useBreakpoints';
 import { STATUS_COLORS } from '../../Types/status.color';
 import { RevenueTableSkeleton } from '../../Pages/Revenues/RevenueTableSkeleton';
+import useHasModule from '../../Hooks/useHasModule/useHasModule';
+import { Module } from '../../enum/module.enum';
 
 const RevenueTable = ({
     revenues = [],
@@ -22,6 +24,7 @@ const RevenueTable = ({
     onGenerateCharge
 }) => {
     const { isMobile } = useBreakpoints();
+    const { hasModule: hasBilling } = useHasModule(Module.BILLING);
 
     if (loading) {
         return <RevenueTableSkeleton />;
@@ -150,7 +153,7 @@ const RevenueTable = ({
                 revenueActions.push({ icon: <BanknoteXIcon size={14} />, label: 'Gerenciar recebimentos', handler: () => onReversePayment(revenue) });
             }
 
-            if (!revenue.idCharge && revenue.status === 'pending') {
+            if (hasBilling && !revenue.idCharge && revenue.status === 'pending') {
                 revenueActions.push({
                     icon: <ReceiptText size={14} />,
                     text: 'Gerar cobrança',

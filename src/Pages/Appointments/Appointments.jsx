@@ -6,6 +6,8 @@ import AlertConfirm from '../../Components/Alerts/AlertConfirm';
 import AlertToast from '../../Components/Alerts/AlertToast';
 import { Recurrence } from '../../enum/recurrence.enum';
 import Loader from '../../Components/Loader/Loader';
+import useHasModule from '../../Hooks/useHasModule/useHasModule';
+import { Module } from '../../enum/module.enum';
 
 const RECURRENCE_OPTIONS = [
   { value: Recurrence.EVERY_15_MIN, label: 'A cada 15 minutos' },
@@ -15,11 +17,13 @@ const RECURRENCE_OPTIONS = [
   { value: Recurrence.WEEKLY_MON_09, label: 'Semanal (seg) às 09:00' },
 ];
 
+
 const tz =
   (Intl.DateTimeFormat && Intl.DateTimeFormat().resolvedOptions().timeZone) ||
   'UTC';
 
 const Appointments = () => {
+  const { hasModule: hasBilling } = useHasModule(Module.BILLING);
   const {
     appointments,
     loading,
@@ -125,6 +129,7 @@ const Appointments = () => {
           )}
           <div className={styles.AppointmentsGrid}>
             {(appointments ?? []).map((appointment) => {
+              if (appointment.name === 'Expiração de cobranças' && !hasBilling) return;
               const isEnabled = Boolean(appointment.isActive);
               const currentRec = getCurrentRec(appointment.id);
 
