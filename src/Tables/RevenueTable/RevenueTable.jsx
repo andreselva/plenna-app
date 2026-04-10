@@ -40,67 +40,62 @@ const RevenueTable = ({
         {
             header: 'Descrição',
             accessor: 'name',
-            style: { flex: '1 1 35%', display: 'flex', justifyContent: 'center' },
+            style: { flex: '1 1 20%', display: 'flex', justifyContent: 'center' },
         },
         {
-            header: 'Valor',
-            accessor: 'value',
-            style: { flex: '1 1 15%', display: 'flex', justifyContent: 'center' },
+            header: 'Cliente',
+            renderCell: (revenue) => {
+                const customer = customers.find((item) => Number(item.id) === Number(revenue.idCustomer ?? revenue.customerId)) || {};
+                return customer.name || revenue.customerName || '-';
+            },
+            style: { flex: '1 1 10%', display: 'flex', justifyContent: 'center' },
         },
+
     ];
 
     if (!isMobile) {
         columns.push(
-            {
-                header: 'Categoria',
-                renderCell: (revenue) => {
-                    const category = categories.find((cat) => cat.id === revenue.idCategory);
-                    if (category && category.color) {
-                        return (
-                            <span
-                                className={globalStyles.statusBadge}
-                                style={{
-                                    backgroundColor: `${category.color}33`,
-                                    color: darkenHexColor(category.color, 25),
-                                    padding: '4px 10px'
-                                }}
-                            >
-                                {category.name}
-                            </span>
-                        );
-                    }
-                    return category ? category.name : '-';
-                },
-                style: { flex: '1 1 20%', display: 'flex', justifyContent: 'center' },
-            },
-            {
-                header: 'Cliente',
-                renderCell: (revenue) => {
-                    const customer = customers.find((item) => Number(item.id) === Number(revenue.idCustomer ?? revenue.customerId)) || {};
-                    return customer.name || revenue.customerName || '-';
-                },
-                style: { flex: '1 1 20%', display: 'flex', justifyContent: 'center' },
-            },
-            {
-                header: 'Forma de pagamento',
-                renderCell: (revenue) => {
-                    const paymentMethod = paymentMethods.find((item) => Number(item.id) === Number(revenue.idPaymentMethod ?? revenue.paymentMethodId)) || {};
-                    return paymentMethod.name || revenue.paymentMethodName || '-';
-                },
-                style: { flex: '1 1 20%', display: 'flex', justifyContent: 'center' },
-            },
+            // {
+            //     header: 'Categoria',
+            //     renderCell: (revenue) => {
+            //         const category = categories.find((cat) => cat.id === revenue.idCategory);
+            //         if (category && category.color) {
+            //             return (
+            //                 <span
+            //                     className={globalStyles.statusBadge}
+            //                     style={{
+            //                         backgroundColor: `${category.color}33`,
+            //                         color: darkenHexColor(category.color, 25),
+            //                         padding: '4px 10px'
+            //                     }}
+            //                 >
+            //                     {category.name}
+            //                 </span>
+            //             );
+            //         }
+            //         return category ? category.name : '-';
+            //     },
+            //     style: { flex: '1 1 20%', display: 'flex', justifyContent: 'center' },
+            // },
+
             {
                 header: 'Conta bancária',
                 renderCell: (revenue) => {
                     const bankAccount = accounts.find((account) => Number(account.id) === Number(revenue.idBankAccount)) || {};
                     return bankAccount.name || '-';
                 },
-                style: { flex: '1 1 20%', display: 'flex', justifyContent: 'center' },
+                style: { flex: '1 1 10%', display: 'flex', justifyContent: 'center' },
+            },
+            {
+                header: 'Valor',
+                accessor: 'value',
+                style: { flex: '1 1 10%', display: 'flex', justifyContent: 'center' },
+                renderCell: (revenue) => "R$ " + (revenue.value ?? 0).toLocaleString("pt-BR", { minimumFractionDigits: 2 }),
             },
             {
                 header: 'Vencimento',
                 renderCell: (revenue) => (revenue.invoiceDueDate ? revenue.invoiceDueDate.split('-').reverse().join('/') : '-'),
-                style: { flex: '1 1 15%', display: 'flex', justifyContent: 'center' },
+                style: { flex: '1 1 10%', display: 'flex', justifyContent: 'center' },
             },
             {
                 header: 'Status',
@@ -126,7 +121,7 @@ const RevenueTable = ({
                         </span>
                     );
                 },
-                style: { flex: '1 1 15%', display: 'flex', justifyContent: 'center' },
+                style: { flex: '1 1 10%', display: 'flex', justifyContent: 'center' },
             }
         );
     }
@@ -165,7 +160,7 @@ const RevenueTable = ({
 
             return <ActionDropdown actions={revenueActions} />;
         },
-        style: { flex: '1 1 15%', display: 'flex', justifyContent: 'center' },
+        style: { flex: '1 1 10%', display: 'flex', justifyContent: 'center' },
     });
 
     return <FlexibleTable columns={columns} data={revenues} noDataMessage="Nenhuma conta a receber cadastrada" />;
