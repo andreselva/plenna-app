@@ -113,11 +113,6 @@ export const ChargesTable = ({
             text: "Visualizar histórico",
             handler: () => onViewHistory(charge),
           },
-          {
-            icon: <Ban size={14} />,
-            text: "Cancelar cobrança",
-            handler: () => onCancel(charge.id),
-          },
         ]
 
         if (charge.status === 'AWAITING_PAYMENT') {
@@ -148,6 +143,14 @@ export const ChargesTable = ({
             //   text: "Reprocessar cobrança",
             //   handler: () => onReprocess(charge.id),
             // },
+          )
+        } else if (['PROCESSING', 'AWAITING_PAYMENT', 'DRAFT'].includes(charge.status)) {
+          chargesActions.push(
+            {
+              icon: <Ban size={14} />,
+              text: "Cancelar cobrança",
+              handler: () => onCancel(charge.id),
+            },
           )
         }
   
