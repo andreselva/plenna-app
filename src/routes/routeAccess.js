@@ -67,3 +67,10 @@ export const getSidebarRoutes = (modulesTree = []) => {
 export const getSettingsRoutes = (modulesTree = []) => {
   return getAccessibleRoutesByPlacement(modulesTree, 'settings');
 };
+
+export const hasModuleByName = (modulesTree = [], moduleName) => {
+  if (!moduleName) return false;
+
+  const flatModules = flattenModuleTree(modulesTree);
+  return flatModules.some((module) => module?.name === moduleName);
+};
