@@ -94,8 +94,11 @@ const Appointments = () => {
         title: 'Alterar recorrência',
         text: 'Deseja realmente alterar a recorrência do agendamento?',
         confirmButtonText: 'Sim, alterar',
-        cancelButtonText: 'Não alterar' 
-      })
+        cancelButtonText: 'Não alterar',
+      });
+
+      if (!resultConfirm.isConfirmed) return;
+
       const ok = await updateAppointmentRecurrence({
         id: appointment.id,
         recurrence: rec,
