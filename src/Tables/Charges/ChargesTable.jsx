@@ -19,7 +19,7 @@ const STATUS = {
   AWAITING_PAYMENT: 'Aguardando pagamento',
   PAID: 'Paga',
   FAILED: 'Com erro',
-  CANCELLED: 'Cancelada',
+  CANCELED: 'Cancelada',
   EXPIRED: 'Expirada'
 }
 
@@ -83,7 +83,7 @@ export const ChargesTable = ({
             AWAITING_PAYMENT: '#008080',
             PAID: '#008000',
             FAILED: '#FF0000',
-            CANCELLED: '#808080',
+            CANCELED: '#808080',
             EXPIRED: '#800000'
           }
 
@@ -113,11 +113,11 @@ export const ChargesTable = ({
             text: "Visualizar histórico",
             handler: () => onViewHistory(charge),
           },
-          // {
-          //   icon: <Ban size={14} />,
-          //   text: "Cancelar cobrança",
-          //   handler: () => onCancel(charge.id),
-          // },
+          {
+            icon: <Ban size={14} />,
+            text: "Cancelar cobrança",
+            handler: () => onCancel(charge.id),
+          },
         ]
 
         if (charge.status === 'AWAITING_PAYMENT') {

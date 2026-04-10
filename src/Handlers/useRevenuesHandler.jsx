@@ -46,8 +46,8 @@ export const useRevenueHandler = (periodo) => {
             invoiceDueDate: revenueInvoiceDueDate,
             idCategory: Number(selectedCategory),
             idBankAccount: Number(selectedBankAccount) || 0,
-            idCustomer: Number(selectedCustomer) || 0,
-            idPaymentMethod: Number(selectedPaymentMethod) || 0,
+            customerId: Number(selectedCustomer) || 0,
+            paymentMethodId: Number(selectedPaymentMethod) || 0,
             installments: Number(installments),
             typeOfInstallments: typeOfInstallment,
             hasInstallments: hasInstallments,
@@ -155,7 +155,7 @@ export const useRevenueHandler = (periodo) => {
         setEditingRevenue('');
         setNewRevenue('');
         setRevenueDescription('');
-        setRevenueValue('0');
+        setRevenueValue('');
         setRevenueInvoiceDueDate('');
         setSelectedCategory('');
         setInstallments('');

@@ -72,7 +72,7 @@ export const useCharges = () => {
     setLoading(true);
 
     try {
-      const { data: response, status } = await axiosInstance.post(`${apiUrl}/${id}/cancel`);
+      const { data: response, status } = await axiosInstance.put(`${apiUrl}/${id}/cancel`);
 
       if (response && status >= 200 && status <= 204) {
         AlertToast({ icon: "success", title: "Cobrança cancelada com sucesso." });

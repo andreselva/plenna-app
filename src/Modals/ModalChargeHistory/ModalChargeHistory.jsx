@@ -8,7 +8,7 @@ const STATUS_LABELS = {
   AWAITING_PAYMENT: 'Aguardando pagamento',
   PAID: 'Paga',
   FAILED: 'Com erro',
-  CANCELLED: 'Cancelada',
+  CANCELED: 'Cancelada',
   EXPIRED: 'Expirada'
 };
 
