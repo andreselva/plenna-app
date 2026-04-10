@@ -242,7 +242,7 @@ const ModalRevenues = ({
             onSubmit={handleAddRevenue}
             onCancel={handleCancel}
             submitButtonText="Salvar"
-            width="auto"
+            width="600px"
             height="auto"
             loading={loading}
         />
