@@ -16,8 +16,12 @@ import { useCharges } from '../../Hooks/ChargesManager/useCharges';
 import AlertConfirm from '../../Components/Alerts/AlertConfirm';
 import { ChargeEntityTypeEnum } from '../../enum/charge-entity-type.enum';
 import AlertToast from '../../Components/Alerts/AlertToast';
+import useHasModule from '../../Hooks/useHasModule/useHasModule';
+import { Module } from '../../enum/module.enum';
 
 const Revenues = () => {
+    const { hasModule: billing } = useHasModule(Module.BILLING);
+
     const [formattedPeriod, setFormattedPeriod] = useState(() => getStartAndEndOfMonth());
     const [selectedMonth, setSelectedMonth] = useState(() => {
         const now = new Date();
@@ -41,7 +45,8 @@ const Revenues = () => {
     };
 
     const { registerPayment } = usePaymentManager();
-    const { generateCharge } = useCharges();
+    
+    const { generateCharge } = useCharges({ enabled: billing });
 
     const {
         revenues, categories, selectedCategory, setSelectedCategory, isModalOpen, setIsModalOpen, setEditingRevenue,

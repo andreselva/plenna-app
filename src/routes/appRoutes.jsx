@@ -1,5 +1,6 @@
 import {
   AlarmClock,
+  ArrowLeftRight,
   BanknoteArrowDown,
   BanknoteArrowUp,
   BriefcaseBusiness,
@@ -36,6 +37,7 @@ import Customers from '../Pages/Customers/Customers';
 import Gateways from '../Pages/Gateways/Gateways';
 import PaymentMethods from '../Pages/PaymentMethods/PaymentMethods';
 import BillingRules from '../Pages/BillingRules/BillingRules';
+import Transfer from '../Pages/Transfer/Transfer';
 
 export const appRoutes = [
   {
@@ -117,6 +119,16 @@ export const appRoutes = [
       icon: <Landmark />,
       placements: ['sidebar'],
       accessPath: '/bank-accounts',
+    },
+  },
+  {
+    path: '/transfers',
+    element: <Transfer />,
+    meta: {
+      label: 'Transferências',
+      icon: <ArrowLeftRight />,
+      placements: ['sidebar'],
+      accessPath: '/transfers',
     },
   },
   {

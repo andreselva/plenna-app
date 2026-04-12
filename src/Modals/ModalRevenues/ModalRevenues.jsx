@@ -2,6 +2,8 @@ import GenericModal from '../../Components/GenericModal/GenericModal';
 import { HelpCircle } from 'lucide-react';
 import Tooltip from '../../Components/Tooltip/Tooltip';
 import { useEffect } from 'react';
+import useHasModule from '../../Hooks/useHasModule/useHasModule';
+import { Module } from '../../enum/module.enum';
 
 const ModalRevenues = ({
     idRevenue,
@@ -34,8 +36,11 @@ const ModalRevenues = ({
     paymentMethods,
     selectedPaymentMethod,
     setSelectedPaymentMethod,
-    loading = false
+    loading = false,
 }) => {
+    const {hasModule: hasPaymentMethods} = useHasModule(Module.PAYMENT_METHODS);
+    const {hasModule: hasCustomers} = useHasModule(Module.CUSTOMERS);
+
     const handleCancel = () => {
         setNewRevenue('');
         setRevenueValue('');
@@ -132,10 +137,10 @@ const ModalRevenues = ({
                 }
             ]
         },
-        {
+        ...(hasCustomers || hasPaymentMethods ? [{
             title: 'Vínculos',
             fields: [
-                {
+                ...(hasCustomers ? [{
                     id: 'customer',
                     label: 'Cliente',
                     type: 'select',
@@ -145,8 +150,8 @@ const ModalRevenues = ({
                     required: false,
                     options: customers.map((customer) => ({ value: customer.id, label: customer.name })),
                     size: 'half-width-large'
-                },
-                {
+                }] : []),
+                ...(hasPaymentMethods ? [{
                     id: 'paymentMethod',
                     label: 'Forma de pagamento',
                     type: 'select',
@@ -158,9 +163,9 @@ const ModalRevenues = ({
                         .filter((paymentMethod) => paymentMethod.isActive)
                         .map((paymentMethod) => ({ value: paymentMethod.id, label: paymentMethod.name })),
                     size: 'half-width-medium'
-                }
+                }] : []),
             ]
-        },
+        }] : []),
         {
             title: 'Parcelamento',
             fields: [
