@@ -33,23 +33,23 @@ export const TransferTable = ({ transfers, accounts = [], onDelete, loading }) =
     {
       header: "Conta origem",
       renderCell: (transfer) =>
-        transfer.originAccountName ?? getAccountName(accounts, transfer.accountId),
+        transfer.originAccountName ?? getAccountName(accounts, transfer.originAccount),
       style: { flex: "1 1 25%", display: "flex", justifyContent: "center" },
     },
     {
       header: "Conta destino",
       renderCell: (transfer) =>
-        transfer.destinationAccountName ?? getAccountName(accounts, transfer.payableId),
+        transfer.destinationAccountName ?? getAccountName(accounts, transfer.targetAccount),
       style: { flex: "1 1 25%", display: "flex", justifyContent: "center" },
     },
     {
       header: "Valor",
-      renderCell: (transfer) => formatCurrency(transfer.value),
+      renderCell: (transfer) => formatCurrency(transfer.amount),
       style: { flex: "1 1 20%", display: "flex", justifyContent: "center" },
     },
     {
       header: "Data",
-      renderCell: (transfer) => formatDateToPtBr(transfer.paymentDate),
+      renderCell: (transfer) => formatDateToPtBr(transfer.transferDate),
       style: { flex: "1 1 20%", display: "flex", justifyContent: "center" },
     },
     {

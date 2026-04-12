@@ -3,7 +3,7 @@ import axiosInstance from "../../api/axiosInstance";
 import AlertToast from "../../Components/Alerts/AlertToast";
 import { Operations } from "../../enum/operations.enum";
 
-const apiUrl = "/payment";
+const apiUrl = "/transfers";
 const entityType = "TRANSFER";
 
 export const useTransfers = () => {
@@ -19,7 +19,7 @@ export const useTransfers = () => {
       hasFetched.current = true;
       setLoading(true);
       try {
-        const { data: response, status } = await axiosInstance.get(`${apiUrl}/${entityType}`);
+        const { data: response, status } = await axiosInstance.get(`${apiUrl}`);
         if (response && status >= 200 && status <= 204) {
           const payload = response.payload?.payments ?? response.payload ?? response ?? [];
           setTransfers(Array.isArray(payload) ? payload : []);
@@ -41,10 +41,7 @@ export const useTransfers = () => {
   const addTransfer = async (transferData) => {
     setLoading(true);
     try {
-      const { data: response, status } = await axiosInstance.post(apiUrl, {
-        ...transferData,
-        entityType,
-      });
+      const { data: response, status } = await axiosInstance.post(apiUrl, transferData);
       if (response && status >= 200 && status <= 204) {
         const created = response.payload?.payment ?? response.payload ?? response;
         if (created?.id) {

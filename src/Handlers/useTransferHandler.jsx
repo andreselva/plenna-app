@@ -2,12 +2,14 @@ import { useState } from "react";
 import { useBankAccounts } from "../Hooks/BankAccountsManager/useBankAccounts";
 import { useTransfers } from "../Hooks/TransferManager/useTransfers";
 import { getLocalISODate } from "../Utils/DateUtils";
+import AlertConfirm from "../Components/Alerts/AlertConfirm";
+import AlertToast from "../Components/Alerts/AlertToast";
 
 const EMPTY_TRANSFER = {
-  accountId: "",
-  payableId: "",
-  value: "",
-  paymentDate: getLocalISODate(),
+  originAccount: "",
+  targetAccount: "",
+  amount: "",
+  transferDate: getLocalISODate(),
 };
 
 export const useTransferHandler = () => {
@@ -24,32 +26,32 @@ export const useTransferHandler = () => {
   };
 
   const resetForm = () => {
-    setFormData({ ...EMPTY_TRANSFER, paymentDate: getLocalISODate() });
+    setFormData({ ...EMPTY_TRANSFER, transferDate: getLocalISODate() });
   };
 
   const validate = () => {
-    if (!formData.accountId) {
-      alert("Selecione a conta bancária de origem.");
+    if (!formData.originAccount) {
+      AlertToast({icon: 'info', title: "Selecione a conta bancária de origem."});
       return false;
     }
 
-    if (!formData.payableId) {
-      alert("Selecione a conta bancária de destino.");
+    if (!formData.targetAccount) {
+      AlertToast({ icon: 'info', title: "Selecione a conta de destino" });
       return false;
     }
 
-    if (formData.accountId === formData.payableId) {
-      alert("A conta de origem e destino não podem ser iguais.");
+    if (formData.originAccount === formData.targetAccount) {
+      AlertToast({ icon: 'info', title: "A conta de origem e destino não podem ser iguais." });
       return false;
     }
 
-    if (!formData.value || Number(formData.value) <= 0) {
-      alert("Informe um valor válido para a transferência.");
+    if (!formData.amount || Number(formData.amount) <= 0) {
+      AlertToast({ icon: 'info', title: 'Informe um valor válido para a transferência.' });
       return false;
     }
 
-    if (!formData.paymentDate) {
-      alert("Informe a data da transferência.");
+    if (!formData.transferDate) {
+      AlertToast({ icon: 'info', title: 'Informe a data da transferência.' })
       return false;
     }
 
@@ -57,10 +59,10 @@ export const useTransferHandler = () => {
   };
 
   const normalizePayload = () => ({
-    accountId: Number(formData.accountId),
-    payableId: Number(formData.payableId),
-    value: Number(formData.value),
-    paymentDate: formData.paymentDate,
+    originAccount: Number(formData.originAccount),
+    targetAccount: Number(formData.targetAccount),
+    amount: Number(formData.amount),
+    transferDate: formData.transferDate,
   });
 
   const handleSaveTransfer = async () => {
@@ -76,7 +78,16 @@ export const useTransferHandler = () => {
   };
 
   const handleDeleteTransfer = async (id) => {
-    await deleteTransfer(id);
+    const result = AlertConfirm({
+      title: 'Estornar transferência',
+      text: 'Deseja estornar essa transferência?',
+      icon: 'warning',
+      confirmButtonText: 'Sim, estornar'
+    })
+
+    if (result.isConfirmed) {
+      await deleteTransfer(id);
+    }
   };
 
   return {
