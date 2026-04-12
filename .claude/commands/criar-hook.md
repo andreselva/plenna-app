@@ -7,7 +7,7 @@ Crie o hook de gerenciamento de dados para o recurso **$ARGUMENTS**.
 Responsável pela comunicação com a API e pelo estado dos dados. Siga exatamente este padrão:
 
 ```jsx
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import axiosInstance from "../../api/axiosInstance";
 import AlertToast from "../../Components/Alerts/AlertToast";
 import { Operations } from "../../enum/operations.enum";
@@ -18,56 +18,53 @@ export const use<Recurso>s = () => {
   const [<recurso>s, set<Recurso>s] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const hasFetched = useRef(false);
+
+  const fetch<Recurso>s = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const { data: response, status } = await axiosInstance.get(apiUrl);
+
+      if (response && status >= 200 && status <= 204) {
+        const payload =
+          response.payload?.<recurso>s ??
+          response.payload ??
+          response ??
+          [];
+        set<Recurso>s(Array.isArray(payload) ? payload : []);
+        return;
+      }
+
+      throw new Error("Um erro ocorreu ao buscar os <recurso>s.");
+    } catch (err) {
+      const errorMessage = defineErrorMessage(err, Operations.BUSCAR);
+      AlertToast({ icon: "error", title: errorMessage });
+      setError(errorMessage);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
   useEffect(() => {
-    const fetch<Recurso>s = async () => {
-      if (hasFetched.current) return;
-      hasFetched.current = true;
-      setLoading(true);
-
-      try {
-        const { data: response, status } = await axiosInstance.get(apiUrl);
-
-        if (response && status >= 200 && status <= 204) {
-          const payload =
-            response.payload?.<recurso>s ??
-            response.payload ??
-            response ??
-            [];
-          set<Recurso>s(Array.isArray(payload) ? payload : []);
-          return;
-        }
-
-        throw new Error("Um erro ocorreu ao buscar os <recurso>s.");
-      } catch (err) {
-        const errorMessage = defineErrorMessage(err, Operations.BUSCAR);
-        AlertToast({ icon: "error", title: errorMessage });
-        setError(errorMessage);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetch<Recurso>s();
-  }, []);
+  }, [fetch<Recurso>s]);
 
   const add<Recurso> = async (<recurso>) => {
     setLoading(true);
     try {
       const { data: response, status } = await axiosInstance.post(`${apiUrl}/create`, <recurso>);
       if (response && status >= 200 && status <= 204) {
-        const created = response.payload?.<recurso> ?? response.payload ?? response;
-        if (created?.id) set<Recurso>s((prev) => [...prev, created]);
+        await fetch<Recurso>s();
         AlertToast({ icon: "success", title: "<Recurso> cadastrado com sucesso." });
-        return created;
+        return true;
       }
       throw new Error("Ocorreu um erro ao cadastrar o <recurso>.");
     } catch (err) {
       const errorMessage = defineErrorMessage(err, Operations.CREATE);
       AlertToast({ icon: "error", title: errorMessage });
       setError(errorMessage);
-      return null;
+      return false;
     } finally {
       setLoading(false);
     }
@@ -78,17 +75,16 @@ export const use<Recurso>s = () => {
     try {
       const { data: response, status } = await axiosInstance.put(`${apiUrl}/update/${id}`, <recurso>);
       if (response && status >= 200 && status <= 204) {
-        const updated = response.payload?.<recurso> ?? response.payload ?? response;
-        if (updated?.id) set<Recurso>s((prev) => prev.map((item) => (item.id === id ? updated : item)));
+        await fetch<Recurso>s();
         AlertToast({ icon: "success", title: "<Recurso> atualizado com sucesso." });
-        return updated;
+        return true;
       }
       throw new Error("Ocorreu um erro ao atualizar o <recurso>.");
     } catch (err) {
       const errorMessage = defineErrorMessage(err, Operations.UPDATE);
       AlertToast({ icon: "error", title: errorMessage });
       setError(errorMessage);
-      return null;
+      return false;
     } finally {
       setLoading(false);
     }
@@ -99,7 +95,7 @@ export const use<Recurso>s = () => {
     try {
       const { data: response, status } = await axiosInstance.delete(`${apiUrl}/${id}`);
       if (response && status >= 200 && status <= 204) {
-        set<Recurso>s((prev) => prev.filter((item) => item.id !== id));
+        await fetch<Recurso>s();
         AlertToast({ icon: "success", title: "<Recurso> excluído com sucesso." });
         return true;
       }
@@ -128,6 +124,7 @@ export const use<Recurso>s = () => {
     add<Recurso>,
     update<Recurso>,
     delete<Recurso>,
+    refetch: fetch<Recurso>s,
   };
 };
 ```
@@ -145,7 +142,7 @@ const EMPTY_<RECURSO> = {
 };
 
 export const use<Recurso>Handler = () => {
-  const { <recurso>s, add<Recurso>, update<Recurso>, delete<Recurso>, loading, error } = use<Recurso>s();
+  const { <recurso>s, add<Recurso>, update<Recurso>, delete<Recurso>, refetch, loading, error } = use<Recurso>s();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editing<Recurso>, setEditing<Recurso>] = useState(null);
@@ -179,15 +176,15 @@ export const use<Recurso>Handler = () => {
   const handleSave<Recurso> = async () => {
     if (!validate()) return;
     const payload = normalizePayload();
-    let saved = null;
+    let success = false;
 
     if (editing<Recurso>) {
-      saved = await update<Recurso>(editing<Recurso>.id, payload);
+      success = await update<Recurso>(editing<Recurso>.id, payload);
     } else {
-      saved = await add<Recurso>(payload);
+      success = await add<Recurso>(payload);
     }
 
-    if (!saved) return;
+    if (!success) return;
     resetForm();
     setIsModalOpen(false);
   };
@@ -208,6 +205,7 @@ export const use<Recurso>Handler = () => {
     handleDelete<Recurso>,
     handleSave<Recurso>,
     resetForm,
+    refetch,
     loading,
     error,
   };
@@ -219,7 +217,10 @@ export const use<Recurso>Handler = () => {
 - Sempre use `axiosInstance` (nunca axios direto)
 - Sempre use `AlertToast` para feedback de sucesso e erro
 - Sempre use `Operations` enum nas mensagens de erro (`Operations.BUSCAR`, `Operations.CREATE`, `Operations.UPDATE`, `Operations.DELETE`)
-- Use `hasFetched` ref para evitar double-fetch no useEffect
+- Use `useCallback` + `useEffect` para o fetch inicial — **nunca** use `useRef` como guard de double-fetch
+- Todas as operações (`add`, `update`, `delete`) chamam `refetch` ao invés de atualizar o estado local manualmente
+- Todas as operações retornam `boolean` (`true` = sucesso, `false` = erro)
+- Sempre exponha `refetch` no retorno do hook base e do handler
 - O hook base (`use<Recurso>s`) só cuida de estado e API — sem lógica de formulário
 - O handler (`use<Recurso>Handler`) só cuida de formulário e ações de UI — sem chamadas diretas à API
 - O nome do hook começa sempre com `use` (camelCase)

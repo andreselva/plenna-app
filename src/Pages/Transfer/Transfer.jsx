@@ -1,5 +1,6 @@
 import { useTransferHandler } from "../../Handlers/useTransferHandler";
 import { ModalTransfer } from "../../Modals/ModalTransfer/ModalTransfer";
+import { ModalRevertTransfer } from "../../Modals/ModalRevertTransfer/ModalRevertTransfer";
 import globalStyles from "../../Styles/GlobalStyles.module.css";
 import { TransferTable } from "../../Tables/Transfer/TransferTable";
 
@@ -12,8 +13,14 @@ const Transfer = () => {
     isModalOpen,
     setIsModalOpen,
     handleSaveTransfer,
-    handleDeleteTransfer,
+    handleRevertTransfer,
     resetForm,
+    isRevertModalOpen,
+    transferToRevert,
+    revertDate,
+    setRevertDate,
+    handleConfirmRevert,
+    handleCloseRevertModal,
     loading,
     error,
   } = useTransferHandler();
@@ -42,7 +49,7 @@ const Transfer = () => {
           <TransferTable
             transfers={transfers}
             accounts={accounts}
-            onDelete={handleDeleteTransfer}
+            onRevert={handleRevertTransfer}
             loading={loading}
             error={error}
           />
@@ -57,6 +64,17 @@ const Transfer = () => {
           setField={setField}
           resetForm={resetForm}
           accounts={accounts}
+        />
+      )}
+
+      {isRevertModalOpen && transferToRevert && (
+        <ModalRevertTransfer
+          transfer={transferToRevert}
+          accounts={accounts}
+          revertDate={revertDate}
+          setRevertDate={setRevertDate}
+          onConfirm={handleConfirmRevert}
+          onCancel={handleCloseRevertModal}
         />
       )}
     </div>

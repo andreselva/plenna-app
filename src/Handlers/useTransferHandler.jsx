@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useBankAccounts } from "../Hooks/BankAccountsManager/useBankAccounts";
 import { useTransfers } from "../Hooks/TransferManager/useTransfers";
 import { getLocalISODate } from "../Utils/DateUtils";
-import AlertConfirm from "../Components/Alerts/AlertConfirm";
 import AlertToast from "../Components/Alerts/AlertToast";
 
 const EMPTY_TRANSFER = {
@@ -13,11 +12,15 @@ const EMPTY_TRANSFER = {
 };
 
 export const useTransferHandler = () => {
-  const { transfers, addTransfer, deleteTransfer, loading: transferLoading, error } = useTransfers();
+  const { transfers, addTransfer, revertTransfer, refetch, loading: transferLoading, error } = useTransfers();
   const { accounts, loading: accountsLoading } = useBankAccounts();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formData, setFormData] = useState(EMPTY_TRANSFER);
+
+  const [isRevertModalOpen, setIsRevertModalOpen] = useState(false);
+  const [transferToRevert, setTransferToRevert] = useState(null);
+  const [revertDate, setRevertDate] = useState("");
 
   const loading = transferLoading || accountsLoading;
 
@@ -71,23 +74,30 @@ export const useTransferHandler = () => {
     const payload = normalizePayload();
     const result = await addTransfer(payload);
 
-    if (result !== null) {
+    if (result) {
       resetForm();
       setIsModalOpen(false);
     }
   };
 
-  const handleDeleteTransfer = async (id) => {
-    const result = AlertConfirm({
-      title: 'Estornar transferência',
-      text: 'Deseja estornar essa transferência?',
-      icon: 'warning',
-      confirmButtonText: 'Sim, estornar'
-    })
+  const handleRevertTransfer = (transfer) => {
+    setTransferToRevert(transfer);
+    setRevertDate(transfer.transferDate ?? getLocalISODate());
+    setIsRevertModalOpen(true);
+  };
 
-    if (result.isConfirmed) {
-      await deleteTransfer(id);
+  const handleConfirmRevert = async () => {
+    const payload = { ...transferToRevert, amount: Number(transferToRevert.amount), transferDate: revertDate };
+    const success = await revertTransfer(payload);
+    if (success) {
+      setIsRevertModalOpen(false);
+      setTransferToRevert(null);
     }
+  };
+
+  const handleCloseRevertModal = () => {
+    setIsRevertModalOpen(false);
+    setTransferToRevert(null);
   };
 
   return {
@@ -98,8 +108,15 @@ export const useTransferHandler = () => {
     isModalOpen,
     setIsModalOpen,
     handleSaveTransfer,
-    handleDeleteTransfer,
+    handleRevertTransfer,
     resetForm,
+    isRevertModalOpen,
+    transferToRevert,
+    revertDate,
+    setRevertDate,
+    handleConfirmRevert,
+    handleCloseRevertModal,
+    refetch,
     loading,
     error,
   };

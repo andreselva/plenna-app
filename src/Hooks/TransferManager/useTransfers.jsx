@@ -1,54 +1,47 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import axiosInstance from "../../api/axiosInstance";
 import AlertToast from "../../Components/Alerts/AlertToast";
 import { Operations } from "../../enum/operations.enum";
 
 const apiUrl = "/transfers";
-const entityType = "TRANSFER";
 
 export const useTransfers = () => {
   const [transfers, setTransfers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const hasFetched = useRef(false);
+
+  const fetchTransfers = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const { data: response, status } = await axiosInstance.get(apiUrl);
+      if (response && status >= 200 && status <= 204) {
+        const payload = response.payload?.payments ?? response.payload ?? response ?? [];
+        setTransfers(Array.isArray(payload) ? payload : []);
+        return;
+      }
+      throw new Error("Um erro ocorreu ao buscar as transferências.");
+    } catch (err) {
+      const errorMessage = defineErrorMessage(err, Operations.BUSCAR);
+      AlertToast({ icon: "error", title: errorMessage });
+      setError(errorMessage);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
   useEffect(() => {
-    const fetchTransfers = async () => {
-      if (hasFetched.current) return;
-
-      hasFetched.current = true;
-      setLoading(true);
-      try {
-        const { data: response, status } = await axiosInstance.get(`${apiUrl}`);
-        if (response && status >= 200 && status <= 204) {
-          const payload = response.payload?.payments ?? response.payload ?? response ?? [];
-          setTransfers(Array.isArray(payload) ? payload : []);
-          return;
-        }
-        throw new Error("Um erro ocorreu ao buscar as transferências.");
-      } catch (err) {
-        const errorMessage = defineErrorMessage(err, Operations.BUSCAR);
-        AlertToast({ icon: "error", title: errorMessage });
-        setError(errorMessage);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchTransfers();
-  }, []);
+  }, [fetchTransfers]);
 
   const addTransfer = async (transferData) => {
     setLoading(true);
     try {
       const { data: response, status } = await axiosInstance.post(apiUrl, transferData);
       if (response && status >= 200 && status <= 204) {
-        const created = response.payload?.payment ?? response.payload ?? response;
-        if (created?.id) {
-          setTransfers((prev) => [created, ...prev]);
-        }
+        await fetchTransfers();
         AlertToast({ icon: "success", title: "Transferência registrada com sucesso." });
-        return created;
+        return true;
       }
 
       throw new Error("Ocorreu um erro ao registrar a transferência.");
@@ -56,23 +49,23 @@ export const useTransfers = () => {
       const errorMessage = defineErrorMessage(err, Operations.CREATE);
       AlertToast({ icon: "error", title: errorMessage });
       setError(errorMessage);
-      return null;
+      return false;
     } finally {
       setLoading(false);
     }
   };
 
-  const deleteTransfer = async (id) => {
+  const revertTransfer = async (transfer) => {
     setLoading(true);
     try {
-      const { data: response, status } = await axiosInstance.delete(`${apiUrl}/${id}`);
+      const { data: response, status } = await axiosInstance.post(`${apiUrl}/revert`, transfer);
       if (response && status >= 200 && status <= 204) {
-        setTransfers((prev) => prev.filter((t) => t.id !== id));
-        AlertToast({ icon: "success", title: "Transferência excluída com sucesso." });
+        await fetchTransfers();
+        AlertToast({ icon: "success", title: "Operação feita com sucesso." });
         return true;
       }
 
-      throw new Error("Ocorreu um erro ao excluir a transferência.");
+      throw new Error("Ocorreu um erro ao estornar a transferência.");
     } catch (err) {
       const errorMessage = defineErrorMessage(err, Operations.DELETE);
       AlertToast({ icon: "error", title: errorMessage });
@@ -95,6 +88,7 @@ export const useTransfers = () => {
     loading,
     error,
     addTransfer,
-    deleteTransfer,
+    revertTransfer,
+    refetch: fetchTransfers,
   };
 };

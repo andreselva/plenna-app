@@ -49,6 +49,7 @@ const <Recurso> = () => {
     handleDelete<Recurso>,
     handleSave<Recurso>,
     resetForm,
+    refetch,
     loading,
     error,
   } = use<Recurso>Handler();

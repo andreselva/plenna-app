@@ -1,7 +1,6 @@
-import { Trash2 } from "lucide-react";
+import { Undo2 } from "lucide-react";
 import { ActionDropdown } from "../../Components/ActionDropdown/ActionDropdown";
 import { FlexibleTable } from "../../Components/FlexibleTable/FlexibleTable";
-import DeleteConfirmation from "../../Hooks/DeleteConfirmation/DeleteConfirmation";
 import { formatDateToPtBr } from "../../Utils/DateUtils";
 import { TransferTableSkeleton } from "./TransferTableSkeleton";
 
@@ -15,19 +14,11 @@ const getAccountName = (accounts, id) => {
   return account?.name ?? `Conta #${id}`;
 };
 
-export const TransferTable = ({ transfers, accounts = [], onDelete, loading }) => {
+export const TransferTable = ({ transfers, accounts = [], onRevert, loading }) => {
   if (loading) {
     return <TransferTableSkeleton />;
   }
 
-  const handleDeleteWithConfirmation = DeleteConfirmation(onDelete, {
-    confirmTitle: "Deseja realmente excluir?",
-    confirmText: "A exclusão da transferência é definitiva!",
-    confirmButtonText: "Excluir",
-    cancelButtonText: "Manter",
-    successMessage: "Transferência excluída!",
-    errorMessage: "Falha ao excluir transferência!",
-  });
 
   const columns = [
     {
@@ -59,9 +50,9 @@ export const TransferTable = ({ transfers, accounts = [], onDelete, loading }) =
         <ActionDropdown
           actions={[
             {
-              icon: <Trash2 size={14} />,
-              text: "Excluir",
-              handler: () => handleDeleteWithConfirmation(transfer.id),
+              icon: <Undo2 size={14} />,
+              text: "Reverter transferência",
+              handler: () => onRevert(transfer),
             },
           ]}
         />
