@@ -55,10 +55,10 @@ export const useTransfers = () => {
     }
   };
 
-  const revertTransfer = async (transfer) => {
+  const revertTransfer = async (id) => {
     setLoading(true);
     try {
-      const { data: response, status } = await axiosInstance.post(`${apiUrl}/revert`, transfer);
+      const { data: response, status } = await axiosInstance.post(`${apiUrl}/${id}/revert`);
       if (response && status >= 200 && status <= 204) {
         await fetchTransfers();
         AlertToast({ icon: "success", title: "Operação feita com sucesso." });

@@ -5,14 +5,15 @@ import { Operations } from "../../enum/operations.enum";
 
 const apiUrl = "/charges";
 
-export const useCharges = () => {
+export const useCharges = ({ enabled = true }) => {
   const [charges, setCharges] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const hasFetched = useRef(false);
-
+  
   useEffect(() => {
     const fetchCharges = async () => {
+      if (!enabled) return;
       if (hasFetched.current) return;
 
       hasFetched.current = true;
@@ -46,6 +47,7 @@ export const useCharges = () => {
   }, []);
 
   const reprocessCharge = async (id) => {
+    if (!enabled) return;
     setLoading(true);
 
     try {
@@ -69,6 +71,7 @@ export const useCharges = () => {
   };
 
   const cancelCharge = async (id) => {
+    if (!enabled) return;
     setLoading(true);
 
     try {
@@ -92,6 +95,7 @@ export const useCharges = () => {
   };
 
   const getChargeHistory = async (id) => {
+    if (!enabled) return;
     setLoading(true);
 
     try {
@@ -122,6 +126,7 @@ export const useCharges = () => {
   };
 
   const refreshCharges = async () => {
+    if (!enabled) return;
     try {
       const { data: response, status } = await axiosInstance.get(apiUrl);
 
@@ -157,6 +162,7 @@ export const useCharges = () => {
   };
 
   const generateCharge = async (chargeData) => {
+    if (!enabled) return;
     setLoading(true);
 
     try {
@@ -180,6 +186,7 @@ export const useCharges = () => {
   };
 
   const markAsPaid = async (chargeId) => {
+    if (!enabled) return;
     setLoading(true);
 
     try {
@@ -202,6 +209,7 @@ export const useCharges = () => {
   }
 
   const markAsProcessing = async (chargeId) => {
+    if (!enabled) return;
     setLoading(true);
 
     try {
@@ -224,6 +232,7 @@ export const useCharges = () => {
   }
 
   const markAsAwaitingPayment = async (chargeId) => {
+    if (!enabled) return;
     setLoading(true);
 
     try {

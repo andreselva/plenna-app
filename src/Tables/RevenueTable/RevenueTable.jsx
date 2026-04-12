@@ -25,6 +25,7 @@ const RevenueTable = ({
 }) => {
     const { isMobile } = useBreakpoints();
     const { hasModule: hasBilling } = useHasModule(Module.BILLING);
+    const { hasModule: hasCustomers } = useHasModule(Module.CUSTOMERS);
 
     if (loading) {
         return <RevenueTableSkeleton />;
@@ -45,16 +46,21 @@ const RevenueTable = ({
             accessor: 'name',
             style: { flex: '1 1 20%', display: 'flex', justifyContent: 'center' },
         },
-        {
-            header: 'Cliente',
-            renderCell: (revenue) => {
-                const customer = customers.find((item) => Number(item.id) === Number(revenue.idCustomer ?? revenue.customerId)) || {};
-                return customer.name || revenue.customerName || '-';
-            },
-            style: { flex: '1 1 10%', display: 'flex', justifyContent: 'center' },
-        },
-
+        
     ];
+
+    if (hasCustomers) {
+        columns.push(
+            {
+                header: 'Cliente',
+                renderCell: (revenue) => {
+                    const customer = customers.find((item) => Number(item.id) === Number(revenue.idCustomer ?? revenue.customerId)) || {};
+                    return customer.name || revenue.customerName || '-';
+                },
+                style: { flex: '1 1 10%', display: 'flex', justifyContent: 'center' },
+            }
+        )
+    }
 
     if (!isMobile) {
         columns.push(

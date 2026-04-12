@@ -87,8 +87,7 @@ export const useTransferHandler = () => {
   };
 
   const handleConfirmRevert = async () => {
-    const payload = { ...transferToRevert, amount: Number(transferToRevert.amount), transferDate: revertDate };
-    const success = await revertTransfer(payload);
+    const success = await revertTransfer(transferToRevert.id);
     if (success) {
       setIsRevertModalOpen(false);
       setTransferToRevert(null);

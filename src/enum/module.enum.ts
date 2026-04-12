@@ -19,4 +19,5 @@ export enum Module {
   REVENUES = 'revenues',
   SUBCATEGORIES = 'subcategories',
   USERS = 'users',
+  TRANSFERS = 'transfers'
 }
