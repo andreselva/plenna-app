@@ -5,7 +5,7 @@ import { Operations } from "../../enum/operations.enum";
 
 const apiUrl = "/charges";
 
-export const useCharges = ({ enabled = true }) => {
+export const useCharges = () => {
   const [charges, setCharges] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -13,7 +13,6 @@ export const useCharges = ({ enabled = true }) => {
   
   useEffect(() => {
     const fetchCharges = async () => {
-      if (!enabled) return;
       if (hasFetched.current) return;
 
       hasFetched.current = true;
@@ -47,7 +46,6 @@ export const useCharges = ({ enabled = true }) => {
   }, []);
 
   const reprocessCharge = async (id) => {
-    if (!enabled) return;
     setLoading(true);
 
     try {
@@ -71,7 +69,6 @@ export const useCharges = ({ enabled = true }) => {
   };
 
   const cancelCharge = async (id) => {
-    if (!enabled) return;
     setLoading(true);
 
     try {
@@ -95,7 +92,6 @@ export const useCharges = ({ enabled = true }) => {
   };
 
   const getChargeHistory = async (id) => {
-    if (!enabled) return;
     setLoading(true);
 
     try {
@@ -126,7 +122,6 @@ export const useCharges = ({ enabled = true }) => {
   };
 
   const refreshCharges = async () => {
-    if (!enabled) return;
     try {
       const { data: response, status } = await axiosInstance.get(apiUrl);
 
@@ -162,7 +157,6 @@ export const useCharges = ({ enabled = true }) => {
   };
 
   const generateCharge = async (chargeData) => {
-    if (!enabled) return;
     setLoading(true);
 
     try {
@@ -186,7 +180,6 @@ export const useCharges = ({ enabled = true }) => {
   };
 
   const markAsPaid = async (chargeId) => {
-    if (!enabled) return;
     setLoading(true);
 
     try {
@@ -209,7 +202,6 @@ export const useCharges = ({ enabled = true }) => {
   }
 
   const markAsProcessing = async (chargeId) => {
-    if (!enabled) return;
     setLoading(true);
 
     try {
@@ -232,7 +224,6 @@ export const useCharges = ({ enabled = true }) => {
   }
 
   const markAsAwaitingPayment = async (chargeId) => {
-    if (!enabled) return;
     setLoading(true);
 
     try {
