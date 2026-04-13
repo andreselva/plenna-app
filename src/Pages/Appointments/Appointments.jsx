@@ -15,6 +15,7 @@ const RECURRENCE_OPTIONS = [
   { value: Recurrence.DAILY_08, label: 'Diariamente às 08:00' },
   { value: Recurrence.WEEKDAYS_08, label: 'Dias úteis às 08:00' },
   { value: Recurrence.WEEKLY_MON_09, label: 'Semanal (seg) às 09:00' },
+  { value: Recurrence.DAILY_03, label: 'Todo dia, às 03:00' }
 ];
 
 
